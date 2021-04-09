@@ -1,5 +1,5 @@
-# Name  
-Put your description here
+# TASmod-1.0-OG
+TASmod for Minecraft version 1.0
 ### Contributing
 Open 'mcp/eclipse' in Eclipse.
 After editing, run regeneratePatches.sh in WSL.
