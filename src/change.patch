@@ -1,6 +1,6 @@
 diff -ruN src/minecraft/de/pfannekuchen/tasmod/TASmod.java newsrc/minecraft/de/pfannekuchen/tasmod/TASmod.java
 --- src/minecraft/de/pfannekuchen/tasmod/TASmod.java	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/de/pfannekuchen/tasmod/TASmod.java	2021-04-09 16:03:25.050886800 +0200
++++ newsrc/minecraft/de/pfannekuchen/tasmod/TASmod.java	2021-04-09 19:04:32.260982100 +0200
 @@ -0,0 +1,38 @@
 +package de.pfannekuchen.tasmod;
 +
@@ -41,8 +41,8 @@ diff -ruN src/minecraft/de/pfannekuchen/tasmod/TASmod.java newsrc/minecraft/de/p
 +	
 +}
 diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net/minecraft/client/Minecraft.java
---- src/minecraft/net/minecraft/client/Minecraft.java	2021-04-09 16:03:42.355581200 +0200
-+++ newsrc/minecraft/net/minecraft/client/Minecraft.java	2021-04-09 16:03:25.137887600 +0200
+--- src/minecraft/net/minecraft/client/Minecraft.java	2021-04-09 19:04:48.286062500 +0200
++++ newsrc/minecraft/net/minecraft/client/Minecraft.java	2021-04-09 19:04:32.341979300 +0200
 @@ -12,6 +12,8 @@
  import java.awt.Frame;
  import java.awt.Graphics;
@@ -52,16 +52,17 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
  import java.io.PrintStream;
  import java.text.DecimalFormat;
  import net.minecraft.src.Achievement;
-@@ -108,6 +110,8 @@
+@@ -108,6 +110,9 @@
  import net.minecraft.src.WorldProvider;
  import net.minecraft.src.WorldRenderer;
  import net.minecraft.src.WorldSettings;
 +import net.tasmod.TASmod;
++import net.tasmod.Utils;
 +
  import org.lwjgl.LWJGLException;
  import org.lwjgl.input.Controllers;
  import org.lwjgl.input.Keyboard;
-@@ -126,7 +130,7 @@
+@@ -126,7 +131,7 @@
  {
  
      public static byte field_28006_b[] = new byte[0xa00000];
@@ -70,7 +71,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
      public PlayerController playerController;
      private boolean fullscreen;
      private boolean hasCrashed;
-@@ -152,7 +156,7 @@
+@@ -152,7 +157,7 @@
      public EntityRenderer entityRenderer;
      private ThreadDownloadResources downloadResourcesThread;
      private int ticksRan;
@@ -79,7 +80,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
      private int tempDisplayWidth;
      private int tempDisplayHeight;
      public GuiAchievement guiAchievement;
-@@ -171,7 +175,7 @@
+@@ -171,7 +176,7 @@
      public static long tickTimes[] = new long[512];
      public static int numRecordedFrameTimes = 0;
      public static long hasPaidCheckTime = 0L;
@@ -88,7 +89,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
      public StatFileWriter statFileWriter;
      private String serverName;
      private int serverPort;
-@@ -324,7 +328,7 @@
+@@ -324,7 +329,7 @@
          }
          catch(Exception exception)
          {
@@ -97,7 +98,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          }
          checkGLError("Pre startup");
          GL11.glEnable(3553 /*GL_TEXTURE_2D*/);
-@@ -653,7 +657,7 @@
+@@ -653,7 +658,7 @@
          }
      }
  
@@ -106,7 +107,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
      {
          if(mcApplet != null && !mcApplet.isActive())
          {
-@@ -756,6 +760,11 @@
+@@ -756,6 +761,11 @@
          {
              Display.update();
          }
@@ -118,7 +119,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          screenshotListener();
          if(mcCanvas != null && !fullscreen && (mcCanvas.getWidth() != displayWidth || mcCanvas.getHeight() != displayHeight))
          {
-@@ -1243,7 +1252,7 @@
+@@ -1243,7 +1253,7 @@
          (new ThreadCheckHasPaid(this)).start();
      }
  
@@ -127,30 +128,42 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
      {
          if(rightClickDelayTimer > 0)
          {
-@@ -1313,6 +1322,22 @@
+@@ -1313,6 +1323,34 @@
                  currentScreen.updateScreen();
              }
          }
-+        if (theWorld != null && TASmod.isPlayback()) TASmod.tick();
++        
++        // Moved from EntityRenderer.java / basically just hooked up.
 +        if(inGameHasFocus)
 +        {
-+            mouseHelper.mouseXYChange();
++        	
 +            float f1 = gameSettings.mouseSensitivity * 0.6F + 0.2F;
 +            float f2 = f1 * f1 * f1 * 8F;
-+            float f3 = (float)mouseHelper.deltaX * f2;
-+            float f4 = (float)mouseHelper.deltaY * f2;
++        	
++            float f3 = (float) Utils.dX * f2;
++            float f4 = (float) Utils.dY * f2;
++            
++            Utils.dX = 0;
++            Utils.dY = 0;
++            
 +            int l = 1;
-+            if(gameSettings.invertMouse)
-+            {
++            
++            if (gameSettings.invertMouse) {
 +                l = -1;
 +            }
-+            // TODO: Smooth Camera
-+            if (!TASmod.isPlayback()) thePlayer.setAngles(f3, f4 * (float)l);
++            thePlayer.setAngles(f3, f4 * (float)l);
++            
++            Utils.prevRotationPitch = thePlayer.prevRotationPitch;
++            Utils.prevRotationYaw = thePlayer.prevRotationYaw;
++            Utils.rotationPitch = thePlayer.rotationPitch;
++            Utils.rotationYaw = thePlayer.rotationYaw;
 +        }
++        
++        if (theWorld != null && TASmod.isPlayback()) TASmod.tick();
          if(currentScreen == null || currentScreen.allowUserInput)
          {
              Profiler.endStartSection("mouse");
-@@ -1322,10 +1347,10 @@
+@@ -1322,10 +1360,10 @@
                  {
                      break;
                  }
@@ -163,7 +176,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                  }
                  long l = System.currentTimeMillis() - systemTime;
                  if(l <= 200L)
-@@ -1371,10 +1396,10 @@
+@@ -1371,95 +1409,28 @@
                  {
                      break;
                  }
@@ -174,34 +187,104 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
 -                    KeyBinding.onTick(Keyboard.getEventKey());
 +                	if (!TASmod.isPlayback()) KeyBinding.onTick(Keyboard.getEventKey());
                  }
-                 if(Keyboard.getEventKeyState())
-                 {
-@@ -1437,7 +1462,7 @@
-                                 thePlayer.inventory.currentItem = i;
-                             }
-                         }
--
-+                        
-                         if(gameSettings.showDebugInfo)
+-                if(Keyboard.getEventKeyState())
+-                {
+-                    if(Keyboard.getEventKey() == 87)
++                if(Keyboard.getEventKeyState()) { // Yeet a lot of hotkeys, that don't need to be implemented, because they will be included using different methods, or are just useless!
++                    for(int i = 0; i < 9; i++)
+                     {
+-                        toggleFullscreen();
+-                    } else
+-                    {
+-                        if(currentScreen != null)
+-                        {
+-                            currentScreen.handleKeyboardInput();
+-                        } else
++                        if(Keyboard.getEventKey() == 2 + i)
                          {
-                             if(Keyboard.getEventKey() == 11)
-@@ -1457,9 +1482,13 @@
+-                            if(Keyboard.getEventKey() == 1)
+-                            {
+-                                displayInGameMenu();
+-                            }
+-                            if(Keyboard.getEventKey() == 31 && Keyboard.isKeyDown(61))
+-                            {
+-                                forceReload();
+-                            }
+-                            if(Keyboard.getEventKey() == 20 && Keyboard.isKeyDown(61))
+-                            {
+-                                renderEngine.refreshTextures();
+-                            }
+-                            if(Keyboard.getEventKey() == 33 && Keyboard.isKeyDown(61))
+-                            {
+-                                boolean flag = Keyboard.isKeyDown(42) | Keyboard.isKeyDown(54);
+-                                gameSettings.setOptionValue(EnumOptions.RENDER_DISTANCE, flag ? -1 : 1);
+-                            }
+-                            if(Keyboard.getEventKey() == 30 && Keyboard.isKeyDown(61))
+-                            {
+-                                renderGlobal.loadRenderers();
+-                            }
+-                            if(Keyboard.getEventKey() == 59)
+-                            {
+-                                gameSettings.hideGUI = !gameSettings.hideGUI;
+-                            }
+-                            if(Keyboard.getEventKey() == 61)
+-                            {
+-                                gameSettings.showDebugInfo = !gameSettings.showDebugInfo;
+-                            }
+-                            if(Keyboard.getEventKey() == 63)
+-                            {
+-                                gameSettings.thirdPersonView++;
+-                                if(gameSettings.thirdPersonView > 2)
+-                                {
+-                                    gameSettings.thirdPersonView = 0;
+-                                }
+-                            }
+-                            if(Keyboard.getEventKey() == 66)
+-                            {
+-                                gameSettings.smoothCamera = !gameSettings.smoothCamera;
+-                            }
+-                        }
+-                        for(int i = 0; i < 9; i++)
+-                        {
+-                            if(Keyboard.getEventKey() == 2 + i)
+-                            {
+-                                thePlayer.inventory.currentItem = i;
+-                            }
+-                        }
+-
+-                        if(gameSettings.showDebugInfo)
+-                        {
+-                            if(Keyboard.getEventKey() == 11)
+-                            {
+-                                func_40003_b(0);
+-                            }
+-                            int j = 0;
+-                            while(j < 9) 
+-                            {
+-                                if(Keyboard.getEventKey() == 2 + j)
+-                                {
+-                                    func_40003_b(j + 1);
+-                                }
+-                                j++;
+-                            }
++                            thePlayer.inventory.currentItem = i;
+                         }
                      }
                  }
              } while(true);
++            
++            if (theWorld != null && TASmod.isRecording()) TASmod.tick();
 +            
              for(; gameSettings.keyBindInventory.isPressed(); displayGuiScreen(new GuiInventory(thePlayer))) { }
              for(; gameSettings.keyBindDrop.isPressed(); thePlayer.dropCurrentItem()) { }
              for(; isMultiplayerWorld() && gameSettings.keyBindChat.isPressed(); displayGuiScreen(new GuiChat())) { }
 +            
-+            if (theWorld != null && TASmod.isRecording()) TASmod.tick();
-+            
              if(thePlayer.isUsingItem())
              {
                  if(!gameSettings.keyBindUseItem.pressed)
 diff -ruN src/minecraft/net/minecraft/src/ChunkProviderClient.java newsrc/minecraft/net/minecraft/src/ChunkProviderClient.java
---- src/minecraft/net/minecraft/src/ChunkProviderClient.java	2021-04-09 16:03:44.702012300 +0200
-+++ newsrc/minecraft/net/minecraft/src/ChunkProviderClient.java	2021-04-09 16:03:27.600246800 +0200
+--- src/minecraft/net/minecraft/src/ChunkProviderClient.java	2021-04-09 19:04:50.554064300 +0200
++++ newsrc/minecraft/net/minecraft/src/ChunkProviderClient.java	2021-04-09 19:04:34.604973400 +0200
 @@ -30,13 +30,7 @@
  
      public boolean chunkExists(int i, int j)
@@ -218,33 +301,64 @@ diff -ruN src/minecraft/net/minecraft/src/ChunkProviderClient.java newsrc/minecr
  
      public void func_539_c(int i, int j)
 diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/net/minecraft/src/EntityRenderer.java
---- src/minecraft/net/minecraft/src/EntityRenderer.java	2021-04-09 16:03:47.710002500 +0200
-+++ newsrc/minecraft/net/minecraft/src/EntityRenderer.java	2021-04-09 16:03:30.758014900 +0200
-@@ -8,6 +8,8 @@
+--- src/minecraft/net/minecraft/src/EntityRenderer.java	2021-04-09 19:04:53.380712400 +0200
++++ newsrc/minecraft/net/minecraft/src/EntityRenderer.java	2021-04-09 19:04:37.490019700 +0200
+@@ -7,14 +7,16 @@
+ import java.awt.image.BufferedImage;
  import java.nio.FloatBuffer;
  import java.util.Random;
- import net.minecraft.client.Minecraft;
-+import net.tasmod.TASmod;
+-import net.minecraft.client.Minecraft;
 +
  import org.lwjgl.input.Mouse;
- import org.lwjgl.opengl.ContextCapabilities;
+-import org.lwjgl.opengl.ContextCapabilities;
  import org.lwjgl.opengl.Display;
-@@ -690,32 +692,32 @@
+ import org.lwjgl.opengl.GL11;
+ import org.lwjgl.opengl.GLContext;
+ import org.lwjgl.util.glu.GLU;
+ 
++import net.minecraft.client.Minecraft;
++import net.tasmod.Utils;
++
+ // Referenced classes of package net.minecraft.src:
+ //            MouseFilter, GLAllocation, ItemRenderer, RenderEngine, 
+ //            GameSettings, EntityLiving, MathHelper, World, 
+@@ -396,8 +398,9 @@
+         }
+         if(!mc.gameSettings.debugCamEnable)
+         {
+-            GL11.glRotatef(entityliving.prevRotationPitch + (entityliving.rotationPitch - entityliving.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
+-            GL11.glRotatef(entityliving.prevRotationYaw + (entityliving.rotationYaw - entityliving.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++        	// Rotates..
++            GL11.glRotatef(Utils.prevRotationPitch + (Utils.rotationPitch - Utils.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
++            GL11.glRotatef(Utils.prevRotationYaw + (Utils.rotationYaw - Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
+         }
+         GL11.glTranslatef(0.0F, f1, 0.0F);
+         d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
+@@ -690,31 +693,25 @@
              prevFrameTime = System.currentTimeMillis();
          }
          Profiler.startSection("mouse");
--        if(mc.inGameHasFocus)
--        {
++        
++        // Interpolation!
+         if(mc.inGameHasFocus)
+         {
 -            mc.mouseHelper.mouseXYChange();
--            float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
--            float f2 = f1 * f1 * f1 * 8F;
--            float f3 = (float)mc.mouseHelper.deltaX * f2;
--            float f4 = (float)mc.mouseHelper.deltaY * f2;
--            int l = 1;
++        	
+             float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
+             float f2 = f1 * f1 * f1 * 8F;
++        	
++            mc.mouseHelper.mouseXYChange();
++            Utils.dX += mc.mouseHelper.deltaX;
++            Utils.dY += mc.mouseHelper.deltaY;
++            
+             float f3 = (float)mc.mouseHelper.deltaX * f2;
+             float f4 = (float)mc.mouseHelper.deltaY * f2;
+             int l = 1;
 -            if(mc.gameSettings.invertMouse)
 -            {
--                l = -1;
--            }
++            if(mc.gameSettings.invertMouse) {
+                 l = -1;
+             }
 -            if(mc.gameSettings.smoothCamera)
 -            {
 -                smoothCamYaw += f3;
@@ -258,39 +372,13 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/n
 -            {
 -                mc.thePlayer.setAngles(f3, f4 * (float)l);
 -            }
--        }
-+//        if(mc.inGameHasFocus)
-+//        {
-+//            mc.mouseHelper.mouseXYChange();
-+//            float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
-+//            float f2 = f1 * f1 * f1 * 8F;
-+//            float f3 = (float)mc.mouseHelper.deltaX * f2;
-+//            float f4 = (float)mc.mouseHelper.deltaY * f2;
-+//            int l = 1;
-+//            if(mc.gameSettings.invertMouse)
-+//            {
-+//                l = -1;
-+//            }
-+//            if(mc.gameSettings.smoothCamera)
-+//            {
-+//                smoothCamYaw += f3;
-+//                smoothCamPitch += f4;
-+//                float f5 = f - smoothCamPartialTicks;
-+//                smoothCamPartialTicks = f;
-+//                f3 = smoothCamFilterX * f5;
-+//                f4 = smoothCamFilterY * f5;
-+//                if (!TASmod.isPlayback()) mc.thePlayer.setAngles(f3, f4 * (float)l);
-+//            } else
-+//            {
-+//                if (!TASmod.isPlayback()) mc.thePlayer.setAngles(f3, f4 * (float)l);
-+//            }
-+//        }
++            Utils.setAngles(f3, f4 * (float)l);
+         }
          Profiler.endSection();
          if(mc.skipRenderWorld)
-         {
 diff -ruN src/minecraft/net/minecraft/src/GameSettings.java newsrc/minecraft/net/minecraft/src/GameSettings.java
---- src/minecraft/net/minecraft/src/GameSettings.java	2021-04-09 16:03:48.572010200 +0200
-+++ newsrc/minecraft/net/minecraft/src/GameSettings.java	2021-04-09 16:03:31.646974100 +0200
+--- src/minecraft/net/minecraft/src/GameSettings.java	2021-04-09 19:04:54.254752600 +0200
++++ newsrc/minecraft/net/minecraft/src/GameSettings.java	2021-04-09 19:04:38.307003400 +0200
 @@ -56,6 +56,10 @@
      public KeyBinding keyBindUseItem;
      public KeyBinding keyBindPlayerList;
@@ -318,8 +406,8 @@ diff -ruN src/minecraft/net/minecraft/src/GameSettings.java newsrc/minecraft/net
          difficulty = 2;
          hideGUI = false;
 diff -ruN src/minecraft/net/minecraft/src/GuiContainer.java newsrc/minecraft/net/minecraft/src/GuiContainer.java
---- src/minecraft/net/minecraft/src/GuiContainer.java	2021-04-09 16:03:49.059798500 +0200
-+++ newsrc/minecraft/net/minecraft/src/GuiContainer.java	2021-04-09 16:03:32.183893400 +0200
+--- src/minecraft/net/minecraft/src/GuiContainer.java	2021-04-09 19:04:54.726753400 +0200
++++ newsrc/minecraft/net/minecraft/src/GuiContainer.java	2021-04-09 19:04:38.766005700 +0200
 @@ -190,30 +190,6 @@
          }
          itemRenderer.field_40268_b = 0.0F;
@@ -352,8 +440,8 @@ diff -ruN src/minecraft/net/minecraft/src/GuiContainer.java newsrc/minecraft/net
  
      private Slot getSlotAtPosition(int i, int j)
 diff -ruN src/minecraft/net/minecraft/src/GuiControls.java newsrc/minecraft/net/minecraft/src/GuiControls.java
---- src/minecraft/net/minecraft/src/GuiControls.java	2021-04-09 16:03:49.097801000 +0200
-+++ newsrc/minecraft/net/minecraft/src/GuiControls.java	2021-04-09 16:03:32.232891900 +0200
+--- src/minecraft/net/minecraft/src/GuiControls.java	2021-04-09 19:04:54.761767400 +0200
++++ newsrc/minecraft/net/minecraft/src/GuiControls.java	2021-04-09 19:04:38.801018100 +0200
 @@ -41,7 +41,7 @@
              controlList.add(new GuiSmallButton(j, i + (j % 2) * 160, height / 6 + 24 * (j >> 1), 70, 20, options.getOptionDisplayString(j)));
          }
@@ -364,8 +452,8 @@ diff -ruN src/minecraft/net/minecraft/src/GuiControls.java newsrc/minecraft/net/
      }
  
 diff -ruN src/minecraft/net/minecraft/src/GuiIngameMenu.java newsrc/minecraft/net/minecraft/src/GuiIngameMenu.java
---- src/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-04-09 16:03:49.321800700 +0200
-+++ newsrc/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-04-09 16:03:32.486951500 +0200
+--- src/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-04-09 19:04:54.967752700 +0200
++++ newsrc/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-04-09 19:04:39.025008200 +0200
 @@ -4,8 +4,10 @@
  
  package net.minecraft.src;
@@ -391,8 +479,8 @@ diff -ruN src/minecraft/net/minecraft/src/GuiIngameMenu.java newsrc/minecraft/ne
              if(mc.isMultiplayerWorld())
              {
 diff -ruN src/minecraft/net/minecraft/src/GuiOptions.java newsrc/minecraft/net/minecraft/src/GuiOptions.java
---- src/minecraft/net/minecraft/src/GuiOptions.java	2021-04-09 16:03:49.414798900 +0200
-+++ newsrc/minecraft/net/minecraft/src/GuiOptions.java	2021-04-09 16:03:32.583999400 +0200
+--- src/minecraft/net/minecraft/src/GuiOptions.java	2021-04-09 19:04:55.046767500 +0200
++++ newsrc/minecraft/net/minecraft/src/GuiOptions.java	2021-04-09 19:04:39.110015100 +0200
 @@ -6,6 +6,7 @@
  
  import java.util.List;
@@ -421,9 +509,53 @@ diff -ruN src/minecraft/net/minecraft/src/GuiOptions.java newsrc/minecraft/net/m
          controlList.add(new GuiButton(200, width / 2 - 100, height / 6 + 168, stringtranslate.translateKey("gui.done")));
      }
  
+diff -ruN src/minecraft/net/minecraft/src/GuiScreen.java newsrc/minecraft/net/minecraft/src/GuiScreen.java
+--- src/minecraft/net/minecraft/src/GuiScreen.java	2021-04-09 19:04:55.105752500 +0200
++++ newsrc/minecraft/net/minecraft/src/GuiScreen.java	2021-04-09 19:04:39.180008200 +0200
+@@ -46,11 +46,7 @@
+ 
+     protected void keyTyped(char c, int i)
+     {
+-        if(i == 1)
+-        {
+-            mc.displayGuiScreen(null);
+-            mc.setIngameFocus();
+-        }
++        // No more closing GUI using Escape!
+     }
+ 
+     public static String getClipboardString()
+@@ -139,11 +135,7 @@
+     {
+         if(Keyboard.getEventKeyState())
+         {
+-            if(Keyboard.getEventKey() == 87)
+-            {
+-                mc.toggleFullscreen();
+-                return;
+-            }
++           // Yeet
+             keyTyped(Keyboard.getEventCharacter(), Keyboard.getEventKey());
+         }
+     }
+diff -ruN src/minecraft/net/minecraft/src/MouseHelper.java newsrc/minecraft/net/minecraft/src/MouseHelper.java
+--- src/minecraft/net/minecraft/src/MouseHelper.java	2021-04-09 19:04:58.426752200 +0200
++++ newsrc/minecraft/net/minecraft/src/MouseHelper.java	2021-04-09 19:04:42.481017000 +0200
+@@ -52,9 +52,8 @@
+         Mouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
+         Mouse.setGrabbed(false);
+     }
+-
+-    public void mouseXYChange()
+-    {
++    
++    public void mouseXYChange() {
+         deltaX = Mouse.getDX();
+         deltaY = Mouse.getDY();
+     }
 diff -ruN src/minecraft/net/minecraft/src/RenderBlocks.java newsrc/minecraft/net/minecraft/src/RenderBlocks.java
---- src/minecraft/net/minecraft/src/RenderBlocks.java	2021-04-09 16:03:55.426549700 +0200
-+++ newsrc/minecraft/net/minecraft/src/RenderBlocks.java	2021-04-09 16:03:38.603055800 +0200
+--- src/minecraft/net/minecraft/src/RenderBlocks.java	2021-04-09 19:05:00.668754500 +0200
++++ newsrc/minecraft/net/minecraft/src/RenderBlocks.java	2021-04-09 19:04:44.762009700 +0200
 @@ -181,40 +181,7 @@
  
      public boolean renderLightOnBlock(int i, int j, int k, int l)
@@ -467,8 +599,8 @@ diff -ruN src/minecraft/net/minecraft/src/RenderBlocks.java newsrc/minecraft/net
  
      public boolean renderBlockByRenderType(Block block, int i, int j, int k)
 diff -ruN src/minecraft/net/minecraft/src/ThreadCheckHasPaid.java newsrc/minecraft/net/minecraft/src/ThreadCheckHasPaid.java
---- src/minecraft/net/minecraft/src/ThreadCheckHasPaid.java	2021-04-09 16:03:57.606932900 +0200
-+++ newsrc/minecraft/net/minecraft/src/ThreadCheckHasPaid.java	2021-04-09 16:03:40.845938700 +0200
+--- src/minecraft/net/minecraft/src/ThreadCheckHasPaid.java	2021-04-09 19:05:02.718754800 +0200
++++ newsrc/minecraft/net/minecraft/src/ThreadCheckHasPaid.java	2021-04-09 19:04:46.832003500 +0200
 @@ -28,10 +28,6 @@
          {
              HttpURLConnection httpurlconnection = (HttpURLConnection)(new URL((new StringBuilder()).append("https://login.minecraft.net/session?name=").append(mc.session.username).append("&session=").append(mc.session.sessionId).toString())).openConnection();
@@ -481,8 +613,8 @@ diff -ruN src/minecraft/net/minecraft/src/ThreadCheckHasPaid.java newsrc/minecra
          }
          catch(Exception exception)
 diff -ruN src/minecraft/net/minecraft/src/ThreadDownloadResources.java newsrc/minecraft/net/minecraft/src/ThreadDownloadResources.java
---- src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-04-09 16:03:57.686936400 +0200
-+++ newsrc/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-04-09 16:03:40.923989700 +0200
+--- src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-04-09 19:05:02.792752300 +0200
++++ newsrc/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-04-09 19:04:46.907062300 +0200
 @@ -42,6 +42,9 @@
              DocumentBuilderFactory documentbuilderfactory = DocumentBuilderFactory.newInstance();
              DocumentBuilder documentbuilder = documentbuilderfactory.newDocumentBuilder();
@@ -503,8 +635,8 @@ diff -ruN src/minecraft/net/minecraft/src/ThreadDownloadResources.java newsrc/mi
          }
  
 diff -ruN src/minecraft/net/minecraft/src/TileEntityMobSpawner.java newsrc/minecraft/net/minecraft/src/TileEntityMobSpawner.java
---- src/minecraft/net/minecraft/src/TileEntityMobSpawner.java	2021-04-09 16:03:57.953936400 +0200
-+++ newsrc/minecraft/net/minecraft/src/TileEntityMobSpawner.java	2021-04-09 16:03:41.194991700 +0200
+--- src/minecraft/net/minecraft/src/TileEntityMobSpawner.java	2021-04-09 19:05:03.046751600 +0200
++++ newsrc/minecraft/net/minecraft/src/TileEntityMobSpawner.java	2021-04-09 19:04:47.158065200 +0200
 @@ -85,10 +85,6 @@
                      updateDelay();
                      return;
@@ -518,7 +650,7 @@ diff -ruN src/minecraft/net/minecraft/src/TileEntityMobSpawner.java newsrc/minec
                  double d5 = (double)zCoord + (worldObj.rand.nextDouble() - worldObj.rand.nextDouble()) * 4D;
 diff -ruN src/minecraft/net/tasmod/recorder/Recorder.java newsrc/minecraft/net/tasmod/recorder/Recorder.java
 --- src/minecraft/net/tasmod/recorder/Recorder.java	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/tasmod/recorder/Recorder.java	2021-04-09 16:03:42.208066200 +0200
++++ newsrc/minecraft/net/tasmod/recorder/Recorder.java	2021-04-09 19:04:48.144077400 +0200
 @@ -0,0 +1,128 @@
 +package net.tasmod.recorder;
 +
@@ -634,7 +766,7 @@ diff -ruN src/minecraft/net/tasmod/recorder/Recorder.java newsrc/minecraft/net/t
 +		for (int i = 0; i < this.mc.gameSettings.keyBindings.length; i++) {
 +			print += i + "\u002D" + (this.mc.gameSettings.keyBindings[i].pressed ? "1" : "0") + "\u002D" + this.mc.gameSettings.keyBindings[i].pressTime + "\u007C";
 +		}
-+		print += ":" + Mouse.getX() + ";" + Mouse.getY() + ":" + mc.thePlayer.rotationYaw + ";" + (mc.thePlayer.rotationPitch % 360.0f) + ";" + (mc.leftClickCounter >= 0 ? (mc.leftClickCounter + 1) : mc.leftClickCounter ) + ";" + mc.rightClickDelayTimer;
++		print += ":" + Mouse.getX() + ";" + Mouse.getY() + ":" + mc.thePlayer.rotationYaw + ";" + (mc.thePlayer.rotationPitch % 360.0f) + ";" + (mc.leftClickCounter >= 0 ? (mc.leftClickCounter + 1) : mc.leftClickCounter ) + ";" + mc.rightClickDelayTimer + ";" + mc.thePlayer.inventory.currentItem;
 +		
 +		linesToPrint.add(print + '\n');
 +		this.currentTick++;
@@ -650,8 +782,8 @@ diff -ruN src/minecraft/net/tasmod/recorder/Recorder.java newsrc/minecraft/net/t
 +}
 diff -ruN src/minecraft/net/tasmod/replayer/Replayer.java newsrc/minecraft/net/tasmod/replayer/Replayer.java
 --- src/minecraft/net/tasmod/replayer/Replayer.java	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/tasmod/replayer/Replayer.java	2021-04-09 16:03:42.228054400 +0200
-@@ -0,0 +1,127 @@
++++ newsrc/minecraft/net/tasmod/replayer/Replayer.java	2021-04-09 19:04:48.166062500 +0200
+@@ -0,0 +1,128 @@
 +package net.tasmod.replayer;
 +
 +import java.io.BufferedInputStream;
@@ -772,6 +904,7 @@ diff -ruN src/minecraft/net/tasmod/replayer/Replayer.java newsrc/minecraft/net/t
 +			mc.thePlayer.rotationPitch = Float.parseFloat(mouse.split(";")[1]);
 +			mc.leftClickCounter = Integer.parseInt(mouse.split(";")[2]);
 +			mc.rightClickDelayTimer = Integer.parseInt(mouse.split(";")[3]); 
++			mc.thePlayer.inventory.currentItem = Integer.parseInt(mouse.split(";")[4]);
 +			
 +		} else {
 +			TASmod.endPlayback();
@@ -781,7 +914,7 @@ diff -ruN src/minecraft/net/tasmod/replayer/Replayer.java newsrc/minecraft/net/t
 +}
 diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmod.java
 --- src/minecraft/net/tasmod/TASmod.java	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/tasmod/TASmod.java	2021-04-09 16:03:42.244055200 +0200
++++ newsrc/minecraft/net/tasmod/TASmod.java	2021-04-09 19:04:48.183077200 +0200
 @@ -0,0 +1,91 @@
 +package net.tasmod;
 +
@@ -876,8 +1009,8 @@ diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmo
 +}
 diff -ruN src/minecraft/net/tasmod/Utils.java newsrc/minecraft/net/tasmod/Utils.java
 --- src/minecraft/net/tasmod/Utils.java	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/tasmod/Utils.java	2021-04-09 16:03:42.258052100 +0200
-@@ -0,0 +1,25 @@
++++ newsrc/minecraft/net/tasmod/Utils.java	2021-04-09 19:04:48.199065500 +0200
+@@ -0,0 +1,50 @@
 +package net.tasmod;
 +
 +import java.io.File;
@@ -886,6 +1019,31 @@ diff -ruN src/minecraft/net/tasmod/Utils.java newsrc/minecraft/net/tasmod/Utils.
 +
 +public final class Utils {
 +
++	public static float rotationPitch = 0f;
++	public static float rotationYaw = 0f;
++	public static float prevRotationPitch = 0f;
++	public static float prevRotationYaw = 0f;
++	
++	public static double dX = 0;
++	public static double dY = 0;
++	
++    public static void setAngles(float f, float f1) {
++        float f2 = rotationPitch;
++        float f3 = rotationYaw;
++        rotationYaw += (double)f * 0.14999999999999999D;
++        rotationPitch -= (double)f1 * 0.14999999999999999D;
++        if(rotationPitch < -90F)
++        {
++            rotationPitch = -90F;
++        }
++        if(rotationPitch > 90F)
++        {
++            rotationPitch = 90F;
++        }
++        prevRotationPitch += rotationPitch - f2;
++        prevRotationYaw += rotationYaw - f3;
++    }
++	
 +	public static final boolean deleteDirectory(final File directoryToBeDeleted) {
 +		final File[] allContents = directoryToBeDeleted.listFiles();
 +	    if (allContents != null) {
