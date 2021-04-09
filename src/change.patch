@@ -1,6 +1,6 @@
 diff -ruN src/minecraft/de/pfannekuchen/tasmod/TASmod.java newsrc/minecraft/de/pfannekuchen/tasmod/TASmod.java
 --- src/minecraft/de/pfannekuchen/tasmod/TASmod.java	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/de/pfannekuchen/tasmod/TASmod.java	2021-04-08 23:51:38.002564600 +0200
++++ newsrc/minecraft/de/pfannekuchen/tasmod/TASmod.java	2021-04-09 12:57:17.420169100 +0200
 @@ -0,0 +1,38 @@
 +package de.pfannekuchen.tasmod;
 +
@@ -40,9 +40,314 @@ diff -ruN src/minecraft/de/pfannekuchen/tasmod/TASmod.java newsrc/minecraft/de/p
 +	}
 +	
 +}
+diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net/minecraft/client/Minecraft.java
+--- src/minecraft/net/minecraft/client/Minecraft.java	2021-04-09 12:57:33.947051200 +0200
++++ newsrc/minecraft/net/minecraft/client/Minecraft.java	2021-04-09 12:57:17.492823600 +0200
+@@ -12,6 +12,8 @@
+ import java.awt.Frame;
+ import java.awt.Graphics;
+ import java.io.File;
++import java.io.FileNotFoundException;
++import java.io.IOException;
+ import java.io.PrintStream;
+ import java.text.DecimalFormat;
+ import net.minecraft.src.Achievement;
+@@ -108,6 +110,8 @@
+ import net.minecraft.src.WorldProvider;
+ import net.minecraft.src.WorldRenderer;
+ import net.minecraft.src.WorldSettings;
++import net.tasmod.TASmod;
++
+ import org.lwjgl.LWJGLException;
+ import org.lwjgl.input.Controllers;
+ import org.lwjgl.input.Keyboard;
+@@ -126,7 +130,7 @@
+ {
+ 
+     public static byte field_28006_b[] = new byte[0xa00000];
+-    private static Minecraft theMinecraft;
++    public static Minecraft theMinecraft;
+     public PlayerController playerController;
+     private boolean fullscreen;
+     private boolean hasCrashed;
+@@ -324,7 +328,7 @@
+         }
+         catch(Exception exception)
+         {
+-            exception.printStackTrace();
++            // Remove Ugly Exception
+         }
+         checkGLError("Pre startup");
+         GL11.glEnable(3553 /*GL_TEXTURE_2D*/);
+@@ -653,7 +657,7 @@
+         }
+     }
+ 
+-    private void func_40001_x()
++    private void func_40001_x() throws IOException
+     {
+         if(mcApplet != null && !mcApplet.isActive())
+         {
+@@ -756,6 +760,11 @@
+         {
+             Display.update();
+         }
++        // Pancake: React to hotkeys
++        if(Keyboard.isKeyDown(gameSettings.keyBindStartRecording.keyCode) && theWorld == null) TASmod.startRecording(-5793894949254896867L, 0);
++        if(Keyboard.isKeyDown(gameSettings.keyBindStopRecording.keyCode) && theWorld != null) TASmod.endRecording();
++        if(Keyboard.isKeyDown(gameSettings.keyBindPlayback.keyCode) && theWorld == null) TASmod.startPlayback();
++        
+         screenshotListener();
+         if(mcCanvas != null && !fullscreen && (mcCanvas.getWidth() != displayWidth || mcCanvas.getHeight() != displayHeight))
+         {
+@@ -1243,7 +1252,7 @@
+         (new ThreadCheckHasPaid(this)).start();
+     }
+ 
+-    public void runTick()
++    public void runTick() throws IOException
+     {
+         if(rightClickDelayTimer > 0)
+         {
+@@ -1437,7 +1446,7 @@
+                                 thePlayer.inventory.currentItem = i;
+                             }
+                         }
+-
++                        
+                         if(gameSettings.showDebugInfo)
+                         {
+                             if(Keyboard.getEventKey() == 11)
+@@ -1457,6 +1466,7 @@
+                     }
+                 }
+             } while(true);
++            
+             for(; gameSettings.keyBindInventory.isPressed(); displayGuiScreen(new GuiInventory(thePlayer))) { }
+             for(; gameSettings.keyBindDrop.isPressed(); thePlayer.dropCurrentItem()) { }
+             for(; isMultiplayerWorld() && gameSettings.keyBindChat.isPressed(); displayGuiScreen(new GuiChat())) { }
+@@ -1540,6 +1550,8 @@
+         }
+         Profiler.endSection();
+         systemTime = System.currentTimeMillis();
++        
++        if (theWorld != null) TASmod.tick();
+     }
+ 
+     private void forceReload()
+diff -ruN src/minecraft/net/minecraft/src/ChunkProviderClient.java newsrc/minecraft/net/minecraft/src/ChunkProviderClient.java
+--- src/minecraft/net/minecraft/src/ChunkProviderClient.java	2021-04-09 12:57:36.256032600 +0200
++++ newsrc/minecraft/net/minecraft/src/ChunkProviderClient.java	2021-04-09 12:57:19.862467800 +0200
+@@ -30,13 +30,7 @@
+ 
+     public boolean chunkExists(int i, int j)
+     {
+-        if(this != null)
+-        {
+-            return true;
+-        } else
+-        {
+-            return chunkMapping.func_35575_b(ChunkCoordIntPair.chunkXZ2Int(i, j));
+-        }
++        return true;
+     }
+ 
+     public void func_539_c(int i, int j)
+diff -ruN src/minecraft/net/minecraft/src/GameSettings.java newsrc/minecraft/net/minecraft/src/GameSettings.java
+--- src/minecraft/net/minecraft/src/GameSettings.java	2021-04-09 12:57:40.096947400 +0200
++++ newsrc/minecraft/net/minecraft/src/GameSettings.java	2021-04-09 12:57:23.685331000 +0200
+@@ -56,6 +56,10 @@
+     public KeyBinding keyBindUseItem;
+     public KeyBinding keyBindPlayerList;
+     public KeyBinding keyBindPickBlock;
++    /* 1: Add a Start and Stop Recording Hotkey */
++    public KeyBinding keyBindStartRecording;
++    public KeyBinding keyBindStopRecording;
++    public KeyBinding keyBindPlayback;
+     public KeyBinding keyBindings[];
+     protected Minecraft mc;
+     private File optionsFile;
+@@ -102,9 +106,13 @@
+         keyBindUseItem = new KeyBinding("key.use", -99);
+         keyBindPlayerList = new KeyBinding("key.playerlist", 15);
+         keyBindPickBlock = new KeyBinding("key.pickItem", -98);
++        // 2: Add a Start and Stop Recording Hotkey
++        keyBindStartRecording = new KeyBinding("Start Recording", Keyboard.KEY_J);
++        keyBindStopRecording = new KeyBinding("Stop Recording", Keyboard.KEY_K);
++        keyBindPlayback = new KeyBinding("Playback", Keyboard.KEY_P);
+         keyBindings = (new KeyBinding[] {
+             keyBindAttack, keyBindUseItem, keyBindForward, keyBindLeft, keyBindBack, keyBindRight, keyBindJump, keyBindSneak, keyBindDrop, keyBindInventory, 
+-            keyBindChat, keyBindPlayerList, keyBindPickBlock
++            keyBindChat, keyBindPlayerList, keyBindPickBlock, keyBindStartRecording, keyBindStopRecording, keyBindPlayback
+         });
+         difficulty = 2;
+         hideGUI = false;
+diff -ruN src/minecraft/net/minecraft/src/GuiContainer.java newsrc/minecraft/net/minecraft/src/GuiContainer.java
+--- src/minecraft/net/minecraft/src/GuiContainer.java	2021-04-09 12:57:40.645996900 +0200
++++ newsrc/minecraft/net/minecraft/src/GuiContainer.java	2021-04-09 12:57:24.170907700 +0200
+@@ -190,30 +190,6 @@
+         }
+         itemRenderer.field_40268_b = 0.0F;
+         zLevel = 0.0F;
+-        if(this == null)
+-        {
+-            zLevel = 100F;
+-            itemRenderer.field_40268_b = 100F;
+-            if(itemstack == null)
+-            {
+-                int l = slot.getBackgroundIconIndex();
+-                if(l >= 0)
+-                {
+-                    GL11.glDisable(2896 /*GL_LIGHTING*/);
+-                    mc.renderEngine.bindTexture(mc.renderEngine.getTexture("/gui/items.png"));
+-                    drawTexturedModalRect(i, j, (l % 16) * 16, (l / 16) * 16, 16, 16);
+-                    GL11.glEnable(2896 /*GL_LIGHTING*/);
+-                    flag = true;
+-                }
+-            }
+-            if(!flag)
+-            {
+-                itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, itemstack, i, j);
+-                itemRenderer.renderItemOverlayIntoGUI(fontRenderer, mc.renderEngine, itemstack, i, j);
+-            }
+-            itemRenderer.field_40268_b = 0.0F;
+-            zLevel = 0.0F;
+-        }
+     }
+ 
+     private Slot getSlotAtPosition(int i, int j)
+diff -ruN src/minecraft/net/minecraft/src/GuiControls.java newsrc/minecraft/net/minecraft/src/GuiControls.java
+--- src/minecraft/net/minecraft/src/GuiControls.java	2021-04-09 12:57:40.684995300 +0200
++++ newsrc/minecraft/net/minecraft/src/GuiControls.java	2021-04-09 12:57:24.209912600 +0200
+@@ -41,7 +41,7 @@
+             controlList.add(new GuiSmallButton(j, i + (j % 2) * 160, height / 6 + 24 * (j >> 1), 70, 20, options.getOptionDisplayString(j)));
+         }
+ 
+-        controlList.add(new GuiButton(200, width / 2 - 100, height / 6 + 168, stringtranslate.translateKey("gui.done")));
++        controlList.add(new GuiButton(200, width / 2 - 100, height - 28, stringtranslate.translateKey("gui.done")));
+         screenTitle = stringtranslate.translateKey("controls.title");
+     }
+ 
+diff -ruN src/minecraft/net/minecraft/src/GuiIngameMenu.java newsrc/minecraft/net/minecraft/src/GuiIngameMenu.java
+--- src/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-04-09 12:57:40.926542500 +0200
++++ newsrc/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-04-09 12:57:24.427909600 +0200
+@@ -4,8 +4,10 @@
+ 
+ package net.minecraft.src;
+ 
++import java.io.IOException;
+ import java.util.List;
+ import net.minecraft.client.Minecraft;
++import net.tasmod.TASmod;
+ 
+ // Referenced classes of package net.minecraft.src:
+ //            GuiScreen, GuiButton, StatCollector, GuiOptions, 
+@@ -48,6 +50,12 @@
+         }
+         if(guibutton.id == 1)
+         {
++        	if (TASmod.isRecording())
++				try {
++					TASmod.endRecording();
++				} catch (IOException e) {
++					e.printStackTrace();
++				}
+             mc.statFileWriter.readStat(StatList.leaveGameStat, 1);
+             if(mc.isMultiplayerWorld())
+             {
+diff -ruN src/minecraft/net/minecraft/src/GuiOptions.java newsrc/minecraft/net/minecraft/src/GuiOptions.java
+--- src/minecraft/net/minecraft/src/GuiOptions.java	2021-04-09 12:57:41.011539700 +0200
++++ newsrc/minecraft/net/minecraft/src/GuiOptions.java	2021-04-09 12:57:24.513908700 +0200
+@@ -6,6 +6,7 @@
+ 
+ import java.util.List;
+ import net.minecraft.client.Minecraft;
++import net.tasmod.TASmod;
+ 
+ // Referenced classes of package net.minecraft.src:
+ //            GuiScreen, StringTranslate, EnumOptions, GuiSmallButton, 
+@@ -45,16 +46,19 @@
+                     guismallbutton.enabled = false;
+                     guismallbutton.displayString = (new StringBuilder()).append(StatCollector.translateToLocal("options.difficulty")).append(": ").append(StatCollector.translateToLocal("options.difficulty.hardcore")).toString();
+                 }
++                guismallbutton.enabled = !TASmod.isRecording();
+                 controlList.add(guismallbutton);
+             } else
+             {
+                 controlList.add(new GuiSlider(enumoptions.returnEnumOrdinal(), (width / 2 - 155) + (i % 2) * 160, height / 6 + 24 * (i >> 1), enumoptions, options.getKeyBinding(enumoptions), options.getOptionFloatValue(enumoptions)));
++                if (TASmod.isRecording() && (enumoptions == EnumOptions.SENSITIVITY || enumoptions == EnumOptions.INVERT_MOUSE)) ((GuiSlider) controlList.get(controlList.size() - 1)).enabled = false;
+             }
+             i++;
+         }
+ 
+         controlList.add(new GuiButton(101, width / 2 - 100, height / 6 + 96 + 12, stringtranslate.translateKey("options.video")));
+         controlList.add(new GuiButton(100, width / 2 - 100, height / 6 + 120 + 12, stringtranslate.translateKey("options.controls")));
++        ((GuiButton) controlList.get(controlList.size() - 1)).enabled = !TASmod.isRecording();
+         controlList.add(new GuiButton(200, width / 2 - 100, height / 6 + 168, stringtranslate.translateKey("gui.done")));
+     }
+ 
+diff -ruN src/minecraft/net/minecraft/src/RenderBlocks.java newsrc/minecraft/net/minecraft/src/RenderBlocks.java
+--- src/minecraft/net/minecraft/src/RenderBlocks.java	2021-04-09 12:57:46.826828300 +0200
++++ newsrc/minecraft/net/minecraft/src/RenderBlocks.java	2021-04-09 12:57:30.361975200 +0200
+@@ -181,40 +181,7 @@
+ 
+     public boolean renderLightOnBlock(int i, int j, int k, int l)
+     {
+-        if(this != null)
+-        {
+-            return false;
+-        }
+-        byte byte0 = 13;
+-        byte byte1 = 52;
+-        byte byte2 = 32;
+-        int i1 = MathHelper.abs_int(i - byte0);
+-        int j1 = MathHelper.abs_int(k - byte1);
+-        if(j1 <= byte2 && i1 <= byte2 && (i1 == byte2 || j1 == byte2) && catchesLight[blockAccess.getBlockId(i, j, k)])
+-        {
+-            int k1 = 5;
+-            if(i == byte0 - byte2)
+-            {
+-                k1--;
+-            }
+-            if(i == byte0 + byte2)
+-            {
+-                k1++;
+-            }
+-            if(k == byte1 - byte2)
+-            {
+-                k1 -= 3;
+-            }
+-            if(k == byte1 + byte2)
+-            {
+-                k1 += 3;
+-            }
+-            renderCorrectedLightOnBlock(k1, i, j, k);
+-            return true;
+-        } else
+-        {
+-            return false;
+-        }
++        return false;
+     }
+ 
+     public boolean renderBlockByRenderType(Block block, int i, int j, int k)
+diff -ruN src/minecraft/net/minecraft/src/ThreadCheckHasPaid.java newsrc/minecraft/net/minecraft/src/ThreadCheckHasPaid.java
+--- src/minecraft/net/minecraft/src/ThreadCheckHasPaid.java	2021-04-09 12:57:48.971333700 +0200
++++ newsrc/minecraft/net/minecraft/src/ThreadCheckHasPaid.java	2021-04-09 12:57:32.404372300 +0200
+@@ -28,10 +28,6 @@
+         {
+             HttpURLConnection httpurlconnection = (HttpURLConnection)(new URL((new StringBuilder()).append("https://login.minecraft.net/session?name=").append(mc.session.username).append("&session=").append(mc.session.sessionId).toString())).openConnection();
+             httpurlconnection.connect();
+-            if(httpurlconnection.getResponseCode() == 400 && this == null)
+-            {
+-                Minecraft.hasPaidCheckTime = System.currentTimeMillis();
+-            }
+             httpurlconnection.disconnect();
+         }
+         catch(Exception exception)
 diff -ruN src/minecraft/net/minecraft/src/ThreadDownloadResources.java newsrc/minecraft/net/minecraft/src/ThreadDownloadResources.java
---- src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-04-08 23:51:02.401620000 +0200
-+++ newsrc/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-04-08 23:51:35.689564400 +0200
+--- src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-04-09 12:57:49.049964100 +0200
++++ newsrc/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-04-09 12:57:32.496373800 +0200
 @@ -42,6 +42,9 @@
              DocumentBuilderFactory documentbuilderfactory = DocumentBuilderFactory.newInstance();
              DocumentBuilder documentbuilder = documentbuilderfactory.newDocumentBuilder();
@@ -53,11 +358,170 @@ diff -ruN src/minecraft/net/minecraft/src/ThreadDownloadResources.java newsrc/mi
              NodeList nodelist = document.getElementsByTagName("Contents");
              for(int i = 0; i < 2; i++)
              {
+@@ -150,7 +153,7 @@
+             dataoutputstream.write(abyte0, 0, i);
+             if(closing)
+             {
+-                return;
++                break;
+             }
+         }
+ 
+diff -ruN src/minecraft/net/minecraft/src/TileEntityMobSpawner.java newsrc/minecraft/net/minecraft/src/TileEntityMobSpawner.java
+--- src/minecraft/net/minecraft/src/TileEntityMobSpawner.java	2021-04-09 12:57:49.308514200 +0200
++++ newsrc/minecraft/net/minecraft/src/TileEntityMobSpawner.java	2021-04-09 12:57:32.771339100 +0200
+@@ -85,10 +85,6 @@
+                     updateDelay();
+                     return;
+                 }
+-                if(entityliving == null)
+-                {
+-                    continue;
+-                }
+                 double d3 = (double)xCoord + (worldObj.rand.nextDouble() - worldObj.rand.nextDouble()) * 4D;
+                 double d4 = (yCoord + worldObj.rand.nextInt(3)) - 1;
+                 double d5 = (double)zCoord + (worldObj.rand.nextDouble() - worldObj.rand.nextDouble()) * 4D;
+diff -ruN src/minecraft/net/tasmod/recorder/Recorder.java newsrc/minecraft/net/tasmod/recorder/Recorder.java
+--- src/minecraft/net/tasmod/recorder/Recorder.java	1970-01-01 01:00:00.000000000 +0100
++++ newsrc/minecraft/net/tasmod/recorder/Recorder.java	2021-04-09 12:57:33.830337400 +0200
+@@ -0,0 +1,127 @@
++package net.tasmod.recorder;
++
++import java.io.DataOutputStream;
++import java.io.File;
++import java.io.FileNotFoundException;
++import java.io.FileOutputStream;
++import java.io.IOException;
++import java.nio.charset.Charset;
++import java.nio.charset.StandardCharsets;
++import java.nio.file.Files;
++import java.util.LinkedList;
++import java.util.Queue;
++
++import org.lwjgl.input.Keyboard;
++import org.lwjgl.input.Mouse;
++
++import net.minecraft.client.Minecraft;
++import net.minecraft.src.GameSettings;
++import net.minecraft.src.KeyBinding;
++import net.minecraft.src.PlayerControllerCreative;
++import net.minecraft.src.PlayerControllerSP;
++import net.minecraft.src.WorldSettings;
++import net.tasmod.Utils;
++
++/**
++ * Records a Speedrun, and saves it into a File.
++ * @author Pancake
++ */
++public final class Recorder {
++	
++	private final long worldseed;
++	private final int worldtype;
++	private final Minecraft mc;
++	private final File file;
++	private final FileOutputStream writer;
++	private final Queue<String> linesToPrint = new LinkedList<>();
++	
++	private int currentTick;
++	private final Thread fileWriter;
++	
++	/**
++	 * Creates a new File and prints the Header into it
++	 * @param worldseed World Seed of the TAS.
++	 * @param worldtype Gamemode of the TAS
++	 * @throws IOException Cannot be thrown, unless something is terribly wrong.
++	 */
++	public Recorder(long worldseed, int worldtype) throws IOException {
++		this.worldseed = worldseed;
++		this.mc = Minecraft.theMinecraft;
++		this.worldtype = worldtype;
++		this.file = new File(this.mc.mcDataDir, "recording.tas");
++		
++		/** Create a new File for the Recorder */
++		if (!this.file.exists()) this.file.createNewFile();
++		this.writer = new FileOutputStream(this.file, false);
++		
++		fileWriter = new Thread(new Runnable() {
++			
++			/**
++			 * Thread that will take stuff from a queue and write to the File
++			 */
++			@Override
++			public void run() {
++				try {
++					/* Print the Header of the TAS into the File */
++					writer.write(("###############################################\n").getBytes(StandardCharsets.UTF_8));
++					writer.write(("#                 THIS IS A TAS               #\n").getBytes(StandardCharsets.UTF_8));
++					writer.write(("#    Seed: " + String.format("%020d", worldseed) + "               #\n").getBytes(StandardCharsets.UTF_8));
++					writer.write(("#                                             #\n").getBytes(StandardCharsets.UTF_8));
++					writer.write(("#    Gametype: " + worldtype +  "                              #\n").getBytes(StandardCharsets.UTF_8));
++					writer.write(("#                 PLAYBACK FILE               #\n").getBytes(StandardCharsets.UTF_8));
++					writer.write(("###############################################\n").getBytes(StandardCharsets.UTF_8));
++					while (!Thread.currentThread().isInterrupted()) {
++						if (!linesToPrint.isEmpty()) writer.write(linesToPrint.poll().getBytes(StandardCharsets.UTF_8));
++						else
++							try {
++								Thread.sleep(50);
++							} catch (InterruptedException e) {
++								break;
++							}
++					}
++					writer.write("###############################################".getBytes(StandardCharsets.UTF_8));
++					writer.close();
++				} catch (IOException e) {
++					e.printStackTrace();
++				}
++			}
++		});
++		fileWriter.start();
++	}
++	
++	/**
++	 * Create a new World, and join it.
++	 */
++	public final void startRecording() {
++		/* Delete World if it exists */
++		final File worldFile = new File(this.mc.mcDataDir, "saves" + File.separator + "TAS-Playback");
++		if (worldFile.exists()) Utils.deleteDirectory(worldFile);
++		
++		/* Join a new world */
++		this.mc.playerController = this.worldtype == 0 ? new PlayerControllerSP(this.mc) : new PlayerControllerCreative(this.mc);
++		this.mc.startWorld("TAS-Playback", "TAS-Playback", new WorldSettings(this.worldseed, this.worldtype, true, false));
++		this.mc.displayGuiScreen(null);
++	}
++	
++	/**
++	 * Write all Keybindings into the File
++	 */
++	public final void tick() {
++		String print = this.currentTick + ":";
++		for (int i = 0; i < this.mc.gameSettings.keyBindings.length; i++) {
++			print += i + "\u002D" + (this.mc.gameSettings.keyBindings[i].isPressed() ? "1" : "0") + "\u007C";
++		}
++		print += ":" + Mouse.getX() + ";" + Mouse.getY() + ":" + mc.thePlayer.rotationYaw + ";" + mc.thePlayer.rotationPitch;
++		
++		linesToPrint.add(print.substring(0, print.length() - 1) + '\n');
++		this.currentTick++;
++	}
++	
++	/**
++	 * End the Recording by writing '#' to the File
++	 */
++	public final void endRecording() {
++		fileWriter.interrupt();
++	}
++	
++}
 diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmod.java
 --- src/minecraft/net/tasmod/TASmod.java	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/tasmod/TASmod.java	2021-04-08 23:51:37.947565100 +0200
-@@ -0,0 +1,38 @@
++++ newsrc/minecraft/net/tasmod/TASmod.java	2021-04-09 12:57:33.846336600 +0200
+@@ -0,0 +1,68 @@
 +package net.tasmod;
++
++import java.io.FileNotFoundException;
++import java.io.IOException;
++
++import net.tasmod.recorder.Recorder;
 +
 +/**
 + * 
@@ -67,21 +531,46 @@ diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmo
 + */
 +public final class TASmod {
 +
++	/** Currently running Recording */
++	private static volatile Recorder recording;
++	
 +	/**
 +	 * Join a World and start the Recording
 +	 * 
 +	 * @param seed Create a world with this seed
 +	 * @return Returns whether the action was successful
++	 * @throws IOException This Exception cannot be thrown, unless something is terribly wrong.
 +	 */
-+	public static final boolean startRecording(String seed) {
-+		throw new RuntimeException("Not implemented yet! :c");
++	public static final boolean startRecording(long worldseed, int worldtype) throws IOException {
++		if (recording != null) return false;
++		recording = new Recorder(worldseed, worldtype);
++		recording.startRecording();
++		return true;
++	}
++	
++	/**
++	 * Ticks all kinds of things
++	 * @throws IOException Unexpected File End
++	 */
++	public static final void tick() throws IOException {
++		if (recording != null) recording.tick();
 +	}
 +	
 +	/**
 +	 * Ends the current recording
 +	 */
-+	public static final void endRecording() {
-+		throw new RuntimeException("Not implemented yet! :c");
++	public static final boolean endRecording() throws IOException {
++		if (recording == null) return false;
++		recording.endRecording();
++		recording = null;
++		return true;
++	}
++	
++	/**
++	 * @return Returns whether a Recording is running	
++	 */
++	public static boolean isRecording() {
++		return recording != null;
 +	}
 +	
 +	/**
@@ -92,6 +581,35 @@ diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmo
 +	 */
 +	public static final boolean startPlayback() {
 +		throw new RuntimeException("Not implemented yet! :c");
++	}
++	
++}
+diff -ruN src/minecraft/net/tasmod/Utils.java newsrc/minecraft/net/tasmod/Utils.java
+--- src/minecraft/net/tasmod/Utils.java	1970-01-01 01:00:00.000000000 +0100
++++ newsrc/minecraft/net/tasmod/Utils.java	2021-04-09 12:57:33.861336300 +0200
+@@ -0,0 +1,25 @@
++package net.tasmod;
++
++import java.io.File;
++import java.io.FileNotFoundException;
++import java.io.PrintWriter;
++
++public final class Utils {
++
++	public static final boolean deleteDirectory(final File directoryToBeDeleted) {
++		final File[] allContents = directoryToBeDeleted.listFiles();
++	    if (allContents != null) {
++	        for (final File file : allContents) {
++	            deleteDirectory(file);
++	        }
++	    }
++	    return directoryToBeDeleted.delete();
++	}
++
++	public static void emptyFile(File file) throws FileNotFoundException {
++		PrintWriter writer = new PrintWriter(file);
++		writer.println("");
++		writer.close();
 +	}
 +	
 +}
