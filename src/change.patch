@@ -2297,7 +2297,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiGameOver.java newsrc/minecraft/net/
 diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/minecraft/src/GuiIngame.java
 --- src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
-@@ -7,9 +7,11 @@
+@@ -7,9 +7,13 @@
  import java.awt.Color;
  import java.util.ArrayList;
  import java.util.Random;
@@ -2306,10 +2306,27 @@ diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/mi
  import org.lwjgl.opengl.GL11;
  
 +import net.minecraft.client.Minecraft;
++import net.tasmod.TASmod;
++import net.tasmod.replayer.Replayer;
 +
  // Referenced classes of package net.minecraft.src:
  //            Gui, ScaledResolution, EntityRenderer, EntityPlayerSP, 
  //            InventoryPlayer, GameSettings, ItemStack, Block, 
+@@ -76,6 +80,14 @@
+                 renderPortalOverlay(f1, k, l);
+             }
+         }
++        // Pancake: Draw Text here
++        //#DEV: Add Desync Tool
++        if (TASmod.isPlayback()) {
++        	drawString(mc.fontRenderer, TASmod.getPlayback().desync, 1, 1, 0xFFFFFF);
++        	drawString(mc.fontRenderer, TASmod.getPlayback().desync_2, 1, 12, 0xFFFFFF);
++        	drawString(mc.fontRenderer, TASmod.getPlayback().desync_3, 1, 24, 0xFFFFFF);
++        }
++        //#ENDDEV
+         if(!mc.playerController.func_35643_e())
+         {
+             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 diff -ruN src/minecraft/net/minecraft/src/GuiIngameMenu.java newsrc/minecraft/net/minecraft/src/GuiIngameMenu.java
 --- src/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
@@ -6269,7 +6286,7 @@ diff -ruN src/minecraft/net/minecraft/src/WorldRenderer.java newsrc/minecraft/ne
 diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmod.java
 --- src/minecraft/net/tasmod/TASmod.java	1970-01-01 01:00:00.000000000 +0100
 +++ newsrc/minecraft/net/tasmod/TASmod.java	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,111 @@
+@@ -0,0 +1,119 @@
 +package net.tasmod;
 +
 +import java.io.IOException;
@@ -6309,7 +6326,7 @@ diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmo
 +		recording.startRecording();
 +		return true;
 +	}
-+	
++
 +	/**
 +	 * Ticks all kinds of things
 +	 * @throws IOException Unexpected File End
@@ -6379,12 +6396,20 @@ diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmo
 +	public static void endPlayback() {
 +		playback = null;
 +	}
++
++	public static Recorder getRecording() {
++		return recording;
++	}
++
++	public static Replayer getPlayback() {
++		return playback;
++	}
 +	
 +}
 diff -ruN src/minecraft/net/tasmod/Utils.java newsrc/minecraft/net/tasmod/Utils.java
 --- src/minecraft/net/tasmod/Utils.java	1970-01-01 01:00:00.000000000 +0100
 +++ newsrc/minecraft/net/tasmod/Utils.java	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,80 @@
 +package net.tasmod;
 +
 +import java.io.File;
@@ -6455,11 +6480,20 @@ diff -ruN src/minecraft/net/tasmod/Utils.java newsrc/minecraft/net/tasmod/Utils.
 +		}
 +	}
 +	
++	
++	public static boolean isZeroFloat(float value, float threshold){
++	    return value >= -threshold && value <= threshold;
++	}
++	
++	public static boolean isZero(double value, double threshold){
++	    return value >= -threshold && value <= threshold;
++	}
++	
 +}
 diff -ruN src/minecraft/net/tasmod/recorder/Recorder.java newsrc/minecraft/net/tasmod/recorder/Recorder.java
 --- src/minecraft/net/tasmod/recorder/Recorder.java	1970-01-01 01:00:00.000000000 +0100
 +++ newsrc/minecraft/net/tasmod/recorder/Recorder.java	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,179 @@
+@@ -0,0 +1,186 @@
 +package net.tasmod.recorder;
 +
 +import java.io.File;
@@ -6469,11 +6503,13 @@ diff -ruN src/minecraft/net/tasmod/recorder/Recorder.java newsrc/minecraft/net/t
 +import java.util.ArrayList;
 +import java.util.LinkedList;
 +import java.util.List;
++import java.util.Locale;
 +import java.util.Queue;
 +
 +import org.lwjgl.input.Mouse;
 +
 +import net.minecraft.client.Minecraft;
++import net.minecraft.src.NBTTagCompound;
 +import net.minecraft.src.PlayerControllerCreative;
 +import net.minecraft.src.PlayerControllerSP;
 +import net.minecraft.src.WorldSettings;
@@ -6581,6 +6617,8 @@ diff -ruN src/minecraft/net/tasmod/recorder/Recorder.java newsrc/minecraft/net/t
 +		this.mc.playerController = this.worldtype == 0 ? new PlayerControllerSP(this.mc) : new PlayerControllerCreative(this.mc);
 +		this.mc.startWorld(folderName, worldName, new WorldSettings(this.worldseed, this.worldtype, mapFeatures, hardcore));
 +		this.mc.displayGuiScreen(null);
++		this.mc.thePlayer.rotationYaw = 0f;
++		this.mc.thePlayer.rotationPitch = 0f;
 +	}
 +	
 +	private volatile List<VirtualKeyEvent> keyEventsPerTick = new ArrayList<>();
@@ -6618,6 +6656,9 @@ diff -ruN src/minecraft/net/tasmod/recorder/Recorder.java newsrc/minecraft/net/t
 +			mouseEventsPerTick.clear();
 +			break;
 +		}
++		//#DEV: Add anti-desync tool
++		linesToPrint.add(String.format(Locale.US, "%.5f", mc.thePlayer.posX) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.posY) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.posZ) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.motionX) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.motionY) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.motionZ) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.rotationPitch % 360) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.rotationYaw % 360) + "\n");
++		//#ENDDEV
 +		this.currentTick++;
 +	}
 +	
@@ -6642,7 +6683,7 @@ diff -ruN src/minecraft/net/tasmod/recorder/Recorder.java newsrc/minecraft/net/t
 diff -ruN src/minecraft/net/tasmod/replayer/Replayer.java newsrc/minecraft/net/tasmod/replayer/Replayer.java
 --- src/minecraft/net/tasmod/replayer/Replayer.java	1970-01-01 01:00:00.000000000 +0100
 +++ newsrc/minecraft/net/tasmod/replayer/Replayer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,150 @@
+@@ -0,0 +1,209 @@
 +package net.tasmod.replayer;
 +
 +import java.io.BufferedReader;
@@ -6660,6 +6701,7 @@ diff -ruN src/minecraft/net/tasmod/replayer/Replayer.java newsrc/minecraft/net/t
 +import net.minecraft.src.WorldSettings;
 +import net.tasmod.TASmod;
 +import net.tasmod.Utils;
++import net.tasmod.recorder.Recorder;
 +import net.tasmod.virtual.VirtualKeyboard;
 +import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 +import net.tasmod.virtual.VirtualMouse;
@@ -6748,6 +6790,8 @@ diff -ruN src/minecraft/net/tasmod/replayer/Replayer.java newsrc/minecraft/net/t
 +		this.mc.playerController = this.worldtype == 0 ? new PlayerControllerSP(this.mc) : new PlayerControllerCreative(this.mc);
 +		this.mc.startWorld("TAS-Playback", "TAS-Playback", new WorldSettings(this.worldseed, this.worldtype, mapFeatures, hardcore));
 +		this.mc.displayGuiScreen(null);
++		this.mc.thePlayer.rotationYaw = 0f;
++		this.mc.thePlayer.rotationPitch = 0f;
 +	}
 +	
 +	/**
@@ -6756,7 +6800,63 @@ diff -ruN src/minecraft/net/tasmod/replayer/Replayer.java newsrc/minecraft/net/t
 +	public final void tick() {
 +		tickKeyboad();
 +		tickMouse();
++		//#DEV: Add Desync Tool
++		// Update
++    	double desyncPosX = mc.thePlayer.posX - posX;
++    	double desyncPosY = mc.thePlayer.posY - posY;
++    	double desyncPosZ = mc.thePlayer.posZ - posZ;
++    	double desyncMotionX = mc.thePlayer.motionX - motionX;
++    	double desyncMotionY = mc.thePlayer.motionY - motionY;
++    	double desyncMotionZ = mc.thePlayer.motionZ - motionZ;
++    	float desyncYaw = (mc.thePlayer.rotationYaw % 360) - yaw;
++    	float desyncPitch = (mc.thePlayer.rotationPitch % 360) - pitch;
++    	desync = "";
++    	desync_2 = "";
++    	desync_3 = "";
++    	if (!Utils.isZero(desyncPosX, 0.000009D)) desync += "X: " + String.format("%.5f", desyncPosX) + " ";
++    	if (!Utils.isZero(desyncPosY, 0.000009D)) desync += "Y: " + String.format("%.5f", desyncPosY) + " ";
++    	if (!Utils.isZero(desyncPosZ, 0.000009D)) desync += "Z: " + String.format("%.5f", desyncPosZ) + " ";
++    	if (!Utils.isZero(desyncMotionX, 0.000009D)) desync_2 += "mX: " + String.format("%.5f", desyncMotionX) + " ";
++    	if (!Utils.isZero(desyncMotionY, 0.000009D)) desync_2 += "mY: " + String.format("%.5f", desyncMotionY) + " ";
++    	if (!Utils.isZero(desyncMotionZ, 0.000009D)) desync_2 += "mZ: " + String.format("%.5f", desyncMotionZ) + " ";
++    	if (!Utils.isZeroFloat(desyncYaw, 0.000009F)) desync_3 += "Yaw: " + String.format("%.5f", desyncYaw) + " ";
++    	if (!Utils.isZeroFloat(desyncPitch, 0.000009F)) desync_3 += "Pitch: " + String.format("%.5f", desyncPitch) + " ";
++    	// Reset
++		final String line = linesRead.poll();
++		if (line == null) return;
++		final String[] strings = line.split(":");
++		if (!strings[0].isEmpty()) posX = Double.parseDouble(strings[0]);
++		else posX = 0.0D;
++		if (!strings[1].isEmpty()) posY = Double.parseDouble(strings[1]);
++		else posY = 0.0D;
++		if (!strings[2].isEmpty()) posZ = Double.parseDouble(strings[2]);
++		else posZ = 0.0D;
++		if (!strings[3].isEmpty()) motionX = Double.parseDouble(strings[3]);
++		else motionX = 0.0D;
++		if (!strings[4].isEmpty()) motionY = Double.parseDouble(strings[4]);
++		else motionY = 0.0D;
++		if (!strings[5].isEmpty()) motionZ = Double.parseDouble(strings[5]);
++		else motionZ = 0.0D;
++		if (!strings[6].isEmpty()) pitch = Float.parseFloat(strings[6]);
++		else pitch = 0.0F;
++		if (!strings[7].isEmpty()) yaw = Float.parseFloat(strings[7]);
++		else yaw = 0.0F;
++		//#ENDDEV
 +	}
++	
++	//#DEV: Add Desync Tool
++	public double posX;
++	public double posY;
++	public double posZ;
++	public double motionX;
++	public double motionY;
++	public double motionZ;
++	public float yaw;
++	public float pitch;
++	public String desync;
++	public String desync_2;
++	public String desync_3;
++	//#ENDDEV
 +	
 +	private final void tickKeyboad() {
 +		final String line = linesRead.poll();
