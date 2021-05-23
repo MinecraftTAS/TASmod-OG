@@ -39,7 +39,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
  import net.minecraft.src.Item;
  import net.minecraft.src.ItemRenderer;
  import net.minecraft.src.ItemStack;
-@@ -104,19 +110,14 @@
+@@ -104,19 +110,12 @@
  import net.minecraft.src.UnexpectedThrowable;
  import net.minecraft.src.Vec3D;
  import net.minecraft.src.World;
@@ -56,15 +56,13 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
 -import org.lwjgl.opengl.GL11;
 -import org.lwjgl.opengl.PixelFormat;
 -import org.lwjgl.util.glu.GLU;
-+import net.tasmod.HijackedRandom;
 +import net.tasmod.TASmod;
-+import net.tasmod.Utils;
 +import net.tasmod.virtual.VirtualKeyboard;
 +import net.tasmod.virtual.VirtualMouse;
  
  // Referenced classes of package net.minecraft.client:
  //            MinecraftApplet
-@@ -126,7 +127,7 @@
+@@ -126,7 +125,7 @@
  {
  
      public static byte field_28006_b[] = new byte[0xa00000];
@@ -73,18 +71,19 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
      public PlayerController playerController;
      private boolean fullscreen;
      private boolean hasCrashed;
-@@ -192,6 +193,10 @@
+@@ -192,6 +191,11 @@
  
      public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag)
      {
 +    	
 +		/* Override Math.random() and more */
-+		Utils.changeField("java.lang.Math$RandomNumberGeneratorHolder", "randomNumberGenerator", new HijackedRandom(), true);
++		// TODO: well yeah let's hope this is just visually. double check this
++    	// Utils.changeField("java.lang.Math$RandomNumberGeneratorHolder", "randomNumberGenerator", new Random(), true);
 +		
          fullscreen = false;
          hasCrashed = false;
          timer = new Timer(20F);
-@@ -315,7 +320,7 @@
+@@ -315,7 +319,7 @@
          statFileWriter = new StatFileWriter(session, mcDataDir);
          AchievementList.openInventory.setStatStringFormatter(new StatStringFormatKeyInv(this));
          loadScreen();
@@ -93,7 +92,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          Mouse.create();
          mouseHelper = new MouseHelper(mcCanvas);
          try
-@@ -592,7 +597,7 @@
+@@ -592,7 +596,7 @@
              catch(Throwable throwable1) { }
              sndManager.closeMinecraft();
              Mouse.destroy();
@@ -102,7 +101,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          }
          finally
          {
-@@ -709,7 +714,7 @@
+@@ -709,7 +713,7 @@
          Profiler.startSection("render");
          Profiler.startSection("display");
          GL11.glEnable(3553 /*GL_TEXTURE_2D*/);
@@ -111,7 +110,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          {
              Display.update();
          }
-@@ -752,7 +757,7 @@
+@@ -752,7 +756,7 @@
          guiAchievement.updateAchievementWindow();
          Profiler.startSection("root");
          Thread.yield();
@@ -120,7 +119,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          {
              Display.update();
          }
-@@ -810,7 +815,7 @@
+@@ -810,7 +814,7 @@
  
      private void screenshotListener()
      {
@@ -129,7 +128,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          {
              if(!isTakingScreenshot)
              {
-@@ -1313,24 +1318,59 @@
+@@ -1313,24 +1317,59 @@
                  currentScreen.updateScreen();
              }
          }
@@ -194,7 +193,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                      if(i1 != 0)
                      {
                          thePlayer.inventory.changeCurrentItem(i1);
-@@ -1349,7 +1389,7 @@
+@@ -1349,7 +1388,7 @@
                      }
                      if(currentScreen == null)
                      {
@@ -203,7 +202,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                          {
                              setIngameFocus();
                          }
-@@ -1367,18 +1407,18 @@
+@@ -1367,18 +1406,18 @@
              Profiler.endStartSection("keyboard");
              do
              {
@@ -228,7 +227,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                      {
                          toggleFullscreen();
                      } else
-@@ -1388,36 +1428,36 @@
+@@ -1388,36 +1427,36 @@
                              currentScreen.handleKeyboardInput();
                          } else
                          {
@@ -274,7 +273,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                              {
                                  gameSettings.thirdPersonView++;
                                  if(gameSettings.thirdPersonView > 2)
-@@ -1425,14 +1465,14 @@
+@@ -1425,14 +1464,14 @@
                                      gameSettings.thirdPersonView = 0;
                                  }
                              }
@@ -291,7 +290,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                              {
                                  thePlayer.inventory.currentItem = i;
                              }
-@@ -1440,14 +1480,14 @@
+@@ -1440,14 +1479,14 @@
  
                          if(gameSettings.showDebugInfo)
                          {
@@ -308,7 +307,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                                  {
                                      func_40003_b(j + 1);
                                  }
-@@ -1540,6 +1580,11 @@
+@@ -1540,6 +1579,11 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
@@ -493,84 +492,48 @@ diff -ruN src/minecraft/net/minecraft/src/BlockBed.java newsrc/minecraft/net/min
 diff -ruN src/minecraft/net/minecraft/src/BlockBrewingStand.java newsrc/minecraft/net/minecraft/src/BlockBrewingStand.java
 --- src/minecraft/net/minecraft/src/BlockBrewingStand.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/BlockBrewingStand.java	2021-01-01 00:00:00.000000000 +0100
-@@ -7,6 +7,8 @@
- import java.util.ArrayList;
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            BlockContainer, Material, TileEntityBrewingStand, World, 
- //            EntityPlayer, ItemStack, EntityItem, Item, 
-@@ -20,7 +22,7 @@
+@@ -20,7 +20,7 @@
      public BlockBrewingStand(int i)
      {
          super(i, Material.iron);
 -        field_40214_a = new Random();
-+        field_40214_a = new HijackedRandom(); // Defines which Direction Items drop, when breaking a brewing stand
++        field_40214_a = new Random(); // Defines which Direction Items drop, when breaking a brewing stand
          blockIndexInTexture = 157;
      }
  
 diff -ruN src/minecraft/net/minecraft/src/BlockChest.java newsrc/minecraft/net/minecraft/src/BlockChest.java
 --- src/minecraft/net/minecraft/src/BlockChest.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/BlockChest.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,6 +6,8 @@
- 
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            BlockContainer, Material, World, EntityLiving, 
- //            MathHelper, Block, IBlockAccess, TileEntityChest, 
-@@ -20,7 +22,7 @@
+@@ -20,7 +20,7 @@
      protected BlockChest(int i)
      {
          super(i, Material.wood);
 -        random = new Random();
-+        random = new HijackedRandom(); // Defines which Direction Items drop, when breaking a chest
++        random = new Random(); // Defines which Direction Items drop, when breaking a chest
          blockIndexInTexture = 26;
      }
  
 diff -ruN src/minecraft/net/minecraft/src/BlockDispenser.java newsrc/minecraft/net/minecraft/src/BlockDispenser.java
 --- src/minecraft/net/minecraft/src/BlockDispenser.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/BlockDispenser.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,6 +6,8 @@
- 
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            BlockContainer, Material, Block, World, 
- //            IBlockAccess, TileEntityDispenser, EntityPlayer, ItemStack, 
-@@ -21,7 +23,7 @@
+@@ -21,7 +21,7 @@
      protected BlockDispenser(int i)
      {
          super(i, Material.rock);
 -        random = new Random();
-+        random = new HijackedRandom(); // Defines which Direction Items drop, when breaking a Dispenser
++        random = new Random(); // Defines which Direction Items drop, when breaking a Dispenser
          blockIndexInTexture = 45;
      }
  
 diff -ruN src/minecraft/net/minecraft/src/BlockFurnace.java newsrc/minecraft/net/minecraft/src/BlockFurnace.java
 --- src/minecraft/net/minecraft/src/BlockFurnace.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/BlockFurnace.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,6 +6,8 @@
- 
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            BlockContainer, Material, Block, World, 
- //            IBlockAccess, TileEntityFurnace, EntityPlayer, TileEntity, 
-@@ -22,7 +24,7 @@
+@@ -22,7 +22,7 @@
      protected BlockFurnace(int i, boolean flag)
      {
          super(i, Material.rock);
 -        furnaceRand = new Random();
-+        furnaceRand = new HijackedRandom(); // Defines which Direction Items drop, when breaking a furnace
++        furnaceRand = new Random(); // Defines which Direction Items drop, when breaking a furnace
          isActive = flag;
          blockIndexInTexture = 45;
      }
@@ -916,7 +879,7 @@ diff -ruN src/minecraft/net/minecraft/src/ContainerDispenser.java newsrc/minecra
 diff -ruN src/minecraft/net/minecraft/src/ContainerEnchantment.java newsrc/minecraft/net/minecraft/src/ContainerEnchantment.java
 --- src/minecraft/net/minecraft/src/ContainerEnchantment.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/ContainerEnchantment.java	2021-01-01 00:00:00.000000000 +0100
-@@ -4,7 +4,11 @@
+@@ -4,7 +4,9 @@
  
  package net.minecraft.src;
  
@@ -924,17 +887,15 @@ diff -ruN src/minecraft/net/minecraft/src/ContainerEnchantment.java newsrc/minec
 +import java.util.Iterator;
 +import java.util.List;
 +import java.util.Random;
-+
-+import net.tasmod.HijackedRandom;
  
  // Referenced classes of package net.minecraft.src:
  //            Container, SlotEnchantmentTable, SlotEnchantment, Slot, 
-@@ -27,7 +31,7 @@
+@@ -27,7 +29,7 @@
      public ContainerEnchantment(InventoryPlayer inventoryplayer, World world, int i, int j, int k)
      {
          field_40236_a = new SlotEnchantmentTable(this, "Enchant", 1);
 -        field_40237_l = new Random();
-+        field_40237_l = new HijackedRandom(); // Defines Random Enchantments, that you are going to get
++        field_40237_l = new Random(); // Defines Random Enchantments, that you are going to get
          field_40235_c = new int[3];
          field_40240_h = world;
          field_40241_i = i;
@@ -1013,7 +974,7 @@ diff -ruN src/minecraft/net/minecraft/src/DataWatcher.java newsrc/minecraft/net/
 diff -ruN src/minecraft/net/minecraft/src/EffectRenderer.java newsrc/minecraft/net/minecraft/src/EffectRenderer.java
 --- src/minecraft/net/minecraft/src/EffectRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EffectRenderer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -4,9 +4,14 @@
+@@ -4,7 +4,10 @@
  
  package net.minecraft.src;
  
@@ -1024,15 +985,11 @@ diff -ruN src/minecraft/net/minecraft/src/EffectRenderer.java newsrc/minecraft/n
 +
  import org.lwjgl.opengl.GL11;
  
-+import net.tasmod.HijackedRandom;
-+
  // Referenced classes of package net.minecraft.src:
- //            EntityFX, ActiveRenderInfo, Entity, RenderEngine, 
- //            Tessellator, MathHelper, Block, EntityDiggingFX, 
 diff -ruN src/minecraft/net/minecraft/src/EnchantmentHelper.java newsrc/minecraft/net/minecraft/src/EnchantmentHelper.java
 --- src/minecraft/net/minecraft/src/EnchantmentHelper.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EnchantmentHelper.java	2021-01-01 00:00:00.000000000 +0100
-@@ -4,7 +4,14 @@
+@@ -4,7 +4,12 @@
  
  package net.minecraft.src;
  
@@ -1043,59 +1000,39 @@ diff -ruN src/minecraft/net/minecraft/src/EnchantmentHelper.java newsrc/minecraf
 +import java.util.List;
 +import java.util.Map;
 +import java.util.Random;
-+
-+import net.tasmod.HijackedRandom;
  
  // Referenced classes of package net.minecraft.src:
  //            ItemStack, NBTTagList, NBTTagCompound, Enchantment, 
-@@ -15,7 +22,7 @@
+@@ -15,7 +20,7 @@
  public class EnchantmentHelper
  {
  
 -    private static final Random enchantmentRand = new Random();
-+    private static final Random enchantmentRand = new HijackedRandom(); // TODO: what the heck does this do
++    private static final Random enchantmentRand = new Random(); // TODO: what the heck does this do
      private static final EnchantmentModifierDamage enchantmentModifierDamage = new EnchantmentModifierDamage(null);
      private static final EnchantmentModifierLiving enchantmentModifierLiving = new EnchantmentModifierLiving(null);
  
 diff -ruN src/minecraft/net/minecraft/src/EnchantmentNameParts.java newsrc/minecraft/net/minecraft/src/EnchantmentNameParts.java
 --- src/minecraft/net/minecraft/src/EnchantmentNameParts.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EnchantmentNameParts.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,6 +6,8 @@
- 
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- public class EnchantmentNameParts
- {
- 
-@@ -15,7 +17,7 @@
+@@ -15,7 +15,7 @@
  
      private EnchantmentNameParts()
      {
 -        field_40251_b = new Random();
-+        field_40251_b = new HijackedRandom(); // Very secret text for enchanting... selects and encrypts a string from v
++        field_40251_b = new Random(); // Very secret text for enchanting... selects and encrypts a string from v
          field_40252_c = "the elder scrolls klaatu berata niktu xyzzy bless curse light darkness fire air earth water hot dry cold wet ignite snuff embiggen twist shorten stretch fiddle destroy imbue galvanize enchant free limited range of towards inside sphere cube self other ball mental physical grow shrink demon elemental spirit animal creature beast humanoid undead fresh stale ".split(" ");
      }
  
 diff -ruN src/minecraft/net/minecraft/src/Entity.java newsrc/minecraft/net/minecraft/src/Entity.java
 --- src/minecraft/net/minecraft/src/Entity.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/Entity.java	2021-01-01 00:00:00.000000000 +0100
-@@ -7,6 +7,8 @@
- import java.util.List;
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            AxisAlignedBB, DataWatcher, World, Profiler, 
- //            MathHelper, DamageSource, Block, StepSound, 
-@@ -105,7 +107,7 @@
+@@ -105,7 +105,7 @@
          stepHeight = 0.0F;
          noClip = false;
          entityCollisionReduction = 0.0F;
 -        rand = new Random();
-+        rand = new HijackedRandom(); // Random for all entity stuff
++        rand = new Random(); // Random for all entity stuff
          ticksExisted = 0;
          fireResistance = 1;
          fire = 0;
@@ -1580,7 +1517,7 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRainFX.java newsrc/minecraft/net
 diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/net/minecraft/src/EntityRenderer.java
 --- src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -7,14 +7,18 @@
+@@ -7,14 +7,15 @@
  import java.awt.image.BufferedImage;
  import java.nio.FloatBuffer;
  import java.util.Random;
@@ -1594,15 +1531,12 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/n
  import org.lwjgl.util.glu.GLU;
  
 +import net.minecraft.client.Minecraft;
-+import net.tasmod.HijackedRandom;
-+import net.tasmod.TASmod;
-+import net.tasmod.Utils;
 +import net.tasmod.virtual.VirtualMouse;
 +
  // Referenced classes of package net.minecraft.src:
  //            MouseFilter, GLAllocation, ItemRenderer, RenderEngine, 
  //            GameSettings, EntityLiving, MathHelper, World, 
-@@ -396,8 +400,8 @@
+@@ -396,8 +397,8 @@
          }
          if(!mc.gameSettings.debugCamEnable)
          {
@@ -1613,7 +1547,7 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/n
          }
          GL11.glTranslatef(0.0F, f1, 0.0F);
          d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
-@@ -690,32 +694,25 @@
+@@ -690,32 +691,25 @@
              prevFrameTime = System.currentTimeMillis();
          }
          Profiler.startSection("mouse");
@@ -1665,7 +1599,7 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/n
          Profiler.endSection();
          if(mc.skipRenderWorld)
          {
-@@ -725,8 +722,8 @@
+@@ -725,8 +719,8 @@
          ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
          int i = scaledresolution.getScaledWidth();
          int j = scaledresolution.getScaledHeight();
@@ -1822,7 +1756,7 @@ diff -ruN src/minecraft/net/minecraft/src/EntityZombie.java newsrc/minecraft/net
 diff -ruN src/minecraft/net/minecraft/src/Explosion.java newsrc/minecraft/net/minecraft/src/Explosion.java
 --- src/minecraft/net/minecraft/src/Explosion.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/Explosion.java	2021-01-01 00:00:00.000000000 +0100
-@@ -4,7 +4,13 @@
+@@ -4,7 +4,11 @@
  
  package net.minecraft.src;
  
@@ -1832,24 +1766,22 @@ diff -ruN src/minecraft/net/minecraft/src/Explosion.java newsrc/minecraft/net/mi
 +import java.util.List;
 +import java.util.Random;
 +import java.util.Set;
-+
-+import net.tasmod.HijackedRandom;
  
  // Referenced classes of package net.minecraft.src:
  //            World, MathHelper, Block, ChunkPosition, 
-@@ -27,7 +33,7 @@
+@@ -27,7 +31,7 @@
      public Explosion(World world, Entity entity, double d, double d1, double d2, float f)
      {
          isFlaming = false;
 -        ExplosionRNG = new Random();
-+        ExplosionRNG = new HijackedRandom(); // Flames
++        ExplosionRNG = new Random(); // Flames
          destroyedBlockPositions = new HashSet();
          worldObj = world;
          exploder = entity;
 diff -ruN src/minecraft/net/minecraft/src/FontRenderer.java newsrc/minecraft/net/minecraft/src/FontRenderer.java
 --- src/minecraft/net/minecraft/src/FontRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/FontRenderer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -8,9 +8,13 @@
+@@ -8,7 +8,9 @@
  import java.io.IOException;
  import java.nio.IntBuffer;
  import java.util.Random;
@@ -1858,17 +1790,13 @@ diff -ruN src/minecraft/net/minecraft/src/FontRenderer.java newsrc/minecraft/net
 +
  import org.lwjgl.opengl.GL11;
  
-+import net.tasmod.HijackedRandom;
-+
  // Referenced classes of package net.minecraft.src:
- //            GLAllocation, RenderEngine, Tessellator, GameSettings, 
- //            ChatAllowedCharacters
-@@ -31,7 +35,7 @@
+@@ -31,7 +33,7 @@
          fontTextureName = 0;
          field_41063_b = 8;
          buffer = GLAllocation.createDirectIntBuffer(1024 /*GL_FRONT_LEFT*/);
 -        field_41064_c = new Random();
-+        field_41064_c = new HijackedRandom(); // TODO: More investigation
++        field_41064_c = new Random(); // TODO: More investigation
          BufferedImage bufferedimage;
          try
          {
@@ -1948,7 +1876,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiAchievement.java newsrc/minecraft/n
 diff -ruN src/minecraft/net/minecraft/src/GuiAchievements.java newsrc/minecraft/net/minecraft/src/GuiAchievements.java
 --- src/minecraft/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
-@@ -4,12 +4,13 @@
+@@ -4,12 +4,12 @@
  
  package net.minecraft.src;
  
@@ -1959,13 +1887,12 @@ diff -ruN src/minecraft/net/minecraft/src/GuiAchievements.java newsrc/minecraft/
 +
  import org.lwjgl.opengl.GL11;
  
-+import net.tasmod.HijackedRandom;
 +import net.tasmod.virtual.VirtualMouse;
 +
  // Referenced classes of package net.minecraft.src:
  //            GuiScreen, AchievementList, Achievement, GuiSmallButton, 
  //            StatCollector, GuiButton, GameSettings, KeyBinding, 
-@@ -80,7 +81,7 @@
+@@ -80,7 +80,7 @@
  
      public void drawScreen(int i, int j, float f)
      {
@@ -2189,12 +2116,11 @@ diff -ruN src/minecraft/net/minecraft/src/GuiCreateWorld.java newsrc/minecraft/n
  package net.minecraft.src;
  
 -import java.util.List;
--import java.util.Random;
++import java.io.IOException;
+ import java.util.Random;
 -import net.minecraft.client.Minecraft;
 -import org.lwjgl.input.Keyboard;
-+import java.io.IOException;
 +
-+import net.tasmod.HijackedRandom;
 +import net.tasmod.TASmod;
 +import net.tasmod.virtual.VirtualKeyboard;
  
@@ -2221,15 +2147,6 @@ diff -ruN src/minecraft/net/minecraft/src/GuiCreateWorld.java newsrc/minecraft/n
      }
  
      protected void actionPerformed(GuiButton guibutton)
-@@ -140,7 +141,7 @@
-                 return;
-             }
-             createClicked = true;
--            long l = (new Random()).nextLong();
-+            long l = (new HijackedRandom()).nextLong(); // RNG Seed for new World
-             String s = textboxSeed.getText();
-             if(!MathHelper.stringNullOrLengthZero(s))
-             {
 @@ -157,17 +158,22 @@
                      l = s.hashCode();
                  }
@@ -2336,7 +2253,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiEditSign.java newsrc/minecraft/net/
 diff -ruN src/minecraft/net/minecraft/src/GuiEnchantment.java newsrc/minecraft/net/minecraft/src/GuiEnchantment.java
 --- src/minecraft/net/minecraft/src/GuiEnchantment.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiEnchantment.java	2021-01-01 00:00:00.000000000 +0100
-@@ -5,10 +5,12 @@
+@@ -5,7 +5,7 @@
  package net.minecraft.src;
  
  import java.util.Random;
@@ -2345,17 +2262,12 @@ diff -ruN src/minecraft/net/minecraft/src/GuiEnchantment.java newsrc/minecraft/n
  import org.lwjgl.opengl.GL11;
  import org.lwjgl.util.glu.GLU;
  
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            GuiContainer, ContainerEnchantment, FontRenderer, PlayerController, 
- //            RenderEngine, ScaledResolution, RenderHelper, MathHelper, 
-@@ -33,7 +35,7 @@
+@@ -33,7 +33,7 @@
      public GuiEnchantment(InventoryPlayer inventoryplayer, World world, int i, int j, int k)
      {
          super(new ContainerEnchantment(inventoryplayer, world, i, j, k));
 -        field_40230_x = new Random();
-+        field_40230_x = new HijackedRandom(); // TODO: More investigation
++        field_40230_x = new Random(); // TODO: More investigation
          field_40228_y = (ContainerEnchantment)inventorySlots;
      }
  
@@ -2385,7 +2297,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiGameOver.java newsrc/minecraft/net/
 diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/minecraft/src/GuiIngame.java
 --- src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
-@@ -7,9 +7,12 @@
+@@ -7,9 +7,11 @@
  import java.awt.Color;
  import java.util.ArrayList;
  import java.util.Random;
@@ -2394,19 +2306,10 @@ diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/mi
  import org.lwjgl.opengl.GL11;
  
 +import net.minecraft.client.Minecraft;
-+import net.tasmod.HijackedRandom;
 +
  // Referenced classes of package net.minecraft.src:
  //            Gui, ScaledResolution, EntityRenderer, EntityPlayerSP, 
  //            InventoryPlayer, GameSettings, ItemStack, Block, 
-@@ -76,6 +79,7 @@
-                 renderPortalOverlay(f1, k, l);
-             }
-         }
-+        drawString(mc.fontRenderer, HijackedRandom.seed.get() + "", 0, 0, 0xFFFFFF);
-         if(!mc.playerController.func_35643_e())
-         {
-             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 diff -ruN src/minecraft/net/minecraft/src/GuiIngameMenu.java newsrc/minecraft/net/minecraft/src/GuiIngameMenu.java
 --- src/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
@@ -2438,7 +2341,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiInventory.java newsrc/minecraft/net
 diff -ruN src/minecraft/net/minecraft/src/GuiMainMenu.java newsrc/minecraft/net/minecraft/src/GuiMainMenu.java
 --- src/minecraft/net/minecraft/src/GuiMainMenu.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiMainMenu.java	2021-01-01 00:00:00.000000000 +0100
-@@ -10,12 +10,13 @@
+@@ -10,9 +10,8 @@
  import java.util.ArrayList;
  import java.util.Calendar;
  import java.util.Date;
@@ -2449,12 +2352,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiMainMenu.java newsrc/minecraft/net/
  import org.lwjgl.opengl.GL11;
  import org.lwjgl.util.glu.GLU;
  
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            GuiScreen, RenderEngine, StringTranslate, GuiButton, 
- //            GuiOptions, GuiSelectWorld, GuiMultiplayer, GuiTexturePacks, 
-@@ -100,8 +101,8 @@
+@@ -100,8 +99,8 @@
          }
          StringTranslate stringtranslate = StringTranslate.getInstance();
          int i = height / 4 + 48;
@@ -3299,7 +3197,7 @@ diff -ruN src/minecraft/net/minecraft/src/ImageBufferDownload.java newsrc/minecr
 diff -ruN src/minecraft/net/minecraft/src/Item.java newsrc/minecraft/net/minecraft/src/Item.java
 --- src/minecraft/net/minecraft/src/Item.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/Item.java	2021-01-01 00:00:00.000000000 +0100
-@@ -4,10 +4,11 @@
+@@ -4,7 +4,6 @@
  
  package net.minecraft.src;
  
@@ -3307,17 +3205,12 @@ diff -ruN src/minecraft/net/minecraft/src/Item.java newsrc/minecraft/net/minecra
  import java.util.List;
  import java.util.Random;
  
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            ItemStack, StatCollector, EnumAction, StringTranslate, 
- //            EnumRarity, EntityPlayer, Vec3D, MathHelper, 
-@@ -27,7 +28,7 @@
+@@ -27,7 +26,7 @@
  public class Item
  {
  
 -    protected static Random itemRand = new Random();
-+    protected static Random itemRand = new HijackedRandom(); // TODO: More investigation
++    protected static Random itemRand = new Random(); // TODO: More investigation
      public static Item itemsList[] = new Item[32000];
      public static Item shovelSteel;
      public static Item pickaxeSteel;
@@ -3642,16 +3535,7 @@ diff -ruN src/minecraft/net/minecraft/src/MapData.java newsrc/minecraft/net/mine
 diff -ruN src/minecraft/net/minecraft/src/MapGenBase.java newsrc/minecraft/net/minecraft/src/MapGenBase.java
 --- src/minecraft/net/minecraft/src/MapGenBase.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/MapGenBase.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,6 +6,8 @@
- 
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            World, IChunkProvider
- 
-@@ -19,7 +21,7 @@
+@@ -19,7 +19,7 @@
      public MapGenBase()
      {
          field_1306_a = 8;
@@ -4049,7 +3933,7 @@ diff -ruN src/minecraft/net/minecraft/src/NBTTagString.java newsrc/minecraft/net
 diff -ruN src/minecraft/net/minecraft/src/NetClientHandler.java newsrc/minecraft/net/minecraft/src/NetClientHandler.java
 --- src/minecraft/net/minecraft/src/NetClientHandler.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/NetClientHandler.java	2021-01-01 00:00:00.000000000 +0100
-@@ -4,10 +4,21 @@
+@@ -4,9 +4,19 @@
  
  package net.minecraft.src;
  
@@ -4070,16 +3954,14 @@ diff -ruN src/minecraft/net/minecraft/src/NetClientHandler.java newsrc/minecraft
 +import java.util.Random;
 +
  import net.minecraft.client.Minecraft;
-+import net.tasmod.HijackedRandom;
  
  // Referenced classes of package net.minecraft.src:
- //            NetHandler, MapStorage, NetworkManager, PlayerControllerMP, 
-@@ -64,7 +75,7 @@
+@@ -64,7 +74,7 @@
          field_35787_k = new HashMap();
          field_35786_c = new ArrayList();
          field_35785_d = 20;
 -        rand = new Random();
-+        rand = new HijackedRandom(); // Pitch for picking up items
++        rand = new Random(); // Pitch for picking up items
          mc = minecraft;
          Socket socket = new Socket(InetAddress.getByName(s), i);
          netManager = new NetworkManager(socket, "Client", this);
@@ -4120,16 +4002,7 @@ diff -ruN src/minecraft/net/minecraft/src/NetworkWriterThread.java newsrc/minecr
 diff -ruN src/minecraft/net/minecraft/src/NoiseGeneratorPerlin.java newsrc/minecraft/net/minecraft/src/NoiseGeneratorPerlin.java
 --- src/minecraft/net/minecraft/src/NoiseGeneratorPerlin.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/NoiseGeneratorPerlin.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,6 +6,8 @@
- 
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            NoiseGenerator
- 
-@@ -19,7 +21,7 @@
+@@ -19,7 +19,7 @@
  
      public NoiseGeneratorPerlin()
      {
@@ -5121,12 +4994,12 @@ diff -ruN src/minecraft/net/minecraft/src/PanelCrashReport.java newsrc/minecraft
 diff -ruN src/minecraft/net/minecraft/src/Particle.java newsrc/minecraft/net/minecraft/src/Particle.java
 --- src/minecraft/net/minecraft/src/Particle.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/Particle.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,13 +6,15 @@
+@@ -4,15 +4,13 @@
  
- import java.util.Random;
+ package net.minecraft.src;
  
-+import net.tasmod.HijackedRandom;
-+
+-import java.util.Random;
+-
  // Referenced classes of package net.minecraft.src:
  //            GuiParticle
  
@@ -5320,18 +5193,14 @@ diff -ruN src/minecraft/net/minecraft/src/RenderEndPortal.java newsrc/minecraft/
 diff -ruN src/minecraft/net/minecraft/src/RenderEnderman.java newsrc/minecraft/net/minecraft/src/RenderEnderman.java
 --- src/minecraft/net/minecraft/src/RenderEnderman.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/RenderEnderman.java	2021-01-01 00:00:00.000000000 +0100
-@@ -5,8 +5,11 @@
+@@ -5,6 +5,7 @@
  package net.minecraft.src;
  
  import java.util.Random;
 +
  import org.lwjgl.opengl.GL11;
  
-+import net.tasmod.HijackedRandom;
-+
  // Referenced classes of package net.minecraft.src:
- //            RenderLiving, ModelEnderman, EntityEnderman, OpenGlHelper, 
- //            Block, RenderBlocks, EntityLiving, Entity
 diff -ruN src/minecraft/net/minecraft/src/RenderEngine.java newsrc/minecraft/net/minecraft/src/RenderEngine.java
 --- src/minecraft/net/minecraft/src/RenderEngine.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/RenderEngine.java	2021-01-01 00:00:00.000000000 +0100
@@ -5391,18 +5260,14 @@ diff -ruN src/minecraft/net/minecraft/src/RenderHelper.java newsrc/minecraft/net
 diff -ruN src/minecraft/net/minecraft/src/RenderItem.java newsrc/minecraft/net/minecraft/src/RenderItem.java
 --- src/minecraft/net/minecraft/src/RenderItem.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/RenderItem.java	2021-01-01 00:00:00.000000000 +0100
-@@ -5,8 +5,11 @@
+@@ -5,6 +5,7 @@
  package net.minecraft.src;
  
  import java.util.Random;
 +
  import org.lwjgl.opengl.GL11;
  
-+import net.tasmod.HijackedRandom;
-+
  // Referenced classes of package net.minecraft.src:
- //            Render, RenderBlocks, EntityItem, MathHelper, 
- //            ItemStack, Block, Item, ItemPotion, 
 diff -ruN src/minecraft/net/minecraft/src/RenderLightningBolt.java newsrc/minecraft/net/minecraft/src/RenderLightningBolt.java
 --- src/minecraft/net/minecraft/src/RenderLightningBolt.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/RenderLightningBolt.java	2021-01-01 00:00:00.000000000 +0100
@@ -5469,19 +5334,15 @@ diff -ruN src/minecraft/net/minecraft/src/RenderManager.java newsrc/minecraft/ne
 diff -ruN src/minecraft/net/minecraft/src/RenderPainting.java newsrc/minecraft/net/minecraft/src/RenderPainting.java
 --- src/minecraft/net/minecraft/src/RenderPainting.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/RenderPainting.java	2021-01-01 00:00:00.000000000 +0100
-@@ -5,8 +5,11 @@
+@@ -5,6 +5,7 @@
  package net.minecraft.src;
  
  import java.util.Random;
 +
  import org.lwjgl.opengl.GL11;
  
-+import net.tasmod.HijackedRandom;
-+
  // Referenced classes of package net.minecraft.src:
- //            Render, EntityPainting, EnumArt, Tessellator, 
- //            MathHelper, RenderManager, World, OpenGlHelper, 
-@@ -19,7 +22,7 @@
+@@ -19,7 +20,7 @@
  
      public RenderPainting()
      {
@@ -5600,14 +5461,13 @@ diff -ruN src/minecraft/net/minecraft/src/ShapelessRecipes.java newsrc/minecraft
 diff -ruN src/minecraft/net/minecraft/src/SoundManager.java newsrc/minecraft/net/minecraft/src/SoundManager.java
 --- src/minecraft/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
-@@ -5,13 +5,11 @@
+@@ -5,13 +5,10 @@
  package net.minecraft.src;
  
  import java.io.File;
 -import java.io.PrintStream;
  import java.util.Random;
 +
-+import net.tasmod.HijackedRandom;
  import paulscode.sound.SoundSystem;
  import paulscode.sound.SoundSystemConfig;
 -import paulscode.sound.codecs.CodecJOrbis;
@@ -5616,19 +5476,19 @@ diff -ruN src/minecraft/net/minecraft/src/SoundManager.java newsrc/minecraft/net
  
  // Referenced classes of package net.minecraft.src:
  //            SoundPool, GameSettings, CodecMus, SoundPoolEntry, 
-@@ -36,7 +34,7 @@
+@@ -36,7 +33,7 @@
          soundPoolStreaming = new SoundPool();
          soundPoolMusic = new SoundPool();
          latestSoundID = 0;
 -        rand = new Random();
-+        rand = new HijackedRandom(); // Random for Music!
++        rand = new Random(); // Random for Music!
          ticksBeforeMusic = rand.nextInt(12000);
      }
  
 diff -ruN src/minecraft/net/minecraft/src/SoundPool.java newsrc/minecraft/net/minecraft/src/SoundPool.java
 --- src/minecraft/net/minecraft/src/SoundPool.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/SoundPool.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,8 +6,13 @@
+@@ -6,8 +6,11 @@
  
  import java.io.File;
  import java.net.MalformedURLException;
@@ -5639,17 +5499,15 @@ diff -ruN src/minecraft/net/minecraft/src/SoundPool.java newsrc/minecraft/net/mi
 +import java.util.List;
 +import java.util.Map;
 +import java.util.Random;
-+
-+import net.tasmod.HijackedRandom;
  
  // Referenced classes of package net.minecraft.src:
  //            SoundPoolEntry
-@@ -23,7 +28,7 @@
+@@ -23,7 +26,7 @@
  
      public SoundPool()
      {
 -        rand = new Random();
-+        rand = new HijackedRandom(); // Picks a random sound.. probably for SuperSecretSettings-Button
++        rand = new Random(); // Picks a random sound.. probably for SuperSecretSettings-Button
          nameToSoundPoolEntriesMapping = new HashMap();
          allSoundPoolEntries = new ArrayList();
          numberOfSoundPoolEntries = 0;
@@ -5891,21 +5749,12 @@ diff -ruN src/minecraft/net/minecraft/src/StructureVillageStart.java newsrc/mine
 diff -ruN src/minecraft/net/minecraft/src/Teleporter.java newsrc/minecraft/net/minecraft/src/Teleporter.java
 --- src/minecraft/net/minecraft/src/Teleporter.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/Teleporter.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,6 +6,8 @@
- 
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            World, WorldProvider, Entity, MathHelper, 
- //            Block, BlockPortal, Material
-@@ -17,7 +19,7 @@
+@@ -17,7 +17,7 @@
  
      public Teleporter()
      {
 -        random = new Random();
-+        random = new HijackedRandom(); // TODO: Direction of Portal?
++        random = new Random(); // TODO: Direction of Portal?
      }
  
      public void placeInPortal(World world, Entity entity)
@@ -6203,42 +6052,24 @@ diff -ruN src/minecraft/net/minecraft/src/TileEntityChest.java newsrc/minecraft/
 diff -ruN src/minecraft/net/minecraft/src/TileEntityDispenser.java newsrc/minecraft/net/minecraft/src/TileEntityDispenser.java
 --- src/minecraft/net/minecraft/src/TileEntityDispenser.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/TileEntityDispenser.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,6 +6,8 @@
- 
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            TileEntity, IInventory, ItemStack, NBTTagCompound, 
- //            NBTTagList, World, EntityPlayer
-@@ -20,7 +22,7 @@
+@@ -20,7 +20,7 @@
      public TileEntityDispenser()
      {
          dispenserContents = new ItemStack[9];
 -        dispenserRandom = new Random();
-+        dispenserRandom = new HijackedRandom(); // Defines which Item to drop
++        dispenserRandom = new Random(); // Defines which Item to drop
      }
  
      public int getSizeInventory()
 diff -ruN src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java newsrc/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java
 --- src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,6 +6,8 @@
- 
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            TileEntity, World, EntityPlayer
- 
-@@ -22,7 +24,7 @@
+@@ -22,7 +22,7 @@
      public float field_40069_h;
      public float field_40067_p;
      public float field_40066_q;
 -    private static Random field_40064_r = new Random();
-+    private static Random field_40064_r = new HijackedRandom(); // TODO: I have no Idea...
++    private static Random field_40064_r = new Random(); // TODO: I have no Idea...
  
      public TileEntityEnchantmentTable()
      {
@@ -6338,7 +6169,7 @@ diff -ruN src/minecraft/net/minecraft/src/WeightedRandom.java newsrc/minecraft/n
 diff -ruN src/minecraft/net/minecraft/src/World.java newsrc/minecraft/net/minecraft/src/World.java
 --- src/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
-@@ -4,8 +4,16 @@
+@@ -4,8 +4,14 @@
  
  package net.minecraft.src;
  
@@ -6352,47 +6183,9 @@ diff -ruN src/minecraft/net/minecraft/src/World.java newsrc/minecraft/net/minecr
 +import java.util.Random;
 +import java.util.Set;
 +import java.util.TreeSet;
-+
-+import net.tasmod.HijackedRandom;
  
  // Referenced classes of package net.minecraft.src:
  //            IBlockAccess, WorldProvider, WorldInfo, MapStorage, 
-@@ -97,7 +105,7 @@
-         weatherEffects = new ArrayList();
-         cloudColour = 0xffffffL;
-         skylightSubtracted = 0;
--        updateLCG = (new Random()).nextInt();
-+        updateLCG = (new HijackedRandom()).nextInt();
-         lastLightningBolt = 0;
-         lightningFlash = 0;
-         editingBlocks = false;
-@@ -143,7 +151,7 @@
-         weatherEffects = new ArrayList();
-         cloudColour = 0xffffffL;
-         skylightSubtracted = 0;
--        updateLCG = (new Random()).nextInt();
-+        updateLCG = (new HijackedRandom()).nextInt();
-         lastLightningBolt = 0;
-         lightningFlash = 0;
-         editingBlocks = false;
-@@ -195,7 +203,7 @@
-         weatherEffects = new ArrayList();
-         cloudColour = 0xffffffL;
-         skylightSubtracted = 0;
--        updateLCG = (new Random()).nextInt();
-+        updateLCG = (new HijackedRandom()).nextInt();
-         lastLightningBolt = 0;
-         lightningFlash = 0;
-         editingBlocks = false;
-@@ -2806,7 +2814,7 @@
-     public void randomDisplayUpdates(int i, int j, int k)
-     {
-         byte byte0 = 16;
--        Random random = new Random();
-+        Random random = new HijackedRandom();
-         for(int l = 0; l < 1000; l++)
-         {
-             int i1 = (i + rand.nextInt(byte0)) - rand.nextInt(byte0);
 diff -ruN src/minecraft/net/minecraft/src/WorldChunkManager.java newsrc/minecraft/net/minecraft/src/WorldChunkManager.java
 --- src/minecraft/net/minecraft/src/WorldChunkManager.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/WorldChunkManager.java	2021-01-01 00:00:00.000000000 +0100
@@ -6438,21 +6231,12 @@ diff -ruN src/minecraft/net/minecraft/src/WorldClient.java newsrc/minecraft/net/
 diff -ruN src/minecraft/net/minecraft/src/WorldGenBigTree.java newsrc/minecraft/net/minecraft/src/WorldGenBigTree.java
 --- src/minecraft/net/minecraft/src/WorldGenBigTree.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/WorldGenBigTree.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,6 +6,8 @@
- 
- import java.util.Random;
- 
-+import net.tasmod.HijackedRandom;
-+
- // Referenced classes of package net.minecraft.src:
- //            WorldGenerator, MathHelper, World
- 
-@@ -35,7 +37,7 @@
+@@ -35,7 +35,7 @@
      public WorldGenBigTree(boolean flag)
      {
          super(flag);
 -        rand = new Random();
-+        rand = new HijackedRandom(); // Defines where leaves for a big tree are
++        rand = new Random(); // Defines where leaves for a big tree are
          heightLimit = 0;
          heightAttenuation = 0.61799999999999999D;
          field_875_h = 1.0D;
@@ -6482,58 +6266,10 @@ diff -ruN src/minecraft/net/minecraft/src/WorldRenderer.java newsrc/minecraft/ne
  import org.lwjgl.opengl.GL11;
  
  // Referenced classes of package net.minecraft.src:
-diff -ruN src/minecraft/net/tasmod/HijackedRandom.java newsrc/minecraft/net/tasmod/HijackedRandom.java
---- src/minecraft/net/tasmod/HijackedRandom.java	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/tasmod/HijackedRandom.java	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,44 @@
-+package net.tasmod;
-+
-+import java.util.Random;
-+import java.util.concurrent.atomic.AtomicLong;
-+
-+/**
-+ * This Random forces a Seed for all 'Random' Operations and logs them into a file.
-+ * @author Pancake
-+ */
-+public class HijackedRandom extends Random {
-+	
-+	public static final AtomicLong seed = new AtomicLong(0L);
-+	
-+    private static final long multiplier = 0x5DEECE66DL;
-+    private static final long addend = 0xBL;
-+    private static final long mask = (1L << 48) - 1;
-+	
-+    /* Redirect internal seed to static seed */
-+    
-+    public HijackedRandom(long seed) {
-+    	System.err.println(Thread.currentThread().getStackTrace()[5].getFileName());
-+    }
-+    
-+	public HijackedRandom() {
-+		
-+	}
-+
-+	@Override
-+    synchronized public void setSeed(long seed) {
-+		
-+    }
-+	
-+	@Override
-+	public synchronized double nextGaussian() {
-+		return nextDouble(); // Gaussian is nextDouble but biased
-+	}
-+	
-+    @Override
-+    protected int next(int bits) {
-+        long nextseed = (HijackedRandom.seed.get() * multiplier + addend) & mask;
-+        return (int)(nextseed >>> (48 - bits));
-+    }
-+    
-+}
 diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmod.java
 --- src/minecraft/net/tasmod/TASmod.java	1970-01-01 01:00:00.000000000 +0100
 +++ newsrc/minecraft/net/tasmod/TASmod.java	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,112 @@
+@@ -0,0 +1,111 @@
 +package net.tasmod;
 +
 +import java.io.IOException;
@@ -6557,7 +6293,6 @@ diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmo
 +	/** Currently running Playback */
 +	private static volatile Replayer playback;
 +	
-+	// TODO: Sync KillTheRng
 +	// TODO: Sync Playback/Recording
 +	// TODO: Implement a Tick Start thingy
 +	
@@ -6742,7 +6477,6 @@ diff -ruN src/minecraft/net/tasmod/recorder/Recorder.java newsrc/minecraft/net/t
 +import net.minecraft.src.PlayerControllerCreative;
 +import net.minecraft.src.PlayerControllerSP;
 +import net.minecraft.src.WorldSettings;
-+import net.tasmod.HijackedRandom;
 +import net.tasmod.Utils;
 +import net.tasmod.virtual.VirtualKeyboard;
 +import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
@@ -6836,16 +6570,17 @@ diff -ruN src/minecraft/net/tasmod/recorder/Recorder.java newsrc/minecraft/net/t
 +		final File worldFile = new File(this.mc.mcDataDir, "saves" + File.separator + "TAS-Playback");
 +		if (worldFile.exists()) Utils.deleteDirectory(worldFile);
 +		
++		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
++		VirtualMouse.getDX();
++		VirtualMouse.getDY();
++		
 +		VirtualKeyboard.listen = true;
 +		VirtualMouse.listen = true;
 +		
 +		/* Join a new world */
-+		HijackedRandom.seed.set(0L);
 +		this.mc.playerController = this.worldtype == 0 ? new PlayerControllerSP(this.mc) : new PlayerControllerCreative(this.mc);
 +		this.mc.startWorld(folderName, worldName, new WorldSettings(this.worldseed, this.worldtype, mapFeatures, hardcore));
 +		this.mc.displayGuiScreen(null);
-+		//this.mc.thePlayer.rotationPitch = 0f;
-+		//this.mc.thePlayer.rotationYaw = 0f;
 +	}
 +	
 +	private volatile List<VirtualKeyEvent> keyEventsPerTick = new ArrayList<>();
@@ -6923,7 +6658,6 @@ diff -ruN src/minecraft/net/tasmod/replayer/Replayer.java newsrc/minecraft/net/t
 +import net.minecraft.src.PlayerControllerCreative;
 +import net.minecraft.src.PlayerControllerSP;
 +import net.minecraft.src.WorldSettings;
-+import net.tasmod.HijackedRandom;
 +import net.tasmod.TASmod;
 +import net.tasmod.Utils;
 +import net.tasmod.virtual.VirtualKeyboard;
@@ -7006,13 +6740,14 @@ diff -ruN src/minecraft/net/tasmod/replayer/Replayer.java newsrc/minecraft/net/t
 +		final File worldFile = new File(this.mc.mcDataDir, "saves" + File.separator + "TAS-Playback");
 +		if (worldFile.exists()) Utils.deleteDirectory(worldFile);
 +		
++		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
++		VirtualMouse.getDX();
++		VirtualMouse.getDY();
++		
 +		/* Join a new world */
-+		HijackedRandom.seed.set(0L);
 +		this.mc.playerController = this.worldtype == 0 ? new PlayerControllerSP(this.mc) : new PlayerControllerCreative(this.mc);
 +		this.mc.startWorld("TAS-Playback", "TAS-Playback", new WorldSettings(this.worldseed, this.worldtype, mapFeatures, hardcore));
 +		this.mc.displayGuiScreen(null);
-+		//this.mc.thePlayer.rotationPitch = 0f;
-+		//this.mc.thePlayer.rotationYaw = 0f;
 +	}
 +	
 +	/**
@@ -7061,7 +6796,7 @@ diff -ruN src/minecraft/net/tasmod/replayer/Replayer.java newsrc/minecraft/net/t
 diff -ruN src/minecraft/net/tasmod/virtual/VirtualKeyboard.java newsrc/minecraft/net/tasmod/virtual/VirtualKeyboard.java
 --- src/minecraft/net/tasmod/virtual/VirtualKeyboard.java	1970-01-01 01:00:00.000000000 +0100
 +++ newsrc/minecraft/net/tasmod/virtual/VirtualKeyboard.java	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,136 @@
+@@ -0,0 +1,130 @@
 +package net.tasmod.virtual;
 +
 +import java.util.LinkedList;
@@ -7070,7 +6805,6 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualKeyboard.java newsrc/minecraft
 +import org.lwjgl.LWJGLException;
 +import org.lwjgl.input.Keyboard;
 +
-+import net.tasmod.HijackedRandom;
 +import net.tasmod.TASmod;
 +
 +public final class VirtualKeyboard {
@@ -7124,13 +6858,8 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualKeyboard.java newsrc/minecraft
 +			if (virtualKeyEvent.key == i && virtualKeyEvent.state == true) return true;
 +		return false;
 +	}
-+
-+    private static final long multiplier = 0x5DEECE66DL;
-+    private static final long addend = 0xBL;
-+    private static final long mask = (1L << 48) - 1;
 +	
 +	public final static boolean next() {
-+		long newSeed = (HijackedRandom.seed.get() * multiplier + addend) & mask;
 +		if (listen) {
 +			if (currentlyListening != null) {
 +				TASmod.keyboardTick(currentlyListening);
