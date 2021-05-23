@@ -13,6 +13,7 @@ rm mcp50.zip
 /mnt/c/Windows/System32/cmd.exe /C decompile.bat
 cd src
 find . -type f -exec dos2unix {} \;
+find . -type f -exec touch -a -m -t 202101010000.00 {} \;
 cd ..
 dos2unix ../src/change.patch
 patch -s -p0 < ../src/change.patch
