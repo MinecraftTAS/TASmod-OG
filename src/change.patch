@@ -39,7 +39,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
  import net.minecraft.src.Item;
  import net.minecraft.src.ItemRenderer;
  import net.minecraft.src.ItemStack;
-@@ -104,19 +110,12 @@
+@@ -104,19 +110,13 @@
  import net.minecraft.src.UnexpectedThrowable;
  import net.minecraft.src.Vec3D;
  import net.minecraft.src.World;
@@ -57,12 +57,13 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
 -import org.lwjgl.opengl.PixelFormat;
 -import org.lwjgl.util.glu.GLU;
 +import net.tasmod.TASmod;
++import net.tasmod.Utils;
 +import net.tasmod.virtual.VirtualKeyboard;
 +import net.tasmod.virtual.VirtualMouse;
  
  // Referenced classes of package net.minecraft.client:
  //            MinecraftApplet
-@@ -126,7 +125,7 @@
+@@ -126,7 +126,7 @@
  {
  
      public static byte field_28006_b[] = new byte[0xa00000];
@@ -71,7 +72,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
      public PlayerController playerController;
      private boolean fullscreen;
      private boolean hasCrashed;
-@@ -192,6 +191,11 @@
+@@ -192,6 +192,11 @@
  
      public Minecraft(Component component, Canvas canvas, MinecraftApplet minecraftapplet, int i, int j, boolean flag)
      {
@@ -83,7 +84,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          fullscreen = false;
          hasCrashed = false;
          timer = new Timer(20F);
-@@ -315,7 +319,7 @@
+@@ -315,7 +320,7 @@
          statFileWriter = new StatFileWriter(session, mcDataDir);
          AchievementList.openInventory.setStatStringFormatter(new StatStringFormatKeyInv(this));
          loadScreen();
@@ -92,7 +93,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          Mouse.create();
          mouseHelper = new MouseHelper(mcCanvas);
          try
-@@ -592,7 +596,7 @@
+@@ -592,7 +597,7 @@
              catch(Throwable throwable1) { }
              sndManager.closeMinecraft();
              Mouse.destroy();
@@ -101,7 +102,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          }
          finally
          {
-@@ -709,7 +713,7 @@
+@@ -709,7 +714,7 @@
          Profiler.startSection("render");
          Profiler.startSection("display");
          GL11.glEnable(3553 /*GL_TEXTURE_2D*/);
@@ -110,7 +111,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          {
              Display.update();
          }
-@@ -752,7 +756,7 @@
+@@ -752,7 +757,7 @@
          guiAchievement.updateAchievementWindow();
          Profiler.startSection("root");
          Thread.yield();
@@ -119,7 +120,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          {
              Display.update();
          }
-@@ -810,7 +814,7 @@
+@@ -810,7 +815,7 @@
  
      private void screenshotListener()
      {
@@ -128,7 +129,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          {
              if(!isTakingScreenshot)
              {
-@@ -1313,24 +1317,59 @@
+@@ -1313,24 +1318,57 @@
                  currentScreen.updateScreen();
              }
          }
@@ -139,12 +140,10 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
 +            float f1 = gameSettings.mouseSensitivity * 0.6F + 0.2F;
 +            float f2 = f1 * f1 * f1 * 8F;
 +        	
-+//            float f3 = (float) Utils.dX * f2;
-+//            float f4 = (float) Utils.dY * f2;
-+            mouseHelper.mouseXYChange();
++            mouseHelper.mouseXYChange(); // Call the real one, but actually call the virtual one
 +            float f3 = (float) mouseHelper.deltaX * f2;
 +            float f4 = (float) mouseHelper.deltaY * f2;
-+//            
++            
 +//            Utils.dX = 0;
 +//            Utils.dY = 0;
 +            
@@ -153,12 +152,12 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
 +            if (gameSettings.invertMouse) {
 +                l = -1;
 +            }
-+            thePlayer.setAngles((f3 % 360), f4 * (float)l);
++            thePlayer.setAngles(f3, f4 * (float)l);
 +            
-+//            Utils.prevRotationPitch = thePlayer.prevRotationPitch;
-+//            Utils.prevRotationYaw = thePlayer.prevRotationYaw;
-+//            Utils.rotationPitch = thePlayer.rotationPitch;
-+//            Utils.rotationYaw = thePlayer.rotationYaw;
++            Utils.prevRotationPitch = thePlayer.prevRotationPitch;
++            Utils.prevRotationYaw = thePlayer.prevRotationYaw;
++            Utils.rotationPitch = thePlayer.rotationPitch;
++            Utils.rotationYaw = thePlayer.rotationYaw;
 +        }
 +        // Pancake: React to hotkeys
 +        try {
@@ -193,7 +192,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                      if(i1 != 0)
                      {
                          thePlayer.inventory.changeCurrentItem(i1);
-@@ -1349,7 +1388,7 @@
+@@ -1349,7 +1387,7 @@
                      }
                      if(currentScreen == null)
                      {
@@ -202,7 +201,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                          {
                              setIngameFocus();
                          }
-@@ -1367,18 +1406,18 @@
+@@ -1367,18 +1405,18 @@
              Profiler.endStartSection("keyboard");
              do
              {
@@ -227,7 +226,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                      {
                          toggleFullscreen();
                      } else
-@@ -1388,36 +1427,36 @@
+@@ -1388,36 +1426,36 @@
                              currentScreen.handleKeyboardInput();
                          } else
                          {
@@ -273,7 +272,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                              {
                                  gameSettings.thirdPersonView++;
                                  if(gameSettings.thirdPersonView > 2)
-@@ -1425,14 +1464,14 @@
+@@ -1425,14 +1463,14 @@
                                      gameSettings.thirdPersonView = 0;
                                  }
                              }
@@ -290,7 +289,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                              {
                                  thePlayer.inventory.currentItem = i;
                              }
-@@ -1440,14 +1479,14 @@
+@@ -1440,14 +1478,14 @@
  
                          if(gameSettings.showDebugInfo)
                          {
@@ -307,7 +306,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                                  {
                                      func_40003_b(j + 1);
                                  }
-@@ -1540,6 +1579,11 @@
+@@ -1540,6 +1578,11 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
@@ -1517,52 +1516,67 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRainFX.java newsrc/minecraft/net
 diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/net/minecraft/src/EntityRenderer.java
 --- src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -7,14 +7,15 @@
+@@ -7,14 +7,17 @@
  import java.awt.image.BufferedImage;
  import java.nio.FloatBuffer;
  import java.util.Random;
 -import net.minecraft.client.Minecraft;
--import org.lwjgl.input.Mouse;
--import org.lwjgl.opengl.ContextCapabilities;
 +
+ import org.lwjgl.input.Mouse;
+-import org.lwjgl.opengl.ContextCapabilities;
  import org.lwjgl.opengl.Display;
  import org.lwjgl.opengl.GL11;
  import org.lwjgl.opengl.GLContext;
  import org.lwjgl.util.glu.GLU;
  
 +import net.minecraft.client.Minecraft;
++import net.tasmod.Utils;
 +import net.tasmod.virtual.VirtualMouse;
 +
  // Referenced classes of package net.minecraft.src:
  //            MouseFilter, GLAllocation, ItemRenderer, RenderEngine, 
  //            GameSettings, EntityLiving, MathHelper, World, 
-@@ -396,8 +397,8 @@
+@@ -396,8 +399,9 @@
          }
          if(!mc.gameSettings.debugCamEnable)
          {
 -            GL11.glRotatef(entityliving.prevRotationPitch + (entityliving.rotationPitch - entityliving.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
 -            GL11.glRotatef(entityliving.prevRotationYaw + (entityliving.rotationYaw - entityliving.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
-+            GL11.glRotatef(mc.thePlayer.prevRotationPitch + (mc.thePlayer.rotationPitch - mc.thePlayer.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
-+            GL11.glRotatef(mc.thePlayer.prevRotationYaw + (mc.thePlayer.rotationYaw - mc.thePlayer.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++        	// Interpolation
++            GL11.glRotatef(Utils.prevRotationPitch + (Utils.rotationPitch - Utils.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
++            GL11.glRotatef(Utils.prevRotationYaw + (Utils.rotationYaw - Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
          }
          GL11.glTranslatef(0.0F, f1, 0.0F);
          d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
-@@ -690,32 +691,25 @@
+@@ -690,31 +694,28 @@
              prevFrameTime = System.currentTimeMillis();
          }
          Profiler.startSection("mouse");
--        if(mc.inGameHasFocus)
--        {
++        // Interpolation!
+         if(mc.inGameHasFocus)
+         {
 -            mc.mouseHelper.mouseXYChange();
--            float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
--            float f2 = f1 * f1 * f1 * 8F;
++        	
+             float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
+             float f2 = f1 * f1 * f1 * 8F;
 -            float f3 = (float)mc.mouseHelper.deltaX * f2;
 -            float f4 = (float)mc.mouseHelper.deltaY * f2;
--            int l = 1;
++        	
++            // Instead of calling this here, we call out Custom Method
++            //mc.mouseHelper.mouseXYChange();
++            int dx = Mouse.getDX();
++            int dy = Mouse.getDY();
++            Utils.dX += dx;
++            Utils.dY += dy;
++            
++            float f3 = dx * f2;
++            float f4 = dy * f2;
+             int l = 1;
 -            if(mc.gameSettings.invertMouse)
 -            {
--                l = -1;
--            }
++            if(mc.gameSettings.invertMouse) {
+                 l = -1;
+             }
 -            if(mc.gameSettings.smoothCamera)
 -            {
 -                smoothCamYaw += f3;
@@ -1576,30 +1590,12 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/n
 -            {
 -                mc.thePlayer.setAngles(f3, f4 * (float)l);
 -            }
--        }
-+//        // Interpolation!
-+//        if(mc.inGameHasFocus)
-+//        {
-+//        	
-+//            float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
-+//            float f2 = f1 * f1 * f1 * 8F;
-+//        	
-+//            mc.mouseHelper.mouseXYChange();
-+//            Utils.dX += mc.mouseHelper.deltaX;
-+//            Utils.dY += mc.mouseHelper.deltaY;
-+//            
-+//            float f3 = (float)mc.mouseHelper.deltaX * f2;
-+//            float f4 = (float)mc.mouseHelper.deltaY * f2;
-+//            int l = 1;
-+//            if(mc.gameSettings.invertMouse) {
-+//                l = -1;
-+//            }
-+//            Utils.setAngles(f3, f4 * (float)l);
-+//        }
++            // Set fake angles
++            Utils.setAngles(f3, f4 * l);
+         }
          Profiler.endSection();
          if(mc.skipRenderWorld)
-         {
-@@ -725,8 +719,8 @@
+@@ -725,8 +726,8 @@
          ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
          int i = scaledresolution.getScaledWidth();
          int j = scaledresolution.getScaledHeight();
@@ -6409,7 +6405,7 @@ diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmo
 diff -ruN src/minecraft/net/tasmod/Utils.java newsrc/minecraft/net/tasmod/Utils.java
 --- src/minecraft/net/tasmod/Utils.java	1970-01-01 01:00:00.000000000 +0100
 +++ newsrc/minecraft/net/tasmod/Utils.java	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,77 @@
+@@ -0,0 +1,92 @@
 +package net.tasmod;
 +
 +import java.io.File;
@@ -6421,6 +6417,9 @@ diff -ruN src/minecraft/net/tasmod/Utils.java newsrc/minecraft/net/tasmod/Utils.
 +
 +public final class Utils {
 +
++	public static int dX;
++	public static int dY;
++	
 +	public static float rotationPitch = 0f;
 +	public static float rotationYaw = 0f;
 +	public static float prevRotationPitch = 0f;
@@ -6484,6 +6483,18 @@ diff -ruN src/minecraft/net/tasmod/Utils.java newsrc/minecraft/net/tasmod/Utils.
 +	
 +	public static boolean isZero(double value, double threshold){
 +	    return value >= -threshold && value <= threshold;
++	}
++
++	public static int getDX() {
++		int value = dX;
++		dX = 0;
++		return value;
++	}
++
++	public static int getDY() {
++		int value = dY;
++		dY = 0;
++		return value;
 +	}
 +	
 +}
@@ -7027,7 +7038,7 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualKeyboard.java newsrc/minecraft
 diff -ruN src/minecraft/net/tasmod/virtual/VirtualMouse.java newsrc/minecraft/net/tasmod/virtual/VirtualMouse.java
 --- src/minecraft/net/tasmod/virtual/VirtualMouse.java	1970-01-01 01:00:00.000000000 +0100
 +++ newsrc/minecraft/net/tasmod/virtual/VirtualMouse.java	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,207 @@
+@@ -0,0 +1,208 @@
 +package net.tasmod.virtual;
 +
 +import java.util.LinkedList;
@@ -7035,8 +7046,8 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualMouse.java newsrc/minecraft/ne
 +
 +import org.lwjgl.input.Mouse;
 +
-+import net.minecraft.client.Minecraft;
 +import net.tasmod.TASmod;
++import net.tasmod.Utils;
 +
 +public class VirtualMouse {
 +
@@ -7212,9 +7223,10 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualMouse.java newsrc/minecraft/ne
 +		return getEventY();
 +	}
 +	
++	// Calls the Fake Utils
 +	public static int getDX() {
 +		if (!hack) {
-+			int val = Mouse.getDX();
++			int val = Utils.getDX();
 +			if (listen) {
 +				dX = val;
 +			}
@@ -7225,7 +7237,7 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualMouse.java newsrc/minecraft/ne
 +
 +	public static int getDY() {
 +		if (!hack) {
-+			int val = Mouse.getDY();
++			int val = Utils.getDY();
 +			if (listen) {
 +				dY = val;
 +			}
