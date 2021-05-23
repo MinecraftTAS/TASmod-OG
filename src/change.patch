@@ -6409,7 +6409,7 @@ diff -ruN src/minecraft/net/tasmod/TASmod.java newsrc/minecraft/net/tasmod/TASmo
 diff -ruN src/minecraft/net/tasmod/Utils.java newsrc/minecraft/net/tasmod/Utils.java
 --- src/minecraft/net/tasmod/Utils.java	1970-01-01 01:00:00.000000000 +0100
 +++ newsrc/minecraft/net/tasmod/Utils.java	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,80 @@
+@@ -0,0 +1,77 @@
 +package net.tasmod;
 +
 +import java.io.File;
@@ -6425,9 +6425,6 @@ diff -ruN src/minecraft/net/tasmod/Utils.java newsrc/minecraft/net/tasmod/Utils.
 +	public static float rotationYaw = 0f;
 +	public static float prevRotationPitch = 0f;
 +	public static float prevRotationYaw = 0f;
-+	
-+	public static double dX = 0;
-+	public static double dY = 0;
 +	
 +    public static void setAngles(float f, float f1) {
 +        float f2 = rotationPitch;
@@ -7046,16 +7043,16 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualMouse.java newsrc/minecraft/ne
 +	public static final class VirtualMouseEvent {
 +		
 +		/** The current position */
-+		public double posX;
++		public int posX;
 +
 +		/** The current position */
-+		public double posY;
++		public int posY;
 +		
 +		/** MAC only, is the Cursor grabbed */
 +		public boolean grabbed;
 +		
-+		public double dX;
-+		public double dY;
++		public int dX;
++		public int dY;
 +		
 +		/** Scroll wheel */
 +		public int wheel;
@@ -7066,7 +7063,7 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualMouse.java newsrc/minecraft/ne
 +		/* EventButton down */
 +		public boolean eventState;
 +		
-+		public VirtualMouseEvent(final double i, final double j, final boolean b, final int k, final int l, final boolean c, final double dX, final double dY) {
++		public VirtualMouseEvent(final int i, final int j, final boolean b, final int k, final int l, final boolean c, final int dX, final int dY) {
 +			this.posX = i;
 +			this.posY = j;
 +			this.grabbed = b;
@@ -7083,7 +7080,7 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualMouse.java newsrc/minecraft/ne
 +		}
 +		
 +		public static final VirtualMouseEvent fromString(final String object) {
-+			return new VirtualMouseEvent(Double.parseDouble(object.split("!")[0]), Double.parseDouble(object.split("!")[1]), Boolean.parseBoolean(object.split("!")[2]), Integer.parseInt(object.split("!")[3]), Integer.parseInt(object.split("!")[4]), Boolean.parseBoolean(object.split("!")[5]), Double.parseDouble(object.split("!")[6]), Double.parseDouble(object.split("!")[7]));
++			return new VirtualMouseEvent(Integer.parseInt(object.split("!")[0]), Integer.parseInt(object.split("!")[1]), Boolean.parseBoolean(object.split("!")[2]), Integer.parseInt(object.split("!")[3]), Integer.parseInt(object.split("!")[4]), Boolean.parseBoolean(object.split("!")[5]), Integer.parseInt(object.split("!")[6]), Integer.parseInt(object.split("!")[7]));
 +		}
 +		
 +	}
@@ -7097,8 +7094,8 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualMouse.java newsrc/minecraft/ne
 +	public static boolean listen = false;
 +	public static VirtualMouseEvent currentlyListening = new VirtualMouseEvent(-1, -1, false, -1, -1, false, 0, 0);
 +	
-+	public static double dX;
-+	public static double dY;
++	public static int dX;
++	public static int dY;
 +	
 +	public static boolean isButtonDown(final int i) {
 +		if (!hack) {
@@ -7144,12 +7141,12 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualMouse.java newsrc/minecraft/ne
 +		if (!hack) {
 +			Mouse.setCursorPosition(i, j);
 +			if (listen) {
-+				currentlyListening.posX = ((double) i) / ((double) Minecraft.theMinecraft.displayWidth);
-+				currentlyListening.posY = ((double) j) / ((double) Minecraft.theMinecraft.displayHeight);
++				currentlyListening.posX = i;
++				currentlyListening.posY = j;
 +			}
 +			return;
 +		}
-+		Mouse.setCursorPosition((int) currentMouseEvents.posX * Minecraft.theMinecraft.displayWidth, (int) (currentMouseEvents.posY * Minecraft.theMinecraft.displayHeight));
++		Mouse.setCursorPosition(currentMouseEvents.posX, currentMouseEvents.posY);
 +	}
 +
 +	public static boolean getEventButtonState() {
@@ -7189,22 +7186,22 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualMouse.java newsrc/minecraft/ne
 +		if (!hack) {
 +			int val = Mouse.getEventX();
 +			if (listen) {
-+				currentlyListening.posX = ((double) val) / ((double) Minecraft.theMinecraft.displayWidth);
++				currentlyListening.posX = val;
 +			}
 +			return val;
 +		}
-+		return (int) (currentMouseEvents.posX * Minecraft.theMinecraft.displayWidth);
++		return currentMouseEvents.posX;
 +	}
 +
 +	public static int getEventY() {
 +		if (!hack) {
 +			int val = Mouse.getEventY();
 +			if (listen) {
-+				currentlyListening.posY = ((double) val) / ((double) Minecraft.theMinecraft.displayHeight);
++				currentlyListening.posY = val;
 +			}
 +			return val;
 +		}
-+		return (int) (currentMouseEvents.posY * Minecraft.theMinecraft.displayHeight);
++		return currentMouseEvents.posY;
 +	}
 +	
 +	public static int getX() {
@@ -7219,22 +7216,22 @@ diff -ruN src/minecraft/net/tasmod/virtual/VirtualMouse.java newsrc/minecraft/ne
 +		if (!hack) {
 +			int val = Mouse.getDX();
 +			if (listen) {
-+				dX = ((double) val) / ((double) Minecraft.theMinecraft.displayWidth);
++				dX = val;
 +			}
 +			return val;
 +		}
-+		return (int) (((double) dX) * ((double) Minecraft.theMinecraft.displayWidth));
++		return dX;
 +	}
 +
 +	public static int getDY() {
 +		if (!hack) {
 +			int val = Mouse.getDY();
 +			if (listen) {
-+				dY = ((double) val) / ((double) Minecraft.theMinecraft.displayHeight);
++				dY = val;
 +			}
 +			return val;
 +		}
-+		return (int) (((double) dY) * ((double) Minecraft.theMinecraft.displayHeight));
++		return dY;
 +	}
 +	
 +}
