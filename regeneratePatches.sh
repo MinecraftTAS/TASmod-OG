@@ -6,6 +6,7 @@ echo Press enter, to generate Patch Files
 read
 rm src -r
 mkdir src
+mv mcp/src/minecraft/net/tasmod src/tasmod
 mkdir temp
 cd temp
 wget http://mgnet.work/mcp50.zip
@@ -19,5 +20,6 @@ find ./src -type f -exec touch -a -m -t 202101010000.00 {} \;
 diff -ruN src/ newsrc/ > ../src/change.patch
 cd ..
 rm temp -r
+cp src/tasmod mcp/src/minecraft/net/tasmod -r
 clear
 echo Patch File generated, you can now upload this to github
