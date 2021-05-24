@@ -38,8 +38,6 @@ public final class VirtualKeyboard {
 		
 	}
 	
-	// TODO: Reimplement isKeyDown with a Virtual Keyboard
-	
 	public final static Queue<VirtualKeyEvent> keyEventsForTick = new LinkedList<>();
 	public static VirtualKeyEvent currentKeyEvent;
 	public static boolean hack = false;

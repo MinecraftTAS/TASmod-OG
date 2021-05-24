@@ -4,28 +4,30 @@ import java.util.Random;
 
 public class FakeRandom extends Random {
 
-	public static long seed = 0L;
+	public static long customSeed = 0L;
 	
 	@Override
-	public boolean nextBoolean() { return new Random(seed).nextBoolean(); }
+	public boolean nextBoolean() { return new Random(customSeed).nextBoolean(); }
 	
 	@Override
-	public double nextDouble() { return new Random(seed).nextDouble(); }
+	public double nextDouble() { return new Random(customSeed).nextDouble(); }
 	
 	@Override
-	public float nextFloat() { return new Random(seed).nextFloat(); }
+	public float nextFloat() { return new Random(customSeed).nextFloat(); }
 	
 	@Override
-	public int nextInt() { return new Random(seed).nextInt(); }
+	public int nextInt() { return new Random(customSeed).nextInt(); }
 	
 	@Override
-	public int nextInt(int bound) { return new Random(seed).nextInt(bound); }
+	public int nextInt(int bound) { return new Random(customSeed).nextInt(bound); }
 	
 	@Override
-	public long nextLong() { return new Random(seed).nextLong(); }
+	public long nextLong() { return new Random(customSeed).nextLong(); }
 	
 	@Override
-	public synchronized double nextGaussian() { return new Random(seed).nextGaussian(); } 
+	public synchronized double nextGaussian() { return new Random(customSeed).nextGaussian(); } 
+	
+	
 	
 	/* List of all RNG Sources, that have to be changed */
 	

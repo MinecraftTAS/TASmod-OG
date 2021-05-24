@@ -111,7 +111,7 @@ public final class Recorder {
 		final File worldFile = new File(this.mc.mcDataDir, "saves" + File.separator + "TAS-Playback");
 		if (worldFile.exists()) Utils.deleteDirectory(worldFile);
 		
-		FakeRandom.seed = worldseed;
+		FakeRandom.customSeed = worldseed;
 		
 		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
 		VirtualMouse.getDX();

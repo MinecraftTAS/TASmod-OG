@@ -2360,6 +2360,39 @@ diff -ruN src/minecraft/net/minecraft/src/BlockFurnace.java newsrc/minecraft/net
          isActive = flag;
          blockIndexInTexture = 45;
      }
+diff -ruN src/minecraft/net/minecraft/src/ChunkProviderGenerate.java newsrc/minecraft/net/minecraft/src/ChunkProviderGenerate.java
+--- src/minecraft/net/minecraft/src/ChunkProviderGenerate.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/ChunkProviderGenerate.java	2021-01-01 00:00:00.000000000 +0100
+@@ -56,7 +56,7 @@
+         unusedIntArray32x32 = new int[32][32];
+         worldObj = world;
+         mapFeaturesEnabled = flag;
+-        rand = new Random(l);
++        rand = new net.tasmod.rng.DecoratorRng(l);
+         noiseGen1 = new NoiseGeneratorOctaves(rand, 16);
+         noiseGen2 = new NoiseGeneratorOctaves(rand, 16);
+         noiseGen3 = new NoiseGeneratorOctaves(rand, 8);
+diff -ruN src/minecraft/net/minecraft/src/ComponentNetherBridgeEntrance.java newsrc/minecraft/net/minecraft/src/ComponentNetherBridgeEntrance.java
+--- src/minecraft/net/minecraft/src/ComponentNetherBridgeEntrance.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/ComponentNetherBridgeEntrance.java	2021-01-01 00:00:00.000000000 +0100
+@@ -7,6 +7,8 @@
+ import java.util.List;
+ import java.util.Random;
+ 
++import net.tasmod.rng.FakeRandom;
++
+ // Referenced classes of package net.minecraft.src:
+ //            ComponentNetherBridgePiece, ComponentNetherBridgeStartPiece, StructureBoundingBox, StructureComponent, 
+ //            Block, World
+@@ -114,7 +116,7 @@
+         if(structureboundingbox.isVecInside(i1, l1, i2))
+         {
+             world.scheduledUpdatesAreImmediate = true;
+-            Block.blocksList[Block.lavaMoving.blockID].updateTick(world, i1, l1, i2, random);
++            Block.blocksList[Block.lavaMoving.blockID].updateTick(world, i1, l1, i2, new FakeRandom()); // Lava is being updated using the wrong RNG
+             world.scheduledUpdatesAreImmediate = false;
+         }
+         return true;
 diff -ruN src/minecraft/net/minecraft/src/ContainerEnchantment.java newsrc/minecraft/net/minecraft/src/ContainerEnchantment.java
 --- src/minecraft/net/minecraft/src/ContainerEnchantment.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/ContainerEnchantment.java	2021-01-01 00:00:00.000000000 +0100
@@ -2372,6 +2405,26 @@ diff -ruN src/minecraft/net/minecraft/src/ContainerEnchantment.java newsrc/minec
          field_40235_c = new int[3];
          field_40240_h = world;
          field_40241_i = i;
+diff -ruN src/minecraft/net/minecraft/src/EffectRenderer.java newsrc/minecraft/net/minecraft/src/EffectRenderer.java
+--- src/minecraft/net/minecraft/src/EffectRenderer.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/EffectRenderer.java	2021-01-01 00:00:00.000000000 +0100
+@@ -6,7 +6,6 @@
+ 
+ import java.util.*;
+ import org.lwjgl.opengl.GL11;
+-
+ // Referenced classes of package net.minecraft.src:
+ //            EntityFX, ActiveRenderInfo, Entity, RenderEngine, 
+ //            Tessellator, MathHelper, Block, EntityDiggingFX, 
+@@ -23,7 +22,7 @@
+     public EffectRenderer(World world, RenderEngine renderengine)
+     {
+         fxLayers = new List[4];
+-        rand = new Random();
++        rand = new net.tasmod.rng.FakeRandom();
+         if(world != null)
+         {
+             worldObj = world;
 diff -ruN src/minecraft/net/minecraft/src/EnchantmentHelper.java newsrc/minecraft/net/minecraft/src/EnchantmentHelper.java
 --- src/minecraft/net/minecraft/src/EnchantmentHelper.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EnchantmentHelper.java	2021-01-01 00:00:00.000000000 +0100
@@ -2383,6 +2436,18 @@ diff -ruN src/minecraft/net/minecraft/src/EnchantmentHelper.java newsrc/minecraf
 +    private static final Random enchantmentRand = new net.tasmod.rng.FakeRandom();
      private static final EnchantmentModifierDamage enchantmentModifierDamage = new EnchantmentModifierDamage(null);
      private static final EnchantmentModifierLiving enchantmentModifierLiving = new EnchantmentModifierLiving(null);
+ 
+diff -ruN src/minecraft/net/minecraft/src/EnchantmentNameParts.java newsrc/minecraft/net/minecraft/src/EnchantmentNameParts.java
+--- src/minecraft/net/minecraft/src/EnchantmentNameParts.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/EnchantmentNameParts.java	2021-01-01 00:00:00.000000000 +0100
+@@ -15,7 +15,7 @@
+ 
+     private EnchantmentNameParts()
+     {
+-        field_40251_b = new Random();
++        field_40251_b = new net.tasmod.rng.FakeRandom();
+         field_40252_c = "the elder scrolls klaatu berata niktu xyzzy bless curse light darkness fire air earth water hot dry cold wet ignite snuff embiggen twist shorten stretch fiddle destroy imbue galvanize enchant free limited range of towards inside sphere cube self other ball mental physical grow shrink demon elemental spirit animal creature beast humanoid undead fresh stale ".split(" ");
+     }
  
 diff -ruN src/minecraft/net/minecraft/src/Entity.java newsrc/minecraft/net/minecraft/src/Entity.java
 --- src/minecraft/net/minecraft/src/Entity.java	2021-01-01 00:00:00.000000000 +0100
@@ -2399,7 +2464,25 @@ diff -ruN src/minecraft/net/minecraft/src/Entity.java newsrc/minecraft/net/minec
 diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/net/minecraft/src/EntityRenderer.java
 --- src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -396,8 +396,8 @@
+@@ -8,6 +8,8 @@
+ import java.nio.FloatBuffer;
+ import java.util.Random;
+ import net.minecraft.client.Minecraft;
++import net.tasmod.rng.FakeRandom;
++
+ import org.lwjgl.input.Mouse;
+ import org.lwjgl.opengl.ContextCapabilities;
+ import org.lwjgl.opengl.Display;
+@@ -120,7 +122,7 @@
+         torchFlickerDX = 0.0F;
+         torchFlickerY = 0.0F;
+         torchFlickerDY = 0.0F;
+-        random = new Random();
++        random = new FakeRandom();
+         rainSoundCounter = 0;
+         unusedVolatile0 = 0;
+         unusedVolatile1 = 0;
+@@ -396,8 +398,8 @@
          }
          if(!mc.gameSettings.debugCamEnable)
          {
@@ -2410,7 +2493,7 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/n
          }
          GL11.glTranslatef(0.0F, f1, 0.0F);
          d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
-@@ -692,29 +692,15 @@
+@@ -692,29 +694,15 @@
          Profiler.startSection("mouse");
          if(mc.inGameHasFocus)
          {
@@ -2449,7 +2532,7 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/n
          }
          Profiler.endSection();
          if(mc.skipRenderWorld)
-@@ -725,8 +711,8 @@
+@@ -725,8 +713,8 @@
          ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
          int i = scaledresolution.getScaledWidth();
          int j = scaledresolution.getScaledHeight();
@@ -2472,6 +2555,18 @@ diff -ruN src/minecraft/net/minecraft/src/Explosion.java newsrc/minecraft/net/mi
          destroyedBlockPositions = new HashSet();
          worldObj = world;
          exploder = entity;
+diff -ruN src/minecraft/net/minecraft/src/FontRenderer.java newsrc/minecraft/net/minecraft/src/FontRenderer.java
+--- src/minecraft/net/minecraft/src/FontRenderer.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/FontRenderer.java	2021-01-01 00:00:00.000000000 +0100
+@@ -31,7 +31,7 @@
+         fontTextureName = 0;
+         field_41063_b = 8;
+         buffer = GLAllocation.createDirectIntBuffer(1024 /*GL_FRONT_LEFT*/);
+-        field_41064_c = new Random();
++        field_41064_c = new net.tasmod.rng.FakeRandom();
+         BufferedImage bufferedimage;
+         try
+         {
 diff -ruN src/minecraft/net/minecraft/src/GameSettings.java newsrc/minecraft/net/minecraft/src/GameSettings.java
 --- src/minecraft/net/minecraft/src/GameSettings.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GameSettings.java	2021-01-01 00:00:00.000000000 +0100
@@ -2496,116 +2591,6 @@ diff -ruN src/minecraft/net/minecraft/src/GuiAchievements.java newsrc/minecraft/
          {
              int k = (width - achievementsPaneWidth) / 2;
              int l = (height - achievementsPaneHeight) / 2;
-diff -ruN src/minecraft/net/minecraft/src/GuiChat.java.bak newsrc/minecraft/net/minecraft/src/GuiChat.java.bak
---- src/minecraft/net/minecraft/src/GuiChat.java.bak	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiChat.java.bak	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,106 @@
-+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-+// Jad home page: http://www.kpdus.com/jad.html
-+// Decompiler options: packimports(3) braces deadcode fieldsfirst 
-+
-+package net.minecraft.src;
-+
-+import net.minecraft.client.Minecraft;
-+import org.lwjgl.input.Keyboard;
-+
-+// Referenced classes of package net.minecraft.src:
-+//            GuiScreen, EntityPlayerSP, GuiIngame, ChatAllowedCharacters
-+
-+public class GuiChat extends GuiScreen
-+{
-+
-+    protected String message;
-+    private int updateCounter;
-+    private static final String allowedCharacters;
-+
-+    public GuiChat()
-+    {
-+        message = "";
-+        updateCounter = 0;
-+    }
-+
-+    public void initGui()
-+    {
-+        Keyboard.enableRepeatEvents(true);
-+    }
-+
-+    public void onGuiClosed()
-+    {
-+    	Keyboard.enableRepeatEvents(false);
-+    }
-+
-+    public void updateScreen()
-+    {
-+        updateCounter++;
-+    }
-+
-+    protected void keyTyped(char c, int i)
-+    {
-+        if(i == 1)
-+        {
-+            mc.displayGuiScreen(null);
-+            return;
-+        }
-+        if(i == 28)
-+        {
-+            String s = message.trim();
-+            if(s.length() > 0)
-+            {
-+                String s1 = message.trim();
-+                if(!mc.lineIsCommand(s1))
-+                {
-+                    mc.thePlayer.sendChatMessage(s1);
-+                }
-+            }
-+            mc.displayGuiScreen(null);
-+            return;
-+        }
-+        if(i == 14 && message.length() > 0)
-+        {
-+            message = message.substring(0, message.length() - 1);
-+        }
-+        if(allowedCharacters.indexOf(c) >= 0 && message.length() < 100)
-+        {
-+            message += c;
-+        }
-+    }
-+
-+    public void drawScreen(int i, int j, float f)
-+    {
-+        drawRect(2, height - 14, width - 2, height - 2, 0x80000000);
-+        drawString(fontRenderer, (new StringBuilder()).append("> ").append(message).append((updateCounter / 6) % 2 != 0 ? "" : "_").toString(), 4, height - 12, 0xe0e0e0);
-+        super.drawScreen(i, j, f);
-+    }
-+
-+    protected void mouseClicked(int i, int j, int k)
-+    {
-+        super.mouseClicked(i, j, k);
-+        if(k != 0)
-+        {
-+            return;
-+        }
-+        if(mc.ingameGUI.field_933_a == null)
-+        {
-+            return;
-+        }
-+        if(message.length() > 0 && !message.endsWith(" "))
-+        {
-+            message += " ";
-+        }
-+        message += mc.ingameGUI.field_933_a;
-+        byte byte0 = 100;
-+        if(message.length() > byte0)
-+        {
-+            message = message.substring(0, byte0);
-+        }
-+    }
-+
-+    static 
-+    {
-+        allowedCharacters = ChatAllowedCharacters.allowedCharacters;
-+    }
-+}
 diff -ruN src/minecraft/net/minecraft/src/GuiContainer.java newsrc/minecraft/net/minecraft/src/GuiContainer.java
 --- src/minecraft/net/minecraft/src/GuiContainer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiContainer.java	2021-01-01 00:00:00.000000000 +0100
@@ -2651,6 +2636,15 @@ diff -ruN src/minecraft/net/minecraft/src/GuiCreateWorld.java newsrc/minecraft/n
          controlList.add(new GuiButton(1, width / 2 + 5, height - 28, 150, 20, stringtranslate.translateKey("gui.cancel")));
          controlList.add(field_35366_j = new GuiButton(2, width / 2 - 75, 100, 150, 20, stringtranslate.translateKey("selectWorld.gameMode")));
          controlList.add(field_35367_k = new GuiButton(3, width / 2 - 75, 172, 150, 20, stringtranslate.translateKey("selectWorld.moreWorldOptions")));
+@@ -140,7 +140,7 @@
+                 return;
+             }
+             createClicked = true;
+-            long l = (new Random()).nextLong();
++            long l = (new net.tasmod.rng.FakeRandom()).nextLong();
+             String s = textboxSeed.getText();
+             if(!MathHelper.stringNullOrLengthZero(s))
+             {
 @@ -157,17 +157,11 @@
                      l = s.hashCode();
                  }
@@ -2674,288 +2668,6 @@ diff -ruN src/minecraft/net/minecraft/src/GuiCreateWorld.java newsrc/minecraft/n
          } else
          if(guibutton.id == 3)
          {
-diff -ruN src/minecraft/net/minecraft/src/GuiCreateWorld.java.bak newsrc/minecraft/net/minecraft/src/GuiCreateWorld.java.bak
---- src/minecraft/net/minecraft/src/GuiCreateWorld.java.bak	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiCreateWorld.java.bak	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,278 @@
-+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-+// Jad home page: http://www.kpdus.com/jad.html
-+// Decompiler options: packimports(3) braces deadcode fieldsfirst 
-+
-+package net.minecraft.src;
-+
-+import java.util.List;
-+import java.util.Random;
-+import net.minecraft.client.Minecraft;
-+import org.lwjgl.input.Keyboard;
-+
-+// Referenced classes of package net.minecraft.src:
-+//            GuiScreen, StatCollector, GuiTextField, StringTranslate, 
-+//            GuiButton, ChatAllowedCharacters, MathHelper, ISaveFormat, 
-+//            PlayerControllerCreative, PlayerControllerSP, WorldSettings
-+
-+public class GuiCreateWorld extends GuiScreen
-+{
-+
-+    private GuiScreen parentGuiScreen;
-+    private GuiTextField textboxWorldName;
-+    private GuiTextField textboxSeed;
-+    private String folderName;
-+    private String field_35364_f;
-+    private boolean field_35365_g;
-+    private boolean field_40232_h;
-+    private boolean createClicked;
-+    private boolean field_35368_i;
-+    private GuiButton field_35366_j;
-+    private GuiButton field_35367_k;
-+    private GuiButton field_35372_s;
-+    private GuiButton field_35371_t;
-+    private String field_35370_u;
-+    private String field_35369_v;
-+    private String field_41048_x;
-+    private String field_41047_y;
-+
-+    public GuiCreateWorld(GuiScreen guiscreen)
-+    {
-+        field_35364_f = "survival";
-+        field_35365_g = true;
-+        field_40232_h = false;
-+        parentGuiScreen = guiscreen;
-+        field_41048_x = "";
-+        field_41047_y = StatCollector.translateToLocal("selectWorld.newWorld");
-+    }
-+
-+    public void updateScreen()
-+    {
-+        textboxWorldName.updateCursorCounter();
-+        textboxSeed.updateCursorCounter();
-+    }
-+
-+    public void initGui()
-+    {
-+        StringTranslate stringtranslate = StringTranslate.getInstance();
-+        Keyboard.enableRepeatEvents(true);
-+        controlList.clear();
-+        controlList.add(new GuiButton(0, width / 2 - 155, height - 28, 150, 20, stringtranslate.translateKey("Create and record World")));
-+        controlList.add(new GuiButton(1, width / 2 + 5, height - 28, 150, 20, stringtranslate.translateKey("gui.cancel")));
-+        controlList.add(field_35366_j = new GuiButton(2, width / 2 - 75, 100, 150, 20, stringtranslate.translateKey("selectWorld.gameMode")));
-+        controlList.add(field_35367_k = new GuiButton(3, width / 2 - 75, 172, 150, 20, stringtranslate.translateKey("selectWorld.moreWorldOptions")));
-+        controlList.add(field_35372_s = new GuiButton(4, width / 2 - 155, 100, 150, 20, stringtranslate.translateKey("selectWorld.mapFeatures")));
-+        field_35372_s.drawButton = false;
-+        controlList.add(field_35371_t = new GuiButton(5, width / 2 + 5, 100, 150, 20, stringtranslate.translateKey("selectWorld.mapType")));
-+        field_35371_t.drawButton = false;
-+        field_35371_t.enabled = false;
-+        textboxWorldName = new GuiTextField(this, fontRenderer, width / 2 - 100, 60, 200, 20, field_41047_y);
-+        textboxWorldName.isFocused = true;
-+        textboxWorldName.setMaxStringLength(32);
-+        textboxSeed = new GuiTextField(this, fontRenderer, width / 2 - 100, 60, 200, 20, field_41048_x);
-+        makeUseableName();
-+        func_35363_g();
-+    }
-+
-+    private void makeUseableName()
-+    {
-+        folderName = textboxWorldName.getText().trim();
-+        char ac[] = ChatAllowedCharacters.allowedCharactersArray;
-+        int i = ac.length;
-+        for(int j = 0; j < i; j++)
-+        {
-+            char c = ac[j];
-+            folderName = folderName.replace(c, '_');
-+        }
-+
-+        if(MathHelper.stringNullOrLengthZero(folderName))
-+        {
-+            folderName = "World";
-+        }
-+        folderName = generateUnusedFolderName(mc.getSaveLoader(), folderName);
-+    }
-+
-+    private void func_35363_g()
-+    {
-+        StringTranslate stringtranslate;
-+        stringtranslate = StringTranslate.getInstance();
-+        field_35366_j.displayString = (new StringBuilder()).append(stringtranslate.translateKey("selectWorld.gameMode")).append(" ").append(stringtranslate.translateKey((new StringBuilder()).append("selectWorld.gameMode.").append(field_35364_f).toString())).toString();
-+        field_35370_u = stringtranslate.translateKey((new StringBuilder()).append("selectWorld.gameMode.").append(field_35364_f).append(".line1").toString());
-+        field_35369_v = stringtranslate.translateKey((new StringBuilder()).append("selectWorld.gameMode.").append(field_35364_f).append(".line2").toString());
-+        field_35372_s.displayString = (new StringBuilder()).append(stringtranslate.translateKey("selectWorld.mapFeatures")).append(" ").toString();
-+        if(field_35365_g)
-+        {
-+            field_35372_s.displayString += stringtranslate.translateKey("options.on");
-+        }
-+        else
-+        {
-+            field_35372_s.displayString += stringtranslate.translateKey("options.off");
-+        }
-+        field_35371_t.displayString = (new StringBuilder()).append(stringtranslate.translateKey("selectWorld.mapType")).append(" ").append(stringtranslate.translateKey("selectWorld.mapType.normal")).toString();
-+        return;
-+    }
-+
-+    public static String generateUnusedFolderName(ISaveFormat isaveformat, String s)
-+    {
-+        for(; isaveformat.getWorldInfo(s) != null; s = (new StringBuilder()).append(s).append("-").toString()) { }
-+        return s;
-+    }
-+
-+    public void onGuiClosed()
-+    {
-+        net.tasmod.virtual.VirtualKeyboard.enableRepeatEvents(false);
-+    }
-+
-+    protected void actionPerformed(GuiButton guibutton)
-+    {
-+        if(!guibutton.enabled)
-+        {
-+            return;
-+        }
-+        if(guibutton.id == 1)
-+        {
-+            mc.displayGuiScreen(parentGuiScreen);
-+        } else
-+        if(guibutton.id == 0)
-+        {
-+            mc.displayGuiScreen(null);
-+            if(createClicked)
-+            {
-+                return;
-+            }
-+            createClicked = true;
-+            long l = (new Random()).nextLong();
-+            String s = textboxSeed.getText();
-+            if(!MathHelper.stringNullOrLengthZero(s))
-+            {
-+                try
-+                {
-+                    long l1 = Long.parseLong(s);
-+                    if(l1 != 0L)
-+                    {
-+                        l = l1;
-+                    }
-+                }
-+                catch(NumberFormatException numberformatexception)
-+                {
-+                    l = s.hashCode();
-+                }
-+            }
-+            try {
-+				net.tasmod.TASmod.startRecording(l, field_35364_f.equals("creative") ? 1 : 0, field_40232_h, field_35365_g, folderName, textboxWorldName.getText());
-+			} catch (java.io.IOException e) {
-+				e.printStackTrace();
-+			}
-+        } else
-+        if(guibutton.id == 3)
-+        {
-+            field_35368_i = !field_35368_i;
-+            field_35366_j.drawButton = !field_35368_i;
-+            field_35372_s.drawButton = field_35368_i;
-+            field_35371_t.drawButton = field_35368_i;
-+            if(field_35368_i)
-+            {
-+                StringTranslate stringtranslate = StringTranslate.getInstance();
-+                field_35367_k.displayString = stringtranslate.translateKey("gui.done");
-+            } else
-+            {
-+                StringTranslate stringtranslate1 = StringTranslate.getInstance();
-+                field_35367_k.displayString = stringtranslate1.translateKey("selectWorld.moreWorldOptions");
-+            }
-+        } else
-+        if(guibutton.id == 2)
-+        {
-+            if(field_35364_f.equals("survival"))
-+            {
-+                field_40232_h = false;
-+                field_35364_f = "hardcore";
-+                field_40232_h = true;
-+                func_35363_g();
-+            } else
-+            if(field_35364_f.equals("hardcore"))
-+            {
-+                field_40232_h = false;
-+                field_35364_f = "creative";
-+                func_35363_g();
-+                field_40232_h = false;
-+            } else
-+            {
-+                field_35364_f = "survival";
-+                func_35363_g();
-+                field_40232_h = false;
-+            }
-+            func_35363_g();
-+        } else
-+        if(guibutton.id == 4)
-+        {
-+            field_35365_g = !field_35365_g;
-+            func_35363_g();
-+        }
-+    }
-+
-+    protected void keyTyped(char c, int i)
-+    {
-+        if(textboxWorldName.isFocused && !field_35368_i)
-+        {
-+            textboxWorldName.textboxKeyTyped(c, i);
-+            field_41047_y = textboxWorldName.getText();
-+        } else
-+        if(textboxSeed.isFocused && field_35368_i)
-+        {
-+            textboxSeed.textboxKeyTyped(c, i);
-+            field_41048_x = textboxSeed.getText();
-+        }
-+        if(c == '\r')
-+        {
-+            actionPerformed((GuiButton)controlList.get(0));
-+        }
-+        ((GuiButton)controlList.get(0)).enabled = textboxWorldName.getText().length() > 0;
-+        makeUseableName();
-+    }
-+
-+    protected void mouseClicked(int i, int j, int k)
-+    {
-+        super.mouseClicked(i, j, k);
-+        if(!field_35368_i)
-+        {
-+            textboxWorldName.mouseClicked(i, j, k);
-+        } else
-+        {
-+            textboxSeed.mouseClicked(i, j, k);
-+        }
-+    }
-+
-+    public void drawScreen(int i, int j, float f)
-+    {
-+        StringTranslate stringtranslate = StringTranslate.getInstance();
-+        drawDefaultBackground();
-+        drawCenteredString(fontRenderer, stringtranslate.translateKey("selectWorld.create"), width / 2, 20, 0xffffff);
-+        if(!field_35368_i)
-+        {
-+            drawString(fontRenderer, stringtranslate.translateKey("selectWorld.enterName"), width / 2 - 100, 47, 0xa0a0a0);
-+            drawString(fontRenderer, (new StringBuilder()).append(stringtranslate.translateKey("selectWorld.resultFolder")).append(" ").append(folderName).toString(), width / 2 - 100, 85, 0xa0a0a0);
-+            textboxWorldName.drawTextBox();
-+            drawString(fontRenderer, field_35370_u, width / 2 - 100, 122, 0xa0a0a0);
-+            drawString(fontRenderer, field_35369_v, width / 2 - 100, 134, 0xa0a0a0);
-+        } else
-+        {
-+            drawString(fontRenderer, stringtranslate.translateKey("selectWorld.enterSeed"), width / 2 - 100, 47, 0xa0a0a0);
-+            drawString(fontRenderer, stringtranslate.translateKey("selectWorld.seedInfo"), width / 2 - 100, 85, 0xa0a0a0);
-+            drawString(fontRenderer, stringtranslate.translateKey("selectWorld.mapFeatures.info"), width / 2 - 150, 122, 0xa0a0a0);
-+            textboxSeed.drawTextBox();
-+        }
-+        super.drawScreen(i, j, f);
-+    }
-+
-+    public void selectNextField()
-+    {
-+        if(textboxWorldName.isFocused)
-+        {
-+            textboxWorldName.setFocused(false);
-+            textboxSeed.setFocused(true);
-+        } else
-+        {
-+            textboxWorldName.setFocused(true);
-+            textboxSeed.setFocused(false);
-+        }
-+    }
-+}
 diff -ruN src/minecraft/net/minecraft/src/GuiEditSign.java newsrc/minecraft/net/minecraft/src/GuiEditSign.java
 --- src/minecraft/net/minecraft/src/GuiEditSign.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiEditSign.java	2021-01-01 00:00:00.000000000 +0100
@@ -3008,6 +2720,15 @@ diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/mi
 diff -ruN src/minecraft/net/minecraft/src/GuiMainMenu.java newsrc/minecraft/net/minecraft/src/GuiMainMenu.java
 --- src/minecraft/net/minecraft/src/GuiMainMenu.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiMainMenu.java	2021-01-01 00:00:00.000000000 +0100
+@@ -24,7 +24,7 @@
+ public class GuiMainMenu extends GuiScreen
+ {
+ 
+-    private static final Random rand = new Random();
++    private static final Random rand = new net.tasmod.rng.FakeRandom();
+     private float updateCounter;
+     private String splashText;
+     private GuiButton multiplayerButton;
 @@ -100,8 +100,9 @@
          }
          StringTranslate stringtranslate = StringTranslate.getInstance();
@@ -3127,613 +2848,6 @@ diff -ruN src/minecraft/net/minecraft/src/GuiMultiplayer.java newsrc/minecraft/n
          super.drawScreen(i, j, f);
          if(field_35350_v != null)
          {
-diff -ruN src/minecraft/net/minecraft/src/GuiMultiplayer.java.bak newsrc/minecraft/net/minecraft/src/GuiMultiplayer.java.bak
---- src/minecraft/net/minecraft/src/GuiMultiplayer.java.bak	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiMultiplayer.java.bak	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,503 @@
-+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-+// Jad home page: http://www.kpdus.com/jad.html
-+// Decompiler options: packimports(3) braces deadcode fieldsfirst 
-+
-+package net.minecraft.src;
-+
-+import java.io.*;
-+import java.net.InetSocketAddress;
-+import java.net.Socket;
-+import java.util.ArrayList;
-+import java.util.List;
-+import net.minecraft.client.Minecraft;
-+import org.lwjgl.input.Keyboard;
-+
-+// Referenced classes of package net.minecraft.src:
-+//            GuiScreen, GuiSlotServer, CompressedStreamTools, NBTTagCompound, 
-+//            NBTTagList, ServerNBTStorage, StringTranslate, GuiButton, 
-+//            GuiYesNo, GuiScreenServerList, StatCollector, GuiScreenAddServer, 
-+//            GuiConnecting, Packet, ChatAllowedCharacters, FontRenderer
-+
-+public class GuiMultiplayer extends GuiScreen
-+{
-+
-+    private static int threadsPending = 0;
-+    private static Object lock = new Object();
-+    private GuiScreen parentScreen;
-+    private GuiSlotServer serverSlotContainer;
-+    private List serverList;
-+    private int selectedServer;
-+    private GuiButton buttonEdit;
-+    private GuiButton buttonSelect;
-+    private GuiButton buttonDelete;
-+    private boolean deleteClicked;
-+    private boolean addClicked;
-+    private boolean editClicked;
-+    private boolean directClicked;
-+    private String field_35350_v;
-+    private ServerNBTStorage tempServer;
-+
-+    public GuiMultiplayer(GuiScreen guiscreen)
-+    {
-+        serverList = new ArrayList();
-+        selectedServer = -1;
-+        deleteClicked = false;
-+        addClicked = false;
-+        editClicked = false;
-+        directClicked = false;
-+        field_35350_v = null;
-+        tempServer = null;
-+        parentScreen = guiscreen;
-+    }
-+
-+    public void updateScreen()
-+    {
-+    }
-+
-+    public void initGui()
-+    {
-+        loadServerList();
-+        Keyboard.enableRepeatEvents(true);
-+        controlList.clear();
-+        serverSlotContainer = new GuiSlotServer(this);
-+        initGuiControls();
-+    }
-+    
-+    private void loadServerList()
-+    {
-+    	for (File f : mc.mcDataDir.listFiles(new FilenameFilter() {
-+
-+    		@Override
-+    		public boolean accept(File dir, String name) {
-+    			return name.toLowerCase().endsWith(".tas");
-+    		}
-+    	})) {
-+    		try {
-+    			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
-+
-+    			reader.readLine();
-+    			reader.readLine();
-+
-+    			ServerNBTStorage storage = new ServerNBTStorage(f.getName().split(".tas")[0], Long.parseLong(reader.readLine().split(": ")[1].split(" ")[0]) + "");
-+
-+    			boolean hardcore = Boolean.parseBoolean(reader.readLine().split(": ")[1].split(" ")[0]);
-+    			boolean mapFeatures = Boolean.parseBoolean(reader.readLine().split(": ")[1].split(" ")[0]);
-+    			int worldtype = Integer.parseInt(reader.readLine().split(": ")[1].split(" ")[0]);
-+    			reader.close();
-+
-+    			storage.motd = (worldtype == 1 ? "Creative, " : (hardcore ? "Hardcore, " : "Survival, ")) + (mapFeatures ? "with Structures" : "without Structures");
-+    			storage.lag = 420691337L;
-+    			storage.playerCount = f.getName();
-+    			storage.polled = true;
-+    			serverList.add(storage);
-+        }
-+        catch(Exception exception)
-+        {
-+            exception.printStackTrace();
-+        }
-+    }
-+
-+    private void saveServerList()
-+    {
-+        try
-+        {
-+            NBTTagList nbttaglist = new NBTTagList();
-+            for(int i = 0; i < serverList.size(); i++)
-+            {
-+                nbttaglist.setTag(((ServerNBTStorage)serverList.get(i)).getCompoundTag());
-+            }
-+
-+            NBTTagCompound nbttagcompound = new NBTTagCompound();
-+            nbttagcompound.setTag("servers", nbttaglist);
-+            CompressedStreamTools.func_35621_a(nbttagcompound, new File(mc.mcDataDir, "servers.dat"));
-+        }
-+        catch(Exception exception)
-+        {
-+            exception.printStackTrace();
-+        }
-+    }
-+
-+    public void initGuiControls()
-+    {
-+        StringTranslate stringtranslate = StringTranslate.getInstance();
-+        controlList.add(buttonEdit = new GuiButton(7, width / 2 - 154, height - 28, 70, 20, stringtranslate.translateKey("selectServer.edit")));
-+        controlList.add(buttonDelete = new GuiButton(2, width / 2 + 5, height - 28, 70, 20, stringtranslate.translateKey("Delete")));
-+        controlList.add(buttonSelect = new GuiButton(1, width / 2 - 154, height - 52, 308, 20, stringtranslate.translateKey("Playback")));
-+        controlList.add(new GuiButton(7, width / 2 - 154, height - 28, 154, 20, stringtranslate.translateKey("Edit Playback")));
-+        ((GuiButton) controlList.get(controlList.size() - 1)).enabled = false;
-+		buttonEdit.visible = false;
-+        controlList.add(new GuiButton(0, width / 2 + 4 + 76, height - 28, 75, 20, stringtranslate.translateKey("gui.cancel")));
-+        boolean flag = selectedServer >= 0 && selectedServer < serverSlotContainer.getSize();
-+        buttonSelect.enabled = flag;
-+        buttonEdit.enabled = flag;
-+        buttonDelete.enabled = flag;
-+    }
-+
-+    public void onGuiClosed()
-+    {
-+        Keyboard.enableRepeatEvents(false);
-+    }
-+
-+    protected void actionPerformed(GuiButton guibutton)
-+    {
-+        if(!guibutton.enabled)
-+        {
-+            return;
-+        }
-+        if(guibutton.id == 2)
-+        {
-+        	new File(mc.mcDataDir, ((ServerNBTStorage) serverList.get(selectedServer)).playerCount).delete();
-+        	mc.displayGuiScreen(new GuiMultiplayer(parentScreen));
-+        } else
-+        if(guibutton.id == 1)
-+        {
-+        	try {
-+    			net.tasmod.TASmod.startPlayback(((ServerNBTStorage) serverList.get(selectedServer)).playerCount.split(".tas")[0]);
-+    		} catch (IOException e) {
-+    			e.printStackTrace();
-+    		}
-+        } else
-+        if(guibutton.id == 4)
-+        {
-+            directClicked = true;
-+            mc.displayGuiScreen(new GuiScreenServerList(this, tempServer = new ServerNBTStorage(StatCollector.translateToLocal("selectServer.defaultName"), "")));
-+        } else
-+        if(guibutton.id == 3)
-+        {
-+            addClicked = true;
-+            mc.displayGuiScreen(new GuiScreenAddServer(this, tempServer = new ServerNBTStorage(StatCollector.translateToLocal("selectServer.defaultName"), "")));
-+        } else
-+        if(guibutton.id == 7)
-+        {
-+            editClicked = true;
-+            ServerNBTStorage servernbtstorage = (ServerNBTStorage)serverList.get(selectedServer);
-+            mc.displayGuiScreen(new GuiScreenAddServer(this, tempServer = new ServerNBTStorage(servernbtstorage.name, servernbtstorage.host)));
-+        } else
-+        if(guibutton.id == 0)
-+        {
-+            mc.displayGuiScreen(parentScreen);
-+        } else
-+        if(guibutton.id == 8)
-+        {
-+            mc.displayGuiScreen(new GuiMultiplayer(parentScreen));
-+        } else
-+        {
-+            serverSlotContainer.actionPerformed(guibutton);
-+        }
-+    }
-+
-+    public void deleteWorld(boolean flag, int i)
-+    {
-+        if(deleteClicked)
-+        {
-+            deleteClicked = false;
-+            if(flag)
-+            {
-+                serverList.remove(i);
-+                saveServerList();
-+            }
-+            mc.displayGuiScreen(this);
-+        } else
-+        if(directClicked)
-+        {
-+            directClicked = false;
-+            if(flag)
-+            {
-+                joinServer(tempServer);
-+            } else
-+            {
-+                mc.displayGuiScreen(this);
-+            }
-+        } else
-+        if(addClicked)
-+        {
-+            addClicked = false;
-+            if(flag)
-+            {
-+                serverList.add(tempServer);
-+                saveServerList();
-+            }
-+            mc.displayGuiScreen(this);
-+        } else
-+        if(editClicked)
-+        {
-+            editClicked = false;
-+            if(flag)
-+            {
-+                ServerNBTStorage servernbtstorage = (ServerNBTStorage)serverList.get(selectedServer);
-+                servernbtstorage.name = tempServer.name;
-+                servernbtstorage.host = tempServer.host;
-+                saveServerList();
-+            }
-+            mc.displayGuiScreen(this);
-+        }
-+    }
-+
-+    private int parseIntWithDefault(String s, int i)
-+    {
-+        try
-+        {
-+            return Integer.parseInt(s.trim());
-+        }
-+        catch(Exception exception)
-+        {
-+            return i;
-+        }
-+    }
-+
-+    protected void keyTyped(char c, int i)
-+    {
-+        if(c == '\r')
-+        {
-+            actionPerformed((GuiButton)controlList.get(2));
-+        }
-+    }
-+
-+    protected void mouseClicked(int i, int j, int k)
-+    {
-+        super.mouseClicked(i, j, k);
-+    }
-+
-+    public void drawScreen(int i, int j, float f)
-+    {
-+        field_35350_v = null;
-+        StringTranslate stringtranslate = StringTranslate.getInstance();
-+        drawDefaultBackground();
-+        serverSlotContainer.drawScreen(i, j, f);
-+        // TODO: Lang File
-+        drawCenteredString(fontRenderer, stringtranslate.translateKey("Playback or Edit TAS"), width / 2, 20, 0xffffff);
-+        super.drawScreen(i, j, f);
-+        if(field_35350_v != null)
-+        {
-+            func_35325_a(field_35350_v, i, j);
-+        }
-+    }
-+
-+    private void joinServer(int i)
-+    {
-+        joinServer((ServerNBTStorage)serverList.get(i));
-+    }
-+
-+    private void joinServer(ServerNBTStorage servernbtstorage)
-+    {
-+        String s = servernbtstorage.host;
-+        String as[] = s.split(":");
-+        if(s.startsWith("["))
-+        {
-+            int i = s.indexOf("]");
-+            if(i > 0)
-+            {
-+                String s1 = s.substring(1, i);
-+                String s2 = s.substring(i + 1).trim();
-+                if(s2.startsWith(":") && s2.length() > 0)
-+                {
-+                    s2 = s2.substring(1);
-+                    as = new String[2];
-+                    as[0] = s1;
-+                    as[1] = s2;
-+                } else
-+                {
-+                    as = new String[1];
-+                    as[0] = s1;
-+                }
-+            }
-+        }
-+        if(as.length > 2)
-+        {
-+            as = new String[1];
-+            as[0] = s;
-+        }
-+        mc.displayGuiScreen(new GuiConnecting(mc, as[0], as.length <= 1 ? 25565 : parseIntWithDefault(as[1], 25565)));
-+    }
-+
-+    private void pollServer(ServerNBTStorage servernbtstorage)
-+        throws IOException
-+    {
-+        String s = servernbtstorage.host;
-+        String as[] = s.split(":");
-+        if(s.startsWith("["))
-+        {
-+            int i = s.indexOf("]");
-+            if(i > 0)
-+            {
-+                String s2 = s.substring(1, i);
-+                String s3 = s.substring(i + 1).trim();
-+                if(s3.startsWith(":") && s3.length() > 0)
-+                {
-+                    s3 = s3.substring(1);
-+                    as = new String[2];
-+                    as[0] = s2;
-+                    as[1] = s3;
-+                } else
-+                {
-+                    as = new String[1];
-+                    as[0] = s2;
-+                }
-+            }
-+        }
-+        if(as.length > 2)
-+        {
-+            as = new String[1];
-+            as[0] = s;
-+        }
-+        String s1 = as[0];
-+        int j = as.length <= 1 ? 25565 : parseIntWithDefault(as[1], 25565);
-+        Socket socket = null;
-+        DataInputStream datainputstream = null;
-+        DataOutputStream dataoutputstream = null;
-+        try
-+        {
-+            socket = new Socket();
-+            socket.setSoTimeout(3000);
-+            socket.setTcpNoDelay(true);
-+            socket.setTrafficClass(18);
-+            socket.connect(new InetSocketAddress(s1, j), 3000);
-+            datainputstream = new DataInputStream(socket.getInputStream());
-+            dataoutputstream = new DataOutputStream(socket.getOutputStream());
-+            dataoutputstream.write(254);
-+            if(datainputstream.read() != 255)
-+            {
-+                throw new IOException("Bad message");
-+            }
-+            String s4 = Packet.readString(datainputstream, 64);
-+            char ac[] = s4.toCharArray();
-+            for(int k = 0; k < ac.length; k++)
-+            {
-+                if(ac[k] != '\247' && ChatAllowedCharacters.allowedCharacters.indexOf(ac[k]) < 0)
-+                {
-+                    ac[k] = '?';
-+                }
-+            }
-+
-+            s4 = new String(ac);
-+            String as1[] = s4.split("\247");
-+            s4 = as1[0];
-+            int l = -1;
-+            int i1 = -1;
-+            try
-+            {
-+                l = Integer.parseInt(as1[1]);
-+                i1 = Integer.parseInt(as1[2]);
-+            }
-+            catch(Exception exception) { }
-+            servernbtstorage.motd = (new StringBuilder()).append("\2477").append(s4).toString();
-+            if(l >= 0 && i1 > 0)
-+            {
-+                servernbtstorage.playerCount = (new StringBuilder()).append("\2477").append(l).append("\2478/\2477").append(i1).toString();
-+            } else
-+            {
-+                servernbtstorage.playerCount = "\2478???";
-+            }
-+        }
-+        finally
-+        {
-+            try
-+            {
-+                if(datainputstream != null)
-+                {
-+                    datainputstream.close();
-+                }
-+            }
-+            catch(Throwable throwable) { }
-+            try
-+            {
-+                if(dataoutputstream != null)
-+                {
-+                    dataoutputstream.close();
-+                }
-+            }
-+            catch(Throwable throwable1) { }
-+            try
-+            {
-+                if(socket != null)
-+                {
-+                    socket.close();
-+                }
-+            }
-+            catch(Throwable throwable2) { }
-+        }
-+    }
-+
-+    protected void func_35325_a(String s, int i, int j)
-+    {
-+        if(s == null)
-+        {
-+            return;
-+        } else
-+        {
-+            int k = i + 12;
-+            int l = j - 12;
-+            int i1 = fontRenderer.getStringWidth(s);
-+            drawGradientRect(k - 3, l - 3, k + i1 + 3, l + 8 + 3, 0xc0000000, 0xc0000000);
-+            fontRenderer.drawStringWithShadow(s, k, l, -1);
-+            return;
-+        }
-+    }
-+
-+    static List getServerList(GuiMultiplayer guimultiplayer)
-+    {
-+        return guimultiplayer.serverList;
-+    }
-+
-+    static int setSelectedServer(GuiMultiplayer guimultiplayer, int i)
-+    {
-+        return guimultiplayer.selectedServer = i;
-+    }
-+
-+    static int getSelectedServer(GuiMultiplayer guimultiplayer)
-+    {
-+        return guimultiplayer.selectedServer;
-+    }
-+
-+    static GuiButton getButtonSelect(GuiMultiplayer guimultiplayer)
-+    {
-+        return guimultiplayer.buttonSelect;
-+    }
-+
-+    static GuiButton getButtonEdit(GuiMultiplayer guimultiplayer)
-+    {
-+        return guimultiplayer.buttonEdit;
-+    }
-+
-+    static GuiButton getButtonDelete(GuiMultiplayer guimultiplayer)
-+    {
-+        return guimultiplayer.buttonDelete;
-+    }
-+
-+    static void joinServer(GuiMultiplayer guimultiplayer, int i)
-+    {
-+        guimultiplayer.joinServer(i);
-+    }
-+
-+    static Object getLock()
-+    {
-+        return lock;
-+    }
-+
-+    static int getThreadsPending()
-+    {
-+        return threadsPending;
-+    }
-+
-+    static int incrementThreadsPending()
-+    {
-+        return threadsPending++;
-+    }
-+
-+    static void pollServer(GuiMultiplayer guimultiplayer, ServerNBTStorage servernbtstorage)
-+        throws IOException
-+    {
-+        guimultiplayer.pollServer(servernbtstorage);
-+    }
-+
-+    static int decrementThreadsPending()
-+    {
-+        return threadsPending--;
-+    }
-+
-+    static String func_35327_a(GuiMultiplayer guimultiplayer, String s)
-+    {
-+        return guimultiplayer.field_35350_v = s;
-+    }
-+
-+}
-diff -ruN src/minecraft/net/minecraft/src/GuiRenameWorld.java.bak newsrc/minecraft/net/minecraft/src/GuiRenameWorld.java.bak
---- src/minecraft/net/minecraft/src/GuiRenameWorld.java.bak	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiRenameWorld.java.bak	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,96 @@
-+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-+// Jad home page: http://www.kpdus.com/jad.html
-+// Decompiler options: packimports(3) braces deadcode fieldsfirst 
-+
-+package net.minecraft.src;
-+
-+import java.util.List;
-+import net.minecraft.client.Minecraft;
-+import org.lwjgl.input.Keyboard;
-+
-+// Referenced classes of package net.minecraft.src:
-+//            GuiScreen, GuiTextField, StringTranslate, GuiButton, 
-+//            ISaveFormat, WorldInfo
-+
-+public class GuiRenameWorld extends GuiScreen
-+{
-+
-+    private GuiScreen parentGuiScreen;
-+    private GuiTextField theGuiTextField;
-+    private final String worldName;
-+
-+    public GuiRenameWorld(GuiScreen guiscreen, String s)
-+    {
-+        parentGuiScreen = guiscreen;
-+        worldName = s;
-+    }
-+
-+    public void updateScreen()
-+    {
-+        theGuiTextField.updateCursorCounter();
-+    }
-+
-+    public void initGui()
-+    {
-+        StringTranslate stringtranslate = StringTranslate.getInstance();
-+        net.tasmod.virtual.VirtualKeyboard.enableRepeatEvents(true);
-+        controlList.clear();
-+        controlList.add(new GuiButton(0, width / 2 - 100, height / 4 + 96 + 12, stringtranslate.translateKey("selectWorld.renameButton")));
-+        controlList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + 12, stringtranslate.translateKey("gui.cancel")));
-+        ISaveFormat isaveformat = mc.getSaveLoader();
-+        WorldInfo worldinfo = isaveformat.getWorldInfo(worldName);
-+        String s = worldinfo.getWorldName();
-+        theGuiTextField = new GuiTextField(this, fontRenderer, width / 2 - 100, 60, 200, 20, s);
-+        theGuiTextField.isFocused = true;
-+        theGuiTextField.setMaxStringLength(32);
-+    }
-+
-+    public void onGuiClosed()
-+    {
-+    	net.tasmod.virtual.VirtualKeyboard.enableRepeatEvents(false);
-+    }
-+
-+    protected void actionPerformed(GuiButton guibutton)
-+    {
-+        if(!guibutton.enabled)
-+        {
-+            return;
-+        }
-+        if(guibutton.id == 1)
-+        {
-+            mc.displayGuiScreen(parentGuiScreen);
-+        } else
-+        if(guibutton.id == 0)
-+        {
-+            ISaveFormat isaveformat = mc.getSaveLoader();
-+            isaveformat.renameWorld(worldName, theGuiTextField.getText().trim());
-+            mc.displayGuiScreen(parentGuiScreen);
-+        }
-+    }
-+
-+    protected void keyTyped(char c, int i)
-+    {
-+        theGuiTextField.textboxKeyTyped(c, i);
-+        ((GuiButton)controlList.get(0)).enabled = theGuiTextField.getText().trim().length() > 0;
-+        if(c == '\r')
-+        {
-+            actionPerformed((GuiButton)controlList.get(0));
-+        }
-+    }
-+
-+    protected void mouseClicked(int i, int j, int k)
-+    {
-+        super.mouseClicked(i, j, k);
-+        theGuiTextField.mouseClicked(i, j, k);
-+    }
-+
-+    public void drawScreen(int i, int j, float f)
-+    {
-+        StringTranslate stringtranslate = StringTranslate.getInstance();
-+        drawDefaultBackground();
-+        drawCenteredString(fontRenderer, stringtranslate.translateKey("selectWorld.renameTitle"), width / 2, (height / 4 - 60) + 20, 0xffffff);
-+        drawString(fontRenderer, stringtranslate.translateKey("selectWorld.enterName"), width / 2 - 100, 47, 0xa0a0a0);
-+        theGuiTextField.drawTextBox();
-+        super.drawScreen(i, j, f);
-+    }
-+}
 diff -ruN src/minecraft/net/minecraft/src/GuiScreen.java newsrc/minecraft/net/minecraft/src/GuiScreen.java
 --- src/minecraft/net/minecraft/src/GuiScreen.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiScreen.java	2021-01-01 00:00:00.000000000 +0100
@@ -3785,229 +2899,6 @@ diff -ruN src/minecraft/net/minecraft/src/GuiScreen.java newsrc/minecraft/net/mi
          }
      }
  
-diff -ruN src/minecraft/net/minecraft/src/GuiScreenAddServer.java.bak newsrc/minecraft/net/minecraft/src/GuiScreenAddServer.java.bak
---- src/minecraft/net/minecraft/src/GuiScreenAddServer.java.bak	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiScreenAddServer.java.bak	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,124 @@
-+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-+// Jad home page: http://www.kpdus.com/jad.html
-+// Decompiler options: packimports(3) braces deadcode fieldsfirst 
-+
-+package net.minecraft.src;
-+
-+import java.util.List;
-+import org.lwjgl.input.Keyboard;
-+
-+import net.tasmod.virtual.VirtualKeyboard;
-+
-+// Referenced classes of package net.minecraft.src:
-+//            GuiScreen, GuiTextField, StringTranslate, GuiButton, 
-+//            ServerNBTStorage
-+
-+public class GuiScreenAddServer extends GuiScreen
-+{
-+
-+    private GuiScreen field_35362_a;
-+    private GuiTextField field_35360_b;
-+    private GuiTextField field_35361_c;
-+    private ServerNBTStorage field_35359_d;
-+
-+    public GuiScreenAddServer(GuiScreen guiscreen, ServerNBTStorage servernbtstorage)
-+    {
-+        field_35362_a = guiscreen;
-+        field_35359_d = servernbtstorage;
-+    }
-+
-+    public void updateScreen()
-+    {
-+        field_35361_c.updateCursorCounter();
-+        field_35360_b.updateCursorCounter();
-+    }
-+
-+    public void initGui()
-+    {
-+        StringTranslate stringtranslate = StringTranslate.getInstance();
-+        net.tasmod.virtual.VirtualKeyboard.enableRepeatEvents(true);
-+        controlList.clear();
-+        controlList.add(new GuiButton(0, width / 2 - 100, height / 4 + 96 + 12, stringtranslate.translateKey("addServer.add")));
-+        controlList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + 12, stringtranslate.translateKey("gui.cancel")));
-+        field_35361_c = new GuiTextField(this, fontRenderer, width / 2 - 100, 76, 200, 20, field_35359_d.name);
-+        field_35361_c.isFocused = true;
-+        field_35361_c.setMaxStringLength(32);
-+        field_35360_b = new GuiTextField(this, fontRenderer, width / 2 - 100, 116, 200, 20, field_35359_d.host);
-+        field_35360_b.setMaxStringLength(128);
-+        ((GuiButton)controlList.get(0)).enabled = field_35360_b.getText().length() > 0 && field_35361_c.getText().length() > 0;
-+    }
-+
-+    public void onGuiClosed()
-+    {
-+    	net.tasmod.virtual.VirtualKeyboard.enableRepeatEvents(false);
-+    }
-+
-+    protected void actionPerformed(GuiButton guibutton)
-+    {
-+        if(!guibutton.enabled)
-+        {
-+            return;
-+        }
-+        if(guibutton.id == 1)
-+        {
-+            field_35362_a.deleteWorld(false, 0);
-+        } else
-+        if(guibutton.id == 0)
-+        {
-+            field_35359_d.name = field_35361_c.getText();
-+            field_35359_d.host = field_35360_b.getText();
-+            field_35362_a.deleteWorld(true, 0);
-+        }
-+    }
-+
-+    protected void keyTyped(char c, int i)
-+    {
-+        field_35361_c.textboxKeyTyped(c, i);
-+        field_35360_b.textboxKeyTyped(c, i);
-+        if(c == '\t')
-+        {
-+            if(field_35361_c.isFocused)
-+            {
-+                field_35361_c.isFocused = false;
-+                field_35360_b.isFocused = true;
-+            } else
-+            {
-+                field_35361_c.isFocused = true;
-+                field_35360_b.isFocused = false;
-+            }
-+        }
-+        if(c == '\r')
-+        {
-+            actionPerformed((GuiButton)controlList.get(0));
-+        }
-+        ((GuiButton)controlList.get(0)).enabled = field_35360_b.getText().length() > 0 && field_35361_c.getText().length() > 0;
-+        if(((GuiButton)controlList.get(0)).enabled)
-+        {
-+            String s = field_35360_b.getText().trim();
-+            String as[] = s.split(":");
-+            if(as.length > 2)
-+            {
-+                ((GuiButton)controlList.get(0)).enabled = false;
-+            }
-+        }
-+    }
-+
-+    protected void mouseClicked(int i, int j, int k)
-+    {
-+        super.mouseClicked(i, j, k);
-+        field_35360_b.mouseClicked(i, j, k);
-+        field_35361_c.mouseClicked(i, j, k);
-+    }
-+
-+    public void drawScreen(int i, int j, float f)
-+    {
-+        StringTranslate stringtranslate = StringTranslate.getInstance();
-+        drawDefaultBackground();
-+        drawCenteredString(fontRenderer, stringtranslate.translateKey("addServer.title"), width / 2, (height / 4 - 60) + 20, 0xffffff);
-+        drawString(fontRenderer, stringtranslate.translateKey("addServer.enterName"), width / 2 - 100, 63, 0xa0a0a0);
-+        drawString(fontRenderer, stringtranslate.translateKey("addServer.enterIp"), width / 2 - 100, 104, 0xa0a0a0);
-+        field_35361_c.drawTextBox();
-+        field_35360_b.drawTextBox();
-+        super.drawScreen(i, j, f);
-+    }
-+}
-diff -ruN src/minecraft/net/minecraft/src/GuiScreenServerList.java.bak newsrc/minecraft/net/minecraft/src/GuiScreenServerList.java.bak
---- src/minecraft/net/minecraft/src/GuiScreenServerList.java.bak	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiScreenServerList.java.bak	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,91 @@
-+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-+// Jad home page: http://www.kpdus.com/jad.html
-+// Decompiler options: packimports(3) braces deadcode fieldsfirst 
-+
-+package net.minecraft.src;
-+
-+import java.util.List;
-+import org.lwjgl.input.Keyboard;
-+
-+// Referenced classes of package net.minecraft.src:
-+//            GuiScreen, GuiTextField, StringTranslate, GuiButton, 
-+//            ServerNBTStorage
-+
-+public class GuiScreenServerList extends GuiScreen
-+{
-+
-+    private GuiScreen guiScreen;
-+    private GuiTextField serverTextField;
-+    private ServerNBTStorage field_35318_c;
-+
-+    public GuiScreenServerList(GuiScreen guiscreen, ServerNBTStorage servernbtstorage)
-+    {
-+        guiScreen = guiscreen;
-+        field_35318_c = servernbtstorage;
-+    }
-+
-+    public void updateScreen()
-+    {
-+        serverTextField.updateCursorCounter();
-+    }
-+
-+    public void initGui()
-+    {
-+        StringTranslate stringtranslate = StringTranslate.getInstance();
-+        net.tasmod.virtual.VirtualKeyboard.enableRepeatEvents(true);
-+        controlList.clear();
-+        controlList.add(new GuiButton(0, width / 2 - 100, height / 4 + 96 + 12, stringtranslate.translateKey("selectServer.select")));
-+        controlList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + 12, stringtranslate.translateKey("gui.cancel")));
-+        serverTextField = new GuiTextField(this, fontRenderer, width / 2 - 100, 116, 200, 20, field_35318_c.host);
-+        serverTextField.setMaxStringLength(128);
-+        ((GuiButton)controlList.get(0)).enabled = serverTextField.getText().length() > 0;
-+    }
-+
-+    public void onGuiClosed()
-+    {
-+    	net.tasmod.virtual.VirtualKeyboard.enableRepeatEvents(false);
-+    }
-+
-+    protected void actionPerformed(GuiButton guibutton)
-+    {
-+        if(!guibutton.enabled)
-+        {
-+            return;
-+        }
-+        if(guibutton.id == 1)
-+        {
-+            guiScreen.deleteWorld(false, 0);
-+        } else
-+        if(guibutton.id == 0)
-+        {
-+            field_35318_c.host = serverTextField.getText();
-+            guiScreen.deleteWorld(true, 0);
-+        }
-+    }
-+
-+    protected void keyTyped(char c, int i)
-+    {
-+        serverTextField.textboxKeyTyped(c, i);
-+        if(c == '\r')
-+        {
-+            actionPerformed((GuiButton)controlList.get(0));
-+        }
-+        ((GuiButton)controlList.get(0)).enabled = serverTextField.getText().length() > 0;
-+    }
-+
-+    protected void mouseClicked(int i, int j, int k)
-+    {
-+        super.mouseClicked(i, j, k);
-+        serverTextField.mouseClicked(i, j, k);
-+    }
-+
-+    public void drawScreen(int i, int j, float f)
-+    {
-+        StringTranslate stringtranslate = StringTranslate.getInstance();
-+        drawDefaultBackground();
-+        drawCenteredString(fontRenderer, stringtranslate.translateKey("selectServer.direct"), width / 2, (height / 4 - 60) + 20, 0xffffff);
-+        drawString(fontRenderer, stringtranslate.translateKey("addServer.enterIp"), width / 2 - 100, 100, 0xa0a0a0);
-+        serverTextField.drawTextBox();
-+        super.drawScreen(i, j, f);
-+    }
-+}
 diff -ruN src/minecraft/net/minecraft/src/GuiSleepMP.java newsrc/minecraft/net/minecraft/src/GuiSleepMP.java
 --- src/minecraft/net/minecraft/src/GuiSleepMP.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiSleepMP.java	2021-01-01 00:00:00.000000000 +0100
@@ -4054,144 +2945,6 @@ diff -ruN src/minecraft/net/minecraft/src/GuiSlot.java newsrc/minecraft/net/mine
                  if(j1 != 0)
                  {
                      if(j1 > 0)
-diff -ruN src/minecraft/net/minecraft/src/GuiSlotServer.java.bak newsrc/minecraft/net/minecraft/src/GuiSlotServer.java.bak
---- src/minecraft/net/minecraft/src/GuiSlotServer.java.bak	1970-01-01 01:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiSlotServer.java.bak	2021-01-01 00:00:00.000000000 +0100
-@@ -0,0 +1,134 @@
-+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-+// Jad home page: http://www.kpdus.com/jad.html
-+// Decompiler options: packimports(3) braces deadcode fieldsfirst 
-+
-+package net.minecraft.src;
-+
-+import java.util.List;
-+import net.minecraft.client.Minecraft;
-+import org.lwjgl.opengl.GL11;
-+
-+// Referenced classes of package net.minecraft.src:
-+//            GuiSlot, GuiMultiplayer, GuiButton, ServerNBTStorage, 
-+//            ThreadPollServers, FontRenderer, RenderEngine, Tessellator
-+
-+class GuiSlotServer extends GuiSlot
-+{
-+
-+    final GuiMultiplayer field_35410_a; /* synthetic field */
-+
-+    public GuiSlotServer(GuiMultiplayer guimultiplayer)
-+    {
-+        super(guimultiplayer.mc, guimultiplayer.width, guimultiplayer.height, 32, guimultiplayer.height - 64, 36);
-+        field_35410_a = guimultiplayer;
-+    }
-+
-+    protected int getSize()
-+    {
-+        return GuiMultiplayer.getServerList(field_35410_a).size();
-+    }
-+
-+    protected void elementClicked(int i, boolean flag)
-+    {
-+        GuiMultiplayer.setSelectedServer(field_35410_a, i);
-+        boolean flag1 = GuiMultiplayer.getSelectedServer(field_35410_a) >= 0 && GuiMultiplayer.getSelectedServer(field_35410_a) < getSize();
-+        GuiMultiplayer.getButtonSelect(field_35410_a).enabled = flag1;
-+        //GuiMultiplayer.getButtonEdit(field_35410_a).enabled = flag1;
-+        GuiMultiplayer.getButtonDelete(field_35410_a).enabled = flag1;
-+        if(flag && flag1)
-+        {
-+            GuiMultiplayer.joinServer(field_35410_a, i);
-+        }
-+    }
-+
-+    protected boolean isSelected(int i)
-+    {
-+        return i == GuiMultiplayer.getSelectedServer(field_35410_a);
-+    }
-+
-+    protected int getContentHeight()
-+    {
-+        return GuiMultiplayer.getServerList(field_35410_a).size() * 36;
-+    }
-+
-+    protected void drawBackground()
-+    {
-+        field_35410_a.drawDefaultBackground();
-+    }
-+
-+    protected void drawSlot(int i, int j, int k, int l, Tessellator tessellator)
-+    {
-+        ServerNBTStorage servernbtstorage = (ServerNBTStorage)GuiMultiplayer.getServerList(field_35410_a).get(i);
-+        synchronized(GuiMultiplayer.getLock())
-+        {
-+            if(GuiMultiplayer.getThreadsPending() < 5 && !servernbtstorage.polled)
-+            {
-+                servernbtstorage.polled = true;
-+                servernbtstorage.lag = -2L;
-+                servernbtstorage.motd = "";
-+                servernbtstorage.playerCount = "";
-+                GuiMultiplayer.incrementThreadsPending();
-+                (new ThreadPollServers(this, servernbtstorage)).start();
-+            }
-+        }
-+        field_35410_a.drawString(field_35410_a.fontRenderer, servernbtstorage.name, j + 2, k + 1, 0xffffff);
-+        field_35410_a.drawString(field_35410_a.fontRenderer, servernbtstorage.motd, j + 2, k + 12, 0x808080);
-+        field_35410_a.drawString(field_35410_a.fontRenderer, servernbtstorage.playerCount, (j + 215) - field_35410_a.fontRenderer.getStringWidth(servernbtstorage.playerCount), k + 12, 0x808080);
-+        field_35410_a.drawString(field_35410_a.fontRenderer, servernbtstorage.host, j + 2, k + 12 + 11, 0x303030);
-+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-+        field_35410_a.mc.renderEngine.bindTexture(field_35410_a.mc.renderEngine.getTexture("/gui/icons.png"));
-+        int i1 = 0;
-+        int j1 = 0;
-+        String s = "";
-+        if(servernbtstorage.polled && servernbtstorage.lag != -2L)
-+        {
-+            i1 = 0;
-+            j1 = 0;
-+            if(servernbtstorage.lag < 0L)
-+            {
-+                j1 = 5;
-+            } else
-+            if(servernbtstorage.lag < 150L)
-+            {
-+                j1 = 0;
-+            } else
-+            if(servernbtstorage.lag < 300L)
-+            {
-+                j1 = 1;
-+            } else
-+            if(servernbtstorage.lag < 600L)
-+            {
-+                j1 = 2;
-+            } else
-+            if(servernbtstorage.lag < 1000L)
-+            {
-+                j1 = 3;
-+            } else
-+            {
-+                j1 = 4;
-+            }
-+            if(servernbtstorage.lag < 0L)
-+            {
-+                s = "(no connection)";
-+            } else
-+            {
-+                s = (new StringBuilder()).append(servernbtstorage.lag).append("ms").toString();
-+            }
-+        } else
-+        {
-+            i1 = 1;
-+            j1 = (int)(System.currentTimeMillis() / 100L + (long)(i * 2) & 7L);
-+            if(j1 > 4)
-+            {
-+                j1 = 8 - j1;
-+            }
-+            s = "Polling..";
-+        }
-+        field_35410_a.drawTexturedModalRect(j + 205, k, 0 + i1 * 10, 176 + j1 * 8, 10, 8);
-+        byte byte0 = 4;
-+        if(field_35409_k >= (j + 205) - byte0 && field_35408_l >= k - byte0 && field_35409_k <= j + 205 + 10 + byte0 && field_35408_l <= k + 8 + byte0)
-+        {
-+            GuiMultiplayer.func_35327_a(field_35410_a, s);
-+        }
-+    }
-+}
 diff -ruN src/minecraft/net/minecraft/src/GuiSlotStats.java newsrc/minecraft/net/minecraft/src/GuiSlotStats.java
 --- src/minecraft/net/minecraft/src/GuiSlotStats.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiSlotStats.java	2021-01-01 00:00:00.000000000 +0100
@@ -4257,6 +3010,78 @@ diff -ruN src/minecraft/net/minecraft/src/MouseHelper.java newsrc/minecraft/net/
 +        deltaY = net.tasmod.virtual.VirtualMouse.getDY();
      }
  }
+diff -ruN src/minecraft/net/minecraft/src/NetClientHandler.java newsrc/minecraft/net/minecraft/src/NetClientHandler.java
+--- src/minecraft/net/minecraft/src/NetClientHandler.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/NetClientHandler.java	2021-01-01 00:00:00.000000000 +0100
+@@ -64,7 +64,7 @@
+         field_35787_k = new HashMap();
+         field_35786_c = new ArrayList();
+         field_35785_d = 20;
+-        rand = new Random();
++        rand = new net.tasmod.rng.FakeRandom();
+         mc = minecraft;
+         Socket socket = new Socket(InetAddress.getByName(s), i);
+         netManager = new NetworkManager(socket, "Client", this);
+diff -ruN src/minecraft/net/minecraft/src/Particle.java newsrc/minecraft/net/minecraft/src/Particle.java
+--- src/minecraft/net/minecraft/src/Particle.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/Particle.java	2021-01-01 00:00:00.000000000 +0100
+@@ -12,7 +12,7 @@
+ public class Particle
+ {
+ 
+-    private static Random rand = new Random();
++    private static Random rand = new net.tasmod.rng.FakeRandom();
+     public double posX;
+     public double posY;
+     public double prevPosX;
+diff -ruN src/minecraft/net/minecraft/src/RenderEnderman.java newsrc/minecraft/net/minecraft/src/RenderEnderman.java
+--- src/minecraft/net/minecraft/src/RenderEnderman.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/RenderEnderman.java	2021-01-01 00:00:00.000000000 +0100
+@@ -20,7 +20,7 @@
+     public RenderEnderman()
+     {
+         super(new ModelEnderman(), 0.5F);
+-        rnd = new Random();
++        rnd = new net.tasmod.rng.FakeRandom();
+         endermanModel = (ModelEnderman)super.mainModel;
+         setRenderPassModel(endermanModel);
+     }
+diff -ruN src/minecraft/net/minecraft/src/RenderItem.java newsrc/minecraft/net/minecraft/src/RenderItem.java
+--- src/minecraft/net/minecraft/src/RenderItem.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/RenderItem.java	2021-01-01 00:00:00.000000000 +0100
+@@ -24,7 +24,7 @@
+     public RenderItem()
+     {
+         renderBlocks = new RenderBlocks();
+-        random = new Random();
++        random = new net.tasmod.rng.FakeRandom();
+         field_27004_a = true;
+         field_40268_b = 0.0F;
+         shadowSize = 0.15F;
+diff -ruN src/minecraft/net/minecraft/src/SoundManager.java newsrc/minecraft/net/minecraft/src/SoundManager.java
+--- src/minecraft/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
+@@ -36,7 +36,7 @@
+         soundPoolStreaming = new SoundPool();
+         soundPoolMusic = new SoundPool();
+         latestSoundID = 0;
+-        rand = new Random();
++        rand = new net.tasmod.rng.FakeRandom();
+         ticksBeforeMusic = rand.nextInt(12000);
+     }
+ 
+diff -ruN src/minecraft/net/minecraft/src/SoundPool.java newsrc/minecraft/net/minecraft/src/SoundPool.java
+--- src/minecraft/net/minecraft/src/SoundPool.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/SoundPool.java	2021-01-01 00:00:00.000000000 +0100
+@@ -23,7 +23,7 @@
+ 
+     public SoundPool()
+     {
+-        rand = new Random();
++        rand = new net.tasmod.rng.FakeRandom();
+         nameToSoundPoolEntriesMapping = new HashMap();
+         allSoundPoolEntries = new ArrayList();
+         numberOfSoundPoolEntries = 0;
 diff -ruN src/minecraft/net/minecraft/src/Teleporter.java newsrc/minecraft/net/minecraft/src/Teleporter.java
 --- src/minecraft/net/minecraft/src/Teleporter.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/Teleporter.java	2021-01-01 00:00:00.000000000 +0100
@@ -4281,10 +3106,29 @@ diff -ruN src/minecraft/net/minecraft/src/TileEntityDispenser.java newsrc/minecr
      }
  
      public int getSizeInventory()
+diff -ruN src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java newsrc/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java
+--- src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java	2021-01-01 00:00:00.000000000 +0100
+@@ -22,7 +22,7 @@
+     public float field_40069_h;
+     public float field_40067_p;
+     public float field_40066_q;
+-    private static Random field_40064_r = new Random();
++    private static Random field_40064_r = new net.tasmod.rng.FakeRandom();
+ 
+     public TileEntityEnchantmentTable()
+     {
 diff -ruN src/minecraft/net/minecraft/src/World.java newsrc/minecraft/net/minecraft/src/World.java
 --- src/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
-@@ -103,7 +103,7 @@
+@@ -97,13 +97,13 @@
+         weatherEffects = new ArrayList();
+         cloudColour = 0xffffffL;
+         skylightSubtracted = 0;
+-        updateLCG = (new Random()).nextInt();
++        updateLCG = (new net.tasmod.rng.FakeRandom()).nextInt();
+         lastLightningBolt = 0;
+         lightningFlash = 0;
          editingBlocks = false;
          lockTimestamp = System.currentTimeMillis();
          autosavePeriod = 40;
@@ -4293,7 +3137,14 @@ diff -ruN src/minecraft/net/minecraft/src/World.java newsrc/minecraft/net/minecr
          isNewWorld = false;
          worldAccesses = new ArrayList();
          collidingBoundingBoxes = new ArrayList();
-@@ -149,7 +149,7 @@
+@@ -143,13 +143,13 @@
+         weatherEffects = new ArrayList();
+         cloudColour = 0xffffffL;
+         skylightSubtracted = 0;
+-        updateLCG = (new Random()).nextInt();
++        updateLCG = (new net.tasmod.rng.FakeRandom()).nextInt();
+         lastLightningBolt = 0;
+         lightningFlash = 0;
          editingBlocks = false;
          lockTimestamp = System.currentTimeMillis();
          autosavePeriod = 40;
@@ -4302,7 +3153,14 @@ diff -ruN src/minecraft/net/minecraft/src/World.java newsrc/minecraft/net/minecr
          isNewWorld = false;
          worldAccesses = new ArrayList();
          collidingBoundingBoxes = new ArrayList();
-@@ -201,7 +201,7 @@
+@@ -195,13 +195,13 @@
+         weatherEffects = new ArrayList();
+         cloudColour = 0xffffffL;
+         skylightSubtracted = 0;
+-        updateLCG = (new Random()).nextInt();
++        updateLCG = (new net.tasmod.rng.FakeRandom()).nextInt();
+         lastLightningBolt = 0;
+         lightningFlash = 0;
          editingBlocks = false;
          lockTimestamp = System.currentTimeMillis();
          autosavePeriod = 40;
@@ -4320,3 +3178,58 @@ diff -ruN src/minecraft/net/minecraft/src/World.java newsrc/minecraft/net/minecr
          for(int l = 0; l < 1000; l++)
          {
              int i1 = (i + rand.nextInt(byte0)) - rand.nextInt(byte0);
+@@ -3449,12 +3449,6 @@
+         return field_35472_c;
+     }
+ 
+-    public Random setRandomSeed(int i, int j, int k)
+-    {
+-        long l = (long)i * 0x4f9939f508L + (long)j * 0x1ef1565bd5L + getWorldInfo().getRandomSeed() + (long)k;
+-        rand.setSeed(l);
+-        return rand;
+-    }
+ 
+     public boolean updatingLighting()
+     {
+diff -ruN src/minecraft/net/minecraft/src/WorldGenHellLava.java newsrc/minecraft/net/minecraft/src/WorldGenHellLava.java
+--- src/minecraft/net/minecraft/src/WorldGenHellLava.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/WorldGenHellLava.java	2021-01-01 00:00:00.000000000 +0100
+@@ -6,6 +6,8 @@
+ 
+ import java.util.Random;
+ 
++import net.tasmod.rng.FakeRandom;
++
+ // Referenced classes of package net.minecraft.src:
+ //            WorldGenerator, World, Block
+ 
+@@ -75,7 +77,7 @@
+         {
+             world.setBlockWithNotify(i, j, k, hellLavaID);
+             world.scheduledUpdatesAreImmediate = true;
+-            Block.blocksList[hellLavaID].updateTick(world, i, j, k, random);
++            Block.blocksList[hellLavaID].updateTick(world, i, j, k, new FakeRandom()); // updateTick being called with wrong RNG
+             world.scheduledUpdatesAreImmediate = false;
+         }
+         return true;
+diff -ruN src/minecraft/net/minecraft/src/WorldGenLiquids.java newsrc/minecraft/net/minecraft/src/WorldGenLiquids.java
+--- src/minecraft/net/minecraft/src/WorldGenLiquids.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/WorldGenLiquids.java	2021-01-01 00:00:00.000000000 +0100
+@@ -6,6 +6,8 @@
+ 
+ import java.util.Random;
+ 
++import net.tasmod.rng.FakeRandom;
++
+ // Referenced classes of package net.minecraft.src:
+ //            WorldGenerator, World, Block
+ 
+@@ -71,7 +73,7 @@
+         {
+             world.setBlockWithNotify(i, j, k, liquidBlockId);
+             world.scheduledUpdatesAreImmediate = true;
+-            Block.blocksList[liquidBlockId].updateTick(world, i, j, k, random);
++            Block.blocksList[liquidBlockId].updateTick(world, i, j, k, new FakeRandom()); // updateTick being called with wrong RNG
+             world.scheduledUpdatesAreImmediate = false;
+         }
+         return true;

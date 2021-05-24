@@ -55,8 +55,6 @@ public class VirtualMouse {
 		
 	}
 	
-	// TODO: Reimplement isButtonDown with a Virtual Mouse
-	
 	public final static Queue<VirtualMouseEvent> mouseEventsForTick = new LinkedList<>();
 	public static VirtualMouseEvent currentMouseEvents = new VirtualMouseEvent(0, 0, false, 0, 0, false, 0, 0);
 	public static boolean hack = false;
