@@ -4,28 +4,34 @@ import java.util.Random;
 
 public class FakeRandom extends Random {
 
-	public static long customSeed = 0L;
+	public static long seed = 0L;
 	
 	@Override
-	public boolean nextBoolean() { return new Random(customSeed).nextBoolean(); }
+	public synchronized void setSeed(long seed) {
+		System.out.println("Successfully messed up!");
+		throw new RuntimeException();
+	}
 	
 	@Override
-	public double nextDouble() { return new Random(customSeed).nextDouble(); }
+	public boolean nextBoolean() { return new Random(seed).nextBoolean(); }
 	
 	@Override
-	public float nextFloat() { return new Random(customSeed).nextFloat(); }
+	public double nextDouble() { return new Random(seed).nextDouble(); }
 	
 	@Override
-	public int nextInt() { return new Random(customSeed).nextInt(); }
+	public float nextFloat() { return new Random(seed).nextFloat(); }
 	
 	@Override
-	public int nextInt(int bound) { return new Random(customSeed).nextInt(bound); }
+	public int nextInt() { return new Random(seed).nextInt(); }
 	
 	@Override
-	public long nextLong() { return new Random(customSeed).nextLong(); }
+	public int nextInt(int bound) { return new Random(seed).nextInt(bound); }
 	
 	@Override
-	public synchronized double nextGaussian() { return new Random(customSeed).nextGaussian(); } 
+	public long nextLong() { return new Random(seed).nextLong(); }
+	
+	@Override
+	public synchronized double nextGaussian() { return new Random(seed).nextGaussian(); } 
 	
 	
 	

@@ -10,12 +10,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
 
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.PlayerControllerCreative;
 import net.minecraft.src.PlayerControllerSP;
 import net.minecraft.src.WorldSettings;
 import net.tasmod.TASmod;
 import net.tasmod.Utils;
+import net.tasmod.rng.FakeRandom;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse;

@@ -3,6 +3,7 @@ package net.tasmod.virtual;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 
 import net.tasmod.TASmod;
@@ -104,6 +105,10 @@ public final class VirtualKeyboard {
 			return val;
 		}
 		return currentKeyEvent.state;
+	}
+	
+	public final static void enableRepeatEvents(final boolean b) {
+		Keyboard.enableRepeatEvents(b);
 	}
 	
 }

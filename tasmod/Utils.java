@@ -1,8 +1,12 @@
 package net.tasmod;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Properties;
+import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.StringTranslate;

@@ -5,6 +5,7 @@ import java.io.IOException;
 import net.minecraft.client.Minecraft;
 import net.tasmod.recorder.Recorder;
 import net.tasmod.replayer.Replayer;
+import net.tasmod.rng.FakeRandom;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
 
