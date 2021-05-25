@@ -8,8 +8,17 @@ import org.lwjgl.input.Mouse;
 import net.tasmod.TASmod;
 import net.tasmod.Utils;
 
+/**
+ * This is an interface of the Mouse Class.
+ * This File records or manipulates these Calls
+ * @author ScribbleLP, Pancake
+ */
 public class VirtualMouse {
 
+	/**
+	 * Internal Mouse Event used to save the Mouse to a File
+	 * @author ScribbleLP
+	 */
 	public static final class VirtualMouseEvent {
 		
 		/** The current position */
@@ -18,7 +27,7 @@ public class VirtualMouse {
 		/** The current position */
 		public int posY;
 		
-		/** MAC only, is the Cursor grabbed */
+		/** Is the Cursor grabbed */
 		public boolean grabbed;
 		
 		public int dX;
@@ -55,7 +64,11 @@ public class VirtualMouse {
 		
 	}
 	
-	// TODO: Reimplement isButtonDown with a Virtual Mouse
+	/**
+	 * General Idea: LWJGL uses Events, these Events contain a bit of Information {@link VirtualMouseEvent}. You go trough them by running next() and then you access their Information using getEvent****. 
+	 * So every time next() is called, a new VirtualMouseEvent is being created, that is slowly being filled with data, by Minecraft Code that is accessing them. So if the MC Code asks for the Mouse Button, then our Code puts that Information into 
+	 * the VirtualMouseEvent. Replaying works the same, but instead of listening, it hacks the LWJGL Mouse like a Man In The Middle
+	 */
 	
 	public final static Queue<VirtualMouseEvent> mouseEventsForTick = new LinkedList<>();
 	public static VirtualMouseEvent currentMouseEvents = new VirtualMouseEvent(0, 0, false, 0, 0, false, 0, 0);
@@ -67,6 +80,9 @@ public class VirtualMouse {
 	public static int dX;
 	public static int dY;
 	
+	/**
+	 * isButtonDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Mouse)
+	 */
 	public static boolean isButtonDown(final int i) {
 		if (!hack) {
 			boolean val = Mouse.isButtonDown(i);
@@ -174,15 +190,25 @@ public class VirtualMouse {
 		return currentMouseEvents.posY;
 	}
 	
+	/**
+	 * This is a redirect. This alters the behavior of the Mouse. It is just not noticeable, and doesn't change anything at all. 
+	 * Why? Because getX would normally ask the Mouse Directly for its X Position, while getEventX would wait for the Game to catch that.
+	 */
 	public static int getX() {
 		return getEventX();
 	}
-
+	/**
+	 * This is a redirect. This alters the behavior of the Mouse. It is just not noticeable, and doesn't change anything at all. 
+	 * Why? Because getY would normally ask the Mouse Directly for its Y Position, while getEventY would wait for the Game to catch that.
+	 */
 	public static int getY() {
 		return getEventY();
 	}
 	
-	// Calls the Fake Utils
+	/**
+	 * To make the Interpolation work, we are not asking LWJGL, but a Custom Util, that adds all the LWJGL Calls per Tick. 
+	 * Does not change anything with the Mouse
+	 */
 	public static int getDX() {
 		if (!hack) {
 			int val = Utils.getDX();
@@ -194,6 +220,10 @@ public class VirtualMouse {
 		return dX;
 	}
 
+	/**
+	 * To make the Interpolation work, we are not asking LWJGL, but a Custom Util, that adds all the LWJGL Calls per Tick. 
+	 * Does not change anything with the Mouse
+	 */
 	public static int getDY() {
 		if (!hack) {
 			int val = Utils.getDY();

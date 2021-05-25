@@ -28,7 +28,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          {
              if(!isTakingScreenshot)
              {
-@@ -1313,24 +1313,44 @@
+@@ -1313,24 +1313,40 @@
                  currentScreen.updateScreen();
              }
          }
@@ -47,11 +47,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
 +            net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
 +            net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
 +        }
-+        try {
-+			if(net.tasmod.virtual.VirtualKeyboard.isKeyDown(37) && theWorld != null) net.tasmod.TASmod.endRecording();
-+		} catch (java.io.IOException e) {
-+			e.printStackTrace();
-+		}
++        // End-Edit
          if(currentScreen == null || currentScreen.allowUserInput)
          {
              Profiler.endStartSection("mouse");
@@ -78,7 +74,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                      if(i1 != 0)
                      {
                          thePlayer.inventory.changeCurrentItem(i1);
-@@ -1349,7 +1369,7 @@
+@@ -1349,7 +1365,7 @@
                      }
                      if(currentScreen == null)
                      {
@@ -87,7 +83,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                          {
                              setIngameFocus();
                          }
-@@ -1367,18 +1387,18 @@
+@@ -1367,18 +1383,18 @@
              Profiler.endStartSection("keyboard");
              do
              {
@@ -112,7 +108,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                      {
                          toggleFullscreen();
                      } else
-@@ -1388,36 +1408,36 @@
+@@ -1388,36 +1404,36 @@
                              currentScreen.handleKeyboardInput();
                          } else
                          {
@@ -158,7 +154,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                              {
                                  gameSettings.thirdPersonView++;
                                  if(gameSettings.thirdPersonView > 2)
-@@ -1425,14 +1445,14 @@
+@@ -1425,14 +1441,14 @@
                                      gameSettings.thirdPersonView = 0;
                                  }
                              }
@@ -175,7 +171,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                              {
                                  thePlayer.inventory.currentItem = i;
                              }
-@@ -1440,14 +1460,14 @@
+@@ -1440,14 +1456,14 @@
  
                          if(gameSettings.showDebugInfo)
                          {
@@ -192,33 +188,38 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                                  {
                                      func_40003_b(j + 1);
                                  }
-@@ -1540,6 +1560,11 @@
+@@ -1540,6 +1556,13 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
++        // Tick the TASmod
 +        try {
 +			net.tasmod.TASmod.tick();
 +		} catch (java.io.IOException e) {
 +			e.printStackTrace();
 +		}
++		// End-Edit
      }
  
      private void forceReload()
 diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/net/minecraft/src/EntityRenderer.java
 --- src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -396,8 +396,8 @@
+@@ -396,8 +396,11 @@
          }
          if(!mc.gameSettings.debugCamEnable)
          {
 -            GL11.glRotatef(entityliving.prevRotationPitch + (entityliving.rotationPitch - entityliving.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
 -            GL11.glRotatef(entityliving.prevRotationYaw + (entityliving.rotationYaw - entityliving.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++        	// This Code rotates the Camera matching the Players Yaw and Pitch
++        	// For the Interpolation, this Camera will be using a custom coordinate that updates more than 20 times a second.
 +            GL11.glRotatef(net.tasmod.Utils.prevRotationPitch + (net.tasmod.Utils.rotationPitch - net.tasmod.Utils.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
 +            GL11.glRotatef(net.tasmod.Utils.prevRotationYaw + (net.tasmod.Utils.rotationYaw - net.tasmod.Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++        	// End-Edit
          }
          GL11.glTranslatef(0.0F, f1, 0.0F);
          d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
-@@ -692,29 +692,15 @@
+@@ -692,29 +695,17 @@
          Profiler.startSection("mouse");
          if(mc.inGameHasFocus)
          {
@@ -245,6 +246,7 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/n
 -            {
 -                mc.thePlayer.setAngles(f3, f4 * (float)l);
 -            }
++        	// Interpolation. Instead of rotating the player here, we do that in runTick() as if the Game would be running at 20 FPS. Instead we rotate a independent Variable.
 +        	float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
 +			float f2 = f1 * f1 * f1 * 8F;
 +
@@ -254,10 +256,11 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/n
 +            net.tasmod.Utils.dY += dy;
 +            
 +            net.tasmod.Utils.setAngles(dx * f2, dy * f2);
++			// End-Edit
          }
          Profiler.endSection();
          if(mc.skipRenderWorld)
-@@ -725,8 +711,8 @@
+@@ -725,8 +716,8 @@
          ScaledResolution scaledresolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
          int i = scaledresolution.getScaledWidth();
          int j = scaledresolution.getScaledHeight();
@@ -280,24 +283,6 @@ diff -ruN src/minecraft/net/minecraft/src/GuiAchievements.java newsrc/minecraft/
          {
              int k = (width - achievementsPaneWidth) / 2;
              int l = (height - achievementsPaneHeight) / 2;
-diff -ruN src/minecraft/net/minecraft/src/GuiChat.java newsrc/minecraft/net/minecraft/src/GuiChat.java
---- src/minecraft/net/minecraft/src/GuiChat.java	2021-01-01 00:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiChat.java	2021-01-01 00:00:00.000000000 +0100
-@@ -25,12 +25,12 @@
- 
-     public void initGui()
-     {
--        Keyboard.enableRepeatEvents(true);
-+    	Keyboard.enableRepeatEvents(true);
-     }
- 
-     public void onGuiClosed()
-     {
--        Keyboard.enableRepeatEvents(false);
-+    	Keyboard.enableRepeatEvents(false);
-     }
- 
-     public void updateScreen()
 diff -ruN src/minecraft/net/minecraft/src/GuiContainer.java newsrc/minecraft/net/minecraft/src/GuiContainer.java
 --- src/minecraft/net/minecraft/src/GuiContainer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiContainer.java	2021-01-01 00:00:00.000000000 +0100
@@ -334,16 +319,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiContainerCreative.java newsrc/minec
 diff -ruN src/minecraft/net/minecraft/src/GuiCreateWorld.java newsrc/minecraft/net/minecraft/src/GuiCreateWorld.java
 --- src/minecraft/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
-@@ -119,7 +119,7 @@
- 
-     public void onGuiClosed()
-     {
--        Keyboard.enableRepeatEvents(false);
-+    	Keyboard.enableRepeatEvents(false);
-     }
- 
-     protected void actionPerformed(GuiButton guibutton)
-@@ -157,17 +157,11 @@
+@@ -157,17 +157,13 @@
                      l = s.hashCode();
                  }
              }
@@ -358,48 +334,20 @@ diff -ruN src/minecraft/net/minecraft/src/GuiCreateWorld.java newsrc/minecraft/n
 -            }
 -            mc.startWorld(folderName, textboxWorldName.getText(), new WorldSettings(l, i, field_35365_g, field_40232_h));
 -            mc.displayGuiScreen(null);
++            // This Edits the behaviour of the "Create World" Button. Instead of directly creating the Player and Loading the World, we start the Recording, which eventually does the exact same
 +            try {
 +				net.tasmod.TASmod.startRecording(l, field_35364_f.equals("creative") ? 1 : 0, field_40232_h, field_35365_g, folderName, textboxWorldName.getText());
 +			} catch (java.io.IOException e) {
 +				e.printStackTrace();
 +			}
++			// End-Edit
          } else
          if(guibutton.id == 3)
          {
-diff -ruN src/minecraft/net/minecraft/src/GuiEditSign.java newsrc/minecraft/net/minecraft/src/GuiEditSign.java
---- src/minecraft/net/minecraft/src/GuiEditSign.java	2021-01-01 00:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiEditSign.java	2021-01-01 00:00:00.000000000 +0100
-@@ -39,7 +39,7 @@
- 
-     public void onGuiClosed()
-     {
--        Keyboard.enableRepeatEvents(false);
-+    	Keyboard.enableRepeatEvents(false);
-         if(mc.theWorld.multiplayerWorld)
-         {
-             mc.getSendQueue().addToSendQueue(new Packet130UpdateSign(entitySign.xCoord, entitySign.yCoord, entitySign.zCoord, entitySign.signText));
-diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/minecraft/src/GuiIngame.java
---- src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
-@@ -76,6 +76,14 @@
-                 renderPortalOverlay(f1, k, l);
-             }
-         }
-+        // Pancake: Draw Text here
-+        //#DEV: Add Desync Tool
-+        if (net.tasmod.TASmod.isPlayback()) {
-+        	drawString(mc.fontRenderer, net.tasmod.TASmod.getPlayback().desync, 1, 1, 0xFFFFFF);
-+        	drawString(mc.fontRenderer, net.tasmod.TASmod.getPlayback().desync_2, 1, 12, 0xFFFFFF);
-+        	drawString(mc.fontRenderer, net.tasmod.TASmod.getPlayback().desync_3, 1, 24, 0xFFFFFF);
-+        }
-+        //#ENDDEV
-         if(!mc.playerController.func_35643_e())
-         {
-             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 diff -ruN src/minecraft/net/minecraft/src/GuiMultiplayer.java newsrc/minecraft/net/minecraft/src/GuiMultiplayer.java
 --- src/minecraft/net/minecraft/src/GuiMultiplayer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiMultiplayer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -65,21 +65,35 @@
+@@ -65,21 +65,37 @@
  
      private void loadServerList()
      {
@@ -412,6 +360,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiMultiplayer.java newsrc/minecraft/n
 -            {
 -                serverList.add(ServerNBTStorage.createServerNBTStorage((NBTTagCompound)nbttaglist.tagAt(i)));
 -            }
++    	// Instead of Loading a List of servers from the servers.dat File, we browse the .minecraft directory for .tas Files and Add them to the List instead
 +    	for (File f : mc.mcDataDir.listFiles(new FilenameFilter() {
  
 -        }
@@ -446,10 +395,11 @@ diff -ruN src/minecraft/net/minecraft/src/GuiMultiplayer.java newsrc/minecraft/n
 +	            exception.printStackTrace();
 +	        }
 +    	}
++    	// End-Edit
      }
  
      private void saveServerList()
-@@ -131,22 +145,12 @@
+@@ -131,22 +147,16 @@
          }
          if(guibutton.id == 2)
          {
@@ -465,28 +415,20 @@ diff -ruN src/minecraft/net/minecraft/src/GuiMultiplayer.java newsrc/minecraft/n
 -                GuiYesNo guiyesno = new GuiYesNo(this, s1, s2, s3, s4, selectedServer);
 -                mc.displayGuiScreen(guiyesno);
 -            }
++        	// Instead of deleting an entry from the servers.dat, with a warning gui popping up, we just delete the TAS File.
 +        	new File(mc.mcDataDir, ((ServerNBTStorage) serverList.get(selectedServer)).playerCount).delete();
 +        	mc.displayGuiScreen(new GuiMultiplayer(parentScreen));
++			// End-Edit
          } else
          if(guibutton.id == 1)
          {
 -            joinServer(selectedServer);
++        	// Start the TAS Playback instead of joining a Minecraft Server
 +        	net.tasmod.TASmod.startPlayback(((ServerNBTStorage) serverList.get(selectedServer)).playerCount.split(".tas")[0]);
++        	// End-Edit
          } else
          if(guibutton.id == 4)
          {
-diff -ruN src/minecraft/net/minecraft/src/GuiRenameWorld.java newsrc/minecraft/net/minecraft/src/GuiRenameWorld.java
---- src/minecraft/net/minecraft/src/GuiRenameWorld.java	2021-01-01 00:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiRenameWorld.java	2021-01-01 00:00:00.000000000 +0100
-@@ -47,7 +47,7 @@
- 
-     public void onGuiClosed()
-     {
--        Keyboard.enableRepeatEvents(false);
-+    	Keyboard.enableRepeatEvents(false);
-     }
- 
-     protected void actionPerformed(GuiButton guibutton)
 diff -ruN src/minecraft/net/minecraft/src/GuiScreen.java newsrc/minecraft/net/minecraft/src/GuiScreen.java
 --- src/minecraft/net/minecraft/src/GuiScreen.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiScreen.java	2021-01-01 00:00:00.000000000 +0100
@@ -538,50 +480,6 @@ diff -ruN src/minecraft/net/minecraft/src/GuiScreen.java newsrc/minecraft/net/mi
          }
      }
  
-diff -ruN src/minecraft/net/minecraft/src/GuiScreenAddServer.java newsrc/minecraft/net/minecraft/src/GuiScreenAddServer.java
---- src/minecraft/net/minecraft/src/GuiScreenAddServer.java	2021-01-01 00:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiScreenAddServer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -48,7 +48,7 @@
- 
-     public void onGuiClosed()
-     {
--        Keyboard.enableRepeatEvents(false);
-+    	Keyboard.enableRepeatEvents(false);
-     }
- 
-     protected void actionPerformed(GuiButton guibutton)
-diff -ruN src/minecraft/net/minecraft/src/GuiScreenServerList.java newsrc/minecraft/net/minecraft/src/GuiScreenServerList.java
---- src/minecraft/net/minecraft/src/GuiScreenServerList.java	2021-01-01 00:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiScreenServerList.java	2021-01-01 00:00:00.000000000 +0100
-@@ -43,7 +43,7 @@
- 
-     public void onGuiClosed()
-     {
--        Keyboard.enableRepeatEvents(false);
-+    	Keyboard.enableRepeatEvents(false);
-     }
- 
-     protected void actionPerformed(GuiButton guibutton)
-diff -ruN src/minecraft/net/minecraft/src/GuiSleepMP.java newsrc/minecraft/net/minecraft/src/GuiSleepMP.java
---- src/minecraft/net/minecraft/src/GuiSleepMP.java	2021-01-01 00:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiSleepMP.java	2021-01-01 00:00:00.000000000 +0100
-@@ -21,14 +21,14 @@
- 
-     public void initGui()
-     {
--        Keyboard.enableRepeatEvents(true);
-+    	Keyboard.enableRepeatEvents(true);
-         StringTranslate stringtranslate = StringTranslate.getInstance();
-         controlList.add(new GuiButton(1, width / 2 - 100, height - 40, stringtranslate.translateKey("multiplayer.stopSleeping")));
-     }
- 
-     public void onGuiClosed()
-     {
--        Keyboard.enableRepeatEvents(false);
-+    	Keyboard.enableRepeatEvents(false);
-     }
- 
-     protected void keyTyped(char c, int i)
 diff -ruN src/minecraft/net/minecraft/src/GuiSlot.java newsrc/minecraft/net/minecraft/src/GuiSlot.java
 --- src/minecraft/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100

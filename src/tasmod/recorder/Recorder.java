@@ -173,10 +173,16 @@ public final class Recorder {
 		VirtualMouse.listen = false;
 	}
 
+	/**
+	 * Adds Mouse Events to a List 
+	 */
 	public final void keyboardTick(final VirtualKeyEvent event) {
 		if (event.key != -1) keyEventsPerTick.add(event);
 	}
 
+	/**
+	 * Adds Mouse Events to a List 
+	 */
 	public final void mouseTick(final VirtualMouseEvent event) {
 		if (event.posX != -1 || event.eventButton != -1) mouseEventsPerTick.add(event);
 	}

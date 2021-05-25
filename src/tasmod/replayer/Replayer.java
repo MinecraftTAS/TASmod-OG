@@ -113,63 +113,8 @@ public final class Replayer {
 	public final void tick() {
 		tickKeyboad();
 		tickMouse();
-		//#DEV: Add Desync Tool
-		// Update
-    	double desyncPosX = mc.thePlayer.posX - posX;
-    	double desyncPosY = mc.thePlayer.posY - posY;
-    	double desyncPosZ = mc.thePlayer.posZ - posZ;
-    	double desyncMotionX = mc.thePlayer.motionX - motionX;
-    	double desyncMotionY = mc.thePlayer.motionY - motionY;
-    	double desyncMotionZ = mc.thePlayer.motionZ - motionZ;
-    	float desyncYaw = (mc.thePlayer.rotationYaw % 360) - yaw;
-    	float desyncPitch = (mc.thePlayer.rotationPitch % 360) - pitch;
-    	desync = "";
-    	desync_2 = "";
-    	desync_3 = "";
-    	if (!Utils.isZero(desyncPosX, 0.000009D)) desync += "X: " + String.format("%.5f", desyncPosX) + " ";
-    	if (!Utils.isZero(desyncPosY, 0.000009D)) desync += "Y: " + String.format("%.5f", desyncPosY) + " ";
-    	if (!Utils.isZero(desyncPosZ, 0.000009D)) desync += "Z: " + String.format("%.5f", desyncPosZ) + " ";
-    	if (!Utils.isZero(desyncMotionX, 0.000009D)) desync_2 += "mX: " + String.format("%.5f", desyncMotionX) + " ";
-    	if (!Utils.isZero(desyncMotionY, 0.000009D)) desync_2 += "mY: " + String.format("%.5f", desyncMotionY) + " ";
-    	if (!Utils.isZero(desyncMotionZ, 0.000009D)) desync_2 += "mZ: " + String.format("%.5f", desyncMotionZ) + " ";
-    	if (!Utils.isZeroFloat(desyncYaw, 0.000009F)) desync_3 += "Yaw: " + String.format("%.5f", desyncYaw) + " ";
-    	if (!Utils.isZeroFloat(desyncPitch, 0.000009F)) desync_3 += "Pitch: " + String.format("%.5f", desyncPitch) + " ";
-    	// Reset
-		final String line = linesRead.poll();
-		if (line == null) return;
-		final String[] strings = line.split(":");
-		if (!strings[0].isEmpty()) posX = Double.parseDouble(strings[0]);
-		else posX = 0.0D;
-		if (!strings[1].isEmpty()) posY = Double.parseDouble(strings[1]);
-		else posY = 0.0D;
-		if (!strings[2].isEmpty()) posZ = Double.parseDouble(strings[2]);
-		else posZ = 0.0D;
-		if (!strings[3].isEmpty()) motionX = Double.parseDouble(strings[3]);
-		else motionX = 0.0D;
-		if (!strings[4].isEmpty()) motionY = Double.parseDouble(strings[4]);
-		else motionY = 0.0D;
-		if (!strings[5].isEmpty()) motionZ = Double.parseDouble(strings[5]);
-		else motionZ = 0.0D;
-		if (!strings[6].isEmpty()) pitch = Float.parseFloat(strings[6]);
-		else pitch = 0.0F;
-		if (!strings[7].isEmpty()) yaw = Float.parseFloat(strings[7]);
-		else yaw = 0.0F;
-		//#ENDDEV
+		Utils.checkDesync(mc, linesRead.poll());
 	}
-	
-	//#DEV: Add Desync Tool
-	public double posX;
-	public double posY;
-	public double posZ;
-	public double motionX;
-	public double motionY;
-	public double motionZ;
-	public float yaw;
-	public float pitch;
-	public String desync;
-	public String desync_2;
-	public String desync_3;
-	//#ENDDEV
 	
 	private final void tickKeyboad() {
 		final String line = linesRead.poll();

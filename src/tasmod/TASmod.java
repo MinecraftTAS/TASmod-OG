@@ -10,7 +10,7 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
 
 /**
  * 
- * All methods that should be accessible from the Minecraft Code
+ * Heart of the TASmod, all stuff that needs to be accessed from different Parts of MC Code
  * 
  * @author Pancake
  */
@@ -47,8 +47,10 @@ public final class TASmod {
 	 * @throws IOException Unexpected File End
 	 */
 	public static final void tick() throws IOException {
+		/* Tick Recording/Playback if needed */
 		if (recording != null) recording.tick();
 		if (playback != null) playback.tick();
+		/* Run Code when MC Ticks the First Time */
 		if (!hasBeenTransformed) {
 			hasBeenTransformed = true;
 			try {
@@ -57,6 +59,12 @@ public final class TASmod {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		/* End the Recording when 'K' is pressed */
+        try {
+			if(net.tasmod.virtual.VirtualKeyboard.isKeyDown(37) && mc.theWorld != null) net.tasmod.TASmod.endRecording();
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
