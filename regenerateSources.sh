@@ -17,4 +17,5 @@ find . -type f -exec touch -a -m -t 202101010000.00 {} \;
 cd ..
 find ../src -type f -exec dos2unix {} \;
 patch -s -p0 < ../src/change.patch
+cd ..
 cp src/tasmod mcp/src/minecraft/net/tasmod -r
