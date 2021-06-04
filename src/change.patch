@@ -250,32 +250,6 @@ diff -ruN src/minecraft/net/minecraft/src/BlockFurnace.java newsrc/minecraft/net
          isActive = flag;
          blockIndexInTexture = 45;
      }
-diff -ruN src/minecraft/net/minecraft/src/ChunkProvider.java newsrc/minecraft/net/minecraft/src/ChunkProvider.java
---- src/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
-@@ -7,6 +7,8 @@
- import java.io.IOException;
- import java.util.*;
- 
-+import net.tasmod.TASmod;
-+
- // Referenced classes of package net.minecraft.src:
- //            IChunkProvider, LongHashMap, EmptyChunk, World, 
- //            ChunkCoordIntPair, ChunkCoordinates, Chunk, IChunkLoader, 
-@@ -93,7 +95,12 @@
-         Chunk chunk = (Chunk)chunkMap.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(i, j));
-         if(chunk == null)
-         {
--            return loadChunk(i, j);
-+        	// Reorder Chunk Generating
-+        	final Chunk newChunkToReturn = loadChunk(i, j);
-+        	if (TASmod.isRecording()) TASmod.getRecording().chunkloadTick(new int[] {i, j}); // Needs to be after loadChunk to avoid a deadlock
-+        	else if (TASmod.isPlayback()) return emptyChunk;
-+        	return newChunkToReturn;
-+        	// End-Edit
-         } else
-         {
-             return chunk;
 diff -ruN src/minecraft/net/minecraft/src/ContainerEnchantment.java newsrc/minecraft/net/minecraft/src/ContainerEnchantment.java
 --- src/minecraft/net/minecraft/src/ContainerEnchantment.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/ContainerEnchantment.java	2021-01-01 00:00:00.000000000 +0100
@@ -888,20 +862,7 @@ diff -ruN src/minecraft/net/minecraft/src/World.java newsrc/minecraft/net/minecr
          isNewWorld = false;
          worldAccesses = new ArrayList();
          collidingBoundingBoxes = new ArrayList();
-@@ -254,6 +254,12 @@
- 
-     protected void getInitialSpawnLocation()
-     {
-+    	// Hijack Spawn Location
-+    	if (net.tasmod.TASmod.isPlayback()) {
-+    		worldInfo.setSpawn((int) net.tasmod.TASmod.getPlayback().getSpawnX(), (int) net.tasmod.TASmod.getPlayback().getSpawnY(), (int) net.tasmod.TASmod.getPlayback().getSpawnZ());
-+    		return;
-+    	}
-+    	// End-Edit
-         findingSpawnPoint = true;
-         WorldChunkManager worldchunkmanager = getWorldChunkManager();
-         List list = worldchunkmanager.getBiomesToSpawnIn();
-@@ -2806,7 +2812,7 @@
+@@ -2806,7 +2806,7 @@
      public void randomDisplayUpdates(int i, int j, int k)
      {
          byte byte0 = 16;
@@ -910,7 +871,7 @@ diff -ruN src/minecraft/net/minecraft/src/World.java newsrc/minecraft/net/minecr
          for(int l = 0; l < 1000; l++)
          {
              int i1 = (i + rand.nextInt(byte0)) - rand.nextInt(byte0);
-@@ -3452,7 +3458,10 @@
+@@ -3452,7 +3452,10 @@
      public Random setRandomSeed(int i, int j, int k)
      {
          long l = (long)i * 0x4f9939f508L + (long)j * 0x1ef1565bd5L + getWorldInfo().getRandomSeed() + (long)k;
