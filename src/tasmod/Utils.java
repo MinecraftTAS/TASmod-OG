@@ -2,10 +2,12 @@ package net.tasmod;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Properties;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.StringTranslate;
+import net.tasmod.random.SimpleRandomMod;
 
 /**
  * Class that contains useful stuff
@@ -103,19 +105,17 @@ public final class Utils {
 		/* Get Field in Obfuscated or Non-Obfuscated Environment */
 		Field translateTableField;
 		try {
-			Class<?> clazz = Class.forName("net.minecraft.src.StringTranslate");
 			/* Non-Obfuscated net.minecraft.src.StringTranslate.translateTable */
 			System.err.println("Non-Obfuscated Environment detected!");
-			translateTableField = clazz.getDeclaredField("translateTable");
+			translateTableField = Class.forName("net.minecraft.src.StringTranslate").getDeclaredField("translateTable");
 		} catch (Exception e) {
 			/* Obfuscated: qp.b */
-			Class<?> clazz = Class.forName("qp");
 			System.err.println("Obfuscated Environment detected!");
-			translateTableField = clazz.getDeclaredField("b");
+			translateTableField = Class.forName("qp").getDeclaredField("b");
 		}
 		translateTableField.setAccessible(true);
 		/* Replace Translations for custom stuff */
-		Properties translations = (Properties) translateTableField.get(StringTranslate.getInstance());
+		final Properties translations = (Properties) translateTableField.get(StringTranslate.getInstance());
 		translations.setProperty("selectWorld.create", "Create and record World");
 		translations.setProperty("menu.singleplayer", "Record TAS");
 		translations.setProperty("menu.multiplayer", "Playback TAS");
@@ -126,6 +126,22 @@ public final class Utils {
 		translations.setProperty("selectServer.select", "Play");
 		/* Reopen Gui Screen with new Translations */
 		TASmod.mc.displayGuiScreen(TASmod.mc.currentScreen);
+	}
+	
+
+	/**
+	 * Transforms the Random Variable for Math.random()
+	 */
+	public static void transformRandom() throws Exception {
+		/* Get Fields for the Random Value used in Math */
+		final Field mathRandomField = Class.forName("java.lang.Math$RandomNumberGeneratorHolder").getDeclaredField("randomNumberGenerator");
+		mathRandomField.setAccessible(true);
+		/* Remove Final */
+		Field modifiersField = Field.class.getDeclaredField("modifiers");
+		modifiersField.setAccessible(true);
+		modifiersField.setInt(mathRandomField, mathRandomField.getModifiers() & ~Modifier.FINAL);
+		/* Replace Random of Math with Modded one */
+		mathRandomField.set(null, new SimpleRandomMod());
 	}
 
 	/**
@@ -202,5 +218,5 @@ public final class Utils {
 	private static String desync;
 	private static String desync_2;
 	private static String desync_3;
-	
+
 }

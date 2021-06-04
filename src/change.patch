@@ -415,6 +415,18 @@ diff -ruN src/minecraft/net/minecraft/src/GuiAchievements.java newsrc/minecraft/
          {
              int k = (width - achievementsPaneWidth) / 2;
              int l = (height - achievementsPaneHeight) / 2;
+diff -ruN src/minecraft/net/minecraft/src/GuiContainer.java newsrc/minecraft/net/minecraft/src/GuiContainer.java
+--- src/minecraft/net/minecraft/src/GuiContainer.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/GuiContainer.java	2021-01-01 00:00:00.000000000 +0100
+@@ -250,7 +250,7 @@
+             }
+             if(j1 != -1)
+             {
+-                boolean flag1 = j1 != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
++                boolean flag1 = j1 != -999 && (net.tasmod.virtual.VirtualKeyboard.isKeyDown(42) || net.tasmod.virtual.VirtualKeyboard.isKeyDown(54));
+                 func_35309_a(slot, j1, k, flag1);
+             }
+         }
 diff -ruN src/minecraft/net/minecraft/src/GuiContainerCreative.java newsrc/minecraft/net/minecraft/src/GuiContainerCreative.java
 --- src/minecraft/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
@@ -436,18 +448,6 @@ diff -ruN src/minecraft/net/minecraft/src/GuiContainerCreative.java newsrc/minec
          int k = field_40216_e;
          int l = field_40215_f;
          int i1 = k + 155;
-diff -ruN src/minecraft/net/minecraft/src/GuiContainer.java newsrc/minecraft/net/minecraft/src/GuiContainer.java
---- src/minecraft/net/minecraft/src/GuiContainer.java	2021-01-01 00:00:00.000000000 +0100
-+++ newsrc/minecraft/net/minecraft/src/GuiContainer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -250,7 +250,7 @@
-             }
-             if(j1 != -1)
-             {
--                boolean flag1 = j1 != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
-+                boolean flag1 = j1 != -999 && (net.tasmod.virtual.VirtualKeyboard.isKeyDown(42) || net.tasmod.virtual.VirtualKeyboard.isKeyDown(54));
-                 func_35309_a(slot, j1, k, flag1);
-             }
-         }
 diff -ruN src/minecraft/net/minecraft/src/GuiCreateWorld.java newsrc/minecraft/net/minecraft/src/GuiCreateWorld.java
 --- src/minecraft/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
@@ -775,6 +775,18 @@ diff -ruN src/minecraft/net/minecraft/src/Teleporter.java newsrc/minecraft/net/m
      }
  
      public void placeInPortal(World world, Entity entity)
+diff -ruN src/minecraft/net/minecraft/src/ThreadDownloadResources.java newsrc/minecraft/net/minecraft/src/ThreadDownloadResources.java
+--- src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
+@@ -59,7 +59,7 @@
+                     {
+                         continue;
+                     }
+-                    downloadAndInstallResource(url, s, l, i);
++                    downloadAndInstallResource(new URL("http://mgnet.work/archive/1.0-sounds/"), s, l, i);
+                     if(closing)
+                     {
+                         return;
 diff -ruN src/minecraft/net/minecraft/src/TileEntityDispenser.java newsrc/minecraft/net/minecraft/src/TileEntityDispenser.java
 --- src/minecraft/net/minecraft/src/TileEntityDispenser.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/TileEntityDispenser.java	2021-01-01 00:00:00.000000000 +0100

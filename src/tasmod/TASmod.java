@@ -56,6 +56,7 @@ public final class TASmod {
 			try {
 				TASmod.mc = Utils.obtainMinecraftInstance();
 				Utils.transformStringTranslate();
+				Utils.transformRandom();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
