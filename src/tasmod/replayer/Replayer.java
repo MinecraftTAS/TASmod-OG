@@ -30,6 +30,9 @@ public final class Replayer {
 	private final int worldtype;
 	private final boolean hardcore;
 	private final boolean mapFeatures;
+	private final double spawnX;
+	private final double spawnY;
+	private final double spawnZ;
 	private final Minecraft mc;
 	private final File file;
 	private final BufferedReader reader;
@@ -59,6 +62,10 @@ public final class Replayer {
 		this.reader.readLine();
 		this.reader.readLine();
 		
+		final String spawnPos = this.reader.readLine();
+		spawnX = Double.parseDouble(spawnPos.split(":")[0]);
+		spawnY = Double.parseDouble(spawnPos.split(":")[1]);
+		spawnZ = Double.parseDouble(spawnPos.split(":")[2]);
 		this.fileReader = new Thread(new Runnable() {
 			
 			/**
@@ -69,7 +76,7 @@ public final class Replayer {
 				try {
 					while (true) {
 						// Only read up to 20 ticks
-						if (linesRead.size() < 60) {
+						if (linesRead.size() < 80) {
 							final String line = reader.readLine();
 							if (line == null || line.startsWith("#")) break;
 							linesRead.add(line);
@@ -114,6 +121,7 @@ public final class Replayer {
 		tickKeyboad();
 		tickMouse();
 		Utils.checkDesync(mc, linesRead.poll());
+		tickChunkloading();
 	}
 	
 	private final void tickKeyboad() {
@@ -148,6 +156,33 @@ public final class Replayer {
 		} else {
 			VirtualMouse.hack = false;
 		}
+	}
+	
+	private final void tickChunkloading() {
+		final String line = linesRead.poll();
+		if (line != null) {
+			if (line.isEmpty()) return;
+			Arrays.asList(line.split(":")).forEach(c -> {
+				mc.theWorld.getIChunkProvider().loadChunk(Integer.parseInt(c.split(",")[0]), Integer.parseInt(c.split(",")[1]));
+			});
+			VirtualMouse.hack = true;
+		} else {
+			VirtualMouse.hack = false;
+		}
+	}
+	
+	/* Getters */
+	
+	public double getSpawnX() {
+		return spawnX;
+	}
+	
+	public double getSpawnY() {
+		return spawnY;
+	}
+	
+	public double getSpawnZ() {
+		return spawnZ;
 	}
 	
 }

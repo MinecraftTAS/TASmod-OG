@@ -121,10 +121,12 @@ public final class Recorder {
 		this.mc.displayGuiScreen(null);
 		this.mc.thePlayer.rotationYaw = 0f;
 		this.mc.thePlayer.rotationPitch = 0f;
+		linesToPrint.add(this.mc.theWorld.getWorldInfo().getSpawnX() + ":" + this.mc.theWorld.getWorldInfo().getSpawnY() + ":" + this.mc.theWorld.getWorldInfo().getSpawnZ() + "\n");
 	}
 	
 	private volatile List<VirtualKeyEvent> keyEventsPerTick = new ArrayList<>();
 	private volatile List<VirtualMouseEvent> mouseEventsPerTick = new ArrayList<>();
+	private volatile List<int[]> chunksLoadedPerTick = new ArrayList<>();
 	
 	/**
 	 * Write all Keybindings into the File
@@ -158,9 +160,20 @@ public final class Recorder {
 			mouseEventsPerTick.clear();
 			break;
 		}
-		//#DEV: Add anti-desync tool
 		linesToPrint.add(String.format(Locale.US, "%.5f", mc.thePlayer.posX) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.posY) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.posZ) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.motionX) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.motionY) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.motionZ) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.rotationPitch % 360) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.rotationYaw % 360) + "\n");
-		//#ENDDEV
+		while (true) {
+			String events = "";
+			if (chunksLoadedPerTick.size() == 0) {
+				linesToPrint.add("\n");
+				break;
+			}
+			for (final int[] loads : chunksLoadedPerTick) {
+				events += loads[0] + "," + loads[1] + ":";
+			}
+			linesToPrint.add(events.substring(0, events.length() - 1) + "\n");
+			chunksLoadedPerTick.clear();
+			break;
+		}
 		this.currentTick++;
 	}
 	
@@ -173,6 +186,13 @@ public final class Recorder {
 		VirtualMouse.listen = false;
 	}
 
+	/**
+	 * Adds a Loaded Chunk to a List
+	 */
+	public final void chunkloadTick(final int[] chunk) {
+		chunksLoadedPerTick.add(chunk);
+	}
+	
 	/**
 	 * Adds Mouse Events to a List 
 	 */
