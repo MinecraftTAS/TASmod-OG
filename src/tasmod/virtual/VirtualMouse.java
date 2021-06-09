@@ -34,7 +34,7 @@ public class VirtualMouse {
 		public int dY;
 		
 		/** Scroll wheel */
-		public int wheel;
+		public int eventWheel;
 		
 		/** Left, Right, Middle etc..*/
 		public int eventButton;
@@ -46,7 +46,7 @@ public class VirtualMouse {
 			this.posX = i;
 			this.posY = j;
 			this.grabbed = b;
-			this.wheel = k;
+			this.eventWheel = k;
 			this.eventButton = l;
 			this.eventState = c;
 			this.dX = dX;
@@ -55,7 +55,7 @@ public class VirtualMouse {
 		
 		@Override
 		public final String toString() {
-			return posX + "!" + posY + "!" + grabbed + "!" + wheel + "!" + eventButton + "!" + eventState + "!" + dX + "!" + dY;
+			return posX + "!" + posY + "!" + grabbed + "!" + eventWheel + "!" + eventButton + "!" + eventState + "!" + dX + "!" + dY;
 		}
 		
 		public static final VirtualMouseEvent fromString(final String object) {
@@ -82,8 +82,11 @@ public class VirtualMouse {
 	
 	/**
 	 * isButtonDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Mouse)
-	 */
-	public static boolean isButtonDown(final int i) {
+	 *
+	 * Update: ._. This is frame based and messes up Mouse Inputs entirely.
+	 * Solution: Yeet this, and do a lazy play in runTick() and handleMouseInput() and drawScreen(). 
+	 * Problem with that is, that officially left and right clicking in all Slot Menus (Singleplayer, Stats, Texture Pack, etc) is working a bit less.
+	public final static boolean isButtonDown(final int i) {
 		if (!hack) {
 			boolean val = Mouse.isButtonDown(i);
 			if (listen) {
@@ -96,8 +99,10 @@ public class VirtualMouse {
 			if (virtualMouseEvent.eventState == true && virtualMouseEvent.eventButton == i) return true;
 		return false;
 	}
+	 */
+	public static boolean isButton0Down;
 	
-	public static boolean next() {
+	public final static boolean next() {
 		if (listen) {
 			if (currentlyListening != null) {
 				TASmod.mouseTick(currentlyListening);
@@ -106,13 +111,15 @@ public class VirtualMouse {
 				currentlyListening = new VirtualMouseEvent(-1, -1, false, 0, -1, false, 0, 0);
 			}
 		}
-		if (!hack) return Mouse.next();
+		if (!hack) {
+			return Mouse.next();
+		}
 		if (mouseEventsForTick.isEmpty()) return false;
 		currentMouseEvents = mouseEventsForTick.poll();
 		return true;
 	}
 	
-	public static void setGrabbed(final boolean b) {
+	public final static void setGrabbed(final boolean b) {
 		if (!hack) {
 			Mouse.setGrabbed(b);
 			if (listen) {
@@ -123,7 +130,7 @@ public class VirtualMouse {
 		Mouse.setGrabbed(currentMouseEvents.grabbed);
 	}
 
-	public static void setCursorPosition(final int i, final int j) {
+	public final static void setCursorPosition(final int i, final int j) {
 		if (!hack) {
 			Mouse.setCursorPosition(i, j);
 			if (listen) {
@@ -135,7 +142,7 @@ public class VirtualMouse {
 		Mouse.setCursorPosition(currentMouseEvents.posX, currentMouseEvents.posY);
 	}
 
-	public static boolean getEventButtonState() {
+	public final static boolean getEventButtonState() {
 		if (!hack) {
 			boolean val = Mouse.getEventButtonState();
 			if (listen) {
@@ -146,18 +153,18 @@ public class VirtualMouse {
 		return currentMouseEvents.eventState;
 	}
 
-	public static int getEventDWheel() {
+	public final static int getEventDWheel() {
 		if (!hack) {
 			int val = Mouse.getEventDWheel();
 			if (listen) {
-				currentlyListening.wheel = val;
+				currentlyListening.eventWheel = val;
 			}
 			return val;
 		}
-		return currentMouseEvents.wheel;
+		return currentMouseEvents.eventWheel;
 	}
 
-	public static int getEventButton() {
+	public final static int getEventButton() {
 		if (!hack) {
 			int val = Mouse.getEventButton();
 			if (listen) {
@@ -168,7 +175,7 @@ public class VirtualMouse {
 		return currentMouseEvents.eventButton;
 	}
 
-	public static int getEventX() {
+	public final static int getEventX() {
 		if (!hack) {
 			int val = Mouse.getEventX();
 			if (listen) {
@@ -179,7 +186,7 @@ public class VirtualMouse {
 		return currentMouseEvents.posX;
 	}
 
-	public static int getEventY() {
+	public final static int getEventY() {
 		if (!hack) {
 			int val = Mouse.getEventY();
 			if (listen) {
@@ -193,15 +200,21 @@ public class VirtualMouse {
 	/**
 	 * This is a redirect. This alters the behavior of the Mouse. It is just not noticeable, and doesn't change anything at all. 
 	 * Why? Because getX would normally ask the Mouse Directly for its X Position, while getEventX would wait for the Game to catch that.
+	 * 
+	 * Update: There is actually something more funny to this, so, Mouse has a method called poll(), which is supposed to be called together with next().
+	 * Notch did not know that, so he left it out, and now getX and getY only updates whenever you call setGrabbed, which is being called apparently, very cool!
 	 */
-	public static int getX() {
+	public final static int getX() {
 		return getEventX();
 	}
 	/**
 	 * This is a redirect. This alters the behavior of the Mouse. It is just not noticeable, and doesn't change anything at all. 
 	 * Why? Because getY would normally ask the Mouse Directly for its Y Position, while getEventY would wait for the Game to catch that.
+	 	 * 
+	 * Update: There is actually something more funny to this, so, Mouse has a method called poll(), which is supposed to be called together with next().
+	 * Notch did not know that, so he left it out, and now getX and getY only updates whenever you call setGrabbed, which is being called apparently, very cool!
 	 */
-	public static int getY() {
+	public final static int getY() {
 		return getEventY();
 	}
 	
@@ -209,7 +222,7 @@ public class VirtualMouse {
 	 * To make the Interpolation work, we are not asking LWJGL, but a Custom Util, that adds all the LWJGL Calls per Tick. 
 	 * Does not change anything with the Mouse
 	 */
-	public static int getDX() {
+	public final static int getDX() {
 		if (!hack) {
 			int val = Utils.getDX();
 			if (listen) {
@@ -224,7 +237,7 @@ public class VirtualMouse {
 	 * To make the Interpolation work, we are not asking LWJGL, but a Custom Util, that adds all the LWJGL Calls per Tick. 
 	 * Does not change anything with the Mouse
 	 */
-	public static int getDY() {
+	public final static int getDY() {
 		if (!hack) {
 			int val = Utils.getDY();
 			if (listen) {

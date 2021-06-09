@@ -8,6 +8,7 @@ import java.util.Properties;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.StringTranslate;
 import net.tasmod.random.SimpleRandomMod;
+import net.tasmod.virtual.VirtualMouse;
 
 /**
  * Class that contains useful stuff
@@ -19,6 +20,10 @@ public final class Utils {
 	public static int dX;
 	/** Y Position that the mouse moved in-between Ticks */
 	public static int dY;
+	/* X Position that the mouse is currently per Tick */
+	public static int lastX;
+	/* Y Position that the mouse is currently per Tick */
+	public static int lastY;
 	
 	/** Pitch of the Fake Camera */
 	public static float rotationPitch = 0f;
@@ -175,14 +180,14 @@ public final class Utils {
     	desync = "";
     	desync_2 = "";
     	desync_3 = "";
-    	if (!Utils.isZero(desyncPosX, 0.000009D)) desync += "X: " + String.format("%.5f", desyncPosX) + " ";
-    	if (!Utils.isZero(desyncPosY, 0.000009D)) desync += "Y: " + String.format("%.5f", desyncPosY) + " ";
-    	if (!Utils.isZero(desyncPosZ, 0.000009D)) desync += "Z: " + String.format("%.5f", desyncPosZ) + " ";
-    	if (!Utils.isZero(desyncMotionX, 0.000009D)) desync_2 += "mX: " + String.format("%.5f", desyncMotionX) + " ";
-    	if (!Utils.isZero(desyncMotionY, 0.000009D)) desync_2 += "mY: " + String.format("%.5f", desyncMotionY) + " ";
-    	if (!Utils.isZero(desyncMotionZ, 0.000009D)) desync_2 += "mZ: " + String.format("%.5f", desyncMotionZ) + " ";
-    	if (!Utils.isZeroFloat(desyncYaw, 0.000009F)) desync_3 += "Yaw: " + String.format("%.5f", desyncYaw) + " ";
-    	if (!Utils.isZeroFloat(desyncPitch, 0.000009F)) desync_3 += "Pitch: " + String.format("%.5f", desyncPitch) + " ";
+    	if (!Utils.isZero(desyncPosX, 0.00001D)) desync += "X: " + String.format("%.5f", desyncPosX) + " ";
+    	if (!Utils.isZero(desyncPosY, 0.00001D)) desync += "Y: " + String.format("%.5f", desyncPosY) + " ";
+    	if (!Utils.isZero(desyncPosZ, 0.00001D)) desync += "Z: " + String.format("%.5f", desyncPosZ) + " ";
+    	if (!Utils.isZero(desyncMotionX, 0.00001D)) desync_2 += "mX: " + String.format("%.5f", desyncMotionX) + " ";
+    	if (!Utils.isZero(desyncMotionY, 0.00001D)) desync_2 += "mY: " + String.format("%.5f", desyncMotionY) + " ";
+    	if (!Utils.isZero(desyncMotionZ, 0.00001D)) desync_2 += "mZ: " + String.format("%.5f", desyncMotionZ) + " ";
+    	if (!Utils.isZeroFloat(desyncYaw, 0.00001F)) desync_3 += "Yaw: " + String.format("%.5f", desyncYaw) + " ";
+    	if (!Utils.isZeroFloat(desyncPitch, 0.00001F)) desync_3 += "Pitch: " + String.format("%.5f", desyncPitch) + " ";
 		if (line == null) return;
 		final String[] strings = line.split(":");
 		if (!strings[0].isEmpty()) posX = Double.parseDouble(strings[0]);
@@ -218,5 +223,9 @@ public final class Utils {
 	private static String desync;
 	private static String desync_2;
 	private static String desync_3;
+
+	public static void lazyBtn0Test() {
+		if (VirtualMouse.getEventButton() == 0) VirtualMouse.isButton0Down = VirtualMouse.getEventButtonState();
+	}
 
 }
