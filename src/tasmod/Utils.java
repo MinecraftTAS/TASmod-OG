@@ -8,6 +8,7 @@ import java.util.Properties;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.StringTranslate;
 import net.tasmod.random.SimpleRandomMod;
+import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualMouse;
 
 /**
@@ -224,8 +225,16 @@ public final class Utils {
 	private static String desync_2;
 	private static String desync_3;
 
-	public static void lazyBtn0Test() {
+	public static void lazyMouse() {
 		if (VirtualMouse.getEventButton() == 0) VirtualMouse.isButton0Down = VirtualMouse.getEventButtonState();
 	}
 
+	public static void lazyKeyboard() {
+		if (VirtualKeyboard.getEventKey() == 37) VirtualKeyboard.isKey37Down = VirtualKeyboard.getEventKeyState();
+		if (VirtualKeyboard.getEventKey() == 42) VirtualKeyboard.isKey42Down = VirtualKeyboard.getEventKeyState();
+		if (VirtualKeyboard.getEventKey() == 54) VirtualKeyboard.isKey54Down = VirtualKeyboard.getEventKeyState();
+		if (VirtualKeyboard.getEventKey() == 60) VirtualKeyboard.isKey60Down = VirtualKeyboard.getEventKeyState();
+		if (VirtualKeyboard.getEventKey() == 61) VirtualKeyboard.isKey61Down = VirtualKeyboard.getEventKeyState();
+	}
+	
 }

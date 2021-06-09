@@ -1,34 +1,46 @@
 diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net/minecraft/client/Minecraft.java
 --- src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
-@@ -709,7 +709,7 @@
+@@ -118,6 +118,8 @@
+ import org.lwjgl.opengl.PixelFormat;
+ import org.lwjgl.util.glu.GLU;
+ 
++import com.sun.swing.internal.plaf.metal.resources.metal;
++
+ // Referenced classes of package net.minecraft.client:
+ //            MinecraftApplet
+ 
+@@ -709,9 +711,9 @@
          Profiler.startSection("render");
          Profiler.startSection("display");
          GL11.glEnable(3553 /*GL_TEXTURE_2D*/);
 -        if(!Keyboard.isKeyDown(65))
-+        if(!net.tasmod.virtual.VirtualKeyboard.isKeyDown(65))
++        if(!Keyboard.isKeyDown(65)) 
          {
-             Display.update();
+-            Display.update();
++        	Display.update();
          }
-@@ -752,7 +752,7 @@
-         guiAchievement.updateAchievementWindow();
-         Profiler.startSection("root");
+         if(thePlayer != null && thePlayer.isEntityInsideOpaqueBlock())
+         {
+@@ -754,7 +756,7 @@
          Thread.yield();
--        if(Keyboard.isKeyDown(65))
-+        if(net.tasmod.virtual.VirtualKeyboard.isKeyDown(65))
+         if(Keyboard.isKeyDown(65))
          {
-             Display.update();
+-            Display.update();
++        	Display.update();
          }
-@@ -810,7 +810,7 @@
+         screenshotListener();
+         if(mcCanvas != null && !fullscreen && (mcCanvas.getWidth() != displayWidth || mcCanvas.getHeight() != displayHeight))
+@@ -810,7 +812,7 @@
  
      private void screenshotListener()
      {
 -        if(Keyboard.isKeyDown(60))
-+        if(net.tasmod.virtual.VirtualKeyboard.isKeyDown(60))
++        if(net.tasmod.virtual.VirtualKeyboard.isKey60Down)
          {
              if(!isTakingScreenshot)
              {
-@@ -1313,24 +1313,43 @@
+@@ -1313,24 +1315,42 @@
                  currentScreen.updateScreen();
              }
          }
@@ -59,10 +71,10 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
 +                if(!net.tasmod.virtual.VirtualMouse.next())
                  {
                      break;
-                 }
+-                }
 -                KeyBinding.setKeyBindState(Mouse.getEventButton() - 100, Mouse.getEventButtonState());
 -                if(Mouse.getEventButtonState())
-+                net.tasmod.Utils.lazyBtn0Test();
++                } net.tasmod.Utils.lazyMouse();
 +                KeyBinding.setKeyBindState(net.tasmod.virtual.VirtualMouse.getEventButton() - 100, net.tasmod.virtual.VirtualMouse.getEventButtonState());
 +                if(net.tasmod.virtual.VirtualMouse.getEventButtonState())
                  {
@@ -77,7 +89,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                      if(i1 != 0)
                      {
                          thePlayer.inventory.changeCurrentItem(i1);
-@@ -1349,7 +1368,7 @@
+@@ -1349,7 +1369,7 @@
                      }
                      if(currentScreen == null)
                      {
@@ -86,7 +98,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                          {
                              setIngameFocus();
                          }
-@@ -1367,18 +1386,18 @@
+@@ -1367,18 +1387,18 @@
              Profiler.endStartSection("keyboard");
              do
              {
@@ -94,9 +106,10 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
 +                if(!net.tasmod.virtual.VirtualKeyboard.next())
                  {
                      break;
-                 }
+-                }
 -                KeyBinding.setKeyBindState(Keyboard.getEventKey(), Keyboard.getEventKeyState());
 -                if(Keyboard.getEventKeyState())
++                } net.tasmod.Utils.lazyKeyboard();
 +                KeyBinding.setKeyBindState(net.tasmod.virtual.VirtualKeyboard.getEventKey(), net.tasmod.virtual.VirtualKeyboard.getEventKeyState());
 +                if(net.tasmod.virtual.VirtualKeyboard.getEventKeyState())
                  {
@@ -111,7 +124,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                      {
                          toggleFullscreen();
                      } else
-@@ -1388,36 +1407,36 @@
+@@ -1388,36 +1408,36 @@
                              currentScreen.handleKeyboardInput();
                          } else
                          {
@@ -121,24 +134,24 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                                  displayInGameMenu();
                              }
 -                            if(Keyboard.getEventKey() == 31 && Keyboard.isKeyDown(61))
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 31 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 31 && net.tasmod.virtual.VirtualKeyboard.isKey61Down)
                              {
                                  forceReload();
                              }
 -                            if(Keyboard.getEventKey() == 20 && Keyboard.isKeyDown(61))
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 20 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 20 && net.tasmod.virtual.VirtualKeyboard.isKey61Down)
                              {
                                  renderEngine.refreshTextures();
                              }
 -                            if(Keyboard.getEventKey() == 33 && Keyboard.isKeyDown(61))
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 33 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 33 && net.tasmod.virtual.VirtualKeyboard.isKey61Down)
                              {
 -                                boolean flag = Keyboard.isKeyDown(42) | Keyboard.isKeyDown(54);
-+                                boolean flag = net.tasmod.virtual.VirtualKeyboard.isKeyDown(42) | net.tasmod.virtual.VirtualKeyboard.isKeyDown(54);
++                                boolean flag = net.tasmod.virtual.VirtualKeyboard.isKey42Down | net.tasmod.virtual.VirtualKeyboard.isKey42Down;
                                  gameSettings.setOptionValue(EnumOptions.RENDER_DISTANCE, flag ? -1 : 1);
                              }
 -                            if(Keyboard.getEventKey() == 30 && Keyboard.isKeyDown(61))
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 30 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 30 && net.tasmod.virtual.VirtualKeyboard.isKey61Down)
                              {
                                  renderGlobal.loadRenderers();
                              }
@@ -157,7 +170,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                              {
                                  gameSettings.thirdPersonView++;
                                  if(gameSettings.thirdPersonView > 2)
-@@ -1425,14 +1444,14 @@
+@@ -1425,14 +1445,14 @@
                                      gameSettings.thirdPersonView = 0;
                                  }
                              }
@@ -174,7 +187,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                              {
                                  thePlayer.inventory.currentItem = i;
                              }
-@@ -1440,14 +1459,14 @@
+@@ -1440,14 +1460,14 @@
  
                          if(gameSettings.showDebugInfo)
                          {
@@ -191,7 +204,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                                  {
                                      func_40003_b(j + 1);
                                  }
-@@ -1540,6 +1559,13 @@
+@@ -1540,6 +1560,13 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
@@ -478,7 +491,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiContainer.java newsrc/minecraft/net
              if(j1 != -1)
              {
 -                boolean flag1 = j1 != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
-+                boolean flag1 = j1 != -999 && (net.tasmod.virtual.VirtualKeyboard.isKeyDown(42) || net.tasmod.virtual.VirtualKeyboard.isKeyDown(54));
++                boolean flag1 = j1 != -999 && (net.tasmod.virtual.VirtualKeyboard.isKey42Down || net.tasmod.virtual.VirtualKeyboard.isKey54Down);
                  func_35309_a(slot, j1, k, flag1);
              }
          }
@@ -622,7 +635,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiMultiplayer.java newsrc/minecraft/n
 diff -ruN src/minecraft/net/minecraft/src/GuiScreen.java newsrc/minecraft/net/minecraft/src/GuiScreen.java
 --- src/minecraft/net/minecraft/src/GuiScreen.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiScreen.java	2021-01-01 00:00:00.000000000 +0100
-@@ -116,35 +116,36 @@
+@@ -116,35 +116,37 @@
  
      public void handleInput()
      {
@@ -635,7 +648,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiScreen.java newsrc/minecraft/net/mi
      public void handleMouseInput()
      {
 -        if(Mouse.getEventButtonState())
-+    	net.tasmod.Utils.lazyBtn0Test();
++    	net.tasmod.Utils.lazyMouse();
 +        if(net.tasmod.virtual.VirtualMouse.getEventButtonState())
          {
 -            int i = (Mouse.getEventX() * width) / mc.displayWidth;
@@ -658,6 +671,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiScreen.java newsrc/minecraft/net/mi
      public void handleKeyboardInput()
      {
 -        if(Keyboard.getEventKeyState())
++    	net.tasmod.Utils.lazyKeyboard();
 +        if(net.tasmod.virtual.VirtualKeyboard.getEventKeyState())
          {
 -            if(Keyboard.getEventKey() == 87)
@@ -693,7 +707,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiSlot.java newsrc/minecraft/net/mine
                      break;
                  }
 -                int j1 = Mouse.getEventDWheel();
-+                net.tasmod.Utils.lazyBtn0Test();
++                net.tasmod.Utils.lazyMouse();
 +                int j1 = net.tasmod.virtual.VirtualMouse.getEventDWheel();
                  if(j1 != 0)
                  {

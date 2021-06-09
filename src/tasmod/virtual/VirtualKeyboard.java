@@ -61,7 +61,9 @@ public final class VirtualKeyboard {
 	
 	/**
 	 * isKeyDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Keyboard)
-	 */
+	 * Update: ._. This is frame based and messes up Mouse Inputs entirely.
+	 * Solution: Yeet this, and do a lazy play in runTick() and handleMouseInput() and drawScreen(). 
+	 * Problem with that is, that officially left and right clicking in all Slot Menus (Singleplayer, Stats, Texture Pack, etc) is working a bit less.
 	public final static boolean isKeyDown(final int i) {
 		if (!hack) {
 			final boolean val = Keyboard.isKeyDown(i);
@@ -74,6 +76,12 @@ public final class VirtualKeyboard {
 			if (virtualKeyEvent.key == i && virtualKeyEvent.state == true) return true;
 		return false;
 	}
+	*/
+	public static boolean isKey61Down;
+	public static boolean isKey60Down;
+	public static boolean isKey54Down;
+	public static boolean isKey42Down;
+	public static boolean isKey37Down;
 	
 	public final static boolean next() {
 		if (listen) {

@@ -63,7 +63,7 @@ public final class TASmod {
 		}
 		/* End the Recording when 'K' is pressed */
         try {
-			if(net.tasmod.virtual.VirtualKeyboard.isKeyDown(37) && mc.theWorld != null) net.tasmod.TASmod.endRecording();
+			if(net.tasmod.virtual.VirtualKeyboard.isKey37Down && mc.theWorld != null) net.tasmod.TASmod.endRecording();
 		} catch (java.io.IOException e) {
 			e.printStackTrace();
 		}
