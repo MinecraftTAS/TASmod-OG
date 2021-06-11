@@ -2,6 +2,7 @@ package net.tasmod.random;
 
 import java.util.Random;
 
+import net.minecraft.src.MathHelper;
 import net.tasmod.Utils;
 
 /**
@@ -14,7 +15,6 @@ import net.tasmod.Utils;
 public class SimpleRandomMod extends Random {
 	
 	private static long seed = 0L;
-	public static long scrambledSeed;
 	
 	/**
 	 * Method that changes the Seed and updates all the next Calls
@@ -28,7 +28,6 @@ public class SimpleRandomMod extends Random {
 		nextFloat = new Random(seed).nextFloat();
 		nextGaussian = new Random(seed).nextGaussian();
 		nextLong = new Random(seed).nextLong();
-		scrambledSeed = (seed ^ 0x5DEECE66DL) & ((1L << 48) - 1);
 	}
 	
 	/* Override all Random Calls used by Minecraft Code to custom ones */
@@ -47,7 +46,7 @@ public class SimpleRandomMod extends Random {
 	
 	@Override public boolean nextBoolean() { return nextBoolean; }
 	@Override public int nextInt() { return nextInt; }
-	@Override public int nextInt(int bound) { return Utils.nextInt(bound); }
+	@Override public int nextInt(int bound) { return Math.floorMod(nextInt, bound); }
 	@Override public double nextDouble() { return nextDouble; }
 	@Override public float nextFloat() { return nextFloat; }
 	@Override public double nextGaussian() { return nextGaussian; }

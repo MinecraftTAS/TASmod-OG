@@ -1,27 +1,6 @@
 diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net/minecraft/client/Minecraft.java
 --- src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
-@@ -709,9 +709,9 @@
-         Profiler.startSection("render");
-         Profiler.startSection("display");
-         GL11.glEnable(3553 /*GL_TEXTURE_2D*/);
--        if(!Keyboard.isKeyDown(65))
-+        if(!Keyboard.isKeyDown(65)) 
-         {
--            Display.update();
-+        	Display.update();
-         }
-         if(thePlayer != null && thePlayer.isEntityInsideOpaqueBlock())
-         {
-@@ -754,7 +754,7 @@
-         Thread.yield();
-         if(Keyboard.isKeyDown(65))
-         {
--            Display.update();
-+        	Display.update();
-         }
-         screenshotListener();
-         if(mcCanvas != null && !fullscreen && (mcCanvas.getWidth() != displayWidth || mcCanvas.getHeight() != displayHeight))
 @@ -810,7 +810,7 @@
  
      private void screenshotListener()
