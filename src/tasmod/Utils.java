@@ -4,6 +4,8 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Properties;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.StringTranslate;
@@ -237,4 +239,37 @@ public final class Utils {
 		if (VirtualKeyboard.getEventKey() == 61) VirtualKeyboard.isKey61Down = VirtualKeyboard.getEventKeyState();
 	}
 	
+	/**
+	 * Replacement pt 1 for nextInt in Random without setSeed'ing the Random
+	 */
+	public static int nextInt(int bound) {
+        int r = next(31);
+        int m = bound - 1;
+        if ((bound & m) == 0)  // i.e., bound is a power of 2
+            r = (int)((bound * (long)r) >> 31);
+        else {
+            for (int u = r;
+                 u - (r = u % bound) + m < 0;
+                 u = next(31))
+                ;
+        }
+        return r;
+    }
+	
+	/**
+	 * Replacement pt 2
+	 */
+    protected static int next(int bits) {
+        long oldseed, nextseed;
+        long seed = SimpleRandomMod.scrambledSeed;
+        boolean ref;
+        do {
+            oldseed = seed;
+            nextseed = (oldseed * 0x5DEECE66DL + 0xBL) & ((1L << 48) - 1);
+            ref = seed == oldseed;
+            if (ref) seed = nextseed; 	
+        } while (!ref);
+        return (int)(nextseed >>> (48 - bits));
+    }
+    
 }
