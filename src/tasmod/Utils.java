@@ -1,11 +1,13 @@
 package net.tasmod;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.time.Duration;
 import java.util.Properties;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.StringTranslate;
@@ -70,6 +72,17 @@ public final class Utils {
 	        }
 	    }
 	    return directoryToBeDeleted.delete();
+	}
+	
+	public static String formatDuration(Duration duration) {
+	    long seconds = duration.getSeconds();
+	    long absSeconds = Math.abs(seconds);
+	    String positive = String.format(
+	        "%d:%02d:%02d",
+	        absSeconds / 3600,
+	        (absSeconds % 3600) / 60,
+	        absSeconds % 60);
+	    return seconds < 0 ? "-" + positive : positive;
 	}
 	
 	/**
@@ -255,6 +268,21 @@ public final class Utils {
 		if (VirtualKeyboard.getEventKey() == 61) VirtualKeyboard.isKey61Down = VirtualKeyboard.getEventKeyState();
 		if (VirtualKeyboard.getEventKey() == 51) VirtualKeyboard.isKey51Down = VirtualKeyboard.getEventKeyState();
 		if (VirtualKeyboard.getEventKey() == 52) VirtualKeyboard.isKey52Down = VirtualKeyboard.getEventKeyState();
+	}
+	
+	public static int linesRead = 0;
+
+	public static String readLastLine(File file) throws Exception {
+	    BufferedReader input = new BufferedReader(new FileReader(file));
+	    String last = null, line;
+	    linesRead = 0;
+	    
+	    while ((line = input.readLine()) != null) { 
+	        last = line;
+	        linesRead++;
+	    }
+	    input.close();
+	    return last;
 	}
     
 }

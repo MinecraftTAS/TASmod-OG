@@ -91,7 +91,7 @@ public final class TASmod {
 	 * @throws Exception Throws Exception whenever something bad happens
 	 */
 	public static final void render() throws Exception {
-		if (Keyboard.isKeyDown(66) && !_was66pressed && !isPlayback()) TickrateChanger.toggleTickadvance();
+		if (Keyboard.isKeyDown(66) && !_was66pressed) TickrateChanger.toggleTickadvance();
 		_was66pressed = Keyboard.isKeyDown(66);
 		if (Keyboard.isKeyDown(67) && !_was67pressed && !isPlayback() && TickrateChanger.isTickAdvance) {
 			TickrateChanger.updateTickrate(TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed]);
@@ -151,7 +151,7 @@ public final class TASmod {
 		if (playback != null) return false;
 		try {
 			playback = new Replayer(fileName);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}

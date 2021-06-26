@@ -462,6 +462,15 @@ diff -ruN src/minecraft/net/minecraft/src/GuiContainerCreative.java newsrc/minec
 diff -ruN src/minecraft/net/minecraft/src/GuiCreateWorld.java newsrc/minecraft/net/minecraft/src/GuiCreateWorld.java
 --- src/minecraft/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
+@@ -50,7 +50,7 @@
+         textboxWorldName.updateCursorCounter();
+         textboxSeed.updateCursorCounter();
+     }
+-
++    
+     public void initGui()
+     {
+         StringTranslate stringtranslate = StringTranslate.getInstance();
 @@ -157,17 +157,13 @@
                      l = s.hashCode();
                  }
@@ -499,6 +508,28 @@ diff -ruN src/minecraft/net/minecraft/src/GuiEnchantment.java newsrc/minecraft/n
          field_40228_y = (ContainerEnchantment)inventorySlots;
      }
  
+diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/minecraft/src/GuiIngame.java
+--- src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
++++ newsrc/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
+@@ -76,6 +76,18 @@
+                 renderPortalOverlay(f1, k, l);
+             }
+         }
++        // Render TAS Stuff here. Does not have any effect on minecraft.
++        if (net.tasmod.TASmod.isPlayback() && net.tasmod.tools.TickrateChanger.isTickAdvance) {
++        	GL11.glPushMatrix();
++            drawRect(0, scaledresolution.getScaledHeight() / 5, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight() / 5 * 4, 0xAA000000);
++            GL11.glScaled(2, 2, 1);
++            drawCenteredString(fontrenderer, "TAS in " + net.tasmod.Utils.formatDuration(java.time.Duration.ofMillis(net.tasmod.TASmod.getPlayback().ticksTotal * 50)) + "", scaledresolution.getScaledWidth() / 4, scaledresolution.getScaledHeight() / 4 - fontrenderer.field_41063_b / 2, 0xFFFFFF);
++            GL11.glPopMatrix();
++            drawCenteredString(fontrenderer, net.tasmod.TASmod.getPlayback().ticksTotal + " Ticks", scaledresolution.getScaledWidth() / 2, scaledresolution.getScaledHeight() / 2 + (scaledresolution.getScaledHeight() / 14), 0xFFFFFF);
++            drawString(fontrenderer, "Performed by: " + net.tasmod.TASmod.getPlayback().author, 5, scaledresolution.getScaledHeight() / 5 + 2, 0x0AFFFF);
++            drawString(fontrenderer, "Hours spend on TAS: " + net.tasmod.TASmod.getPlayback().hoursOfWork, 5, scaledresolution.getScaledHeight() / 5 + 4 + fontrenderer.field_41063_b, 0x0AFFFF);
++        }
++        // End-Edit
+         if(!mc.playerController.func_35643_e())
+         {
+             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 diff -ruN src/minecraft/net/minecraft/src/GuiMainMenu.java newsrc/minecraft/net/minecraft/src/GuiMainMenu.java
 --- src/minecraft/net/minecraft/src/GuiMainMenu.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiMainMenu.java	2021-01-01 00:00:00.000000000 +0100

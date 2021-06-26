@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -36,6 +37,9 @@ public final class Recorder {
 	private final Minecraft mc;
 	private final File file;
 	private final FileOutputStream writer;
+	private final String author;
+	private int savestates;
+	private int loadstates;
 	private final Queue<String> linesToPrint = new LinkedList<String>();
 	
 	private int currentTick;
@@ -57,7 +61,7 @@ public final class Recorder {
 		this.folderName = folderName;
 		this.worldName = worldName;
 		this.mapFeatures = mapFeatures;
-		
+		this.author = TASmod.mc.session.username;
 		this.file = new File(this.mc.mcDataDir, folderName + ".tas");
 		
 		/** Create a new File for the Recorder */
@@ -81,6 +85,9 @@ public final class Recorder {
 					writer.write(("#    Gametype: " + Recorder.this.worldtype +  "                              #\n").getBytes(StandardCharsets.UTF_8));
 					writer.write(("#                 PLAYBACK FILE               #\n").getBytes(StandardCharsets.UTF_8));
 					writer.write(("###############################################\n").getBytes(StandardCharsets.UTF_8));
+					writer.write(("Author: " + author + "\n").getBytes(StandardCharsets.UTF_8));
+					writer.write(("Date: " + Calendar.getInstance().getTimeInMillis() + "\n").getBytes(StandardCharsets.UTF_8));
+					
 					while (!Thread.currentThread().isInterrupted()) {
 						if (!linesToPrint.isEmpty()) writer.write(linesToPrint.poll().getBytes(StandardCharsets.UTF_8));
 						else
@@ -90,7 +97,8 @@ public final class Recorder {
 								break;
 							}
 					}
-					writer.write("###############################################".getBytes(StandardCharsets.UTF_8));
+					writer.write("###############################################\n".getBytes(StandardCharsets.UTF_8));
+					writer.write((Calendar.getInstance().getTimeInMillis() + "\n").getBytes(StandardCharsets.UTF_8));
 					writer.close();
 				} catch (IOException e) {
 					e.printStackTrace();

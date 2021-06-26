@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -15,6 +16,7 @@ import net.minecraft.src.PlayerControllerSP;
 import net.minecraft.src.WorldSettings;
 import net.tasmod.TASmod;
 import net.tasmod.Utils;
+import net.tasmod.tools.TickrateChanger;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse;
@@ -34,7 +36,11 @@ public final class Replayer {
 	private final File file;
 	private final BufferedReader reader;
 	private final Queue<String> linesRead = new LinkedList<String>();
-	
+	public final String author;
+	private final long startingTime;
+	private final long lastInputTime;
+	public final long hoursOfWork;
+	public final long ticksTotal;
 	private final Thread fileReader;
 	
 	/** Mouse for next tick */
@@ -44,12 +50,12 @@ public final class Replayer {
 	 * Loads a File and reads some ticks from it
 	 * @throws IOException Cannot be thrown, unless something is terribly wrong.
 	 */
-	public Replayer(String fileName) throws IOException {
+	public Replayer(String fileName) throws Exception {
 		this.mc = TASmod.mc;
 		this.file = new File(this.mc.mcDataDir, fileName + ".tas");
-		
+		this.lastInputTime = Long.parseLong(Utils.readLastLine(this.file)); // read this first, before the file is blocked 
+		this.ticksTotal = Utils.linesRead / 4 - 3;
 		this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file)));
-		
 		this.reader.readLine();
 		this.reader.readLine();
 		this.worldseed = Long.parseLong(this.reader.readLine().split(": ")[1].split(" ")[0]);
@@ -58,6 +64,9 @@ public final class Replayer {
 		this.worldtype = Integer.parseInt(this.reader.readLine().split(": ")[1].split(" ")[0]);
 		this.reader.readLine();
 		this.reader.readLine();
+		this.author = this.reader.readLine().split("Author: ")[1];
+		this.startingTime = Long.parseLong(this.reader.readLine().split(": ")[1]);
+		this.hoursOfWork = Duration.ofMillis(lastInputTime - startingTime).toHours();
 		
 		this.fileReader = new Thread(new Runnable() {
 			
@@ -107,6 +116,8 @@ public final class Replayer {
 		this.mc.thePlayer.rotationPitch = 0f;
 	}
 	
+	public boolean shouldFreeze = true;
+	
 	/**
 	 * Replay Read Ticks
 	 */
@@ -114,6 +125,15 @@ public final class Replayer {
 		tickKeyboad();
 		tickMouse();
 		Utils.checkDesync(mc, linesRead.poll());
+		if (shouldFreeze) {
+			try {
+				TickrateChanger.toggleTickadvance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			shouldFreeze = false;
+		}
+		
 	}
 	
 	private final void tickKeyboad() {
