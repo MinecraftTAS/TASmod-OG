@@ -2,9 +2,14 @@ package net.tasmod;
 
 import java.io.IOException;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.Timer;
 import net.tasmod.recorder.Recorder;
 import net.tasmod.replayer.Replayer;
+import net.tasmod.tools.TickrateChanger;
+import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
 
@@ -61,12 +66,38 @@ public final class TASmod {
 				e.printStackTrace();
 			}
 		}
-		/* End the Recording when 'K' is pressed */
+		/* End the Recording when 'K' is pressed and handle more keybinds and tick advance */
         try {
 			if(net.tasmod.virtual.VirtualKeyboard.isKey37Down && mc.theWorld != null) net.tasmod.TASmod.endRecording();
-		} catch (java.io.IOException e) {
+			if(net.tasmod.virtual.VirtualKeyboard.isKey51Down && !isPlayback()) TickrateChanger.slower();
+			if(net.tasmod.virtual.VirtualKeyboard.isKey52Down && !isPlayback()) TickrateChanger.faster();
+			if ((_undoTickrate) ? !(_undoTickrate = !_undoTickrate) : false) {
+				TickrateChanger.updateTickrate(0f);
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/** Temporary variable to avoid pressing a key twice */
+	private static boolean _was66pressed;
+	/** Temporary variable to avoid pressing a key twice */
+	private static boolean _was67pressed;
+	/** Temporary variable for tickrate zero to work */
+	private static boolean _undoTickrate;
+	
+	/**
+	 * Ticks frame based stuff.
+	 * @throws Exception Throws Exception whenever something bad happens
+	 */
+	public static final void render() throws Exception {
+		if (Keyboard.isKeyDown(66) && !_was66pressed && !isPlayback()) TickrateChanger.toggleTickadvance();
+		_was66pressed = Keyboard.isKeyDown(66);
+		if (Keyboard.isKeyDown(67) && !_was67pressed && !isPlayback() && TickrateChanger.isTickAdvance) {
+			TickrateChanger.updateTickrate(TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed]);
+			_undoTickrate = true;
+		}
+		_was67pressed = Keyboard.isKeyDown(67);
 	}
 	
 	/**

@@ -82,6 +82,9 @@ public final class VirtualKeyboard {
 	public static boolean isKey54Down;
 	public static boolean isKey42Down;
 	public static boolean isKey37Down;
+	public static boolean isKey51Down;
+	public static boolean isKey52Down;
+	
 	
 	public final static boolean next() {
 		if (listen) {

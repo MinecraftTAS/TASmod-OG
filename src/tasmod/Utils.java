@@ -169,6 +169,22 @@ public final class Utils {
 	}
 	
 	/**
+	 * Obtains the inaccessible Timer instance from the minecraft class
+	 */
+	public static Object obtainTimerInstance() throws Exception {
+		/* Get Field in Obfuscated or Non-Obfuscated Environment */
+		final Class<?> clazz = Class.forName("net.minecraft.client.Minecraft");
+		Field theTimerField;
+		try {
+			theTimerField = clazz.getDeclaredField("timer");
+		} catch (Exception e) {
+			theTimerField = clazz.getDeclaredField("X");
+		}
+		theTimerField.setAccessible(true);
+		return theTimerField.get(TASmod.mc);
+	}
+	
+	/**
 	 * Tool that double checks Position and Rotation of the Player, to see if the Playback has desynced
 	 */
 	public static void checkDesync(Minecraft mc, String line) {
@@ -237,6 +253,8 @@ public final class Utils {
 		if (VirtualKeyboard.getEventKey() == 54) VirtualKeyboard.isKey54Down = VirtualKeyboard.getEventKeyState();
 		if (VirtualKeyboard.getEventKey() == 60) VirtualKeyboard.isKey60Down = VirtualKeyboard.getEventKeyState();
 		if (VirtualKeyboard.getEventKey() == 61) VirtualKeyboard.isKey61Down = VirtualKeyboard.getEventKeyState();
+		if (VirtualKeyboard.getEventKey() == 51) VirtualKeyboard.isKey51Down = VirtualKeyboard.getEventKeyState();
+		if (VirtualKeyboard.getEventKey() == 52) VirtualKeyboard.isKey52Down = VirtualKeyboard.getEventKeyState();
 	}
     
 }

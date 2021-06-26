@@ -1,7 +1,30 @@
 diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net/minecraft/client/Minecraft.java
 --- src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
-@@ -810,7 +810,7 @@
+@@ -108,6 +108,8 @@
+ import net.minecraft.src.WorldProvider;
+ import net.minecraft.src.WorldRenderer;
+ import net.minecraft.src.WorldSettings;
++import net.tasmod.TASmod;
++
+ import org.lwjgl.LWJGLException;
+ import org.lwjgl.input.Controllers;
+ import org.lwjgl.input.Keyboard;
+@@ -678,6 +680,13 @@
+         }
+         long l = System.nanoTime();
+         Profiler.startSection("tick");
++        // Call TASmod Render/Gameloop Tick before runTick() to be able to hijack that
++        try {
++        	TASmod.render();
++        } catch (Exception e) {
++			e.printStackTrace();
++		}
++        // End-Edit
+         for(int i = 0; i < timer.elapsedTicks; i++)
+         {
+             ticksRan++;
+@@ -810,7 +819,7 @@
  
      private void screenshotListener()
      {
@@ -10,7 +33,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
          {
              if(!isTakingScreenshot)
              {
-@@ -1313,24 +1313,42 @@
+@@ -1313,24 +1322,42 @@
                  currentScreen.updateScreen();
              }
          }
@@ -59,7 +82,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                      if(i1 != 0)
                      {
                          thePlayer.inventory.changeCurrentItem(i1);
-@@ -1349,7 +1367,7 @@
+@@ -1349,7 +1376,7 @@
                      }
                      if(currentScreen == null)
                      {
@@ -68,7 +91,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                          {
                              setIngameFocus();
                          }
-@@ -1367,18 +1385,18 @@
+@@ -1367,18 +1394,18 @@
              Profiler.endStartSection("keyboard");
              do
              {
@@ -94,7 +117,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                      {
                          toggleFullscreen();
                      } else
-@@ -1388,36 +1406,36 @@
+@@ -1388,36 +1415,36 @@
                              currentScreen.handleKeyboardInput();
                          } else
                          {
@@ -140,7 +163,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                              {
                                  gameSettings.thirdPersonView++;
                                  if(gameSettings.thirdPersonView > 2)
-@@ -1425,14 +1443,14 @@
+@@ -1425,14 +1452,14 @@
                                      gameSettings.thirdPersonView = 0;
                                  }
                              }
@@ -157,7 +180,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                              {
                                  thePlayer.inventory.currentItem = i;
                              }
-@@ -1440,14 +1458,14 @@
+@@ -1440,14 +1467,14 @@
  
                          if(gameSettings.showDebugInfo)
                          {
@@ -174,7 +197,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
                                  {
                                      func_40003_b(j + 1);
                                  }
-@@ -1540,6 +1558,13 @@
+@@ -1540,6 +1567,13 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
