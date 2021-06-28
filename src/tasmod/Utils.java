@@ -119,6 +119,8 @@ public final class Utils {
 		return value;
 	}
 
+	public static boolean isObfuscated;
+	
 	/**
 	 * Changes the Name of a few Buttons to match their use without editing Minecraft Code
 	 */
@@ -132,6 +134,7 @@ public final class Utils {
 		} catch (Exception e) {
 			/* Obfuscated: qp.b */
 			System.err.println("Obfuscated Environment detected!");
+			isObfuscated = true;
 			translateTableField = Class.forName("qp").getDeclaredField("b");
 		}
 		translateTableField.setAccessible(true);
