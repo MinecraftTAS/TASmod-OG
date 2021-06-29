@@ -270,7 +270,7 @@ diff -ruN src/minecraft/net/minecraft/src/ChunkProvider.java newsrc/minecraft/ne
 +        	final StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
 +        	boolean check = false;
 +        	for (final StackTraceElement stackTraceElement : stacktrace) {
-+				if (stackTraceElement.getMethodName().equalsIgnoreCase(net.tasmod.Utils.isObfuscated ? "runTick" : "k")) {
++				if (stackTraceElement.getMethodName().equals(net.tasmod.Utils.isObfuscated ? "k" : "runTick") && stackTraceElement.getClassName().endsWith("Minecraft")) {
 +					check = true;
 +					break;
 +				}
