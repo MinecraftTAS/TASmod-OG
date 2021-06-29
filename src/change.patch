@@ -1,5 +1,5 @@
 diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net/minecraft/client/Minecraft.java
---- src/minecraft/net/minecraft/client/Minecraft.java	2021-06-29 18:52:49.370420600 +0200
+--- src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 @@ -108,6 +108,8 @@
  import net.minecraft.src.WorldProvider;
@@ -212,7 +212,7 @@ diff -ruN src/minecraft/net/minecraft/client/Minecraft.java newsrc/minecraft/net
  
      private void forceReload()
 diff -ruN src/minecraft/net/minecraft/src/BlockBrewingStand.java newsrc/minecraft/net/minecraft/src/BlockBrewingStand.java
---- src/minecraft/net/minecraft/src/BlockBrewingStand.java	2021-06-29 18:52:50.131418800 +0200
+--- src/minecraft/net/minecraft/src/BlockBrewingStand.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/BlockBrewingStand.java	2021-01-01 00:00:00.000000000 +0100
 @@ -20,7 +20,7 @@
      public BlockBrewingStand(int i)
@@ -224,7 +224,7 @@ diff -ruN src/minecraft/net/minecraft/src/BlockBrewingStand.java newsrc/minecraf
      }
  
 diff -ruN src/minecraft/net/minecraft/src/BlockChest.java newsrc/minecraft/net/minecraft/src/BlockChest.java
---- src/minecraft/net/minecraft/src/BlockChest.java	2021-06-29 18:52:50.250420200 +0200
+--- src/minecraft/net/minecraft/src/BlockChest.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/BlockChest.java	2021-01-01 00:00:00.000000000 +0100
 @@ -20,7 +20,7 @@
      protected BlockChest(int i)
@@ -236,7 +236,7 @@ diff -ruN src/minecraft/net/minecraft/src/BlockChest.java newsrc/minecraft/net/m
      }
  
 diff -ruN src/minecraft/net/minecraft/src/BlockDispenser.java newsrc/minecraft/net/minecraft/src/BlockDispenser.java
---- src/minecraft/net/minecraft/src/BlockDispenser.java	2021-06-29 18:52:50.489422400 +0200
+--- src/minecraft/net/minecraft/src/BlockDispenser.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/BlockDispenser.java	2021-01-01 00:00:00.000000000 +0100
 @@ -21,7 +21,7 @@
      protected BlockDispenser(int i)
@@ -248,7 +248,7 @@ diff -ruN src/minecraft/net/minecraft/src/BlockDispenser.java newsrc/minecraft/n
      }
  
 diff -ruN src/minecraft/net/minecraft/src/BlockFurnace.java newsrc/minecraft/net/minecraft/src/BlockFurnace.java
---- src/minecraft/net/minecraft/src/BlockFurnace.java	2021-06-29 18:52:50.796424100 +0200
+--- src/minecraft/net/minecraft/src/BlockFurnace.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/BlockFurnace.java	2021-01-01 00:00:00.000000000 +0100
 @@ -22,7 +22,7 @@
      protected BlockFurnace(int i, boolean flag)
@@ -260,7 +260,7 @@ diff -ruN src/minecraft/net/minecraft/src/BlockFurnace.java newsrc/minecraft/net
          blockIndexInTexture = 45;
      }
 diff -ruN src/minecraft/net/minecraft/src/ChunkProvider.java newsrc/minecraft/net/minecraft/src/ChunkProvider.java
---- src/minecraft/net/minecraft/src/ChunkProvider.java	2021-06-29 18:52:52.508421200 +0200
+--- src/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
 @@ -93,6 +93,17 @@
          Chunk chunk = (Chunk)chunkMap.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(i, j));
@@ -281,7 +281,7 @@ diff -ruN src/minecraft/net/minecraft/src/ChunkProvider.java newsrc/minecraft/ne
          } else
          {
 diff -ruN src/minecraft/net/minecraft/src/ContainerEnchantment.java newsrc/minecraft/net/minecraft/src/ContainerEnchantment.java
---- src/minecraft/net/minecraft/src/ContainerEnchantment.java	2021-06-29 18:52:54.066422300 +0200
+--- src/minecraft/net/minecraft/src/ContainerEnchantment.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/ContainerEnchantment.java	2021-01-01 00:00:00.000000000 +0100
 @@ -27,7 +27,7 @@
      public ContainerEnchantment(InventoryPlayer inventoryplayer, World world, int i, int j, int k)
@@ -293,7 +293,7 @@ diff -ruN src/minecraft/net/minecraft/src/ContainerEnchantment.java newsrc/minec
          field_40240_h = world;
          field_40241_i = i;
 diff -ruN src/minecraft/net/minecraft/src/EffectRenderer.java newsrc/minecraft/net/minecraft/src/EffectRenderer.java
---- src/minecraft/net/minecraft/src/EffectRenderer.java	2021-06-29 18:52:54.284418500 +0200
+--- src/minecraft/net/minecraft/src/EffectRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EffectRenderer.java	2021-01-01 00:00:00.000000000 +0100
 @@ -23,7 +23,7 @@
      public EffectRenderer(World world, RenderEngine renderengine)
@@ -305,7 +305,7 @@ diff -ruN src/minecraft/net/minecraft/src/EffectRenderer.java newsrc/minecraft/n
          {
              worldObj = world;
 diff -ruN src/minecraft/net/minecraft/src/EnchantmentHelper.java newsrc/minecraft/net/minecraft/src/EnchantmentHelper.java
---- src/minecraft/net/minecraft/src/EnchantmentHelper.java	2021-06-29 18:52:54.491418200 +0200
+--- src/minecraft/net/minecraft/src/EnchantmentHelper.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EnchantmentHelper.java	2021-01-01 00:00:00.000000000 +0100
 @@ -15,7 +15,7 @@
  public class EnchantmentHelper
@@ -317,7 +317,7 @@ diff -ruN src/minecraft/net/minecraft/src/EnchantmentHelper.java newsrc/minecraf
      private static final EnchantmentModifierLiving enchantmentModifierLiving = new EnchantmentModifierLiving(null);
  
 diff -ruN src/minecraft/net/minecraft/src/EnchantmentNameParts.java newsrc/minecraft/net/minecraft/src/EnchantmentNameParts.java
---- src/minecraft/net/minecraft/src/EnchantmentNameParts.java	2021-06-29 18:52:54.608421800 +0200
+--- src/minecraft/net/minecraft/src/EnchantmentNameParts.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EnchantmentNameParts.java	2021-01-01 00:00:00.000000000 +0100
 @@ -15,7 +15,7 @@
  
@@ -329,7 +329,7 @@ diff -ruN src/minecraft/net/minecraft/src/EnchantmentNameParts.java newsrc/minec
      }
  
 diff -ruN src/minecraft/net/minecraft/src/Entity.java newsrc/minecraft/net/minecraft/src/Entity.java
---- src/minecraft/net/minecraft/src/Entity.java	2021-06-29 18:52:54.721422300 +0200
+--- src/minecraft/net/minecraft/src/Entity.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/Entity.java	2021-01-01 00:00:00.000000000 +0100
 @@ -105,7 +105,7 @@
          stepHeight = 0.0F;
@@ -341,7 +341,7 @@ diff -ruN src/minecraft/net/minecraft/src/Entity.java newsrc/minecraft/net/minec
          fireResistance = 1;
          fire = 0;
 diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/net/minecraft/src/EntityRenderer.java
---- src/minecraft/net/minecraft/src/EntityRenderer.java	2021-06-29 18:52:56.263419400 +0200
+--- src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
 @@ -396,8 +396,11 @@
          }
@@ -412,7 +412,7 @@ diff -ruN src/minecraft/net/minecraft/src/EntityRenderer.java newsrc/minecraft/n
          if(mc.gameSettings.limitFramerate == 1)
          {
 diff -ruN src/minecraft/net/minecraft/src/Explosion.java newsrc/minecraft/net/minecraft/src/Explosion.java
---- src/minecraft/net/minecraft/src/Explosion.java	2021-06-29 18:52:57.268400700 +0200
+--- src/minecraft/net/minecraft/src/Explosion.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/Explosion.java	2021-01-01 00:00:00.000000000 +0100
 @@ -27,7 +27,7 @@
      public Explosion(World world, Entity entity, double d, double d1, double d2, float f)
@@ -424,7 +424,7 @@ diff -ruN src/minecraft/net/minecraft/src/Explosion.java newsrc/minecraft/net/mi
          worldObj = world;
          exploder = entity;
 diff -ruN src/minecraft/net/minecraft/src/FontRenderer.java newsrc/minecraft/net/minecraft/src/FontRenderer.java
---- src/minecraft/net/minecraft/src/FontRenderer.java	2021-06-29 18:52:57.313403700 +0200
+--- src/minecraft/net/minecraft/src/FontRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/FontRenderer.java	2021-01-01 00:00:00.000000000 +0100
 @@ -31,7 +31,7 @@
          fontTextureName = 0;
@@ -436,7 +436,7 @@ diff -ruN src/minecraft/net/minecraft/src/FontRenderer.java newsrc/minecraft/net
          try
          {
 diff -ruN src/minecraft/net/minecraft/src/GuiAchievements.java newsrc/minecraft/net/minecraft/src/GuiAchievements.java
---- src/minecraft/net/minecraft/src/GuiAchievements.java	2021-06-29 18:52:57.901401500 +0200
+--- src/minecraft/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
 @@ -80,7 +80,7 @@
  
@@ -448,7 +448,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiAchievements.java newsrc/minecraft/
              int k = (width - achievementsPaneWidth) / 2;
              int l = (height - achievementsPaneHeight) / 2;
 diff -ruN src/minecraft/net/minecraft/src/GuiContainer.java newsrc/minecraft/net/minecraft/src/GuiContainer.java
---- src/minecraft/net/minecraft/src/GuiContainer.java	2021-06-29 18:52:58.047399500 +0200
+--- src/minecraft/net/minecraft/src/GuiContainer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiContainer.java	2021-01-01 00:00:00.000000000 +0100
 @@ -250,7 +250,7 @@
              }
@@ -460,7 +460,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiContainer.java newsrc/minecraft/net
              }
          }
 diff -ruN src/minecraft/net/minecraft/src/GuiContainerCreative.java newsrc/minecraft/net/minecraft/src/GuiContainerCreative.java
---- src/minecraft/net/minecraft/src/GuiContainerCreative.java	2021-06-29 18:52:58.070403000 +0200
+--- src/minecraft/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
 @@ -141,7 +141,7 @@
      public void handleMouseInput()
@@ -481,7 +481,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiContainerCreative.java newsrc/minec
          int l = field_40215_f;
          int i1 = k + 155;
 diff -ruN src/minecraft/net/minecraft/src/GuiCreateWorld.java newsrc/minecraft/net/minecraft/src/GuiCreateWorld.java
---- src/minecraft/net/minecraft/src/GuiCreateWorld.java	2021-06-29 18:52:58.134400000 +0200
+--- src/minecraft/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
 @@ -50,7 +50,7 @@
          textboxWorldName.updateCursorCounter();
@@ -518,7 +518,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiCreateWorld.java newsrc/minecraft/n
          if(guibutton.id == 3)
          {
 diff -ruN src/minecraft/net/minecraft/src/GuiEnchantment.java newsrc/minecraft/net/minecraft/src/GuiEnchantment.java
---- src/minecraft/net/minecraft/src/GuiEnchantment.java	2021-06-29 18:52:58.237400100 +0200
+--- src/minecraft/net/minecraft/src/GuiEnchantment.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiEnchantment.java	2021-01-01 00:00:00.000000000 +0100
 @@ -33,7 +33,7 @@
      public GuiEnchantment(InventoryPlayer inventoryplayer, World world, int i, int j, int k)
@@ -530,7 +530,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiEnchantment.java newsrc/minecraft/n
      }
  
 diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/minecraft/src/GuiIngame.java
---- src/minecraft/net/minecraft/src/GuiIngame.java	2021-06-29 18:52:58.324399600 +0200
+--- src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
 @@ -76,6 +76,18 @@
                  renderPortalOverlay(f1, k, l);
@@ -552,7 +552,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/mi
          {
              GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 diff -ruN src/minecraft/net/minecraft/src/GuiIngameMenu.java newsrc/minecraft/net/minecraft/src/GuiIngameMenu.java
---- src/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-06-29 18:52:58.349399800 +0200
+--- src/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
 @@ -4,8 +4,10 @@
  
@@ -591,7 +591,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiIngameMenu.java newsrc/minecraft/ne
              if(mc.isMultiplayerWorld())
              {
 diff -ruN src/minecraft/net/minecraft/src/GuiMainMenu.java newsrc/minecraft/net/minecraft/src/GuiMainMenu.java
---- src/minecraft/net/minecraft/src/GuiMainMenu.java	2021-06-29 18:52:58.394402800 +0200
+--- src/minecraft/net/minecraft/src/GuiMainMenu.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiMainMenu.java	2021-01-01 00:00:00.000000000 +0100
 @@ -24,7 +24,7 @@
  public class GuiMainMenu extends GuiScreen
@@ -603,7 +603,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiMainMenu.java newsrc/minecraft/net/
      private String splashText;
      private GuiButton multiplayerButton;
 diff -ruN src/minecraft/net/minecraft/src/GuiMultiplayer.java newsrc/minecraft/net/minecraft/src/GuiMultiplayer.java
---- src/minecraft/net/minecraft/src/GuiMultiplayer.java	2021-06-29 18:52:58.418401200 +0200
+--- src/minecraft/net/minecraft/src/GuiMultiplayer.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiMultiplayer.java	2021-01-01 00:00:00.000000000 +0100
 @@ -65,21 +65,37 @@
  
@@ -688,7 +688,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiMultiplayer.java newsrc/minecraft/n
          if(guibutton.id == 4)
          {
 diff -ruN src/minecraft/net/minecraft/src/GuiScreen.java newsrc/minecraft/net/minecraft/src/GuiScreen.java
---- src/minecraft/net/minecraft/src/GuiScreen.java	2021-06-29 18:52:58.520402100 +0200
+--- src/minecraft/net/minecraft/src/GuiScreen.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiScreen.java	2021-01-01 00:00:00.000000000 +0100
 @@ -116,35 +116,35 @@
  
@@ -741,7 +741,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiScreen.java newsrc/minecraft/net/mi
      }
  
 diff -ruN src/minecraft/net/minecraft/src/GuiSlot.java newsrc/minecraft/net/minecraft/src/GuiSlot.java
---- src/minecraft/net/minecraft/src/GuiSlot.java	2021-06-29 18:52:58.662400200 +0200
+--- src/minecraft/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
 @@ -159,7 +159,7 @@
          int k = getSize();
@@ -768,7 +768,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiSlot.java newsrc/minecraft/net/mine
                  {
                      if(j1 > 0)
 diff -ruN src/minecraft/net/minecraft/src/GuiSlotStats.java newsrc/minecraft/net/minecraft/src/GuiSlotStats.java
---- src/minecraft/net/minecraft/src/GuiSlotStats.java	2021-06-29 18:52:58.706404400 +0200
+--- src/minecraft/net/minecraft/src/GuiSlotStats.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiSlotStats.java	2021-01-01 00:00:00.000000000 +0100
 @@ -50,7 +50,7 @@
  
@@ -780,7 +780,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiSlotStats.java newsrc/minecraft/net
              field_27268_b = -1;
          }
 diff -ruN src/minecraft/net/minecraft/src/Item.java newsrc/minecraft/net/minecraft/src/Item.java
---- src/minecraft/net/minecraft/src/Item.java	2021-06-29 18:52:59.513402500 +0200
+--- src/minecraft/net/minecraft/src/Item.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/Item.java	2021-01-01 00:00:00.000000000 +0100
 @@ -27,7 +27,7 @@
  public class Item
@@ -792,7 +792,7 @@ diff -ruN src/minecraft/net/minecraft/src/Item.java newsrc/minecraft/net/minecra
      public static Item shovelSteel;
      public static Item pickaxeSteel;
 diff -ruN src/minecraft/net/minecraft/src/MouseHelper.java newsrc/minecraft/net/minecraft/src/MouseHelper.java
---- src/minecraft/net/minecraft/src/MouseHelper.java	2021-06-29 18:53:02.948174700 +0200
+--- src/minecraft/net/minecraft/src/MouseHelper.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/MouseHelper.java	2021-01-01 00:00:00.000000000 +0100
 @@ -42,20 +42,20 @@
  
@@ -821,7 +821,7 @@ diff -ruN src/minecraft/net/minecraft/src/MouseHelper.java newsrc/minecraft/net/
      }
  }
 diff -ruN src/minecraft/net/minecraft/src/NetClientHandler.java newsrc/minecraft/net/minecraft/src/NetClientHandler.java
---- src/minecraft/net/minecraft/src/NetClientHandler.java	2021-06-29 18:53:03.298454800 +0200
+--- src/minecraft/net/minecraft/src/NetClientHandler.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/NetClientHandler.java	2021-01-01 00:00:00.000000000 +0100
 @@ -64,7 +64,7 @@
          field_35787_k = new HashMap();
@@ -833,7 +833,7 @@ diff -ruN src/minecraft/net/minecraft/src/NetClientHandler.java newsrc/minecraft
          Socket socket = new Socket(InetAddress.getByName(s), i);
          netManager = new NetworkManager(socket, "Client", this);
 diff -ruN src/minecraft/net/minecraft/src/RenderEnderman.java newsrc/minecraft/net/minecraft/src/RenderEnderman.java
---- src/minecraft/net/minecraft/src/RenderEnderman.java	2021-06-29 18:53:06.158260900 +0200
+--- src/minecraft/net/minecraft/src/RenderEnderman.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/RenderEnderman.java	2021-01-01 00:00:00.000000000 +0100
 @@ -20,7 +20,7 @@
      public RenderEnderman()
@@ -845,7 +845,7 @@ diff -ruN src/minecraft/net/minecraft/src/RenderEnderman.java newsrc/minecraft/n
          setRenderPassModel(endermanModel);
      }
 diff -ruN src/minecraft/net/minecraft/src/SoundManager.java newsrc/minecraft/net/minecraft/src/SoundManager.java
---- src/minecraft/net/minecraft/src/SoundManager.java	2021-06-29 18:53:07.380259200 +0200
+--- src/minecraft/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
 @@ -36,7 +36,7 @@
          soundPoolStreaming = new SoundPool();
@@ -857,7 +857,7 @@ diff -ruN src/minecraft/net/minecraft/src/SoundManager.java newsrc/minecraft/net
      }
  
 diff -ruN src/minecraft/net/minecraft/src/SoundPool.java newsrc/minecraft/net/minecraft/src/SoundPool.java
---- src/minecraft/net/minecraft/src/SoundPool.java	2021-06-29 18:53:07.404259700 +0200
+--- src/minecraft/net/minecraft/src/SoundPool.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/SoundPool.java	2021-01-01 00:00:00.000000000 +0100
 @@ -23,7 +23,7 @@
  
@@ -869,7 +869,7 @@ diff -ruN src/minecraft/net/minecraft/src/SoundPool.java newsrc/minecraft/net/mi
          allSoundPoolEntries = new ArrayList();
          numberOfSoundPoolEntries = 0;
 diff -ruN src/minecraft/net/minecraft/src/Teleporter.java newsrc/minecraft/net/minecraft/src/Teleporter.java
---- src/minecraft/net/minecraft/src/Teleporter.java	2021-06-29 18:53:08.197258500 +0200
+--- src/minecraft/net/minecraft/src/Teleporter.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/Teleporter.java	2021-01-01 00:00:00.000000000 +0100
 @@ -17,7 +17,7 @@
  
@@ -881,7 +881,7 @@ diff -ruN src/minecraft/net/minecraft/src/Teleporter.java newsrc/minecraft/net/m
  
      public void placeInPortal(World world, Entity entity)
 diff -ruN src/minecraft/net/minecraft/src/ThreadDownloadResources.java newsrc/minecraft/net/minecraft/src/ThreadDownloadResources.java
---- src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-06-29 18:53:08.634259600 +0200
+--- src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
 @@ -59,7 +59,7 @@
                      {
@@ -893,7 +893,7 @@ diff -ruN src/minecraft/net/minecraft/src/ThreadDownloadResources.java newsrc/mi
                      {
                          return;
 diff -ruN src/minecraft/net/minecraft/src/TileEntityDispenser.java newsrc/minecraft/net/minecraft/src/TileEntityDispenser.java
---- src/minecraft/net/minecraft/src/TileEntityDispenser.java	2021-06-29 18:53:08.890259900 +0200
+--- src/minecraft/net/minecraft/src/TileEntityDispenser.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/TileEntityDispenser.java	2021-01-01 00:00:00.000000000 +0100
 @@ -20,7 +20,7 @@
      public TileEntityDispenser()
@@ -905,7 +905,7 @@ diff -ruN src/minecraft/net/minecraft/src/TileEntityDispenser.java newsrc/minecr
  
      public int getSizeInventory()
 diff -ruN src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java newsrc/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java
---- src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java	2021-06-29 18:53:08.914258700 +0200
+--- src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java	2021-01-01 00:00:00.000000000 +0100
 @@ -22,7 +22,7 @@
      public float field_40069_h;
@@ -917,7 +917,7 @@ diff -ruN src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java newsrc
      public TileEntityEnchantmentTable()
      {
 diff -ruN src/minecraft/net/minecraft/src/World.java newsrc/minecraft/net/minecraft/src/World.java
---- src/minecraft/net/minecraft/src/World.java	2021-06-29 18:53:09.275259200 +0200
+--- src/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
 @@ -97,13 +97,13 @@
          weatherEffects = new ArrayList();

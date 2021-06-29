@@ -14,9 +14,9 @@ unzip mcp50.zip
 /mnt/c/Windows/System32/cmd.exe /C decompile.bat
 cp ../mcp/src/ ./newsrc -r
 find ./newsrc -type f -exec dos2unix {} \;
+find ./src -type f -exec dos2unix {} \;
 find ./newsrc -type f -exec touch -a -m -t 202101010000.00 {} \;
 find ./src -type f -exec touch -a -m -t 202101010000.00 {} \;
-find ./src -type f -exec dos2unix {} \;
 diff -ruN src/ newsrc/ > ../src/change.patch
 cd ..
 rm temp -r
