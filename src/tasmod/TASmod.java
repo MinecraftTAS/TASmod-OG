@@ -66,9 +66,8 @@ public final class TASmod {
 				e.printStackTrace();
 			}
 		}
-		/* End the Recording when 'K' is pressed and handle more keybinds and tick advance */
+		/* Handle keybinds and tick advance */
         try {
-			if(net.tasmod.virtual.VirtualKeyboard.isKey37Down && mc.theWorld != null) net.tasmod.TASmod.endRecording();
 			if(net.tasmod.virtual.VirtualKeyboard.isKey51Down && !isPlayback()) TickrateChanger.slower();
 			if(net.tasmod.virtual.VirtualKeyboard.isKey52Down && !isPlayback()) TickrateChanger.faster();
 			if ((_undoTickrate) ? !(_undoTickrate = !_undoTickrate) : false) {
