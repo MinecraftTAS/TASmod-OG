@@ -14,7 +14,7 @@ import net.tasmod.Utils;
  */
 public class SimpleRandomMod extends Random {
 	
-	private static long seed = 0L;
+	public static long seed = 0L;
 	
 	/**
 	 * Method that changes the Seed and updates all the next Calls

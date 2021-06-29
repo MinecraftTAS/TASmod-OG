@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.src.GuiScreen;
 import net.tasmod.TASmod;
+import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.tools.TickrateChanger;
 
 /**
@@ -43,6 +46,7 @@ public class InfoHud extends GuiScreen {
 				renderText = text.call();
 			} catch (Exception e) {
 				e.printStackTrace();
+				// Lots of NPEs
 			}
 		}
 	}
@@ -80,9 +84,9 @@ public class InfoHud extends GuiScreen {
 				saveConfig();
 			}
 			int w = x + TASmod.mc.fontRenderer.getStringWidth(label.renderText);
-			int h = y + 25;
+			int h = y + 15;
 			
-			if (mouseX >= x && mouseX <= w && mouseY >= y && mouseY <= h && label.visible) {
+			if (mouseX >= x && mouseX <= w && mouseY >= y && mouseY <= h) {
 				currentlyDraggedIndex = index;
 				xOffset = mouseX - x;
 				yOffset = mouseY - y;
@@ -96,13 +100,22 @@ public class InfoHud extends GuiScreen {
 	}
 	
 	@Override protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-		System.out.println(mouseButton);
 		if (mouseButton == 1) {
 			identify(mouseX, mouseY);
 			if (currentlyDraggedIndex != -1) {
 				String id = lists.get(currentlyDraggedIndex).displayName;
 				lists.get(currentlyDraggedIndex).renderRect = !lists.get(currentlyDraggedIndex).renderRect;
 				configuration.setProperty(id + "_rect", configuration.getProperty(id + "_rect").equalsIgnoreCase("true") ? "false" : "true");
+				saveConfig();
+				currentlyDraggedIndex = -1;
+			}
+			return;
+		} else if (mouseButton == 2) {
+			identify(mouseX, mouseY);
+			if (currentlyDraggedIndex != -1) {
+				String id = lists.get(currentlyDraggedIndex).displayName;
+				lists.get(currentlyDraggedIndex).visible = !lists.get(currentlyDraggedIndex).visible;
+				configuration.setProperty(id + "_visible", configuration.getProperty(id + "_visible").equalsIgnoreCase("true") ? "false" : "true");
 				saveConfig();
 				currentlyDraggedIndex = -1;
 			}
@@ -141,15 +154,6 @@ public class InfoHud extends GuiScreen {
 			e.printStackTrace();
 		}
 	}
-
-	/**
-	 * Render the Info Hud Customization menu
-	 */
-	@Override public void drawScreen(int i, int j, float f) {
-		super.drawScreen(i, j, f);
-		drawHud();
-		drawString(TASmod.mc.fontRenderer, "Right-Click to hide rect", 2, 2, 0xFFFFFF);
-	}
 	
 	/**
 	 * Updates every tick
@@ -160,7 +164,7 @@ public class InfoHud extends GuiScreen {
 	}
 	
 	public boolean checkInit() {
-		if (configuration != null) return true;
+		if (configuration != null) return false;
 		/* Check whether already rendered before */
 		try {
 			configuration = new Properties();
@@ -173,27 +177,75 @@ public class InfoHud extends GuiScreen {
 			/* ====================== */
 			if (configuration.getProperty("tickrate_x", "err").equals("err")) setDefaults("tickrate");
 			lists.add(new InfoLabel("tickrate", Integer.parseInt(configuration.getProperty("tickrate_x")), Integer.parseInt(configuration.getProperty("tickrate_y")), Boolean.parseBoolean(configuration.getProperty("tickrate_visible")), Boolean.parseBoolean(configuration.getProperty("tickrate_rect")), () -> {
-				return "Tickrate: " + TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed];
+				return "Gamespeed: " + TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed];
+			}));
+			if (configuration.getProperty("xyz_x", "err").equals("err")) setDefaults("xyz");
+			lists.add(new InfoLabel("xyz", Integer.parseInt(configuration.getProperty("xyz_x")), Integer.parseInt(configuration.getProperty("xyz_y")), Boolean.parseBoolean(configuration.getProperty("xyz_visible")), Boolean.parseBoolean(configuration.getProperty("xyz_rect")), () -> {
+				if (TASmod.mc == null) return "";
+				if (TASmod.mc.thePlayer == null) return "";
+				return String.format("XYZ: %.2f %.2f %.2f", TASmod.mc.thePlayer.posX, TASmod.mc.thePlayer.posY, TASmod.mc.thePlayer.posZ);
+			}));
+			if (configuration.getProperty("precise_xyz_x", "err").equals("err")) setDefaults("precise_xyz");
+			lists.add(new InfoLabel("precise_xyz", Integer.parseInt(configuration.getProperty("precise_xyz_x")), Integer.parseInt(configuration.getProperty("precise_xyz_y")), Boolean.parseBoolean(configuration.getProperty("precise_xyz_visible")), Boolean.parseBoolean(configuration.getProperty("precise_xyz_rect")), () -> {
+				if (TASmod.mc == null) return "";
+				if (TASmod.mc.thePlayer == null) return "";
+				return String.format("Precise XYZ: %f %f %f", TASmod.mc.thePlayer.posX, TASmod.mc.thePlayer.posY, TASmod.mc.thePlayer.posZ);
+			}));
+			if (configuration.getProperty("chunk_xz_x", "err").equals("err")) setDefaults("chunk_xz");
+			lists.add(new InfoLabel("chunk_xz", Integer.parseInt(configuration.getProperty("chunk_xz_x")), Integer.parseInt(configuration.getProperty("chunk_xz_y")), Boolean.parseBoolean(configuration.getProperty("chunk_xz_visible")), Boolean.parseBoolean(configuration.getProperty("chunk_xz_rect")), () -> {
+				if (TASmod.mc == null) return "";
+				if (TASmod.mc.thePlayer == null) return "";
+				return String.format("Chunk: %d %d", TASmod.mc.thePlayer.chunkCoordX, TASmod.mc.thePlayer.chunkCoordZ);
+			}));
+			if (configuration.getProperty("worldseed_x", "err").equals("err")) setDefaults("worldseed");
+			lists.add(new InfoLabel("worldseed", Integer.parseInt(configuration.getProperty("worldseed_x")), Integer.parseInt(configuration.getProperty("worldseed_y")), Boolean.parseBoolean(configuration.getProperty("worldseed_visible")), Boolean.parseBoolean(configuration.getProperty("worldseed_rect")), () -> {
+				if (TASmod.mc == null) return "";
+				if (TASmod.mc.theWorld == null) return "";
+				return String.format("Worldseed: " + TASmod.mc.theWorld.getWorldSeed());
+			}));
+			if (configuration.getProperty("rngseed_x", "err").equals("err")) setDefaults("rngseed");
+			lists.add(new InfoLabel("rngseed", Integer.parseInt(configuration.getProperty("rngseed_x")), Integer.parseInt(configuration.getProperty("rngseed_y")), Boolean.parseBoolean(configuration.getProperty("rngseed_visible")), Boolean.parseBoolean(configuration.getProperty("rngseed_rect")), () -> {
+				return String.format("Randomness: " + SimpleRandomMod.seed);
+			}));
+			if (configuration.getProperty("velocity_x", "err").equals("err")) setDefaults("velocity");
+			lists.add(new InfoLabel("velocity", Integer.parseInt(configuration.getProperty("velocity_x")), Integer.parseInt(configuration.getProperty("velocity_y")), Boolean.parseBoolean(configuration.getProperty("velocity_visible")), Boolean.parseBoolean(configuration.getProperty("velocity_rect")), () -> {
+				if (TASmod.mc == null) return "";
+				if (TASmod.mc.thePlayer == null) return "";
+				return String.format("Velocity: %.2f %.2f %.2f", TASmod.mc.thePlayer.motionX, TASmod.mc.thePlayer.motionY, TASmod.mc.thePlayer.motionZ);
 			}));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return false;
+		return true;
 	}
 	
 	/**
 	 * Render the Info Hud only
 	 */
 	public void drawHud() {
-		for (InfoLabel label : lists) if (label.visible) drawRectWithText(label.renderText, label.x, label.y, label.renderRect);
+		if (TASmod.mc != null) if (!TASmod.mc.isDebugInfoEnabled()) for (InfoLabel label : lists) {
+			if (label.visible) {
+				drawRectWithText(label.renderText, label.x, label.y, label.renderRect);
+			} else if (TASmod.mc.currentScreen != null) {
+				if (TASmod.mc.currentScreen.getClass().getSimpleName().contains("InfoHud")) {
+					GL11.glPushMatrix();
+		         	GL11.glEnable(GL11.GL_BLEND);
+		         	GL11.glBlendFunc(770, 771);
+		         	TASmod.mc.fontRenderer.drawStringWithShadow(label.renderText, label.x + 2, label.y + 3, 0x40FFFFFF);
+		    		GL11.glDisable(GL11.GL_BLEND);
+		         	GL11.glPopMatrix();
+				}
+			}
+		}
 	}
 	
 	/**
 	 * Renders a Box with Text in it
 	 */
 	private void drawRectWithText(String text, int x, int y, boolean rect) {
-		if (rect) drawRect(x, y, x + TASmod.mc.fontRenderer.getStringWidth(text) + 4, y + 14, -2147483648);
+		if (rect) drawRect(x, y, x + TASmod.mc.fontRenderer.getStringWidth(text) + 4, y + 14, 0x80000000);
 		TASmod.mc.fontRenderer.drawStringWithShadow(text, x + 2, y + 3, 0xFFFFFF);
+		GL11.glEnable(3042 /*GL_BLEND*/);
 	}
 	
 }
