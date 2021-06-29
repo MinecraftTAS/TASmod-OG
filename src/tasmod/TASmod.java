@@ -6,6 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.Timer;
+import net.tasmod.infogui.InfoHud;
 import net.tasmod.recorder.Recorder;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
@@ -32,6 +33,9 @@ public final class TASmod {
 
 	/** Minecraft Instance obtained via Reflection */
 	public static Minecraft mc;
+	
+	/** The only Info Hud Instance :CsGun: */
+	public static InfoHud infoHud = new InfoHud();
 	
 	/**
 	 * Join a World and start the Recording
@@ -68,20 +72,28 @@ public final class TASmod {
 		}
 		/* Handle keybinds and tick advance */
         try {
-			if(net.tasmod.virtual.VirtualKeyboard.isKey51Down && !isPlayback()) TickrateChanger.slower();
-			if(net.tasmod.virtual.VirtualKeyboard.isKey52Down && !isPlayback()) TickrateChanger.faster();
+			if (VirtualKeyboard.isKey51Down && !isPlayback() && !_was51pressed) TickrateChanger.slower();
+			if (VirtualKeyboard.isKey52Down && !isPlayback() && !_was52pressed) TickrateChanger.faster();
+			_was51pressed = VirtualKeyboard.isKey51Down;
+			_was52pressed = VirtualKeyboard.isKey52Down;
+			if (Keyboard.isKeyDown(64) && !isPlayback()) TASmod.mc.displayGuiScreen(infoHud);
 			if ((_undoTickrate) ? !(_undoTickrate = !_undoTickrate) : false) {
 				TickrateChanger.updateTickrate(0f);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+        infoHud.tick();
 	}
 	
 	/** Temporary variable to avoid pressing a key twice */
 	private static boolean _was66pressed;
 	/** Temporary variable to avoid pressing a key twice */
 	private static boolean _was67pressed;
+	/** Temporary variable to avoid pressing a key twice */
+	private static boolean _was51pressed;
+	/** Temporary variable to avoid pressing a key twice */
+	private static boolean _was52pressed;
 	/** Temporary variable for tickrate zero to work */
 	private static boolean _undoTickrate;
 	

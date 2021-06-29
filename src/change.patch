@@ -532,7 +532,7 @@ diff -ruN src/minecraft/net/minecraft/src/GuiEnchantment.java newsrc/minecraft/n
 diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/minecraft/src/GuiIngame.java
 --- src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
-@@ -76,6 +76,18 @@
+@@ -76,6 +76,25 @@
                  renderPortalOverlay(f1, k, l);
              }
          }
@@ -546,6 +546,13 @@ diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/mi
 +            drawCenteredString(fontrenderer, net.tasmod.TASmod.getPlayback().ticksTotal + " Ticks", scaledresolution.getScaledWidth() / 2, scaledresolution.getScaledHeight() / 2 + (scaledresolution.getScaledHeight() / 14), 0xFFFFFF);
 +            drawString(fontrenderer, "Performed by: " + net.tasmod.TASmod.getPlayback().author, 5, scaledresolution.getScaledHeight() / 5 + 2, 0x0AFFFF);
 +            drawString(fontrenderer, "Hours spend on TAS: " + net.tasmod.TASmod.getPlayback().hoursOfWork, 5, scaledresolution.getScaledHeight() / 5 + 4 + fontrenderer.field_41063_b, 0x0AFFFF);
++        }
++        if (mc.theWorld != null) {
++        	if (mc.currentScreen != null) {
++        		if (mc.currentScreen.getClass().getSimpleName().contains("InfoHud")) net.tasmod.TASmod.infoHud.drawHud();
++        	} else {
++        		net.tasmod.TASmod.infoHud.drawHud();
++        	}
 +        }
 +        // End-Edit
          if(!mc.playerController.func_35643_e())

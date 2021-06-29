@@ -16,7 +16,7 @@ public class TickrateChanger {
 	/** Whether the game is currently in tick advance mode */
 	public static boolean isTickAdvance;
 	/** Selected index from array below */
-	public static int selectedGamespeed = 7;
+	public static int selectedGamespeed = 6;
 	/** Array of all available gamespeeds */
 	public static float[] availableGamespeeds = new float[] {
 		0.025f, // 0
@@ -25,11 +25,8 @@ public class TickrateChanger {
 		0.2f, // 3
 		0.4f, // 4
 		0.5f, // 5
-		0.75f, // 6
-		1f, // 7
-		1.25f, // 8
-		1.5f, // 9
-		2.0f // 10
+		1f, // 6
+		2.0f // 7
 	};
 	
 	/**
