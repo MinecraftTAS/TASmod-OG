@@ -13,6 +13,8 @@ import net.tasmod.Utils;
  */
 public class TickrateChanger {
  
+	
+	
 	/** Whether the game is currently in tick advance mode */
 	public static boolean isTickAdvance;
 	/** Selected index from array below */
@@ -28,6 +30,16 @@ public class TickrateChanger {
 		1f, // 6
 		2.0f // 7
 	};
+	
+	public static long timeOffset = 0L;
+	public static long timeSinceZero = System.currentTimeMillis();
+	public static long timeSinceTC = System.currentTimeMillis();
+	public static long fakeTimeSinceTC = System.currentTimeMillis();
+	public static long getMilliseconds() {
+		long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
+		time *= ((availableGamespeeds[selectedGamespeed] * 20.0f) / 20F);
+		return (long) (fakeTimeSinceTC + time);
+	}
 	
 	/**
 	 * Increases the gamespeed by one (see {@link #availableGamespeeds}).
@@ -72,6 +84,11 @@ public class TickrateChanger {
 	 * @throws Exception Throws exception whenever invalid reflection target is set
 	 */
 	public static void updateTickrate(float gamespeed) throws Exception {
+		if (gamespeed <= 0.02F) timeSinceZero = System.currentTimeMillis() - timeOffset;
+		
+		long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
+		fakeTimeSinceTC += (long) (time * ((gamespeed * 20.0f) / 20F));
+		timeSinceTC = System.currentTimeMillis() - timeOffset;
 		/* Get Field in Obfuscated or Non-Obfuscated Environment */
 		Field translateTableField;
 		try {

@@ -12,6 +12,7 @@ import java.util.concurrent.Callable;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.src.GuiScreen;
+import net.minecraft.src.KeyBinding;
 import net.tasmod.TASmod;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.tools.TickrateChanger;
@@ -212,6 +213,28 @@ public class InfoHud extends GuiScreen {
 				if (TASmod.mc == null) return "";
 				if (TASmod.mc.thePlayer == null) return "";
 				return String.format("Velocity: %.2f %.2f %.2f", TASmod.mc.thePlayer.motionX, TASmod.mc.thePlayer.motionY, TASmod.mc.thePlayer.motionZ);
+			}));
+			if (configuration.getProperty("sprinting_x", "err").equals("err")) setDefaults("sprinting");
+			lists.add(new InfoLabel("sprinting", Integer.parseInt(configuration.getProperty("sprinting_x")), Integer.parseInt(configuration.getProperty("sprinting_y")), Boolean.parseBoolean(configuration.getProperty("sprinting_visible")), Boolean.parseBoolean(configuration.getProperty("sprinting_rect")), () -> {
+				if (TASmod.mc == null) return "";
+				if (TASmod.mc.thePlayer == null) return "";
+				return "Sprinting Hint: " + (!TASmod.mc.thePlayer.isSprinting() ? ((TASmod.mc.thePlayer.sprintToggleTimer > 5) ? "Unpress" : "Press") : "Hold");
+			}));
+			if (configuration.getProperty("keystrokes_x", "err").equals("err")) setDefaults("keystrokes");
+			lists.add(new InfoLabel("keystrokes", Integer.parseInt(configuration.getProperty("keystrokes_x")), Integer.parseInt(configuration.getProperty("keystrokes_y")), Boolean.parseBoolean(configuration.getProperty("keystrokes_visible")), Boolean.parseBoolean(configuration.getProperty("keystrokes_rect")), () -> {
+				if (TASmod.mc == null) return "";
+				String out1 = TASmod.mc.currentScreen == TASmod.infoHud ? "Keybinds " : "";
+				for (KeyBinding binds : TASmod.mc.gameSettings.keyBindings) {
+					try {
+						if (binds.pressed) out1 += org.lwjgl.input.Keyboard.getKeyName(binds.keyCode) + " ";
+					} catch (Exception e3) {
+						
+					}
+				}
+				// Add left and right-click to the string if pressed.
+				if (TASmod.mc.gameSettings.keyBindAttack.pressed) out1 += "LC ";
+				if (TASmod.mc.gameSettings.keyBindUseItem.pressed) out1 += "RC ";
+				return out1;
 			}));
 		} catch (Exception e) {
 			e.printStackTrace();
