@@ -580,6 +580,20 @@ diff -ruN src/minecraft/net/minecraft/src/GuiEnchantment.java newsrc/minecraft/n
          field_40228_y = (ContainerEnchantment)inventorySlots;
      }
  
+@@ -183,10 +183,9 @@
+         if(!ItemStack.areItemStacksEqual(itemstack, field_40222_o))
+         {
+             field_40222_o = itemstack;
+-            do
+-            {
+-                field_40226_k += field_40230_x.nextInt(4) - field_40230_x.nextInt(4);
+-            } while(field_40229_i <= field_40226_k + 1.0F && field_40229_i >= field_40226_k - 1.0F);
++            // Causes a Deadlock, has to be replaced with highest possible number
++            field_40226_k += 3;
++            // End-Edit
+         }
+         field_40227_h++;
+         field_40225_j = field_40229_i;
 diff -ruN src/minecraft/net/minecraft/src/GuiIngame.java newsrc/minecraft/net/minecraft/src/GuiIngame.java
 --- src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
@@ -974,6 +988,32 @@ diff -ruN src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java newsrc
  
      public TileEntityEnchantmentTable()
      {
+@@ -42,17 +42,19 @@
+             field_40059_f += 0.1F;
+             if(field_40059_f < 0.5F || field_40064_r.nextInt(40) == 0)
+             {
+-                float f3 = field_40061_d;
+-                do
+-                {
+-                    field_40061_d += field_40064_r.nextInt(4) - field_40064_r.nextInt(4);
+-                } while(f3 == field_40061_d);
++            	// This line CAN be called, but is connected to rng (40 == 0) which can technically cause it never to run.
++//                float f3 = field_40061_d;
++//                do
++//                {
++//                    field_40061_d += field_40064_r.nextInt(4) - field_40064_r.nextInt(4);
++//                } while(f3 == field_40061_d);
++            	// End-Edit
+             }
+         } else
+         {
+             field_40066_q += 0.02F;
+             field_40059_f -= 0.1F;
+-        }
++        } 
+         for(; field_40069_h >= 3.141593F; field_40069_h -= 6.283185F) { }
+         for(; field_40069_h < -3.141593F; field_40069_h += 6.283185F) { }
+         for(; field_40066_q >= 3.141593F; field_40066_q -= 6.283185F) { }
 diff -ruN src/minecraft/net/minecraft/src/World.java newsrc/minecraft/net/minecraft/src/World.java
 --- src/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
 +++ newsrc/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
