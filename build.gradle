@@ -1,0 +1,3 @@
+plugins {
+    id 'mcpgradleog' version '1.0.0'
+}
