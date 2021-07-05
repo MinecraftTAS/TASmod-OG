@@ -9,6 +9,8 @@ import java.lang.reflect.Modifier;
 import java.time.Duration;
 import java.util.Properties;
 
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.StringTranslate;
 import net.tasmod.random.SimpleRandomMod;
@@ -287,6 +289,14 @@ public final class Utils {
 	    }
 	    input.close();
 	    return last;
+	}
+
+	public static int getOriginalX() {
+		return Mouse.getDX();
+	}
+	
+	public static int getOriginalY() {
+		return Mouse.getDY();
 	}
     
 }

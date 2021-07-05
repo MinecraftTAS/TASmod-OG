@@ -52,7 +52,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java
 diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/java/net/minecraft/src/EntityRenderer.java
 --- build/src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -692,29 +692,7 @@
+@@ -692,29 +692,6 @@
          Profiler.startSection("mouse");
          if(mc.inGameHasFocus)
          {
@@ -79,60 +79,17 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 -            {
 -                mc.thePlayer.setAngles(f3, f4 * (float)l);
 -            }
-+
          }
          Profiler.endSection();
          if(mc.skipRenderWorld)
-diff -ruN build/src/minecraft/net/minecraft/src/GuiEnchantment.java src/main/java/net/minecraft/src/GuiEnchantment.java
---- build/src/minecraft/net/minecraft/src/GuiEnchantment.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/GuiEnchantment.java	2021-01-01 00:00:00.000000000 +0100
-@@ -182,11 +182,9 @@
-         ItemStack itemstack = inventorySlots.getSlot(0).getStack();
-         if(!ItemStack.areItemStacksEqual(itemstack, field_40222_o))
-         {
--            field_40222_o = itemstack;
--            do
--            {
--                field_40226_k += field_40230_x.nextInt(4) - field_40230_x.nextInt(4);
--            } while(field_40229_i <= field_40226_k + 1.0F && field_40229_i >= field_40226_k - 1.0F);
-+            // Causes a Deadlock, has to be replaced with highest possible number
-+            field_40226_k += 3;
-+            // End-Edit
-         }
-         field_40227_h++;
-         field_40225_j = field_40229_i;
-diff -ruN build/src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java src/main/java/net/minecraft/src/TileEntityEnchantmentTable.java
---- build/src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/TileEntityEnchantmentTable.java	2021-01-01 00:00:00.000000000 +0100
-@@ -42,11 +42,13 @@
-             field_40059_f += 0.1F;
-             if(field_40059_f < 0.5F || field_40064_r.nextInt(40) == 0)
-             {
--                float f3 = field_40061_d;
--                do
--                {
--                    field_40061_d += field_40064_r.nextInt(4) - field_40064_r.nextInt(4);
--                } while(f3 == field_40061_d);
-+                // This line CAN be called, but is connected to rng (40 == 0) which can technically cause it never to run.
-+//                float f3 = field_40061_d;
-+//                do
-+//                {
-+//                    field_40061_d += field_40064_r.nextInt(4) - field_40064_r.nextInt(4);
-+//                } while(f3 == field_40061_d);
-+                // End-Edit
-             }
-         } else
-         {
 diff -ruN build/src/minecraft/net/minecraft/src/World.java src/main/java/net/minecraft/src/World.java
 --- build/src/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
-@@ -3452,6 +3452,9 @@
+@@ -3452,6 +3452,7 @@
      public Random setRandomSeed(int i, int j, int k)
      {
          long l = (long)i * 0x4f9939f508L + (long)j * 0x1ef1565bd5L + getWorldInfo().getRandomSeed() + (long)k;
-+        // Return a new Random instead of the worlds one
-+        Random rand = new Random();
-+        // End-Edit
++        Random rand = new Random(); // Return a new Random instead of the worlds one
          rand.setSeed(l);
          return rand;
      }

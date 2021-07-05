@@ -142,8 +142,8 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 -                mc.thePlayer.setAngles(f3, f4 * (float)l);
 -            }
 +
-+            int dx = Mouse.getDX();
-+            int dy = Mouse.getDY();
++            int dx = net.tasmod.Utils.getOriginalX();
++            int dy = net.tasmod.Utils.getOriginalY();
 +            net.tasmod.Utils.dX += dx;
 +            net.tasmod.Utils.dY += dy;
 +            

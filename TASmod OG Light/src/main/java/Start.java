@@ -64,7 +64,8 @@ public class Start
 			"net/minecraft/src/GuiContainerCreative",
 			"net/minecraft/src/GuiSlot",
 			"net/minecraft/src/GuiSlotStats",
-			"net/minecraft/src/MouseHelper"
+			"net/minecraft/src/MouseHelper",
+			"net/minecraft/src/EntityRenderer"
 	);
 	
 	
