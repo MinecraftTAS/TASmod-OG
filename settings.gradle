@@ -1,0 +1,7 @@
+pluginManagement {
+	repositories { 
+		mavenCentral()
+		maven { url "https://mgnet.work/repo/" }
+		maven { url "https://libraries.minecraft.net/" }
+	}
+}

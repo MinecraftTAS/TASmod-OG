@@ -1,4 +1,15 @@
-# Workspace
-mcp
-# In case you push while it is still doing something
-temp
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore build output directories
+build
+bin
+
+# Ignore Eclipse project files
+.classpath
+.project
+.settings
+.metadata 
+minecraft
+
+gradle/wrapper/gradle-wrapper.jar
