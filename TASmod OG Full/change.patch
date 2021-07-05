@@ -182,18 +182,6 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiCreateWorld.java src/main/jav
          } else
          if(guibutton.id == 3)
          {
-diff -ruN build/src/minecraft/net/minecraft/src/GuiEnchantment.java src/main/java/net/minecraft/src/GuiEnchantment.java
---- build/src/minecraft/net/minecraft/src/GuiEnchantment.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/GuiEnchantment.java	2021-01-01 00:00:00.000000000 +0100
-@@ -185,7 +185,7 @@
-             field_40222_o = itemstack;
-             do
-             {
--                field_40226_k += field_40230_x.nextInt(4) - field_40230_x.nextInt(4);
-+            	field_40226_k += field_40230_x.nextInt(4) - field_40230_x.nextInt(4);
-             } while(field_40229_i <= field_40226_k + 1.0F && field_40229_i >= field_40226_k - 1.0F);
-         }
-         field_40227_h++;
 diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net/minecraft/src/GuiIngame.java
 --- build/src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
@@ -335,26 +323,6 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiMultiplayer.java src/main/jav
          } else
          if(guibutton.id == 4)
          {
-diff -ruN build/src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java src/main/java/net/minecraft/src/TileEntityEnchantmentTable.java
---- build/src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/TileEntityEnchantmentTable.java	2021-01-01 00:00:00.000000000 +0100
-@@ -45,14 +45,14 @@
-                 float f3 = field_40061_d;
-                 do
-                 {
--                    field_40061_d += field_40064_r.nextInt(4) - field_40064_r.nextInt(4);
-+                	field_40061_d += field_40064_r.nextInt(4) - field_40064_r.nextInt(4);
-                 } while(f3 == field_40061_d);
-             }
-         } else
-         {
-             field_40066_q += 0.02F;
-             field_40059_f -= 0.1F;
--        }
-+        } 
-         for(; field_40069_h >= 3.141593F; field_40069_h -= 6.283185F) { }
-         for(; field_40069_h < -3.141593F; field_40069_h += 6.283185F) { }
-         for(; field_40066_q >= 3.141593F; field_40066_q -= 6.283185F) { }
 diff -ruN build/src/minecraft/net/minecraft/src/World.java src/main/java/net/minecraft/src/World.java
 --- build/src/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100

@@ -4,12 +4,18 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import org.lwjgl.opengl.Display;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.PlayerControllerCreative;
@@ -63,11 +69,11 @@ public final class Recorder {
 		this.mapFeatures = mapFeatures;
 		this.author = TASmod.mc.session.username;
 		this.file = new File(this.mc.mcDataDir, folderName + ".tas");
+		this.mc.gameSettings.saveOptions();
 		
 		/** Create a new File for the Recorder */
 		if (!this.file.exists()) this.file.createNewFile();
 		this.writer = new FileOutputStream(this.file, false);
-		
 		fileWriter = new Thread(new Runnable() {
 			
 			/**
@@ -85,6 +91,8 @@ public final class Recorder {
 					writer.write(("#    Gametype: " + Recorder.this.worldtype +  "                              #\n").getBytes(StandardCharsets.UTF_8));
 					writer.write(("#                 PLAYBACK FILE               #\n").getBytes(StandardCharsets.UTF_8));
 					writer.write(("###############################################\n").getBytes(StandardCharsets.UTF_8));
+					writer.write((Files.readAllLines(new File(mc.mcDataDir, "options.txt").toPath()).stream().collect(Collectors.joining("/r/n")) + "\n").getBytes(StandardCharsets.UTF_8));
+					writer.write((Display.isFullscreen() + "\n").getBytes(StandardCharsets.UTF_8));
 					writer.write(("Author: " + author + "\n").getBytes(StandardCharsets.UTF_8));
 					writer.write(("Date: " + Calendar.getInstance().getTimeInMillis() + "\n").getBytes(StandardCharsets.UTF_8));
 					

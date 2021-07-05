@@ -5,10 +5,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.PlayerControllerCreative;
@@ -64,10 +69,12 @@ public final class Replayer {
 		this.worldtype = Integer.parseInt(this.reader.readLine().split(": ")[1].split(" ")[0]);
 		this.reader.readLine();
 		this.reader.readLine();
+		Files.write(new File(mc.mcDataDir, "options.txt").toPath(), Arrays.asList(this.reader.readLine().split("/r/n")), StandardOpenOption.CREATE);
+		if (Display.isFullscreen() != Boolean.parseBoolean(this.reader.readLine())) TASmod.mc.toggleFullscreen();
+		this.mc.gameSettings.loadOptions();
 		this.author = this.reader.readLine().split("Author: ")[1];
 		this.startingTime = Long.parseLong(this.reader.readLine().split(": ")[1]);
 		this.hoursOfWork = Duration.ofMillis(lastInputTime - startingTime).toHours();
-		
 		this.fileReader = new Thread(new Runnable() {
 			
 			/**
