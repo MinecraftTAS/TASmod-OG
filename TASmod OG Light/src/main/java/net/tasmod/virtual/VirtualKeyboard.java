@@ -4,11 +4,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 import net.tasmod.TASmod;
 import net.tasmod.Utils;
-import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
 
 /**
  * This is an interface of the Keyboard Class.

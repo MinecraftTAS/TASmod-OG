@@ -5,12 +5,10 @@ import java.io.IOException;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.Timer;
 import net.tasmod.infogui.InfoHud;
 import net.tasmod.recorder.Recorder;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
-import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
 

@@ -1,17 +1,9 @@
 package net.tasmod;
 
-import java.awt.BorderLayout;
-import java.awt.Dialog;
 import java.awt.FileDialog;
 import java.awt.Frame;
-import java.awt.Window.Type;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.UIManager;
 
 import net.minecraft.client.Minecraft;
 import net.tasmod.replayer.Replayer;

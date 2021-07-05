@@ -2,9 +2,6 @@ package net.tasmod.tools;
 
 import java.lang.reflect.Field;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.Timer;
-import net.tasmod.TASmod;
 import net.tasmod.Utils;
 
 /**
@@ -38,7 +35,7 @@ public class TickrateChanger {
 	public static long getMilliseconds() {
 		long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
 		time *= ((availableGamespeeds[selectedGamespeed] * 20.0f) / 20F);
-		return (long) (fakeTimeSinceTC + time);
+		return fakeTimeSinceTC + time;
 	}
 	
 	/**

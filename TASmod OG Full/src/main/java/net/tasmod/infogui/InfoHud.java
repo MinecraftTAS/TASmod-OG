@@ -11,6 +11,7 @@ import java.util.concurrent.Callable;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.KeyBinding;
 import net.tasmod.TASmod;
@@ -246,7 +247,7 @@ public class InfoHud extends GuiScreen {
 	 * Render the Info Hud only
 	 */
 	public void drawHud() {
-		if (TASmod.mc != null) if (!TASmod.mc.isDebugInfoEnabled()) for (InfoLabel label : lists) {
+		if (TASmod.mc != null) if (!Minecraft.isDebugInfoEnabled()) for (InfoLabel label : lists) {
 			if (label.visible) {
 				drawRectWithText(label.renderText, label.x, label.y, label.renderRect);
 			} else if (TASmod.mc.currentScreen != null) {

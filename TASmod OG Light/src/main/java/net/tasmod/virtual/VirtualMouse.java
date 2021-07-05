@@ -6,7 +6,6 @@ import java.util.Queue;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import net.tasmod.TASmod;
 import net.tasmod.Utils;
 
 /**

@@ -3,8 +3,6 @@ package net.tasmod;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import org.lwjgl.input.Mouse;
-
 import net.minecraft.client.Minecraft;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
