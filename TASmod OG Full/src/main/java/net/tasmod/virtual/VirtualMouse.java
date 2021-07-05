@@ -226,7 +226,7 @@ public class VirtualMouse {
 	 * isButtonDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Mouse)
 	 *
 	 * Update: ._. This is frame based and messes up Mouse Inputs entirely.
-	 * Solution: Yeet this, and do a lazy play in next()
+	 * Solution: Yeet this, and do a lazy play in next(). 
 	 * Problem with that is, that officially left and right clicking in all Slot Menus (Singleplayer, Stats, Texture Pack, etc) is working a bit less.
 	public final static boolean isButtonDown(final int i) {
 		if (!hack) {

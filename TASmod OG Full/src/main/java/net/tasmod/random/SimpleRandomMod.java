@@ -2,9 +2,6 @@ package net.tasmod.random;
 
 import java.util.Random;
 
-import net.minecraft.src.MathHelper;
-import net.tasmod.Utils;
-
 /**
  * Hijacked Random, that uses a global seed
  * 

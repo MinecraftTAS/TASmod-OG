@@ -1,30 +1,15 @@
 diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/net/minecraft/client/Minecraft.java
 --- build/src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
-@@ -108,6 +108,8 @@
- import net.minecraft.src.WorldProvider;
- import net.minecraft.src.WorldRenderer;
- import net.minecraft.src.WorldSettings;
-+import net.tasmod.TASmod;
-+
- import org.lwjgl.LWJGLException;
- import org.lwjgl.input.Controllers;
- import org.lwjgl.input.Keyboard;
-@@ -678,6 +680,13 @@
+@@ -678,6 +678,7 @@
          }
          long l = System.nanoTime();
          Profiler.startSection("tick");
-+        // Call TASmod Render/Gameloop Tick before runTick() to be able to hijack that
-+        try {
-+            TASmod.render();
-+        } catch (Exception e) {
-+            e.printStackTrace();
-+        }
-+        // End-Edit
++        net.tasmod.TASmod.render(); // Call TASmod Render/Gameloop Tick before runTick() to be able to hijack that
          for(int i = 0; i < timer.elapsedTicks; i++)
          {
              ticksRan++;
-@@ -1313,6 +1322,24 @@
+@@ -1313,6 +1314,24 @@
                  currentScreen.updateScreen();
              }
          }
@@ -49,36 +34,24 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          if(currentScreen == null || currentScreen.allowUserInput)
          {
              Profiler.endStartSection("mouse");
-@@ -1540,6 +1567,13 @@
+@@ -1540,6 +1559,7 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
-+        // Tick the TASmod
-+        try {
-+            net.tasmod.TASmod.tick();
-+        } catch (java.io.IOException e) {
-+            e.printStackTrace();
-+        }
-+        // End-Edit
++        net.tasmod.TASmod.tick(); // Tick the TASmod
      }
  
      private void forceReload()
 diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java/net/minecraft/src/ChunkProvider.java
 --- build/src/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
-@@ -93,6 +93,17 @@
+@@ -93,6 +93,11 @@
          Chunk chunk = (Chunk)chunkMap.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(i, j));
          if(chunk == null)
          {
 +            // Turn off all chunk generating from the rendering methods
-+            final StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
 +            boolean check = false;
-+            for (final StackTraceElement stackTraceElement : stacktrace) {
-+                if (stackTraceElement.getMethodName().equals("runTick") || stackTraceElement.getMethodName().contains("changeWorld")) {
-+                    check = true;
-+                    break;
-+                }
-+            }
++            for (final StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) if (stackTraceElement.getMethodName().equals("runTick") || stackTraceElement.getMethodName().contains("changeWorld")) check = true;
 +            if (!check) return emptyChunk;
 +            // End-Edit
              return loadChunk(i, j);
@@ -212,11 +185,8 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiCreateWorld.java src/main/jav
 diff -ruN build/src/minecraft/net/minecraft/src/GuiEnchantment.java src/main/java/net/minecraft/src/GuiEnchantment.java
 --- build/src/minecraft/net/minecraft/src/GuiEnchantment.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/GuiEnchantment.java	2021-01-01 00:00:00.000000000 +0100
-@@ -183,9 +183,10 @@
-         if(!ItemStack.areItemStacksEqual(itemstack, field_40222_o))
-         {
+@@ -185,7 +185,7 @@
              field_40222_o = itemstack;
-+            field_40222_o = itemstack;
              do
              {
 -                field_40226_k += field_40230_x.nextInt(4) - field_40230_x.nextInt(4);
@@ -256,36 +226,25 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net
 diff -ruN build/src/minecraft/net/minecraft/src/GuiIngameMenu.java src/main/java/net/minecraft/src/GuiIngameMenu.java
 --- build/src/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
-@@ -4,8 +4,10 @@
- 
- package net.minecraft.src;
- 
-+import java.io.IOException;
- import java.util.List;
- import net.minecraft.client.Minecraft;
-+import net.tasmod.TASmod;
- 
- // Referenced classes of package net.minecraft.src:
- //            GuiScreen, GuiButton, StatCollector, GuiOptions, 
-@@ -29,7 +31,9 @@
+@@ -29,7 +29,9 @@
          updateCounter2 = 0;
          controlList.clear();
          byte byte0 = -16;
 -        controlList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + byte0, "Save and quit to title"));
 +        // Change the message of the Disconnect Button
-+        controlList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + byte0, TASmod.isRecording() ? "End Recording and Quit" : "Save and quit to title"));
++        controlList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + byte0, net.tasmod.TASmod.isRecording() ? "End Recording and Quit" : "Save and quit to title"));
 +        // End-Edit
          if(mc.isMultiplayerWorld())
          {
              ((GuiButton)controlList.get(0)).displayString = "Disconnect";
-@@ -48,6 +52,13 @@
+@@ -48,6 +50,13 @@
          }
          if(guibutton.id == 1)
          {
 +            // End the recording when leaving a world
 +            try {
-+                if (TASmod.isRecording()) TASmod.endRecording();
-+            } catch (IOException e) {
++                if (net.tasmod.TASmod.isRecording()) net.tasmod.TASmod.endRecording();
++            } catch (Exception e) {
 +                e.printStackTrace();
 +            }
 +            // End-Edit

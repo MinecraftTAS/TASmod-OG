@@ -55,7 +55,7 @@ public final class TASmod {
 	 * Ticks all kinds of things
 	 * @throws IOException Unexpected File End
 	 */
-	public static final void tick() throws IOException {
+	public static final void tick() {
 		/* Tick Recording/Playback if needed */
 		if (recording != null) recording.tick();
 		if (playback != null) playback.tick();
@@ -97,18 +97,22 @@ public final class TASmod {
 	 * Ticks frame based stuff.
 	 * @throws Exception Throws Exception whenever something bad happens
 	 */
-	public static final void render() throws Exception {
-		if (!_was51pressed && Keyboard.isKeyDown(51)) TickrateChanger.slower();
-		if (!_was52pressed && Keyboard.isKeyDown(52)) TickrateChanger.faster();
-		_was51pressed = Keyboard.isKeyDown(51);
-		_was52pressed = Keyboard.isKeyDown(52);
-		if (Keyboard.isKeyDown(66) && !_was66pressed) TickrateChanger.toggleTickadvance();
-		_was66pressed = Keyboard.isKeyDown(66);
-		if (Keyboard.isKeyDown(67) && !_was67pressed && !isPlayback() && TickrateChanger.isTickAdvance) {
-			TickrateChanger.updateTickrate(TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed]);
-			_undoTickrate = true;
+	public static final void render() {
+		try {
+			if (!_was51pressed && Keyboard.isKeyDown(51)) TickrateChanger.slower();
+			if (!_was52pressed && Keyboard.isKeyDown(52)) TickrateChanger.faster();
+			_was51pressed = Keyboard.isKeyDown(51);
+			_was52pressed = Keyboard.isKeyDown(52);
+			if (Keyboard.isKeyDown(66) && !_was66pressed) TickrateChanger.toggleTickadvance();
+			_was66pressed = Keyboard.isKeyDown(66);
+			if (Keyboard.isKeyDown(67) && !_was67pressed && !isPlayback() && TickrateChanger.isTickAdvance) {
+				TickrateChanger.updateTickrate(TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed]);
+				_undoTickrate = true;
+			}
+			_was67pressed = Keyboard.isKeyDown(67);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		_was67pressed = Keyboard.isKeyDown(67);
 	}
 	
 	/**

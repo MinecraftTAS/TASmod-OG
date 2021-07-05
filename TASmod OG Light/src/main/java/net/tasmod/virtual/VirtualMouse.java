@@ -127,6 +127,7 @@ public class VirtualMouse {
 	public final static int getX() {
 		return Utils.lastX;
 	}
+	
 	/**
 	 * This Method is being called at only one point, that one being EntityRenderer, which is frame based. To make it be tick based, we replace this value with one, that is based on Ticks
 	 */
