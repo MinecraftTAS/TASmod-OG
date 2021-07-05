@@ -72,11 +72,7 @@ public final class TASmod {
 		}
 		/* Handle keybinds and tick advance */
         try {
-			if (VirtualKeyboard.isKey51Down && !isPlayback() && !_was51pressed) TickrateChanger.slower();
-			if (VirtualKeyboard.isKey52Down && !isPlayback() && !_was52pressed) TickrateChanger.faster();
-			_was51pressed = VirtualKeyboard.isKey51Down;
-			_was52pressed = VirtualKeyboard.isKey52Down;
-			if (Keyboard.isKeyDown(64) && !isPlayback()) TASmod.mc.displayGuiScreen(infoHud);
+			if (Keyboard.isKeyDown(64)) TASmod.mc.displayGuiScreen(infoHud);
 			if ((_undoTickrate) ? !(_undoTickrate = !_undoTickrate) : false) {
 				TickrateChanger.updateTickrate(0f);
 			}
@@ -102,6 +98,10 @@ public final class TASmod {
 	 * @throws Exception Throws Exception whenever something bad happens
 	 */
 	public static final void render() throws Exception {
+		if (!_was51pressed && Keyboard.isKeyDown(51)) TickrateChanger.slower();
+		if (!_was52pressed && Keyboard.isKeyDown(52)) TickrateChanger.faster();
+		_was51pressed = Keyboard.isKeyDown(51);
+		_was52pressed = Keyboard.isKeyDown(52);
 		if (Keyboard.isKeyDown(66) && !_was66pressed) TickrateChanger.toggleTickadvance();
 		_was66pressed = Keyboard.isKeyDown(66);
 		if (Keyboard.isKeyDown(67) && !_was67pressed && !isPlayback() && TickrateChanger.isTickAdvance) {

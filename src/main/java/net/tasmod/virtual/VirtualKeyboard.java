@@ -88,7 +88,7 @@ public final class VirtualKeyboard {
 	
 	public final static boolean next() {
 		if (listen) {
-			if (currentlyListening != null) {
+			if (currentlyListening != null && currentlyListening.key != 51 && currentlyListening.key != 52 && currentlyListening.key != 66 && currentlyListening.key != 67) {
 				TASmod.keyboardTick(currentlyListening);
 			}
 			currentlyListening = new VirtualKeyEvent(-1, -1, false);
