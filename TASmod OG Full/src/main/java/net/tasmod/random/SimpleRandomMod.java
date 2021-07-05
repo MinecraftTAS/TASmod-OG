@@ -14,6 +14,7 @@ import net.tasmod.Utils;
  */
 public class SimpleRandomMod extends Random {
 	
+	private static final long serialVersionUID = -7004011273350186876L;
 	public static long seed = 0L;
 	
 	/**

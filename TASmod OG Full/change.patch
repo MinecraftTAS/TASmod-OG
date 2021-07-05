@@ -16,10 +16,10 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          Profiler.startSection("tick");
 +        // Call TASmod Render/Gameloop Tick before runTick() to be able to hijack that
 +        try {
-+        	TASmod.render();
++            TASmod.render();
 +        } catch (Exception e) {
-+			e.printStackTrace();
-+		}
++            e.printStackTrace();
++        }
 +        // End-Edit
          for(int i = 0; i < timer.elapsedTicks; i++)
          {
@@ -39,10 +39,10 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          }
 +        // Moved from EntityRenderer.java / basically just hooked up.
 +        if(inGameHasFocus) {
-+        	
++            
 +            float f1 = gameSettings.mouseSensitivity * 0.6F + 0.2F;
 +            float f2 = f1 * f1 * f1 * 8F;
-+        	
++            
 +            mouseHelper.mouseXYChange(); // Call the real one, but actually call the virtual one
 +            
 +            thePlayer.setAngles((float) mouseHelper.deltaX * f2, (float) mouseHelper.deltaY * f2);
@@ -140,7 +140,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 33 && net.tasmod.virtual.VirtualKeyboard.isKey61Down)
                              {
 -                                boolean flag = Keyboard.isKeyDown(42) | Keyboard.isKeyDown(54);
-+                                boolean flag = net.tasmod.virtual.VirtualKeyboard.isKey42Down | net.tasmod.virtual.VirtualKeyboard.isKey42Down;
++                                boolean flag = net.tasmod.virtual.VirtualKeyboard.isKey42Down | net.tasmod.virtual.VirtualKeyboard.isKey54Down;
                                  gameSettings.setOptionValue(EnumOptions.RENDER_DISTANCE, flag ? -1 : 1);
                              }
 -                            if(Keyboard.getEventKey() == 30 && Keyboard.isKeyDown(61))
@@ -203,11 +203,11 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          systemTime = System.currentTimeMillis();
 +        // Tick the TASmod
 +        try {
-+			net.tasmod.TASmod.tick();
-+		} catch (java.io.IOException e) {
-+			e.printStackTrace();
-+		}
-+		// End-Edit
++            net.tasmod.TASmod.tick();
++        } catch (java.io.IOException e) {
++            e.printStackTrace();
++        }
++        // End-Edit
      }
  
      private void forceReload()
@@ -266,17 +266,17 @@ diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java
          Chunk chunk = (Chunk)chunkMap.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(i, j));
          if(chunk == null)
          {
-+        	// Turn off all chunk generating from the rendering methods
-+        	final StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-+        	boolean check = false;
-+        	for (final StackTraceElement stackTraceElement : stacktrace) {
-+				if (stackTraceElement.getMethodName().equals("runTick") || stackTraceElement.getMethodName().contains("changeWorld")) {
-+					check = true;
-+					break;
-+				}
-+			}
-+        	if (!check) return emptyChunk;
-+        	// End-Edit
++            // Turn off all chunk generating from the rendering methods
++            final StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
++            boolean check = false;
++            for (final StackTraceElement stackTraceElement : stacktrace) {
++                if (stackTraceElement.getMethodName().equals("runTick") || stackTraceElement.getMethodName().contains("changeWorld")) {
++                    check = true;
++                    break;
++                }
++            }
++            if (!check) return emptyChunk;
++            // End-Edit
              return loadChunk(i, j);
          } else
          {
@@ -361,11 +361,11 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
          {
 -            GL11.glRotatef(entityliving.prevRotationPitch + (entityliving.rotationPitch - entityliving.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
 -            GL11.glRotatef(entityliving.prevRotationYaw + (entityliving.rotationYaw - entityliving.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
-+        	// This Code rotates the Camera matching the Players Yaw and Pitch
-+        	// For the Interpolation, this Camera will be using a custom coordinate that updates more than 20 times a second.
++            // This Code rotates the Camera matching the Players Yaw and Pitch
++            // For the Interpolation, this Camera will be using a custom coordinate that updates more than 20 times a second.
 +            GL11.glRotatef(net.tasmod.Utils.prevRotationPitch + (net.tasmod.Utils.rotationPitch - net.tasmod.Utils.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
 +            GL11.glRotatef(net.tasmod.Utils.prevRotationYaw + (net.tasmod.Utils.rotationYaw - net.tasmod.Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
-+        	// End-Edit
++            // End-Edit
          }
          GL11.glTranslatef(0.0F, f1, 0.0F);
          d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
@@ -374,8 +374,9 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
          if(mc.inGameHasFocus)
          {
 -            mc.mouseHelper.mouseXYChange();
--            float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
--            float f2 = f1 * f1 * f1 * 8F;
++            // Interpolation. Instead of rotating the player here, we do that in runTick() as if the Game would be running at 20 FPS. Instead we rotate a independent Variable.
+             float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
+             float f2 = f1 * f1 * f1 * 8F;
 -            float f3 = (float)mc.mouseHelper.deltaX * f2;
 -            float f4 = (float)mc.mouseHelper.deltaY * f2;
 -            int l = 1;
@@ -396,9 +397,6 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 -            {
 -                mc.thePlayer.setAngles(f3, f4 * (float)l);
 -            }
-+        	// Interpolation. Instead of rotating the player here, we do that in runTick() as if the Game would be running at 20 FPS. Instead we rotate a independent Variable.
-+        	float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
-+			float f2 = f1 * f1 * f1 * 8F;
 +
 +            int dx = Mouse.getDX();
 +            int dy = Mouse.getDY();
@@ -406,7 +404,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 +            net.tasmod.Utils.dY += dy;
 +            
 +            net.tasmod.Utils.setAngles(dx * f2, dy * f2);
-+			// End-Edit
++            // End-Edit
          }
          Profiler.endSection();
          if(mc.skipRenderWorld)
@@ -423,17 +421,6 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
          char c = '\310';
          if(mc.gameSettings.limitFramerate == 1)
          {
-@@ -1089,8 +1082,8 @@
-         enableLightmap(f);
-         if(rainXCoords == null)
-         {
--            rainXCoords = new float[1024];
--            rainYCoords = new float[1024];
-+            rainXCoords = new float[1024 /*GL_FRONT_LEFT*/];
-+            rainYCoords = new float[1024 /*GL_FRONT_LEFT*/];
-             for(int i = 0; i < 32; i++)
-             {
-                 for(int j = 0; j < 32; j++)
 diff -ruN build/src/minecraft/net/minecraft/src/Explosion.java src/main/java/net/minecraft/src/Explosion.java
 --- build/src/minecraft/net/minecraft/src/Explosion.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/Explosion.java	2021-01-01 00:00:00.000000000 +0100
@@ -566,16 +553,15 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiCreateWorld.java src/main/jav
 -            } else
 -            {
 -                mc.playerController = new PlayerControllerSP(mc);
--            }
--            mc.startWorld(folderName, textboxWorldName.getText(), new WorldSettings(l, i, field_35365_g, field_40232_h));
--            mc.displayGuiScreen(null);
 +            // This Edits the behaviour of the "Create World" Button. Instead of directly creating the Player and Loading the World, we start the Recording, which eventually does the exact same
 +            try {
-+				net.tasmod.TASmod.startRecording(l, field_35364_f.equals("creative") ? 1 : 0, field_40232_h, field_35365_g, folderName, textboxWorldName.getText());
-+			} catch (java.io.IOException e) {
-+				e.printStackTrace();
-+			}
-+			// End-Edit
++                net.tasmod.TASmod.startRecording(l, field_35364_f.equals("creative") ? 1 : 0, field_40232_h, field_35365_g, folderName, textboxWorldName.getText());
++            } catch (java.io.IOException e) {
++                e.printStackTrace();
+             }
+-            mc.startWorld(folderName, textboxWorldName.getText(), new WorldSettings(l, i, field_35365_g, field_40232_h));
+-            mc.displayGuiScreen(null);
++            // End-Edit
          } else
          if(guibutton.id == 3)
          {
@@ -614,7 +600,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net
          }
 +        // Render TAS Stuff here. Does not have any effect on minecraft.
 +        if (net.tasmod.TASmod.isPlayback() && net.tasmod.tools.TickrateChanger.isTickAdvance) {
-+        	GL11.glPushMatrix();
++            GL11.glPushMatrix();
 +            drawRect(0, scaledresolution.getScaledHeight() / 5, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight() / 5 * 4, 0xAA000000);
 +            GL11.glScaled(2, 2, 1);
 +            drawCenteredString(fontrenderer, "TAS in " + net.tasmod.Utils.formatDuration(java.time.Duration.ofMillis(net.tasmod.TASmod.getPlayback().ticksTotal * 50)) + "", scaledresolution.getScaledWidth() / 4, scaledresolution.getScaledHeight() / 4 - fontrenderer.field_41063_b / 2, 0xFFFFFF);
@@ -624,11 +610,11 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net
 +            drawString(fontrenderer, "Hours spend on TAS: " + net.tasmod.TASmod.getPlayback().hoursOfWork, 5, scaledresolution.getScaledHeight() / 5 + 4 + fontrenderer.field_41063_b, 0x0AFFFF);
 +        }
 +        if (mc.theWorld != null) {
-+        	if (mc.currentScreen != null) {
-+        		if (mc.currentScreen.getClass().getSimpleName().contains("InfoHud")) net.tasmod.TASmod.infoHud.drawHud();
-+        	} else {
-+        		net.tasmod.TASmod.infoHud.drawHud();
-+        	}
++            if (mc.currentScreen != null) {
++                if (mc.currentScreen.getClass().getSimpleName().contains("InfoHud")) net.tasmod.TASmod.infoHud.drawHud();
++            } else {
++                net.tasmod.TASmod.infoHud.drawHud();
++            }
 +        }
 +        // End-Edit
          if(!mc.playerController.func_35643_e())
@@ -663,13 +649,13 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiIngameMenu.java src/main/java
          }
          if(guibutton.id == 1)
          {
-+        	// End the recording when leaving a world
-+			try {
-+				if (TASmod.isRecording()) TASmod.endRecording();
-+			} catch (IOException e) {
-+				e.printStackTrace();
-+			}
-+        	// End-Edit
++            // End the recording when leaving a world
++            try {
++                if (TASmod.isRecording()) TASmod.endRecording();
++            } catch (IOException e) {
++                e.printStackTrace();
++            }
++            // End-Edit
              mc.statFileWriter.readStat(StatList.leaveGameStat, 1);
              if(mc.isMultiplayerWorld())
              {
@@ -701,42 +687,41 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiMultiplayer.java src/main/jav
 -            {
 -                serverList.add(ServerNBTStorage.createServerNBTStorage((NBTTagCompound)nbttaglist.tagAt(i)));
 -            }
-+    	// Instead of Loading a List of servers from the servers.dat File, we browse the .minecraft directory for .tas Files and Add them to the List instead
-+    	for (File f : mc.mcDataDir.listFiles(new FilenameFilter() {
++        // Instead of Loading a List of servers from the servers.dat File, we browse the .minecraft directory for .tas Files and Add them to the List instead
++        for (File f : mc.mcDataDir.listFiles(new FilenameFilter() {
  
--        }
++            @Override
++            public boolean accept(File dir, String name) {
++                return name.toLowerCase().endsWith(".tas");
++            }
++        })) {
++            try {
++                BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
++
++                reader.readLine();
++                reader.readLine();
++
++                ServerNBTStorage storage = new ServerNBTStorage(f.getName().split(".tas")[0], Long.parseLong(reader.readLine().split(": ")[1].split(" ")[0]) + "");
++
++                boolean hardcore = Boolean.parseBoolean(reader.readLine().split(": ")[1].split(" ")[0]);
++                boolean mapFeatures = Boolean.parseBoolean(reader.readLine().split(": ")[1].split(" ")[0]);
++                int worldtype = Integer.parseInt(reader.readLine().split(": ")[1].split(" ")[0]);
++                reader.close();
++
++                storage.motd = (worldtype == 1 ? "Creative, " : (hardcore ? "Hardcore, " : "Survival, ")) + (mapFeatures ? "with Structures" : "without Structures");
++                storage.lag = 420691337L;
++                storage.playerCount = f.getName();
++                storage.polled = true;
++                serverList.add(storage);
++            } catch(Exception exception) {
++                exception.printStackTrace();
++            }
+         }
 -        catch(Exception exception)
 -        {
 -            exception.printStackTrace();
 -        }
-+    		@Override
-+    		public boolean accept(File dir, String name) {
-+    			return name.toLowerCase().endsWith(".tas");
-+    		}
-+    	})) {
-+    		try {
-+    			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
-+
-+    			reader.readLine();
-+    			reader.readLine();
-+
-+    			ServerNBTStorage storage = new ServerNBTStorage(f.getName().split(".tas")[0], Long.parseLong(reader.readLine().split(": ")[1].split(" ")[0]) + "");
-+
-+    			boolean hardcore = Boolean.parseBoolean(reader.readLine().split(": ")[1].split(" ")[0]);
-+    			boolean mapFeatures = Boolean.parseBoolean(reader.readLine().split(": ")[1].split(" ")[0]);
-+    			int worldtype = Integer.parseInt(reader.readLine().split(": ")[1].split(" ")[0]);
-+    			reader.close();
-+
-+    			storage.motd = (worldtype == 1 ? "Creative, " : (hardcore ? "Hardcore, " : "Survival, ")) + (mapFeatures ? "with Structures" : "without Structures");
-+    			storage.lag = 420691337L;
-+    			storage.playerCount = f.getName();
-+    			storage.polled = true;
-+    			serverList.add(storage);
-+	        } catch(Exception exception) {
-+	            exception.printStackTrace();
-+	        }
-+    	}
-+    	// End-Edit
++        // End-Edit
      }
  
      private void saveServerList()
@@ -756,17 +741,17 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiMultiplayer.java src/main/jav
 -                GuiYesNo guiyesno = new GuiYesNo(this, s1, s2, s3, s4, selectedServer);
 -                mc.displayGuiScreen(guiyesno);
 -            }
-+        	// Instead of deleting an entry from the servers.dat, with a warning gui popping up, we just delete the TAS File.
-+        	new File(mc.mcDataDir, ((ServerNBTStorage) serverList.get(selectedServer)).playerCount).delete();
-+        	mc.displayGuiScreen(new GuiMultiplayer(parentScreen));
-+			// End-Edit
++            // Instead of deleting an entry from the servers.dat, with a warning gui popping up, we just delete the TAS File.
++            new File(mc.mcDataDir, ((ServerNBTStorage) serverList.get(selectedServer)).playerCount).delete();
++            mc.displayGuiScreen(new GuiMultiplayer(parentScreen));
++            // End-Edit
          } else
          if(guibutton.id == 1)
          {
 -            joinServer(selectedServer);
-+        	// Start the TAS Playback instead of joining a Minecraft Server
-+        	net.tasmod.TASmod.startPlayback(((ServerNBTStorage) serverList.get(selectedServer)).playerCount.split(".tas")[0]);
-+        	// End-Edit
++            // Start the TAS Playback instead of joining a Minecraft Server
++            net.tasmod.TASmod.startPlayback(((ServerNBTStorage) serverList.get(selectedServer)).playerCount.split(".tas")[0]);
++            // End-Edit
          } else
          if(guibutton.id == 4)
          {
@@ -882,7 +867,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/MouseHelper.java src/main/java/n
      public void grabMouseCursor()
      {
 -        Mouse.setGrabbed(true);
-+    	net.tasmod.virtual.VirtualMouse.setGrabbed(true);
++        net.tasmod.virtual.VirtualMouse.setGrabbed(true);
          deltaX = 0;
          deltaY = 0;
      }
@@ -891,8 +876,8 @@ diff -ruN build/src/minecraft/net/minecraft/src/MouseHelper.java src/main/java/n
      {
 -        Mouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
 -        Mouse.setGrabbed(false);
-+    	net.tasmod.virtual.VirtualMouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
-+    	net.tasmod.virtual.VirtualMouse.setGrabbed(false);
++        net.tasmod.virtual.VirtualMouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
++        net.tasmod.virtual.VirtualMouse.setGrabbed(false);
      }
  
      public void mouseXYChange()
@@ -1008,13 +993,13 @@ diff -ruN build/src/minecraft/net/minecraft/src/TileEntityEnchantmentTable.java 
 -                {
 -                    field_40061_d += field_40064_r.nextInt(4) - field_40064_r.nextInt(4);
 -                } while(f3 == field_40061_d);
-+            	// This line CAN be called, but is connected to rng (40 == 0) which can technically cause it never to run.
++                // This line CAN be called, but is connected to rng (40 == 0) which can technically cause it never to run.
 +//                float f3 = field_40061_d;
 +//                do
 +//                {
 +//                    field_40061_d += field_40064_r.nextInt(4) - field_40064_r.nextInt(4);
 +//                } while(f3 == field_40061_d);
-+            	// End-Edit
++                // End-Edit
              }
          } else
          {
@@ -1076,15 +1061,6 @@ diff -ruN build/src/minecraft/net/minecraft/src/World.java src/main/java/net/min
          isNewWorld = false;
          worldAccesses = new ArrayList();
          collidingBoundingBoxes = new ArrayList();
-@@ -461,7 +461,7 @@
-     {
-         return getChunkFromChunkCoords(i >> 4, j >> 4);
-     }
--
-+    
-     public Chunk getChunkFromChunkCoords(int i, int j)
-     {
-         return chunkProvider.provideChunk(i, j);
 @@ -2806,7 +2806,7 @@
      public void randomDisplayUpdates(int i, int j, int k)
      {
@@ -1094,15 +1070,13 @@ diff -ruN build/src/minecraft/net/minecraft/src/World.java src/main/java/net/min
          for(int l = 0; l < 1000; l++)
          {
              int i1 = (i + rand.nextInt(byte0)) - rand.nextInt(byte0);
-@@ -3452,7 +3452,10 @@
+@@ -3452,6 +3452,9 @@
      public Random setRandomSeed(int i, int j, int k)
      {
          long l = (long)i * 0x4f9939f508L + (long)j * 0x1ef1565bd5L + getWorldInfo().getRandomSeed() + (long)k;
--        rand.setSeed(l);
-+    	// Return a new Random instead of the worlds one
-+    	Random rand = new Random();
++        // Return a new Random instead of the worlds one
++        Random rand = new Random();
 +        // End-Edit
-+    	rand.setSeed(l);
+         rand.setSeed(l);
          return rand;
      }
- 
