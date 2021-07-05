@@ -3,6 +3,8 @@ package net.tasmod;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.client.Minecraft;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
@@ -120,6 +122,7 @@ public final class Utils {
 		if (VirtualKeyboard.getEventKey() == 61) VirtualKeyboard.isKey61Down = VirtualKeyboard.getEventKeyState();
 		if (VirtualKeyboard.getEventKey() == 51) VirtualKeyboard.isKey51Down = VirtualKeyboard.getEventKeyState();
 		if (VirtualKeyboard.getEventKey() == 52) VirtualKeyboard.isKey52Down = VirtualKeyboard.getEventKeyState();
+		if (VirtualKeyboard.getEventKey() == 65) VirtualKeyboard.isKey65Down = VirtualKeyboard.getEventKeyState();
 	}
     
 }

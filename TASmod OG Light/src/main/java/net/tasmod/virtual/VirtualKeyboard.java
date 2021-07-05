@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import net.tasmod.TASmod;
+import net.tasmod.Utils;
 import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
 
 /**
@@ -64,7 +65,7 @@ public final class VirtualKeyboard {
 	public static boolean isKey37Down;
 	public static boolean isKey51Down;
 	public static boolean isKey52Down;
-	
+	public static boolean isKey65Down;
 	
 	/**
 	 * For the Playback Versions I have implemented an override key, that whenever you hold Left Alt, your inputs will be recognized
@@ -76,10 +77,12 @@ public final class VirtualKeyboard {
 			if (currentKeyEvent.state && currentKeyEvent.key == Keyboard.KEY_RMENU) {
 				TASmod.openTASPicker();
 			}
+			if (b) Utils.lazyKeyboard();
 			return b;
 		}
 		if (keyEventsForTick.isEmpty()) return false;
 		currentKeyEvent = keyEventsForTick.poll();
+		Utils.lazyKeyboard();
 		return true;
 	}
 
@@ -95,11 +98,10 @@ public final class VirtualKeyboard {
 		return currentKeyEvent.state;
 	}
 	
-	
 	/**
 	 * isKeyDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Keyboard)
 	 * Update: ._. This is frame based and messes up Mouse Inputs entirely.
-	 * Solution: Yeet this, and do a lazy play in runTick() and handleMouseInput() and drawScreen(). 
+	 * Solution: Yeet this, and do a lazy play in next()
 	 * Problem with that is, that officially left and right clicking in all Slot Menus (Singleplayer, Stats, Texture Pack, etc) is working a bit less.
 	public final static boolean isKeyDown(final int i) {
 		if (!hack) {
@@ -114,5 +116,18 @@ public final class VirtualKeyboard {
 		return false;
 	}
 	*/
+	public final static boolean isKeyDown(final int i) {
+		switch (i) {
+			case 61: return isKey61Down;
+			case 60: return isKey60Down;
+			case 54: return isKey54Down;
+			case 42: return isKey42Down;
+			case 37: return isKey37Down;
+			case 51: return isKey51Down;
+			case 52: return isKey52Down;
+			case 65: return isKey65Down;
+		}
+		throw new RuntimeException("Unhandled Key...");
+	}
 	
 }

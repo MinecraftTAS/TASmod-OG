@@ -6,6 +6,7 @@ import java.util.Queue;
 import org.lwjgl.input.Keyboard;
 
 import net.tasmod.TASmod;
+import net.tasmod.Utils;
 
 /**
  * This is an interface of the Keyboard Class.
@@ -59,24 +60,6 @@ public final class VirtualKeyboard {
 	public static boolean listen = false;
 	public static VirtualKeyEvent currentlyListening;
 	
-	/**
-	 * isKeyDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Keyboard)
-	 * Update: ._. This is frame based and messes up Mouse Inputs entirely.
-	 * Solution: Yeet this, and do a lazy play in runTick() and handleMouseInput() and drawScreen(). 
-	 * Problem with that is, that officially left and right clicking in all Slot Menus (Singleplayer, Stats, Texture Pack, etc) is working a bit less.
-	public final static boolean isKeyDown(final int i) {
-		if (!hack) {
-			final boolean val = Keyboard.isKeyDown(i);
-			if (listen) {
-				TASmod.keyboardTick(new VirtualKeyEvent(i, i, val));
-			}
-			return val;
-		}
-		for (final VirtualKeyEvent virtualKeyEvent : keyEventsForTick) 
-			if (virtualKeyEvent.key == i && virtualKeyEvent.state == true) return true;
-		return false;
-	}
-	*/
 	public static boolean isKey61Down;
 	public static boolean isKey60Down;
 	public static boolean isKey54Down;
@@ -84,7 +67,7 @@ public final class VirtualKeyboard {
 	public static boolean isKey37Down;
 	public static boolean isKey51Down;
 	public static boolean isKey52Down;
-	
+	public static boolean isKey65Down;
 	
 	public final static boolean next() {
 		if (listen) {
@@ -94,11 +77,13 @@ public final class VirtualKeyboard {
 			currentlyListening = new VirtualKeyEvent(-1, -1, false);
 		}
 		if (!hack) {
-			
-			return Keyboard.next();
+			boolean b = Keyboard.next();
+			if (b) Utils.lazyKeyboard();
+			return b;
 		}
 		if (keyEventsForTick.isEmpty()) return false;
 		currentKeyEvent = keyEventsForTick.poll();
+		Utils.lazyKeyboard();
 		return true;
 	}
 
@@ -133,6 +118,38 @@ public final class VirtualKeyboard {
 			return val;
 		}
 		return currentKeyEvent.state;
+	}
+	
+	/**
+	 * isKeyDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Keyboard)
+	 * Update: ._. This is frame based and messes up Mouse Inputs entirely.
+	 * Solution: Yeet this, and do a lazy play in next()
+	 * Problem with that is, that officially left and right clicking in all Slot Menus (Singleplayer, Stats, Texture Pack, etc) is working a bit less.
+	public final static boolean isKeyDown(final int i) {
+		if (!hack) {
+			final boolean val = Keyboard.isKeyDown(i);
+			if (listen) {
+				TASmod.keyboardTick(new VirtualKeyEvent(i, i, val));
+			}
+			return val;
+		}
+		for (final VirtualKeyEvent virtualKeyEvent : keyEventsForTick) 
+			if (virtualKeyEvent.key == i && virtualKeyEvent.state == true) return true;
+		return false;
+	}
+	*/
+	public final static boolean isKeyDown(final int i) {
+		switch (i) {
+			case 61: return isKey61Down;
+			case 60: return isKey60Down;
+			case 54: return isKey54Down;
+			case 42: return isKey42Down;
+			case 37: return isKey37Down;
+			case 51: return isKey51Down;
+			case 52: return isKey52Down;
+			case 65: return isKey65Down;
+		}
+		throw new RuntimeException("Unhandled Key...");
 	}
 	
 }

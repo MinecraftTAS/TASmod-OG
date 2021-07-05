@@ -40,7 +40,7 @@ public final class TASmod {
 	 * Ticks all kinds of things
 	 * @throws IOException Unexpected File End
 	 */
-	public static final void tick() throws IOException {
+	public static final void tick() {
 		/* Tick Playback if needed */
 		if (playback != null) playback.tick();
 		/* Run Code when MC Ticks the First Time */

@@ -80,28 +80,6 @@ public class VirtualMouse {
 	public static int dX;
 	public static int dY;
 	
-	/**
-	 * isButtonDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Mouse)
-	 *
-	 * Update: ._. This is frame based and messes up Mouse Inputs entirely.
-	 * Solution: Yeet this, and do a lazy play in runTick() and handleMouseInput() and drawScreen(). 
-	 * Problem with that is, that officially left and right clicking in all Slot Menus (Singleplayer, Stats, Texture Pack, etc) is working a bit less.
-	public final static boolean isButtonDown(final int i) {
-		if (!hack) {
-			boolean val = Mouse.isButtonDown(i);
-			if (listen) {
-				currentlyListening.eventButton = i;
-				currentlyListening.eventState = val;
-			}
-			return val;
-		}
-		for (final VirtualMouseEvent virtualMouseEvent : mouseEventsForTick) 
-			if (virtualMouseEvent.eventState == true && virtualMouseEvent.eventButton == i) return true;
-		return false;
-	}
-	 */
-	public static boolean isButton0Down;
-	
 	public final static boolean next() {
 		if (listen) {
 			if (currentlyListening != null) {
@@ -112,10 +90,13 @@ public class VirtualMouse {
 			}
 		}
 		if (!hack) {
-			return Mouse.next();
+			boolean b = Mouse.next();
+			if (b) Utils.lazyMouse();
+			return b;
 		}
 		if (mouseEventsForTick.isEmpty()) return false;
 		currentMouseEvents = mouseEventsForTick.poll();
+		Utils.lazyMouse();
 		return true;
 	}
 	
@@ -198,24 +179,17 @@ public class VirtualMouse {
 	}
 	
 	/**
-	 * This is a redirect. This alters the behavior of the Mouse. It is just not noticeable, and doesn't change anything at all. 
-	 * Why? Because getX would normally ask the Mouse Directly for its X Position, while getEventX would wait for the Game to catch that.
-	 * 
-	 * Update: There is actually something more funny to this, so, Mouse has a method called poll(), which is supposed to be called together with next().
-	 * Notch did not know that, so he left it out, and now getX and getY only updates whenever you call setGrabbed, which is being called apparently, very cool!
+	 * This Method is being called at only one point, that one being EntityRenderer, which is frame based. To make it be tick based, we replace this value with one, that is based on Ticks
 	 */
 	public final static int getX() {
-		return getEventX();
+		return Utils.lastX;
 	}
+	
 	/**
-	 * This is a redirect. This alters the behavior of the Mouse. It is just not noticeable, and doesn't change anything at all. 
-	 * Why? Because getY would normally ask the Mouse Directly for its Y Position, while getEventY would wait for the Game to catch that.
-	 	 * 
-	 * Update: There is actually something more funny to this, so, Mouse has a method called poll(), which is supposed to be called together with next().
-	 * Notch did not know that, so he left it out, and now getX and getY only updates whenever you call setGrabbed, which is being called apparently, very cool!
+	 * This Method is being called at only one point, that one being EntityRenderer, which is frame based. To make it be tick based, we replace this value with one, that is based on Ticks
 	 */
 	public final static int getY() {
-		return getEventY();
+		return Utils.lastY;
 	}
 	
 	/**
@@ -247,5 +221,34 @@ public class VirtualMouse {
 		}
 		return dY;
 	}
+	
+	/**
+	 * isButtonDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Mouse)
+	 *
+	 * Update: ._. This is frame based and messes up Mouse Inputs entirely.
+	 * Solution: Yeet this, and do a lazy play in next()
+	 * Problem with that is, that officially left and right clicking in all Slot Menus (Singleplayer, Stats, Texture Pack, etc) is working a bit less.
+	public final static boolean isButtonDown(final int i) {
+		if (!hack) {
+			boolean val = Mouse.isButtonDown(i);
+			if (listen) {
+				currentlyListening.eventButton = i;
+				currentlyListening.eventState = val;
+			}
+			return val;
+		}
+		for (final VirtualMouseEvent virtualMouseEvent : mouseEventsForTick) 
+			if (virtualMouseEvent.eventState == true && virtualMouseEvent.eventButton == i) return true;
+		return false;
+	}
+	 */
+	public final static boolean isButtonDown(final int i) {
+		switch (i) {
+			case 0: return isButton0Down;
+		}
+		throw new RuntimeException("Unhandled Key...");
+	}
+	
+	public static boolean isButton0Down;
 	
 }
