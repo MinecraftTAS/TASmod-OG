@@ -1,5 +1,5 @@
 plugins {
-    id 'mcpgradleog' version '1.0.0'
+    id 'mcpgradleog' version '1.0.1'
 }
 
 group = "net.tasmod"
