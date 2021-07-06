@@ -49,6 +49,21 @@ diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java
              return loadChunk(i, j);
          } else
          {
+diff -ruN build/src/minecraft/net/minecraft/src/EntityLiving.java src/main/java/net/minecraft/src/EntityLiving.java
+--- build/src/minecraft/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
+@@ -488,9 +488,9 @@
+             {
+                 double d = entity.posX - posX;
+                 double d1;
+-                for(d1 = entity.posZ - posZ; d * d + d1 * d1 < 0.0001D; d1 = (Math.random() - Math.random()) * 0.01D)
++                for(d1 = entity.posZ - posZ; d * d + d1 * d1 < 0.0001D; d1 = (Math.random()/* - Math.random() = 0*/) * 0.01D)
+                 {
+-                    d = (Math.random() - Math.random()) * 0.01D;
++                    d = (Math.random()/* - Math.random() = 0*/) * 0.01D; // Fix a deadlock
+                 }
+ 
+                 attackedAtYaw = (float)((Math.atan2(d1, d) * 180D) / 3.1415927410125732D) - rotationYaw;
 diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/java/net/minecraft/src/EntityRenderer.java
 --- build/src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
