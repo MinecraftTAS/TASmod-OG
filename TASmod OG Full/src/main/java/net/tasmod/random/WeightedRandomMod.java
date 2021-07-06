@@ -8,7 +8,7 @@ import java.util.Random;
  */
 public class WeightedRandomMod extends Random {
 	
-	private int intCalls = 0;
+	public static int intCalls = 0;
 	
 	@Override public boolean nextBoolean() { throw new RuntimeException("Method does not exist"); }
 	@Override public int nextInt() { throw new RuntimeException("Method does not exist"); }

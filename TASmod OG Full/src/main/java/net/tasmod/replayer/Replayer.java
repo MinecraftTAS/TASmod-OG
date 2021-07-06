@@ -21,6 +21,8 @@ import net.minecraft.src.PlayerControllerSP;
 import net.minecraft.src.WorldSettings;
 import net.tasmod.TASmod;
 import net.tasmod.Utils;
+import net.tasmod.random.SimpleRandomMod;
+import net.tasmod.random.WeightedRandomMod;
 import net.tasmod.tools.TickrateChanger;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
@@ -47,6 +49,7 @@ public final class Replayer {
 	public final long hoursOfWork;
 	public final long ticksTotal;
 	private final Thread fileReader;
+	private int currentTick;
 	
 	/** Mouse for next tick */
 	private String mouse;
@@ -69,6 +72,10 @@ public final class Replayer {
 		this.worldtype = Integer.parseInt(this.reader.readLine().split(": ")[1].split(" ")[0]);
 		this.reader.readLine();
 		this.reader.readLine();
+		
+		SimpleRandomMod.updateSeed(0L);
+		WeightedRandomMod.intCalls = 0;
+		
 		Files.write(new File(mc.mcDataDir, "options.txt").toPath(), Arrays.asList(this.reader.readLine().split("/r/n")), StandardOpenOption.CREATE);
 		if (Display.isFullscreen() != Boolean.parseBoolean(this.reader.readLine())) TASmod.mc.toggleFullscreen();
 		this.mc.gameSettings.loadOptions();
@@ -140,7 +147,8 @@ public final class Replayer {
 			}
 			shouldFreeze = false;
 		}
-		
+		SimpleRandomMod.updateSeed(currentTick);
+		this.currentTick++;
 	}
 	
 	private final void tickKeyboad() {

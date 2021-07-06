@@ -23,6 +23,9 @@ import net.minecraft.src.PlayerControllerSP;
 import net.minecraft.src.WorldSettings;
 import net.tasmod.TASmod;
 import net.tasmod.Utils;
+import net.tasmod.asm.WeightedRandomnessVisitor;
+import net.tasmod.random.SimpleRandomMod;
+import net.tasmod.random.WeightedRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse;
@@ -70,6 +73,9 @@ public final class Recorder {
 		this.author = TASmod.mc.session.username;
 		this.file = new File(this.mc.mcDataDir, folderName + ".tas");
 		this.mc.gameSettings.saveOptions();
+		
+		SimpleRandomMod.updateSeed(0L);
+		WeightedRandomMod.intCalls = 0;
 		
 		/** Create a new File for the Recorder */
 		if (!this.file.exists()) this.file.createNewFile();
@@ -176,6 +182,7 @@ public final class Recorder {
 		}
 		linesToPrint.add(String.format(Locale.US, "%.5f", mc.thePlayer.posX) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.posY) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.posZ) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.motionX) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.motionY) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.motionZ) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.rotationPitch % 360) + ":" + String.format(Locale.US, "%.5f", mc.thePlayer.rotationYaw % 360) + "\n");
 		this.currentTick++;
+		SimpleRandomMod.updateSeed(currentTick);
 	}
 	
 	/**
