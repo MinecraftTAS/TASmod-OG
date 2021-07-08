@@ -5,5 +5,3 @@ pluginManagement {
 		maven { url "https://libraries.minecraft.net/" }
 	}
 }
-include 'TASmod OG Full'
-include 'TASmod OG Light'

@@ -9,3 +9,8 @@ dependencies {
 	implementation 'net.bytebuddy:byte-buddy-agent:1.11.6'
 	implementation 'org.ow2.asm:asm:9.2'
 }
+
+javadoc {
+	exclude 'net/minecraft/**'
+	failOnError = false
+}
