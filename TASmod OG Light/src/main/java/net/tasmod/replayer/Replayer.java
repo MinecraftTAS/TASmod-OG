@@ -22,8 +22,8 @@ import net.tasmod.TASmod;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.random.WeightedRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
-import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse;
+import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
 
 /**
@@ -42,9 +42,6 @@ public final class Replayer {
 	private final Queue<String> linesRead = new LinkedList<String>();
 	private final Thread fileReader;
 	private int currentTick;
-	
-	/** Mouse for next tick */
-	private String mouse;
 	
 	/**
 	 * Loads a File and reads some ticks from it
@@ -106,8 +103,6 @@ public final class Replayer {
 	public final void startReplay() {
 		/* Delete World if it exists */
 		String worldName = new Random().nextLong() + "";
-		final File worldFile = new File(this.mc.mcDataDir, "saves" + File.separator + worldName);
-		
 		/* Join a new world */
 		this.mc.playerController = this.worldtype == 0 ? new PlayerControllerSP(this.mc) : new PlayerControllerCreative(this.mc);
 		this.mc.startWorld(worldName, worldName, new WorldSettings(this.worldseed, this.worldtype, mapFeatures, hardcore));

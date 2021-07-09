@@ -8,6 +8,7 @@ import java.util.Random;
  */
 public class WeightedRandomMod extends Random {
 	
+	private static final long serialVersionUID = -2110828922074304230L;
 	public static int intCalls = 0;
 	
 	@Override public boolean nextBoolean() { throw new RuntimeException("Method does not exist"); }

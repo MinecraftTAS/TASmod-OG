@@ -1,3 +1,4 @@
+package net.tasmod.main;
 import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;

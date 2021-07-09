@@ -10,6 +10,12 @@ dependencies {
 	implementation 'org.ow2.asm:asm:9.2'
 }
 
+jar { 
+    manifest {
+    	attributes("Main-Class": "net.tasmod.main.Start")
+    }
+}
+
 javadoc {
 	exclude 'net/minecraft/**'
 	failOnError = false

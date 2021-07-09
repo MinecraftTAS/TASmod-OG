@@ -1,3 +1,4 @@
+package net.tasmod.main;
 // this is needed for the sound engine to work with deobfuscated sourcecode without crashing
 
 public class me
