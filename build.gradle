@@ -1,6 +1,0 @@
-plugins {
-    id 'mcpgradleog' version '1.0.0'
-}
-
-group = "net.tasmod"
-version = "a1.0.0-SNAPSHOT"

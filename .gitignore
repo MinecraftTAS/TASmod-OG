@@ -12,4 +12,6 @@ bin
 .metadata 
 minecraft
 
-gradle/wrapper/gradle-wrapper.jar
+*.jar
+
+TASmod OG Installer/tasmod_data/

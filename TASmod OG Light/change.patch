@@ -1,0 +1,110 @@
+diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/net/minecraft/client/Minecraft.java
+--- build/src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
+@@ -1313,6 +1313,24 @@
+                 currentScreen.updateScreen();
+             }
+         }
++        // Moved from EntityRenderer.java / basically just hooked up.
++        if(inGameHasFocus) {
++            
++            float f1 = gameSettings.mouseSensitivity * 0.6F + 0.2F;
++            float f2 = f1 * f1 * f1 * 8F;
++            
++            mouseHelper.mouseXYChange(); // Call the real one, but actually call the virtual one
++            
++            thePlayer.setAngles((float) mouseHelper.deltaX * f2, (float) mouseHelper.deltaY * f2);
++            
++            net.tasmod.Utils.prevRotationPitch = thePlayer.prevRotationPitch;
++            net.tasmod.Utils.prevRotationYaw = thePlayer.prevRotationYaw;
++            net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
++            net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
++        }
++        net.tasmod.Utils.lastX = Mouse.getEventX();
++        net.tasmod.Utils.lastY = Mouse.getEventY();
++        // End-Edit
+         if(currentScreen == null || currentScreen.allowUserInput)
+         {
+             Profiler.endStartSection("mouse");
+@@ -1540,6 +1558,7 @@
+         }
+         Profiler.endSection();
+         systemTime = System.currentTimeMillis();
++        net.tasmod.TASmod.tick(); // Tick the TASmod
+     }
+ 
+     private void forceReload()
+diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java/net/minecraft/src/ChunkProvider.java
+--- build/src/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
+@@ -93,6 +93,11 @@
+         Chunk chunk = (Chunk)chunkMap.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(i, j));
+         if(chunk == null)
+         {
++            // Turn off all chunk generating from the rendering methods
++            boolean check = false;
++            for (final StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) if (stackTraceElement.getMethodName().equals("runTick") || stackTraceElement.getMethodName().contains("changeWorld")) check = true;
++            if (!check) return emptyChunk;
++            // End-Edit
+             return loadChunk(i, j);
+         } else
+         {
+diff -ruN build/src/minecraft/net/minecraft/src/EntityLiving.java src/main/java/net/minecraft/src/EntityLiving.java
+--- build/src/minecraft/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
+@@ -488,9 +488,9 @@
+             {
+                 double d = entity.posX - posX;
+                 double d1;
+-                for(d1 = entity.posZ - posZ; d * d + d1 * d1 < 0.0001D; d1 = (Math.random() - Math.random()) * 0.01D)
++                for(d1 = entity.posZ - posZ; d * d + d1 * d1 < 0.0001D; d1 = (Math.random()/* - Math.random() = 0*/) * 0.01D)
+                 {
+-                    d = (Math.random() - Math.random()) * 0.01D;
++                    d = (Math.random()/* - Math.random() = 0*/) * 0.01D; // Fix a deadlock
+                 }
+ 
+                 attackedAtYaw = (float)((Math.atan2(d1, d) * 180D) / 3.1415927410125732D) - rotationYaw;
+diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/java/net/minecraft/src/EntityRenderer.java
+--- build/src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
+@@ -692,29 +692,6 @@
+         Profiler.startSection("mouse");
+         if(mc.inGameHasFocus)
+         {
+-            mc.mouseHelper.mouseXYChange();
+-            float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
+-            float f2 = f1 * f1 * f1 * 8F;
+-            float f3 = (float)mc.mouseHelper.deltaX * f2;
+-            float f4 = (float)mc.mouseHelper.deltaY * f2;
+-            int l = 1;
+-            if(mc.gameSettings.invertMouse)
+-            {
+-                l = -1;
+-            }
+-            if(mc.gameSettings.smoothCamera)
+-            {
+-                smoothCamYaw += f3;
+-                smoothCamPitch += f4;
+-                float f5 = f - smoothCamPartialTicks;
+-                smoothCamPartialTicks = f;
+-                f3 = smoothCamFilterX * f5;
+-                f4 = smoothCamFilterY * f5;
+-                mc.thePlayer.setAngles(f3, f4 * (float)l);
+-            } else
+-            {
+-                mc.thePlayer.setAngles(f3, f4 * (float)l);
+-            }
+         }
+         Profiler.endSection();
+         if(mc.skipRenderWorld)
+diff -ruN build/src/minecraft/net/minecraft/src/World.java src/main/java/net/minecraft/src/World.java
+--- build/src/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
+@@ -3452,6 +3452,7 @@
+     public Random setRandomSeed(int i, int j, int k)
+     {
+         long l = (long)i * 0x4f9939f508L + (long)j * 0x1ef1565bd5L + getWorldInfo().getRandomSeed() + (long)k;
++        Random rand = new Random(); // Return a new Random instead of the worlds one
+         rand.setSeed(l);
+         return rand;
+     }

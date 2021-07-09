@@ -1,0 +1,351 @@
+diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/net/minecraft/client/Minecraft.java
+--- build/src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
+@@ -678,6 +678,7 @@
+         }
+         long l = System.nanoTime();
+         Profiler.startSection("tick");
++        net.tasmod.TASmod.render(); // Call TASmod Render/Gameloop Tick before runTick() to be able to hijack that
+         for(int i = 0; i < timer.elapsedTicks; i++)
+         {
+             ticksRan++;
+@@ -1313,6 +1314,24 @@
+                 currentScreen.updateScreen();
+             }
+         }
++        // Moved from EntityRenderer.java / basically just hooked up.
++        if(inGameHasFocus) {
++            
++            float f1 = gameSettings.mouseSensitivity * 0.6F + 0.2F;
++            float f2 = f1 * f1 * f1 * 8F;
++            
++            mouseHelper.mouseXYChange(); // Call the real one, but actually call the virtual one
++            
++            thePlayer.setAngles((float) mouseHelper.deltaX * f2, (float) mouseHelper.deltaY * f2);
++            
++            net.tasmod.Utils.prevRotationPitch = thePlayer.prevRotationPitch;
++            net.tasmod.Utils.prevRotationYaw = thePlayer.prevRotationYaw;
++            net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
++            net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
++        }
++        net.tasmod.Utils.lastX = Mouse.getEventX();
++        net.tasmod.Utils.lastY = Mouse.getEventY();
++        // End-Edit
+         if(currentScreen == null || currentScreen.allowUserInput)
+         {
+             Profiler.endStartSection("mouse");
+@@ -1540,6 +1559,7 @@
+         }
+         Profiler.endSection();
+         systemTime = System.currentTimeMillis();
++        net.tasmod.TASmod.tick(); // Tick the TASmod
+     }
+ 
+     private void forceReload()
+diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java/net/minecraft/src/ChunkProvider.java
+--- build/src/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
+@@ -93,6 +93,11 @@
+         Chunk chunk = (Chunk)chunkMap.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(i, j));
+         if(chunk == null)
+         {
++            // Turn off all chunk generating from the rendering methods
++            boolean check = false;
++            for (final StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) if (stackTraceElement.getMethodName().equals("runTick") || stackTraceElement.getMethodName().contains("changeWorld")) check = true;
++            if (!check) return emptyChunk;
++            // End-Edit
+             return loadChunk(i, j);
+         } else
+         {
+diff -ruN build/src/minecraft/net/minecraft/src/EntityLiving.java src/main/java/net/minecraft/src/EntityLiving.java
+--- build/src/minecraft/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
+@@ -488,9 +488,9 @@
+             {
+                 double d = entity.posX - posX;
+                 double d1;
+-                for(d1 = entity.posZ - posZ; d * d + d1 * d1 < 0.0001D; d1 = (Math.random() - Math.random()) * 0.01D)
++                for(d1 = entity.posZ - posZ; d * d + d1 * d1 < 0.0001D; d1 = (Math.random()/* - Math.random() = 0*/) * 0.01D)
+                 {
+-                    d = (Math.random() - Math.random()) * 0.01D;
++                    d = (Math.random()/* - Math.random() = 0*/) * 0.01D; // Fix a deadlock
+                 }
+ 
+                 attackedAtYaw = (float)((Math.atan2(d1, d) * 180D) / 3.1415927410125732D) - rotationYaw;
+diff -ruN build/src/minecraft/net/minecraft/src/EntityPlayerSP.java src/main/java/net/minecraft/src/EntityPlayerSP.java
+--- build/src/minecraft/net/minecraft/src/EntityPlayerSP.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/EntityPlayerSP.java	2021-01-01 00:00:00.000000000 +0100
+@@ -25,7 +25,7 @@
+ 
+     public MovementInput movementInput;
+     protected Minecraft mc;
+-    protected int sprintToggleTimer;
++    public int sprintToggleTimer;
+     public int sprintingTicksLeft;
+     public float renderArmYaw;
+     public float renderArmPitch;
+diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/java/net/minecraft/src/EntityRenderer.java
+--- build/src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
+@@ -396,8 +396,11 @@
+         }
+         if(!mc.gameSettings.debugCamEnable)
+         {
+-            GL11.glRotatef(entityliving.prevRotationPitch + (entityliving.rotationPitch - entityliving.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
+-            GL11.glRotatef(entityliving.prevRotationYaw + (entityliving.rotationYaw - entityliving.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++            // This Code rotates the Camera matching the Players Yaw and Pitch
++            // For the Interpolation, this Camera will be using a custom coordinate that updates more than 20 times a second.
++            GL11.glRotatef(net.tasmod.Utils.prevRotationPitch + (net.tasmod.Utils.rotationPitch - net.tasmod.Utils.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
++            GL11.glRotatef(net.tasmod.Utils.prevRotationYaw + (net.tasmod.Utils.rotationYaw - net.tasmod.Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++            // End-Edit
+         }
+         GL11.glTranslatef(0.0F, f1, 0.0F);
+         d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
+@@ -692,29 +695,17 @@
+         Profiler.startSection("mouse");
+         if(mc.inGameHasFocus)
+         {
+-            mc.mouseHelper.mouseXYChange();
++            // Interpolation. Instead of rotating the player here, we do that in runTick() as if the Game would be running at 20 FPS. Instead we rotate a independent Variable.
+             float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
+             float f2 = f1 * f1 * f1 * 8F;
+-            float f3 = (float)mc.mouseHelper.deltaX * f2;
+-            float f4 = (float)mc.mouseHelper.deltaY * f2;
+-            int l = 1;
+-            if(mc.gameSettings.invertMouse)
+-            {
+-                l = -1;
+-            }
+-            if(mc.gameSettings.smoothCamera)
+-            {
+-                smoothCamYaw += f3;
+-                smoothCamPitch += f4;
+-                float f5 = f - smoothCamPartialTicks;
+-                smoothCamPartialTicks = f;
+-                f3 = smoothCamFilterX * f5;
+-                f4 = smoothCamFilterY * f5;
+-                mc.thePlayer.setAngles(f3, f4 * (float)l);
+-            } else
+-            {
+-                mc.thePlayer.setAngles(f3, f4 * (float)l);
+-            }
++
++            int dx = net.tasmod.Utils.getOriginalX();
++            int dy = net.tasmod.Utils.getOriginalY();
++            net.tasmod.Utils.dX += dx;
++            net.tasmod.Utils.dY += dy;
++            
++            net.tasmod.Utils.setAngles(dx * f2, dy * f2);
++            // End-Edit
+         }
+         Profiler.endSection();
+         if(mc.skipRenderWorld)
+diff -ruN build/src/minecraft/net/minecraft/src/GuiAchievement.java src/main/java/net/minecraft/src/GuiAchievement.java
+--- build/src/minecraft/net/minecraft/src/GuiAchievement.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiAchievement.java	2021-01-01 00:00:00.000000000 +0100
+@@ -34,7 +34,7 @@
+     {
+         achievementGetLocalText = StatCollector.translateToLocal("achievement.get");
+         achievementStatName = achievement.statName;
+-        achievementTime = System.currentTimeMillis();
++        achievementTime = net.tasmod.tools.TickrateChanger.getMilliseconds();
+         theAchievement = achievement;
+         haveAchiement = false;
+     }
+@@ -43,7 +43,7 @@
+     {
+         achievementGetLocalText = achievement.statName;
+         achievementStatName = achievement.getDescription();
+-        achievementTime = System.currentTimeMillis() - 2500L;
++        achievementTime = net.tasmod.tools.TickrateChanger.getMilliseconds() - 2500L;
+         theAchievement = achievement;
+         haveAchiement = true;
+     }
+@@ -75,7 +75,7 @@
+         {
+             return;
+         }
+-        double d = (double)(System.currentTimeMillis() - achievementTime) / 3000D;
++        double d = (double)(net.tasmod.tools.TickrateChanger.getMilliseconds() - achievementTime) / 3000D;
+         if(!haveAchiement && !haveAchiement && (d < 0.0D || d > 1.0D))
+         {
+             achievementTime = 0L;
+diff -ruN build/src/minecraft/net/minecraft/src/GuiCreateWorld.java src/main/java/net/minecraft/src/GuiCreateWorld.java
+--- build/src/minecraft/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
+@@ -157,17 +157,13 @@
+                     l = s.hashCode();
+                 }
+             }
+-            int i = 0;
+-            if(field_35364_f.equals("creative"))
+-            {
+-                i = 1;
+-                mc.playerController = new PlayerControllerCreative(mc);
+-            } else
+-            {
+-                mc.playerController = new PlayerControllerSP(mc);
++            // This Edits the behaviour of the "Create World" Button. Instead of directly creating the Player and Loading the World, we start the Recording, which eventually does the exact same
++            try {
++                net.tasmod.TASmod.startRecording(l, field_35364_f.equals("creative") ? 1 : 0, field_40232_h, field_35365_g, folderName, textboxWorldName.getText());
++            } catch (java.io.IOException e) {
++                e.printStackTrace();
+             }
+-            mc.startWorld(folderName, textboxWorldName.getText(), new WorldSettings(l, i, field_35365_g, field_40232_h));
+-            mc.displayGuiScreen(null);
++            // End-Edit
+         } else
+         if(guibutton.id == 3)
+         {
+diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net/minecraft/src/GuiIngame.java
+--- build/src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
+@@ -76,6 +76,25 @@
+                 renderPortalOverlay(f1, k, l);
+             }
+         }
++        // Render TAS Stuff here. Does not have any effect on minecraft.
++        if (net.tasmod.TASmod.isPlayback() && net.tasmod.tools.TickrateChanger.isTickAdvance) {
++            GL11.glPushMatrix();
++            drawRect(0, scaledresolution.getScaledHeight() / 5, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight() / 5 * 4, 0xAA000000);
++            GL11.glScaled(2, 2, 1);
++            drawCenteredString(fontrenderer, "TAS in " + net.tasmod.Utils.formatDuration(java.time.Duration.ofMillis(net.tasmod.TASmod.getPlayback().ticksTotal * 50)) + "", scaledresolution.getScaledWidth() / 4, scaledresolution.getScaledHeight() / 4 - fontrenderer.field_41063_b / 2, 0xFFFFFF);
++            GL11.glPopMatrix();
++            drawCenteredString(fontrenderer, net.tasmod.TASmod.getPlayback().ticksTotal + " Ticks", scaledresolution.getScaledWidth() / 2, scaledresolution.getScaledHeight() / 2 + (scaledresolution.getScaledHeight() / 14), 0xFFFFFF);
++            drawString(fontrenderer, "Performed by: " + net.tasmod.TASmod.getPlayback().author, 5, scaledresolution.getScaledHeight() / 5 + 2, 0x0AFFFF);
++            drawString(fontrenderer, "Hours spend on TAS: " + net.tasmod.TASmod.getPlayback().hoursOfWork, 5, scaledresolution.getScaledHeight() / 5 + 4 + fontrenderer.field_41063_b, 0x0AFFFF);
++        }
++        if (mc.theWorld != null) {
++            if (mc.currentScreen != null) {
++                if (mc.currentScreen.getClass().getSimpleName().contains("InfoHud")) net.tasmod.TASmod.infoHud.drawHud();
++            } else {
++                net.tasmod.TASmod.infoHud.drawHud();
++            }
++        }
++        // End-Edit
+         if(!mc.playerController.func_35643_e())
+         {
+             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+diff -ruN build/src/minecraft/net/minecraft/src/GuiIngameMenu.java src/main/java/net/minecraft/src/GuiIngameMenu.java
+--- build/src/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
+@@ -29,7 +29,9 @@
+         updateCounter2 = 0;
+         controlList.clear();
+         byte byte0 = -16;
+-        controlList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + byte0, "Save and quit to title"));
++        // Change the message of the Disconnect Button
++        controlList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + byte0, net.tasmod.TASmod.isRecording() ? "End Recording and Quit" : "Save and quit to title"));
++        // End-Edit
+         if(mc.isMultiplayerWorld())
+         {
+             ((GuiButton)controlList.get(0)).displayString = "Disconnect";
+@@ -48,6 +50,13 @@
+         }
+         if(guibutton.id == 1)
+         {
++            // End the recording when leaving a world
++            try {
++                if (net.tasmod.TASmod.isRecording()) net.tasmod.TASmod.endRecording();
++            } catch (Exception e) {
++                e.printStackTrace();
++            }
++            // End-Edit
+             mc.statFileWriter.readStat(StatList.leaveGameStat, 1);
+             if(mc.isMultiplayerWorld())
+             {
+diff -ruN build/src/minecraft/net/minecraft/src/GuiMultiplayer.java src/main/java/net/minecraft/src/GuiMultiplayer.java
+--- build/src/minecraft/net/minecraft/src/GuiMultiplayer.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiMultiplayer.java	2021-01-01 00:00:00.000000000 +0100
+@@ -65,21 +65,37 @@
+ 
+     private void loadServerList()
+     {
+-        try
+-        {
+-            NBTTagCompound nbttagcompound = CompressedStreamTools.func_35622_a(new File(mc.mcDataDir, "servers.dat"));
+-            NBTTagList nbttaglist = nbttagcompound.getTagList("servers");
+-            serverList.clear();
+-            for(int i = 0; i < nbttaglist.tagCount(); i++)
+-            {
+-                serverList.add(ServerNBTStorage.createServerNBTStorage((NBTTagCompound)nbttaglist.tagAt(i)));
+-            }
++        // Instead of Loading a List of servers from the servers.dat File, we browse the .minecraft directory for .tas Files and Add them to the List instead
++        for (File f : mc.mcDataDir.listFiles(new FilenameFilter() {
+ 
++            @Override
++            public boolean accept(File dir, String name) {
++                return name.toLowerCase().endsWith(".tas");
++            }
++        })) {
++            try {
++                BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
++
++                reader.readLine();
++                reader.readLine();
++
++                ServerNBTStorage storage = new ServerNBTStorage(f.getName().split(".tas")[0], Long.parseLong(reader.readLine().split(": ")[1].split(" ")[0]) + "");
++
++                boolean hardcore = Boolean.parseBoolean(reader.readLine().split(": ")[1].split(" ")[0]);
++                boolean mapFeatures = Boolean.parseBoolean(reader.readLine().split(": ")[1].split(" ")[0]);
++                int worldtype = Integer.parseInt(reader.readLine().split(": ")[1].split(" ")[0]);
++                reader.close();
++
++                storage.motd = (worldtype == 1 ? "Creative, " : (hardcore ? "Hardcore, " : "Survival, ")) + (mapFeatures ? "with Structures" : "without Structures");
++                storage.lag = 420691337L;
++                storage.playerCount = f.getName();
++                storage.polled = true;
++                serverList.add(storage);
++            } catch(Exception exception) {
++                exception.printStackTrace();
++            }
+         }
+-        catch(Exception exception)
+-        {
+-            exception.printStackTrace();
+-        }
++        // End-Edit
+     }
+ 
+     private void saveServerList()
+@@ -131,22 +147,16 @@
+         }
+         if(guibutton.id == 2)
+         {
+-            String s = ((ServerNBTStorage)serverList.get(selectedServer)).name;
+-            if(s != null)
+-            {
+-                deleteClicked = true;
+-                StringTranslate stringtranslate = StringTranslate.getInstance();
+-                String s1 = stringtranslate.translateKey("selectServer.deleteQuestion");
+-                String s2 = (new StringBuilder()).append("'").append(s).append("' ").append(stringtranslate.translateKey("selectServer.deleteWarning")).toString();
+-                String s3 = stringtranslate.translateKey("selectServer.deleteButton");
+-                String s4 = stringtranslate.translateKey("gui.cancel");
+-                GuiYesNo guiyesno = new GuiYesNo(this, s1, s2, s3, s4, selectedServer);
+-                mc.displayGuiScreen(guiyesno);
+-            }
++            // Instead of deleting an entry from the servers.dat, with a warning gui popping up, we just delete the TAS File.
++            new File(mc.mcDataDir, ((ServerNBTStorage) serverList.get(selectedServer)).playerCount).delete();
++            mc.displayGuiScreen(new GuiMultiplayer(parentScreen));
++            // End-Edit
+         } else
+         if(guibutton.id == 1)
+         {
+-            joinServer(selectedServer);
++            // Start the TAS Playback instead of joining a Minecraft Server
++            net.tasmod.TASmod.startPlayback(((ServerNBTStorage) serverList.get(selectedServer)).playerCount.split(".tas")[0]);
++            // End-Edit
+         } else
+         if(guibutton.id == 4)
+         {
+diff -ruN build/src/minecraft/net/minecraft/src/World.java src/main/java/net/minecraft/src/World.java
+--- build/src/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
+@@ -3452,6 +3452,7 @@
+     public Random setRandomSeed(int i, int j, int k)
+     {
+         long l = (long)i * 0x4f9939f508L + (long)j * 0x1ef1565bd5L + getWorldInfo().getRandomSeed() + (long)k;
++        Random rand = new Random(); // Return a new Random instead of the worlds one
+         rand.setSeed(l);
+         return rand;
+     }
