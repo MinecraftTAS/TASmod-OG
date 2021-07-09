@@ -53,7 +53,7 @@ public class Installer {
 				}
 				if (new File(instance, "minecraft.jar").exists()) {
 					findJRE8();
-					ProcessBuilder builder = new ProcessBuilder(new String[] {javaexe.getAbsolutePath(), "-jar", "minecraft.jar"});
+					ProcessBuilder builder = new ProcessBuilder(new String[] {javaexe.getAbsolutePath(), "-Djava.library.path=\".\"", "-jar", "-Xincgc", "-Xmx2G", "-Xms256M", "minecraft.jar"});
 					builder.directory(instance);
 					builder.start();
 				}
@@ -109,7 +109,9 @@ public class Installer {
 		}
 		
 		if (javaexe == null) {
-			javaexe = new File("bin/java");
+			javaexe = new File("/bin/java");
+			if (javaexe.exists()) return;
+			javaexe = new File("/usr/bin/java");
 			if (javaexe.exists()) return;
 			/* Display an Error Message that the Program didn't work with the unsupported Java version, and the Program couldn't find one installed on the PC */
 			JOptionPane.showConfirmDialog(null, "The Program couldn't launch\nand we couldn't find Java 1.8 on your PC :(", "Couldn't attach to JVM.", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
