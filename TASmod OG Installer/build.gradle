@@ -10,9 +10,4 @@ repositories {
 dependencies {
 	implementation group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: '5.12.0.202106070339-r'
 	implementation 'commons-io:commons-io:2.10.0'
-	implementation group: 'net.lingala.zip4j', name: 'zip4j', version: '2.9.0' // For unzipping	
-	implementation group: 'org.apache.commons', name: 'commons-csv', version: '1.8' // For Reading csv tables
-	implementation group: 'de.pfannekuchen.mcpgradle', name: 'mcinjector-og', version: '2.0' // For MCP
-	implementation group: 'de.pfannekuchen.mcpgradle', name: 'retroguard-og', version: '3.0.0' // For MCP
-	implementation group: 'de.pfannekuchen.mcpgradle', name: 'jadretro-og', version: '1.6' // For MCP
 }

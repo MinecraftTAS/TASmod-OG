@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
@@ -20,13 +19,10 @@ public class InstallerWindow extends JFrame {
 
 	private static final long serialVersionUID = 5155442058664945274L;
 	public JButton launchButton;
-	public JButton updateButton;
-	public JProgressBar progressBar;
 	public JTextPane infobox;
 	
 	private String string1 = "TASmod OG Full is the full package to create and playback TASes.\nIt contains all tools needed to efficiently create a TAS.";
 	private String string2 = "The Early Access Channel contains stable builds that require\n testing before they can be released.";
-	public JRadioButton devRadioBox;
 	public JRadioButton earlyAccessRadioBox;
 	public JRadioButton releaseRadioBox;
 	public JRadioButton lightRadioBox;
@@ -67,18 +63,10 @@ public class InstallerWindow extends JFrame {
 		contentPane.setOpaque(false);
 		contentPane.setBackground(new Color(0, 0, 0, 0));
 		
-		
-		updateButton = new JButton("Install/Reinstall/Update");
-		updateButton.setBounds(10, 327, 364, 23);
-		updateButton.setBackground(new Color(0, 0, 0, 0));
-		updateButton.setOpaque(false);
-		contentPane.add(updateButton);
-		
 		launchButton = new JButton("Launch");
-		launchButton.setBounds(10, 280, 364, 23);
+		launchButton.setBounds(10, 327, 364, 23);
 		launchButton.setBackground(new Color(0, 0, 0, 0));
 		launchButton.setOpaque(false);
-		launchButton.setEnabled(false);
 		contentPane.add(launchButton);
 		
 		infobox = new JTextPane();
@@ -100,91 +88,56 @@ public class InstallerWindow extends JFrame {
 		ButtonGroup channelGroup = new ButtonGroup();
 		
 		fullRadioBox = new JRadioButton("TASmod Full");
-		fullRadioBox.setSelected(!Installer.isLight);
+		fullRadioBox.setSelected(true);
 		fullRadioBox.setForeground(Color.white);
 		fullRadioBox.setBackground(new Color(0, 0, 0, 0));
-		fullRadioBox.setBounds(10, 128, 109, 23);
+		fullRadioBox.setBounds(10, 271, 109, 23);
 		fullRadioBox.setOpaque(false);
 		fullRadioBox.addActionListener((c) -> {
 			string1 = "TASmod OG Full is the full package to create and playback TASes.\nIt contains all tools needed to efficiently create a TAS.";
 			updateText();
-			updateButton.setText("Install");
-			launchButton.setEnabled(false);
 		});
 		versionGroup.add(fullRadioBox);
 		contentPane.add(fullRadioBox);
 		
 		lightRadioBox = new JRadioButton("TASmod Light");
-		if (Installer.isLight) {
-			lightRadioBox.setSelected(true);
-			string1 = "TASmod OG Light is the bare minimum to replay a TAS File.\nYou can hold 'ALT' to manually input to mc.";
-		}
-		lightRadioBox.setBounds(10, 154, 109, 23);
+		lightRadioBox.setBounds(10, 297, 109, 23);
 		lightRadioBox.setForeground(Color.white);
 		lightRadioBox.setBackground(new Color(0, 0, 0, 0));
 		lightRadioBox.setOpaque(false);
 		lightRadioBox.addActionListener((c) -> {
 			string1 = "TASmod OG Light is the bare minimum to replay a TAS File.\nYou can hold 'ALT' to manually input to mc.";
 			updateText();
-			updateButton.setText("Install");
-			launchButton.setEnabled(false);
 		});
 		contentPane.add(lightRadioBox);
 		versionGroup.add(lightRadioBox);
 		
 		releaseRadioBox = new JRadioButton("Release Channel");
-		releaseRadioBox.setSelected(Installer.channel.equals("release"));
 		releaseRadioBox.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		releaseRadioBox.setForeground(Color.white);
-		releaseRadioBox.setBounds(223, 128, 151, 23);
+		releaseRadioBox.setBounds(223, 297, 151, 23);
 		releaseRadioBox.setBackground(new Color(0, 0, 0, 0));
 		releaseRadioBox.setOpaque(false);
 		releaseRadioBox.addActionListener((c) -> {
 			string2 = "";
 			updateText();
-			updateButton.setText("Install");
-			launchButton.setEnabled(false);
 		});
 		contentPane.add(releaseRadioBox);
 		channelGroup.add(releaseRadioBox);
 		
 		earlyAccessRadioBox = new JRadioButton("Early Access Channel");
-		earlyAccessRadioBox.setSelected(Installer.channel.equals("early-access"));
+		earlyAccessRadioBox.setSelected(true);
 		earlyAccessRadioBox.setForeground(Color.white);
 		earlyAccessRadioBox.setBackground(new Color(0, 0, 0, 0));
 		earlyAccessRadioBox.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		earlyAccessRadioBox.setBounds(223, 154, 151, 23);
+		earlyAccessRadioBox.setBounds(223, 271, 151, 23);
 		earlyAccessRadioBox.setOpaque(false);
 		earlyAccessRadioBox.addActionListener((c) -> {
 			string2 = "The Early Access Channel contains stable builds that require\n testing before they can be released.";
 			updateText();
-			updateButton.setText("Install");
-			launchButton.setEnabled(false);
 		});
 		contentPane.add(earlyAccessRadioBox);
 		channelGroup.add(earlyAccessRadioBox);
-		
-		devRadioBox = new JRadioButton("Dev Channel");
-		devRadioBox.setSelected(Installer.channel.equals("dev"));
-		devRadioBox.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		devRadioBox.setBounds(223, 180, 151, 23);
-		devRadioBox.setForeground(Color.white);
-		devRadioBox.setBackground(new Color(0, 0, 0, 0));
-		devRadioBox.setOpaque(false);
-		devRadioBox.addActionListener((c) -> {
-			string2 = "The Dev Channel contains the newest Code and therefore \nmight not always work!";
-			updateText();
-			updateButton.setText("Install");
-			launchButton.setEnabled(false);
-		});
-		contentPane.add(devRadioBox);
-		channelGroup.add(devRadioBox);
-
-		progressBar = new JProgressBar();
-		progressBar.setBounds(10, 310, 364, 14);
-		progressBar.setBackground(new Color(0, 0, 0, 0));
-		progressBar.setOpaque(false);
-		contentPane.add(progressBar);
 		
 	}
 	
