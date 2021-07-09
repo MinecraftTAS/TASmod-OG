@@ -40,6 +40,15 @@ public class Installer {
 					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/lwjgl64.dll").openStream(), new File(instance, "lwjgl64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
 					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/OpenAL32.dll").openStream(), new File(instance, "OpenAL32.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
 					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/OpenAL64.dll").openStream(), new File(instance, "OpenAL64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/libjinput-osx.dylib").openStream(), new File(instance, "libjinput-osx.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/liblwjgl.dylib").openStream(), new File(instance, "liblwjgl.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/openal.dylib").openStream(), new File(instance, "openal.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/libjinput-linux.so").openStream(), new File(instance, "libjinput-linux.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/libjinput-linux64.so").openStream(), new File(instance, "libjinput-linux64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/liblwjgl.so").openStream(), new File(instance, "liblwjgl.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/liblwjgl64.so").openStream(), new File(instance, "liblwjgl64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/libopenal.so").openStream(), new File(instance, "libopenal.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/libopenal64.so").openStream(), new File(instance, "libopenal64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
 					Files.copy(new URL("https://mgnet.work/TASmod_OG-" + (dialog.fullRadioBox.isSelected() ? "full" : "light") + "-" + (dialog.earlyAccessRadioBox.isSelected() ? "earlyaccess" : "release") + ".jar").openStream(), new File(instance, "minecraft.jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
 				}
 				if (new File(instance, "minecraft.jar").exists()) {
@@ -99,9 +108,12 @@ public class Installer {
 			checkDir(programFilesx86Folder, "Oracle\\Java", "jdk8");
 		}
 		
-		if (javaexe == null) 
+		if (javaexe == null) {
+			javaexe = new File("bin/java");
+			if (javaexe.exists()) return;
 			/* Display an Error Message that the Program didn't work with the unsupported Java version, and the Program couldn't find one installed on the PC */
 			JOptionPane.showConfirmDialog(null, "The Program couldn't launch\nand we couldn't find Java 1.8 on your PC :(", "Couldn't attach to JVM.", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	/**
