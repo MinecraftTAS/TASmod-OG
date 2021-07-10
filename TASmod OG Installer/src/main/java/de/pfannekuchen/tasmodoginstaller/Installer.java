@@ -53,8 +53,9 @@ public class Installer {
 				}
 				if (new File(instance, "minecraft.jar").exists()) {
 					findJRE8();
-					ProcessBuilder builder = new ProcessBuilder(new String[] {javaexe.getAbsolutePath(), "-Djava.library.path=\".\"", "-jar", "-Xincgc", "-Xmx2G", "-Xms256M", "minecraft.jar"});
+					ProcessBuilder builder = new ProcessBuilder(new String[] {javaexe.getAbsolutePath(), "-Djava.library.path=.", "-jar", "minecraft.jar"});
 					builder.directory(instance);
+					builder.inheritIO();
 					builder.start();
 				}
 			} catch (Exception e) {
