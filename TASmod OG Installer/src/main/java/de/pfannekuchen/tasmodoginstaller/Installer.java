@@ -53,7 +53,7 @@ public class Installer {
 				}
 				if (new File(instance, "minecraft.jar").exists()) {
 					findJRE8();
-					ProcessBuilder builder = new ProcessBuilder(new String[] {javaexe.getAbsolutePath(), "-Djava.library.path=.", "-jar", "minecraft.jar"});
+					ProcessBuilder builder = new ProcessBuilder(new String[] {javaexe.getAbsolutePath(), "-Djdk.attach.allowAttachSelf=true", "-Djava.library.path=.", "-jar", "minecraft.jar"});
 					builder.directory(instance);
 					builder.inheritIO();
 					builder.start();
@@ -91,20 +91,16 @@ public class Installer {
 		if (programFilesFolder.exists()) {
 			// Check all known Dirs
 			checkDir(programFilesFolder, "AdoptOpenJDK", "jdk-8");
-			checkDir(programFilesFolder, "Java", "jre1.8");
 			checkDir(programFilesFolder, "Java", "jdk1.8");
 			checkDir(programFilesFolder, "Java", "jdk8");
-			checkDir(programFilesFolder, "Oracle\\Java", "jre1.8");
 			checkDir(programFilesFolder, "Oracle\\Java", "jdk1.8");
 			checkDir(programFilesFolder, "Oracle\\Java", "jdk8");
 		}
 		if (programFilesx86Folder.exists()) {
 			// Check all known Dirs in the 32-bit Program Files Folder
 			checkDir(programFilesx86Folder, "AdoptOpenJDK", "jdk-8");
-			checkDir(programFilesx86Folder, "Java", "jre1.8");
 			checkDir(programFilesx86Folder, "Java", "jdk1.8");
 			checkDir(programFilesx86Folder, "Java", "jdk8");
-			checkDir(programFilesx86Folder, "Oracle\\Java", "jre1.8");
 			checkDir(programFilesx86Folder, "Oracle\\Java", "jdk1.8");
 			checkDir(programFilesx86Folder, "Oracle\\Java", "jdk8");
 		}
