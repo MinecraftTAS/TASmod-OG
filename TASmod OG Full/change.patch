@@ -57,6 +57,19 @@ diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java
              return loadChunk(i, j);
          } else
          {
+diff -ruN build/src/minecraft/net/minecraft/src/EntityDragon.java src/main/java/net/minecraft/src/EntityDragon.java
+--- build/src/minecraft/net/minecraft/src/EntityDragon.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/EntityDragon.java	2021-01-01 00:00:00.000000000 +0100
+@@ -393,6 +393,9 @@
+     private void func_41006_aA()
+     {
+         field_40163_ay = false;
++        // Create a local random for the dragon to pick a new path, so that it does not deadlock in line 418. This has to be done cuz otherwise id have to change the whole Entity rand
++        net.tasmod.random.WeightedRandomMod rand = new net.tasmod.random.WeightedRandomMod();
++        // End-Edit
+         if(rand.nextInt(2) == 0 && worldObj.playerEntities.size() > 0)
+         {
+             field_40179_aC = (Entity)worldObj.playerEntities.get(rand.nextInt(worldObj.playerEntities.size()));
 diff -ruN build/src/minecraft/net/minecraft/src/EntityLiving.java src/main/java/net/minecraft/src/EntityLiving.java
 --- build/src/minecraft/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
