@@ -338,6 +338,19 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiMultiplayer.java src/main/jav
          } else
          if(guibutton.id == 4)
          {
+diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src/main/java/net/minecraft/src/ThreadDownloadResources.java
+--- build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
+@@ -59,7 +59,8 @@
+                     {
+                         continue;
+                     }
+-                    downloadAndInstallResource(url, s, l, i);
++                    // This is just a small change to fix the game audio, because the files aren't online on the original link anymore. By doing this i download the ogg files from my website instead.
++                    downloadAndInstallResource(new URL("http://mgnet.work/archive/1.0-sounds/"), s, l, i);
+                     if(closing)
+                     {
+                         return;
 diff -ruN build/src/minecraft/net/minecraft/src/World.java src/main/java/net/minecraft/src/World.java
 --- build/src/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
