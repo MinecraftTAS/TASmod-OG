@@ -351,6 +351,26 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiMultiplayer.java src/main/jav
          } else
          if(guibutton.id == 4)
          {
+diff -ruN build/src/minecraft/net/minecraft/src/GuiSlot.java src/main/java/net/minecraft/src/GuiSlot.java
+--- build/src/minecraft/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
+@@ -6,6 +6,7 @@
+ 
+ import java.util.List;
+ import net.minecraft.client.Minecraft;
++
+ import org.lwjgl.input.Mouse;
+ import org.lwjgl.opengl.GL11;
+ 
+@@ -159,7 +160,7 @@
+         int k = getSize();
+         int l = width / 2 + 124;
+         int i1 = l + 6;
+-        if(Mouse.isButtonDown(0))
++        if((net.tasmod.TASmod.isPlayback() || net.tasmod.TASmod.isRecording()) ? net.tasmod.virtual.VirtualMouse.isButtonDown(0) : net.tasmod.TASmodFull.checkRealMouseButtonDown(0))
+         {
+             if(initialClickY == -1F)
+             {
 diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src/main/java/net/minecraft/src/ThreadDownloadResources.java
 --- build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
