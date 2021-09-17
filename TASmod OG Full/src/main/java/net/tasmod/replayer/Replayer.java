@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.PlayerControllerCreative;
@@ -25,8 +24,8 @@ import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.random.WeightedRandomMod;
 import net.tasmod.tools.TickrateChanger;
 import net.tasmod.virtual.VirtualKeyboard;
-import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse;
+import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
 
 /**
@@ -50,9 +49,6 @@ public final class Replayer {
 	public final long ticksTotal;
 	private final Thread fileReader;
 	private int currentTick;
-	
-	/** Mouse for next tick */
-	private String mouse;
 	
 	/**
 	 * Loads a File and reads some ticks from it

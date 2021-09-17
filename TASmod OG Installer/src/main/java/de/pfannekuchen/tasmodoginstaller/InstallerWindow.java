@@ -91,7 +91,7 @@ public class InstallerWindow extends JFrame {
 		fullRadioBox.setSelected(true);
 		fullRadioBox.setForeground(Color.white);
 		fullRadioBox.setBackground(new Color(0, 0, 0, 0));
-		fullRadioBox.setBounds(10, 271, 109, 23);
+		fullRadioBox.setBounds(10, 271, 181, 23);
 		fullRadioBox.setOpaque(false);
 		fullRadioBox.addActionListener((c) -> {
 			string1 = "TASmod OG Full is the full package to create and playback TASes.\nIt contains all tools needed to efficiently create a TAS.";
@@ -101,7 +101,7 @@ public class InstallerWindow extends JFrame {
 		contentPane.add(fullRadioBox);
 		
 		lightRadioBox = new JRadioButton("TASmod Light");
-		lightRadioBox.setBounds(10, 297, 109, 23);
+		lightRadioBox.setBounds(10, 297, 181, 23);
 		lightRadioBox.setForeground(Color.white);
 		lightRadioBox.setBackground(new Color(0, 0, 0, 0));
 		lightRadioBox.setOpaque(false);
@@ -115,7 +115,7 @@ public class InstallerWindow extends JFrame {
 		releaseRadioBox = new JRadioButton("Release Channel");
 		releaseRadioBox.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		releaseRadioBox.setForeground(Color.white);
-		releaseRadioBox.setBounds(223, 297, 151, 23);
+		releaseRadioBox.setBounds(156, 297, 218, 23);
 		releaseRadioBox.setBackground(new Color(0, 0, 0, 0));
 		releaseRadioBox.setOpaque(false);
 		releaseRadioBox.addActionListener((c) -> {
@@ -130,7 +130,7 @@ public class InstallerWindow extends JFrame {
 		earlyAccessRadioBox.setForeground(Color.white);
 		earlyAccessRadioBox.setBackground(new Color(0, 0, 0, 0));
 		earlyAccessRadioBox.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		earlyAccessRadioBox.setBounds(223, 271, 151, 23);
+		earlyAccessRadioBox.setBounds(156, 271, 218, 23);
 		earlyAccessRadioBox.setOpaque(false);
 		earlyAccessRadioBox.addActionListener((c) -> {
 			string2 = "The Early Access Channel contains stable builds that require\n testing before they can be released.";

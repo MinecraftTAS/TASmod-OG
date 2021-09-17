@@ -7,12 +7,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.lwjgl.opengl.Display;
@@ -23,12 +21,11 @@ import net.minecraft.src.PlayerControllerSP;
 import net.minecraft.src.WorldSettings;
 import net.tasmod.TASmod;
 import net.tasmod.Utils;
-import net.tasmod.asm.WeightedRandomnessVisitor;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.random.WeightedRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
-import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse;
+import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
 
 /**
@@ -47,8 +44,8 @@ public final class Recorder {
 	private final File file;
 	private final FileOutputStream writer;
 	private final String author;
-	private int savestates;
-	private int loadstates;
+//	private int savestates;
+//	private int loadstates;
 	private final Queue<String> linesToPrint = new LinkedList<String>();
 	
 	private int currentTick;

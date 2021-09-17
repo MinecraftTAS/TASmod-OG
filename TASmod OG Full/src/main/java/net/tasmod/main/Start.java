@@ -1,3 +1,5 @@
+package net.tasmod.main;
+
 import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
@@ -7,10 +9,11 @@ import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.openjpa.enhance.InstrumentationFactory;
+import org.apache.openjpa.lib.log.NoneLogFactory;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
-import net.bytebuddy.agent.ByteBuddyAgent;
 import net.minecraft.client.Minecraft;
 import net.tasmod.asm.RandomnessVisitor;
 import net.tasmod.asm.VirtualInputVisitor;
@@ -71,8 +74,7 @@ public class Start
 	
 	public static void main(String[] args)
 	{
-		ByteBuddyAgent.install();
-		Instrumentation inst = ByteBuddyAgent.getInstrumentation();
+		Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
 		inst.addTransformer(new ClassFileTransformer() {
 			
 			@Override

@@ -2,12 +2,21 @@ plugins {
     id 'mcpgradleog' version '1.0.1'
 }
 
-group = "net.tasmod"
+group = "tasmod"
 version = "a1.0.0-SNAPSHOT"
 
 dependencies {
-	implementation 'net.bytebuddy:byte-buddy-agent:1.11.6'
+	implementation 'org.apache.openjpa:openjpa:3.2.0'
 	implementation 'org.ow2.asm:asm:9.2'
+}
+
+jar { 
+    manifest {
+    	attributes("Main-Class": "net.tasmod.main.Start",
+    				"Agent-Class": "org.apache.openjpa.enhance.InstrumentationFactory",
+    				"Can-Redefine-Classes": "true",
+    				"Can-Retransform-Classes": "true")
+    }
 }
 
 javadoc {

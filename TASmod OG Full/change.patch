@@ -57,6 +57,19 @@ diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java
              return loadChunk(i, j);
          } else
          {
+diff -ruN build/src/minecraft/net/minecraft/src/EntityDragon.java src/main/java/net/minecraft/src/EntityDragon.java
+--- build/src/minecraft/net/minecraft/src/EntityDragon.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/EntityDragon.java	2021-01-01 00:00:00.000000000 +0100
+@@ -393,6 +393,9 @@
+     private void func_41006_aA()
+     {
+         field_40163_ay = false;
++        // Create a local random for the dragon to pick a new path, so that it does not deadlock in line 418. This has to be done cuz otherwise id have to change the whole Entity rand
++        net.tasmod.random.WeightedRandomMod rand = new net.tasmod.random.WeightedRandomMod();
++        // End-Edit
+         if(rand.nextInt(2) == 0 && worldObj.playerEntities.size() > 0)
+         {
+             field_40179_aC = (Entity)worldObj.playerEntities.get(rand.nextInt(worldObj.playerEntities.size()));
 diff -ruN build/src/minecraft/net/minecraft/src/EntityLiving.java src/main/java/net/minecraft/src/EntityLiving.java
 --- build/src/minecraft/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
@@ -338,6 +351,39 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiMultiplayer.java src/main/jav
          } else
          if(guibutton.id == 4)
          {
+diff -ruN build/src/minecraft/net/minecraft/src/GuiSlot.java src/main/java/net/minecraft/src/GuiSlot.java
+--- build/src/minecraft/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
+@@ -6,6 +6,7 @@
+ 
+ import java.util.List;
+ import net.minecraft.client.Minecraft;
++
+ import org.lwjgl.input.Mouse;
+ import org.lwjgl.opengl.GL11;
+ 
+@@ -159,7 +160,7 @@
+         int k = getSize();
+         int l = width / 2 + 124;
+         int i1 = l + 6;
+-        if(Mouse.isButtonDown(0))
++        if((net.tasmod.TASmod.isPlayback() || net.tasmod.TASmod.isRecording()) ? net.tasmod.virtual.VirtualMouse.isButtonDown(0) : net.tasmod.TASmodFull.checkRealMouseButtonDown(0))
+         {
+             if(initialClickY == -1F)
+             {
+diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src/main/java/net/minecraft/src/ThreadDownloadResources.java
+--- build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
+@@ -59,7 +59,8 @@
+                     {
+                         continue;
+                     }
+-                    downloadAndInstallResource(url, s, l, i);
++                    // This is just a small change to fix the game audio, because the files aren't online on the original link anymore. By doing this i download the ogg files from my website instead.
++                    downloadAndInstallResource(new URL("http://mgnet.work/archive/1.0-sounds/"), s, l, i);
+                     if(closing)
+                     {
+                         return;
 diff -ruN build/src/minecraft/net/minecraft/src/World.java src/main/java/net/minecraft/src/World.java
 --- build/src/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
