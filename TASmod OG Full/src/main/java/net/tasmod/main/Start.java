@@ -5,6 +5,7 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +16,8 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 import net.minecraft.client.Minecraft;
+import net.tasmod.TASmod;
+import net.tasmod.Utils;
 import net.tasmod.asm.RandomnessVisitor;
 import net.tasmod.asm.VirtualInputVisitor;
 import net.tasmod.asm.WeightedRandomnessVisitor;
@@ -72,8 +75,7 @@ public class Start
 	);
 	
 	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) throws Exception {
 		Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
 		inst.addTransformer(new ClassFileTransformer() {
 			
@@ -96,21 +98,37 @@ public class Start
 				return writer.toByteArray();
 			}
 		});
+		Utils.transformRandom();
 		
-		try
-		{
-			// set new minecraft data folder to prevent it from using the .minecraft folder
-			// this makes it a portable version
-			Field f = Minecraft.class.getDeclaredField("minecraftDir");
-			Field.setAccessible(new Field[] { f }, true);
-			f.set(null, new File("build/mc"));
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return;
-		}
-		// start minecraft game application
-		Minecraft.main(args);
+		File mcfolder = new File("tas.minecraft");
+		if (mcfolder.exists()) Utils.deleteDirectory(mcfolder);
+		
+		// Change MC Settings
+		Field f = Minecraft.class.getDeclaredField("minecraftDir");
+		Field.setAccessible(new Field[] { f }, true);
+		f.set(null, mcfolder);
+		
+		launch();
 	}
+	
+	/**
+	 * Launches the Game with specific TAS Modes
+	 */
+	public static void launch() throws Exception {
+		File settings = new File("tas.settings");
+		if (settings.exists()) {
+			// If settings are given, set the to be ran once the game first ticks
+			List<String> lines = Files.readAllLines(settings.toPath());
+			TASmod.shouldRecordOrPlayback = "R".equalsIgnoreCase(lines.get(0));
+			TASmod.tasFile = lines.get(1);
+			settings.delete();
+		}
+		
+		// Run Minecraft
+		Minecraft.main(new String[0]);
+		
+		// Stop the recording after the game is closed
+		if (TASmod.isRecording()) TASmod.getRecording().endRecording();
+	}
+	
 }

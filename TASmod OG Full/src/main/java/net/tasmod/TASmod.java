@@ -13,41 +13,27 @@ import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
 
 /**
- * 
+ *
  * Heart of the TASmod, all stuff that needs to be accessed from different Parts of MC Code
- * 
+ *
  * @author Pancake
  */
 public final class TASmod {
 
 	/** Currently running Recording */
 	private static volatile Recorder recording;
-	
+
 	/** Currently running Playback */
 	private static volatile Replayer playback;
-	
+
 	/** Hacky boolean, to run Code once when MC starts, without requiring more Code Edits */
 	private static boolean hasBeenTransformed;
 
 	/** Minecraft Instance obtained via Reflection */
 	public static Minecraft mc;
-	
+
 	/** The only Info Hud Instance :CsGun: */
 	public static InfoHud infoHud = new InfoHud();
-	
-	/**
-	 * Join a World and start the Recording
-	 * 
-	 * @param seed Create a world with this seed
-	 * @return Returns whether the action was successful
-	 * @throws IOException This Exception cannot be thrown, unless something is terribly wrong.
-	 */
-	public static final boolean startRecording(long worldseed, int worldtype, boolean hardcore, boolean mapFeatures, String folderName, String worldName) throws IOException {
-		if (recording != null) return false;
-		recording = new Recorder(worldseed, worldtype, hardcore, mapFeatures, folderName, worldName);
-		recording.startRecording();
-		return true;
-	}
 
 	/**
 	 * Ticks all kinds of things
@@ -62,8 +48,16 @@ public final class TASmod {
 			hasBeenTransformed = true;
 			try {
 				TASmod.mc = Utils.obtainMinecraftInstance();
-				Utils.transformStringTranslate();
-				Utils.transformRandom();
+				// start a playback or recording if needed
+				if (tasFile != null) {
+					if (shouldRecordOrPlayback) {
+						recording = new Recorder(tasFile);
+						recording.startRecording();
+					} else {
+						playback = new Replayer(tasFile);
+						playback.startReplay();
+					}
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -79,7 +73,7 @@ public final class TASmod {
 		}
         infoHud.tick();
 	}
-	
+
 	/** Temporary variable to avoid pressing a key twice */
 	private static boolean _was66pressed;
 	/** Temporary variable to avoid pressing a key twice */
@@ -90,7 +84,12 @@ public final class TASmod {
 	private static boolean _was52pressed;
 	/** Temporary variable for tickrate zero to work */
 	private static boolean _undoTickrate;
-	
+
+	/** Whether a playback or recording should happen */
+	public static boolean shouldRecordOrPlayback;
+	/** TAS File to play back if set */
+	public static String tasFile;
+
 	/**
 	 * Ticks frame based stuff.
 	 * @throws Exception Throws Exception whenever something bad happens
@@ -112,7 +111,7 @@ public final class TASmod {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Whenever a new Keyboard Event gets called
 	 * @param event The Keyboard Event
@@ -120,7 +119,7 @@ public final class TASmod {
 	public static final void keyboardTick(final VirtualKeyEvent event) {
 		if (recording != null) recording.keyboardTick(event);
 	}
-	
+
 	/**
 	 * Whenever a new Mouse Event gets called
 	 * @param event The Mouse Event
@@ -128,48 +127,19 @@ public final class TASmod {
 	public static final void mouseTick(final VirtualMouseEvent event) {
 		if (recording != null) recording.mouseTick(event);
 	}
-	
+
 	/**
-	 * Ends the current recording
-	 */
-	public static final boolean endRecording() throws IOException {
-		if (recording == null) return false;
-		recording.endRecording();
-		recording = null;
-		return true;
-	}
-	
-	/**
-	 * @return Returns whether a Playback is running	
+	 * @return Returns whether a Playback is running
 	 */
 	public static boolean isPlayback() {
 		return playback != null;
 	}
-	
+
 	/**
-	 * @return Returns whether a Recording is running	
+	 * @return Returns whether a Recording is running
 	 */
 	public static boolean isRecording() {
 		return recording != null;
-	}
-	
-	/**
-	 * Joins the World of the Playback and starts the Playback
-	 * 
-	 * @param seed Create a world with this seed
-	 * @return Returns whether the action was successful
-	 * @throws IOException Thrown if the File doesn't exists
-	 */
-	public static final boolean startPlayback(String fileName) {
-		if (playback != null) return false;
-		try {
-			playback = new Replayer(fileName);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		playback.startReplay();
-		return true;
 	}
 
 	/**
@@ -186,5 +156,5 @@ public final class TASmod {
 	public static Replayer getPlayback() {
 		return playback;
 	}
-	
+
 }
