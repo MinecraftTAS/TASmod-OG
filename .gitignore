@@ -18,3 +18,4 @@ TASmod OG Installer/tasmod_data/
 tas.minecraft/
 *.settings
 *.tas
+*.backup

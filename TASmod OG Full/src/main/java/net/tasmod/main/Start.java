@@ -139,7 +139,13 @@ public class Start
 				TASmod.tasFile = tasFile;
 			} else return;
 		} else if (i == 2) {
-			// TODO: uh, editing a tas..
+			String msg = JOptionPane.showInputDialog("Enter a name for the TAS to edit");
+			if (msg != null) {
+				TASmod.shouldRecordOrPlayback = false;
+				TASmod.tasFile = new File(msg + ".tas");
+				TASmod.shouldStop = true;
+				TASmod.tickToStopAt = Integer.parseInt(JOptionPane.showInputDialog("Enter a tick to rerecord at"));
+			}
 		}
 		
 		System.out.println("Running .minecraft in: " + mcfolder.getAbsolutePath());

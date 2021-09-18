@@ -1,8 +1,11 @@
 package net.tasmod;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.file.Files;
+import java.util.List;
 
 import org.lwjgl.input.Mouse;
 
@@ -57,6 +60,16 @@ public final class Utils {
         prevRotationYaw += rotationYaw - f3;
     }
 
+    /**
+     * Copies a TAS File with a specific amount of ticks
+     * @param from Source
+     * @param stopTick Tick to end
+     * @throws IOException Filesystem
+     */
+    public static List<String> copyTASFile(File from, int stopTick) throws IOException {
+    	return Files.readAllLines(from.toPath()).subList(0, stopTick*2);
+    }
+    
     /**
      * Small Utility that deletes a Directory recursively
      */

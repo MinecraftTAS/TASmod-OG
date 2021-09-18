@@ -22,7 +22,7 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
 public final class TASmod {
 
 	/** Currently running Recording */
-	private static volatile Recorder recording;
+	public static volatile Recorder recording;
 
 	/** Currently running Playback */
 	private static volatile Replayer playback;
@@ -90,6 +90,10 @@ public final class TASmod {
 	public static boolean shouldRecordOrPlayback;
 	/** TAS File to play back if set */
 	public static File tasFile;
+	/** Where the TAS should stop and rerecord at */
+	public static boolean shouldStop;
+	/** ^, but the tick for it */
+	public static int tickToStopAt;
 
 	/**
 	 * Ticks frame based stuff.

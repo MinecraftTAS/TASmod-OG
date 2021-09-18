@@ -29,7 +29,7 @@ public final class Recorder {
 	private final FileOutputStream writer;
 	private final Queue<String> linesToPrint = new LinkedList<String>();
 	
-	private int currentTick;
+	public int currentTick;
 	private final Thread fileWriter;
 	
 	/**
@@ -43,7 +43,7 @@ public final class Recorder {
 		
 		/** Create a new File for the Recorder */
 		if (!this.file.exists()) this.file.createNewFile();
-		this.writer = new FileOutputStream(this.file, false);
+		this.writer = new FileOutputStream(this.file, true);
 		fileWriter = new Thread(new Runnable() {
 			
 			/**

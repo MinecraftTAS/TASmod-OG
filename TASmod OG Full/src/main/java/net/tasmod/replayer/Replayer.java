@@ -5,14 +5,19 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
+import net.tasmod.Utils;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.random.WeightedRandomMod;
+import net.tasmod.recorder.Recorder;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse;
@@ -57,6 +62,8 @@ public final class Replayer {
 						} else {
 							Thread.sleep(32);
 						}
+						
+						if (currentTick > TASmod.tickToStopAt && TASmod.shouldStop) return;
 					}
 					reader.close();
 					System.out.println("Read Finished.");
@@ -87,6 +94,23 @@ public final class Replayer {
 		tickKeyboad();
 		tickMouse();
 		SimpleRandomMod.updateSeed(currentTick);
+		if (TASmod.shouldStop && TASmod.tickToStopAt == currentTick) {
+			try {
+				TASmod.endPlayback();
+				File backupFile = new File(this.file.getParentFile(), this.file.getName() + ".backup");
+				Files.copy(file.toPath(), backupFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				Files.write(file.toPath(), Utils.copyTASFile(file, TASmod.tickToStopAt), StandardOpenOption.WRITE);
+				Recorder rec = new Recorder(this.file);
+				rec.currentTick = currentTick;
+				VirtualKeyboard.hack = false;
+				VirtualMouse.hack = false;
+				VirtualKeyboard.listen = true;
+				VirtualMouse.listen = true;
+				TASmod.recording = rec;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		this.currentTick++;
 	}
 	
