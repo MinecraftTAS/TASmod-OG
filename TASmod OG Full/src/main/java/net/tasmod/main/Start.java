@@ -56,6 +56,7 @@ public class Start
 			"net/minecraft/src/SoundPool",
 			"net/minecraft/src/Teleporter",
 			"net/minecraft/src/TileEntityDispenser",
+			"net/minecraft/src/GuiCreateWorld",
 			"net/minecraft/src/World" // World is only being replaced in the contructor!
 	);
 	
