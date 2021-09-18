@@ -210,6 +210,29 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net
          if(!mc.playerController.func_35643_e())
          {
              GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+diff -ruN build/src/minecraft/net/minecraft/src/GuiSlot.java src/main/java/net/minecraft/src/GuiSlot.java
+--- build/src/minecraft/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
+@@ -223,7 +223,9 @@
+             }
+         } else
+         {
+-            do
++            /*
++             * FIXME: This is a temporary fix for the GuiSlot because frame based Mouse Events are a big no no for TASmod
++             * do
+             {
+                 if(!Mouse.next())
+                 {
+@@ -242,7 +244,7 @@
+                     }
+                     amountScrolled += (j1 * slotHeight) / 2;
+                 }
+-            } while(true);
++            } while(true);*/
+             initialClickY = -1F;
+         }
+         bindAmountScrolled();
 diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src/main/java/net/minecraft/src/ThreadDownloadResources.java
 --- build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
