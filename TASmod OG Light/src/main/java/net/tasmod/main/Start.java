@@ -1,12 +1,17 @@
 package net.tasmod.main;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
+import java.nio.file.Files;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.UIManager;
 
 import org.apache.openjpa.enhance.InstrumentationFactory;
 import org.apache.openjpa.lib.log.NoneLogFactory;
@@ -14,6 +19,8 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 import net.minecraft.client.Minecraft;
+import net.tasmod.TASmod;
+import net.tasmod.Utils;
 import net.tasmod.asm.RandomnessVisitor;
 import net.tasmod.asm.VirtualInputVisitor;
 import net.tasmod.asm.WeightedRandomnessVisitor;
@@ -42,6 +49,7 @@ public class Start
 			"net/minecraft/src/EnchantmentHelper",
 			"net/minecraft/src/EnchantmentNameParts",
 			"net/minecraft/src/Entity",
+			"net/minecraft/src/GuiCreateWorld",
 			"net/minecraft/src/Explosion",
 			"net/minecraft/src/FontRenderer",
 			"net/minecraft/src/GuiMainMenu",
@@ -71,8 +79,7 @@ public class Start
 	);
 	
 	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) throws Exception {
 		Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
 		inst.addTransformer(new ClassFileTransformer() {
 			
@@ -95,21 +102,35 @@ public class Start
 				return writer.toByteArray();
 			}
 		});
+		Utils.transformRandom();
 		
-		try
-		{
-			// set new minecraft data folder to prevent it from using the .minecraft folder
-			// this makes it a portable version
-			Field f = Minecraft.class.getDeclaredField("minecraftDir");
-			Field.setAccessible(new Field[] { f }, true);
-			f.set(null, new File("build/mc"));
+		File mcfolder = Files.createTempDirectory(".minecraft").toFile();
+		if (!mcfolder.exists()) mcfolder.mkdir();
+		
+		// Change MC Settings
+		Field f = Minecraft.class.getDeclaredField("minecraftDir");
+		Field.setAccessible(new Field[] { f }, true);
+		f.set(null, mcfolder);
+		
+		System.setProperty("java.awt.headless", "false");
+		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception e) {}
+		FileDialog taspicker = new FileDialog((Frame) null, "Pick a TAS to play", FileDialog.LOAD);
+		taspicker.setMultipleMode(false);
+		try {
+			taspicker.setDirectory(System.getenv("AppData") + "\\.minecraft");
+		} catch (Exception e) {
+			// not on win
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return;
-		}
-		// start minecraft game application
-		Minecraft.main(args);
+		taspicker.setVisible(true);
+		File tasFile = taspicker.getFiles()[0];
+		TASmod.tasFile = tasFile;
+		if (tasFile == null) return;
+		
+		System.out.println("Running .minecraft in: " + mcfolder.getAbsolutePath());
+		
+		// Run Minecraft
+		Minecraft.main(new String[0]);
+		
+		Utils.deleteDirectory(mcfolder);
 	}
 }

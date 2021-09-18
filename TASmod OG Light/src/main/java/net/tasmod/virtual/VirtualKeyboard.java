@@ -5,7 +5,6 @@ import java.util.Queue;
 
 import org.lwjgl.input.Keyboard;
 
-import net.tasmod.TASmod;
 import net.tasmod.Utils;
 
 /**
@@ -72,9 +71,6 @@ public final class VirtualKeyboard {
 		boolean b = Keyboard.next(); // We can poll keyboard events to free up ram usage
 		if (Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
 			currentKeyEvent = new VirtualKeyEvent(Keyboard.getEventCharacter(), Keyboard.getEventKey(), Keyboard.getEventKeyState());
-			if (currentKeyEvent.state && currentKeyEvent.key == Keyboard.KEY_RMENU) {
-				TASmod.openTASPicker();
-			}
 			if (b) Utils.lazyKeyboard();
 			return b;
 		}

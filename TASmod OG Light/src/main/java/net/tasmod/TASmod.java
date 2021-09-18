@@ -1,7 +1,5 @@
 package net.tasmod;
 
-import java.awt.FileDialog;
-import java.awt.Frame;
 import java.io.File;
 import java.io.IOException;
 
@@ -24,9 +22,9 @@ public final class TASmod {
 
 	/** Minecraft Instance obtained via Reflection */
 	public static Minecraft mc;
-
-	/** Task to run next tick */
-	public static Runnable runMe;
+	
+	/** TAS File to play back if set */
+	public static File tasFile;
 	
 	/**
 	 * Ticks all kinds of things
@@ -40,43 +38,15 @@ public final class TASmod {
 			hasBeenTransformed = true;
 			try {
 				TASmod.mc = Utils.obtainMinecraftInstance();
-				Utils.transformRandom();
-				System.setProperty("java.awt.headless", "false"); // Believe it or not, this works
-				openTASPicker();
+				// start a playback or recording if needed
+				if (tasFile != null) {
+					playback = new Replayer(tasFile);
+					playback.startReplay();
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		if (runMe != null) {
-			runMe.run();
-			runMe = null;
-		}
-	}
-	
-	/** Time when the last TAS Picker was opened */
-	private static long timeLastOpen;
-	
-	/**
-	 * Opens a File Picker, where you can start a TAS
-	 */
-	public static void openTASPicker() {
-		if ((System.currentTimeMillis() - timeLastOpen) < 1000) return; // Avoid double clicking
-		timeLastOpen = System.currentTimeMillis();
-		new Thread(() -> {
-			FileDialog taspicker = new FileDialog((Frame) null, "Pick a TAS to play", FileDialog.LOAD);
-			taspicker.setMultipleMode(false);
-			try {
-				taspicker.setDirectory(System.getenv("AppData") + "\\.minecraft");
-			} catch (Exception e) {
-				// not on win
-			}
-			taspicker.setVisible(true);
-			File tasFile = taspicker.getFiles()[0];
-			if (tasFile != null)
-				runMe = () -> {
-					startPlayback(tasFile);
-				};
-		}).start();
 	}
 
 	/**

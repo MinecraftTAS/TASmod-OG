@@ -1,5 +1,6 @@
 package net.tasmod;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -64,6 +65,19 @@ public final class Utils {
 		return value;
 	}
 
+	/**
+     * Small Utility that deletes a Directory recursively
+     */
+	public static final boolean deleteDirectory(final File directoryToBeDeleted) {
+		final File[] allContents = directoryToBeDeleted.listFiles();
+	    if (allContents != null) {
+	        for (final File file : allContents) {
+	            deleteDirectory(file);
+	        }
+	    }
+	    return directoryToBeDeleted.delete();
+	}
+	
 	/**
 	 * Used by VirtualMouse, to get the dY for one tick.
 	 * The Value dY is being added over frames
