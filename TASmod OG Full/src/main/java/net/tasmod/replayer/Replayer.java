@@ -35,9 +35,9 @@ public final class Replayer {
 	 * Loads a File and reads some ticks from it
 	 * @throws IOException Cannot be thrown, unless something is terribly wrong.
 	 */
-	public Replayer(String fileName) throws Exception {
+	public Replayer(File name) throws Exception {
 		this.mc = TASmod.mc;
-		this.file = new File(fileName + ".tas");
+		this.file = name;
 		this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file)));
 		
 		this.fileReader = new Thread(new Runnable() {

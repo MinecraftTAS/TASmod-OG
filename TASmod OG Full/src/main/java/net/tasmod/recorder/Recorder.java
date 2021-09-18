@@ -37,9 +37,9 @@ public final class Recorder {
 	 * @param name The TAS name
 	 * @throws IOException Cannot be thrown, unless something is terribly wrong.
 	 */
-	public Recorder(String name) throws IOException {
+	public Recorder(File name) throws IOException {
 		this.mc = TASmod.mc;
-		this.file = new File(this.mc.mcDataDir.getParentFile(), name + ".tas");
+		this.file = name;
 		
 		/** Create a new File for the Recorder */
 		if (!this.file.exists()) this.file.createNewFile();

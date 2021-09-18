@@ -1,5 +1,6 @@
 package net.tasmod;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.lwjgl.input.Keyboard;
@@ -88,7 +89,7 @@ public final class TASmod {
 	/** Whether a playback or recording should happen */
 	public static boolean shouldRecordOrPlayback;
 	/** TAS File to play back if set */
-	public static String tasFile;
+	public static File tasFile;
 
 	/**
 	 * Ticks frame based stuff.
