@@ -34,7 +34,7 @@ public final class Replayer {
 	private final BufferedReader reader;
 	private final Queue<String> linesRead = new LinkedList<String>();
 	private final Thread fileReader;
-	private int currentTick;
+	public int currentTick;
 	
 	/**
 	 * Loads a File and reads some ticks from it

@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.tasmod.infogui.InfoHud;
+import net.tasmod.main.NewFrame;
 import net.tasmod.recorder.Recorder;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
@@ -73,6 +74,12 @@ public final class TASmod {
 			e.printStackTrace();
 		}
         infoHud.tick();
+        /* Update the Label */
+        int currentTick = 0;
+        if (TASmod.isPlayback()) currentTick = TASmod.getPlayback().currentTick;
+        else if (TASmod.isRecording()) currentTick = TASmod.getRecording().currentTick;
+        String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d", mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
+        NewFrame.label.setText(label);
 	}
 
 	/** Temporary variable to avoid pressing a key twice */

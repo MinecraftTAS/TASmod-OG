@@ -42,14 +42,23 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
-@@ -1970,6 +1990,7 @@
-         }
-         frame.setVisible(true);
-         frame.addWindowListener(new GameWindowListener(minecraftimpl, thread));
-+        frame.setResizable(false); // Make the game unresizable, because that is not in the Recording
-         thread.start();
-     }
- 
+@@ -1945,7 +1965,7 @@
+     {
+         boolean flag = false;
+         String s3 = s;
+-        Frame frame = new Frame("Minecraft");
++        Frame frame = new net.tasmod.main.NewFrame("Minecraft"); // Replace Minecrafts frame with a new one with some more stuff do it
+         Canvas canvas = new Canvas();
+         frame.setLayout(new BorderLayout());
+         frame.add(canvas, "Center");
+@@ -1954,6 +1974,7 @@
+         frame.setLocationRelativeTo(null);
+         MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, 854, 480, flag, frame);
+         Thread thread = new Thread(minecraftimpl, "Minecraft main thread");
++        net.tasmod.main.NewFrame.mcThread = thread; // I'd like to get the thread here >:)
+         thread.setPriority(10);
+         minecraftimpl.minecraftUri = "www.minecraft.net";
+         if(s3 != null && s1 != null)
 diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java/net/minecraft/src/ChunkProvider.java
 --- build/src/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
