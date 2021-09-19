@@ -42,14 +42,25 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
-@@ -1970,6 +1990,7 @@
-         }
-         frame.setVisible(true);
-         frame.addWindowListener(new GameWindowListener(minecraftimpl, thread));
+@@ -1946,12 +1966,16 @@
+         boolean flag = false;
+         String s3 = s;
+         Frame frame = new Frame("Minecraft");
 +        frame.setResizable(false); // Make the game unresizable, because that is not in the Recording
-         thread.start();
-     }
- 
++        frame.setUndecorated(true); // Hide the title bar
++        if (frame.isAlwaysOnTopSupported()) frame.setAlwaysOnTop(true); // Make it always be on top
++        frame.setLocation(net.tasmod.main.Start.x, net.tasmod.main.Start.y); // Move the window
+         Canvas canvas = new Canvas();
+         frame.setLayout(new BorderLayout());
+         frame.add(canvas, "Center");
+-        canvas.setPreferredSize(new Dimension(854, 480));
++        canvas.setPreferredSize(new Dimension(net.tasmod.main.Start.sizeX, net.tasmod.main.Start.sizeY)); // Change the window size
+         frame.pack();
+-        frame.setLocationRelativeTo(null);
++//        frame.setLocationRelativeTo(null); Don't set the location relative to null
+         MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, 854, 480, flag, frame);
+         Thread thread = new Thread(minecraftimpl, "Minecraft main thread");
+         thread.setPriority(10);
 diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java/net/minecraft/src/ChunkProvider.java
 --- build/src/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
