@@ -1,15 +1,7 @@
 diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/net/minecraft/client/Minecraft.java
 --- build/src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
-@@ -11,6 +11,7 @@
- import java.awt.Dimension;
- import java.awt.Frame;
- import java.awt.Graphics;
-+import java.awt.Panel;
- import java.io.File;
- import java.io.PrintStream;
- import java.text.DecimalFormat;
-@@ -678,6 +679,7 @@
+@@ -678,6 +678,7 @@
          }
          long l = System.nanoTime();
          Profiler.startSection("tick");
@@ -17,7 +9,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          for(int i = 0; i < timer.elapsedTicks; i++)
          {
              ticksRan++;
-@@ -1313,6 +1315,24 @@
+@@ -1313,6 +1314,24 @@
                  currentScreen.updateScreen();
              }
          }
@@ -42,7 +34,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          if(currentScreen == null || currentScreen.allowUserInput)
          {
              Profiler.endStartSection("mouse");
-@@ -1540,6 +1560,7 @@
+@@ -1540,6 +1559,7 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
@@ -50,8 +42,11 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
-@@ -1945,14 +1966,16 @@
+@@ -1943,16 +1963,19 @@
+ 
+     public static void startMainThread(String s, String s1, String s2)
      {
++    	// Change the Minecraft Canvas to be drawn onto a secondary pane making it appear in one specific size on the screen
          boolean flag = false;
          String s3 = s;
 -        Frame frame = new Frame("Minecraft");
@@ -60,7 +55,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 -        frame.setLayout(new BorderLayout());
 -        frame.add(canvas, "Center");
 -        canvas.setPreferredSize(new Dimension(854, 480));
-+        Panel gameWindow = new Panel();
++        java.awt.Panel gameWindow = new java.awt.Panel();
 +        gameWindow.setLayout(null);
 +        gameWindow.setBounds(net.tasmod.main.Start.x , net.tasmod.main.Start.y, net.tasmod.main.Start.sizeX, net.tasmod.main.Start.sizeY);
 +        canvas.setBounds(0, 0, net.tasmod.main.Start.sizeX, net.tasmod.main.Start.sizeY);

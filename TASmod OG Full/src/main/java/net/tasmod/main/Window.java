@@ -12,7 +12,6 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 public class Window extends JFrame implements KeyListener, MouseListener {
