@@ -42,32 +42,14 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
-@@ -1943,16 +1963,19 @@
+@@ -1970,6 +1990,7 @@
+         }
+         frame.setVisible(true);
+         frame.addWindowListener(new GameWindowListener(minecraftimpl, thread));
++        frame.setResizable(false); // Make the game unresizable, because that is not in the Recording
+         thread.start();
+     }
  
-     public static void startMainThread(String s, String s1, String s2)
-     {
-+    	// Change the Minecraft Canvas to be drawn onto a secondary pane making it appear in one specific size on the screen
-         boolean flag = false;
-         String s3 = s;
--        Frame frame = new Frame("Minecraft");
-+        Frame frame = new net.tasmod.main.Window("Minecraft");
-         Canvas canvas = new Canvas();
--        frame.setLayout(new BorderLayout());
--        frame.add(canvas, "Center");
--        canvas.setPreferredSize(new Dimension(854, 480));
-+        java.awt.Panel gameWindow = new java.awt.Panel();
-+        gameWindow.setLayout(null);
-+        gameWindow.setBounds(net.tasmod.main.Start.x , net.tasmod.main.Start.y, net.tasmod.main.Start.sizeX, net.tasmod.main.Start.sizeY);
-+        canvas.setBounds(0, 0, net.tasmod.main.Start.sizeX, net.tasmod.main.Start.sizeY);
-+        frame.add(gameWindow);
-+        gameWindow.add(canvas);
-         frame.pack();
--        frame.setLocationRelativeTo(null);
--        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, 854, 480, flag, frame);
-+        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, net.tasmod.main.Start.sizeX, net.tasmod.main.Start.sizeY, flag, frame);
-         Thread thread = new Thread(minecraftimpl, "Minecraft main thread");
-         thread.setPriority(10);
-         minecraftimpl.minecraftUri = "www.minecraft.net";
 diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java/net/minecraft/src/ChunkProvider.java
 --- build/src/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100

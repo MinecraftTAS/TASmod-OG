@@ -1,6 +1,7 @@
 package net.tasmod.main;
 
-import java.awt.GraphicsEnvironment;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
@@ -10,6 +11,9 @@ import java.nio.file.Files;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import org.apache.openjpa.enhance.InstrumentationFactory;
 import org.apache.openjpa.lib.log.NoneLogFactory;
@@ -76,10 +80,6 @@ public class Start
 			"net/minecraft/src/EntityRenderer"
 	);
 	
-	public static int x;
-	public static int y;
-	public static int sizeX;
-	public static int sizeY;
 	
 	public static void main(String[] args) throws Exception {
 		Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
@@ -113,50 +113,42 @@ public class Start
 		Field f = Minecraft.class.getDeclaredField("minecraftDir");
 		Field.setAccessible(new Field[] { f }, true);
 		f.set(null, mcfolder);
-//		
-//		// Gui
-//		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception e) {}
-//		int i = JOptionPane.showOptionDialog(null, "Do you want to record or playback a TAS?", "TASmod Menu", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[] {"Record", "Playback", "Edit", "Play"}, "Play");
-//		if (i == 0) {
-//			String msg = JOptionPane.showInputDialog("Enter a name for the TAS");
-//			if (msg != null) {
-//				TASmod.shouldRecordOrPlayback = true;
-//				TASmod.tasFile = new File(msg + ".tas");
-//			}
-//		} else if (i == 1) {
-//			System.setProperty("java.awt.headless", "false");
-//			FileDialog taspicker = new FileDialog((Frame) null, "Pick a TAS to play", FileDialog.LOAD);
-//			taspicker.setMultipleMode(false);
-//			try {
-//				taspicker.setDirectory(System.getenv("AppData") + "\\.minecraft");
-//			} catch (Exception e) {
-//				// not on win
-//			}
-//			taspicker.setVisible(true);
-//			File tasFile = taspicker.getFiles()[0];
-//			if (tasFile != null) {
-//				TASmod.shouldRecordOrPlayback = false;
-//				TASmod.tasFile = tasFile;
-//			} else return;
-//		} else if (i == 2) {
-//			String msg = JOptionPane.showInputDialog("Enter a name for the TAS to edit");
-//			if (msg != null) {
-//				TASmod.shouldRecordOrPlayback = false;
-//				TASmod.tasFile = new File(msg + ".tas");
-//				TASmod.shouldStop = true;
-//				TASmod.tickToStopAt = Integer.parseInt(JOptionPane.showInputDialog("Enter a tick to rerecord at"));
-//			}
-//		}
-//		
-		System.out.println("Running .minecraft in: " + mcfolder.getAbsolutePath());
 		
-		int width = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth();
-		Window.gameWindowSizeX = (int) (width / 1.5);
-		Window.gameWindowSizeY = (int) (Window.gameWindowSizeX / 16.0 * 9.0);
-		Start.x = width - Window.gameWindowSizeX;
-		Start.y = 0;
-		Start.sizeX = Window.gameWindowSizeX;
-		Start.sizeY = Window.gameWindowSizeY;
+		// Gui
+		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception e) {}
+		int i = JOptionPane.showOptionDialog(null, "Do you want to record or playback a TAS?", "TASmod Menu", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[] {"Record", "Playback", "Edit", "Play"}, "Play");
+		if (i == 0) {
+			String msg = JOptionPane.showInputDialog("Enter a name for the TAS");
+			if (msg != null) {
+				TASmod.shouldRecordOrPlayback = true;
+				TASmod.tasFile = new File(msg + ".tas");
+			}
+		} else if (i == 1) {
+			System.setProperty("java.awt.headless", "false");
+			FileDialog taspicker = new FileDialog((Frame) null, "Pick a TAS to play", FileDialog.LOAD);
+			taspicker.setMultipleMode(false);
+			try {
+				taspicker.setDirectory(System.getenv("AppData") + "\\.minecraft");
+			} catch (Exception e) {
+				// not on win
+			}
+			taspicker.setVisible(true);
+			File tasFile = taspicker.getFiles()[0];
+			if (tasFile != null) {
+				TASmod.shouldRecordOrPlayback = false;
+				TASmod.tasFile = tasFile;
+			} else return;
+		} else if (i == 2) {
+			String msg = JOptionPane.showInputDialog("Enter a name for the TAS to edit");
+			if (msg != null) {
+				TASmod.shouldRecordOrPlayback = false;
+				TASmod.tasFile = new File(msg + ".tas");
+				TASmod.shouldStop = true;
+				TASmod.tickToStopAt = Integer.parseInt(JOptionPane.showInputDialog("Enter a tick to rerecord at"));
+			}
+		}
+		
+		System.out.println("Running .minecraft in: " + mcfolder.getAbsolutePath());
 		
 		// Run Minecraft
 		Minecraft.main(new String[0]);
