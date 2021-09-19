@@ -1,5 +1,6 @@
 package net.tasmod.main;
 
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
@@ -149,7 +150,13 @@ public class Start
 //		
 		System.out.println("Running .minecraft in: " + mcfolder.getAbsolutePath());
 		
-		new Window().setVisible(true);
+		int width = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode().getWidth();
+		Window.gameWindowSizeX = (int) (width / 1.5);
+		Window.gameWindowSizeY = (int) (Window.gameWindowSizeX / 16.0 * 9.0);
+		Start.x = width - Window.gameWindowSizeX;
+		Start.y = 0;
+		Start.sizeX = Window.gameWindowSizeX;
+		Start.sizeY = Window.gameWindowSizeY;
 		
 		// Run Minecraft
 		Minecraft.main(new String[0]);

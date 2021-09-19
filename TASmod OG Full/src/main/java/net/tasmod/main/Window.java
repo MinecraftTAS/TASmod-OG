@@ -12,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 public class Window extends JFrame implements KeyListener, MouseListener {
@@ -19,18 +20,17 @@ public class Window extends JFrame implements KeyListener, MouseListener {
 	private static final long serialVersionUID = -4893558106947932185L;
 	
 	Image img;
-	int gameWindowSizeX;
-	int gameWindowSizeY;
+	public static int gameWindowSizeX;
+	public static int gameWindowSizeY;
 	
-	public Window() {
-		super("TASmod Window");
+	public Window(String name) {
+		super(name);
 		setResizable(false);
+		setLayout(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setUndecorated(true);
 		addMouseListener(this);
 		addKeyListener(this);
-		if (isAlwaysOnTopSupported()) setAlwaysOnTop(true);
-		setBackground(new Color(0, 0, 0, 0));
 		setExtendedState(MAXIMIZED_BOTH);
 		try {
 			img = ImageIO.read(Window.class.getResourceAsStream("background.png"));
@@ -41,13 +41,6 @@ public class Window extends JFrame implements KeyListener, MouseListener {
 	
 	@Override
 	public void paint(Graphics g) {
-		// Clear background for game window
-		gameWindowSizeX = (int) (getWidth() / 1.5);
-		gameWindowSizeY = (int) (gameWindowSizeX / 16.0 * 9.0);
-		Start.x = getWidth() - gameWindowSizeX;
-		Start.y = 0;
-		Start.sizeX = gameWindowSizeX;
-		Start.sizeY = gameWindowSizeY;
 		// Render background
 		for (int x1 = 0; x1 < getWidth() - gameWindowSizeX; x1+=64) for (int y1 = 0; y1 < getHeight(); y1+=64) g.drawImage(img, x1, y1, 64, 64, null);
 		for (int x1 = 0; x1 < getWidth(); x1+=64) for (int y1 = 0; y1 < getHeight() - gameWindowSizeY; y1+=64) g.drawImage(img, x1, gameWindowSizeY + y1, 64, 64, null);
