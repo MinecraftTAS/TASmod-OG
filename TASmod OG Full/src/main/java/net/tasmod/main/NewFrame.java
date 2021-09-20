@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.Panel;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,7 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
+import net.tasmod.TASmod;
+import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
 
 /**
@@ -28,6 +32,9 @@ public class NewFrame extends Frame {
 	public static NewFrame window;
 	public static JMenuBar bar;
 	public static JLabel label;
+	
+	public static Component mcCanvas;
+	public static Panel gamePanel;
 	
 	public NewFrame(String title) {
 		super(title);
@@ -81,6 +88,60 @@ public class NewFrame extends Frame {
 		JMenuItem load = new JMenuItem("Load TAS");
 		JMenuItem create = new JMenuItem("Create TAS");
 		JMenuItem save = new JMenuItem("Save TAS");
+		save.addActionListener(e -> {
+			if (TASmod.isRecording()) {
+				String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
+				if (out == null) return;
+				TASmod.getRecording().endRecording();
+				try {
+					TASmod.getRecording().saveTo(new File(out));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				save.setEnabled(false);
+			}
+		});
+		load.addActionListener(e -> {
+			String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
+			if (out == null) return;
+			File tasFile = new File(out);
+			try {
+				TASmod.playback = new Replayer(tasFile);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+			int width = Integer.parseInt(Start.resolution.split("x")[0]);
+	        int height = Integer.parseInt(Start.resolution.split("x")[1]);
+			mcCanvas.setBounds(0, 0, width, height);
+			gamePanel.setBounds(0, 0, width, height);
+			pack();
+			setLocationRelativeTo(null);
+			Start.shouldStart = true;
+			TASmod.startPlayback = true;
+			create.setEnabled(false);
+			load.setEnabled(false);
+		});
+		create.addActionListener(e -> {
+			String out = JOptionPane.showInputDialog("Select a screen resolution for Minecraft", "854x480");
+			if (out == null) return;
+			
+			Start.resolution = out;
+			try {
+				int width = Integer.parseInt(Start.resolution.split("x")[0]);
+		        int height = Integer.parseInt(Start.resolution.split("x")[1]);	
+				mcCanvas.setBounds(0, 0, width, height);
+				gamePanel.setBounds(0, 0, width, height);
+			} catch (Exception error) {
+				return;
+			}
+			pack();
+			setLocationRelativeTo(null);
+			Start.shouldStart = true;
+			
+			TASmod.startRecording = true;
+			create.setEnabled(false);
+			load.setEnabled(false);
+		});
 		file.add(load);
 		file.add(create);
 		file.add(save);
@@ -99,6 +160,8 @@ public class NewFrame extends Frame {
 	public void add(Component comp, Object constraints) {
 		if ("Center".equals(constraints)) {
 			Panel p = new Panel(null);
+			gamePanel = p;
+			mcCanvas = comp;
 			comp.setBounds(0, 0, 854, 480);
 			p.setBounds(0, 0, 854, 480);
 			p.add(comp);

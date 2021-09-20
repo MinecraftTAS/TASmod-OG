@@ -1,6 +1,5 @@
 package net.tasmod;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.lwjgl.input.Keyboard;
@@ -26,7 +25,7 @@ public final class TASmod {
 	public static volatile Recorder recording;
 
 	/** Currently running Playback */
-	private static volatile Replayer playback;
+	public static volatile Replayer playback;
 
 	/** Hacky boolean, to run Code once when MC starts, without requiring more Code Edits */
 	private static boolean hasBeenTransformed;
@@ -50,18 +49,15 @@ public final class TASmod {
 			hasBeenTransformed = true;
 			try {
 				TASmod.mc = Utils.obtainMinecraftInstance();
-				// start a playback or recording if needed
-				if (tasFile != null) {
-					if (shouldRecordOrPlayback) {
-						recording = new Recorder(tasFile);
-						recording.startRecording();
-					} else {
-						playback = new Replayer(tasFile);
-						playback.startReplay();
-					}
-				}
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+			if (startRecording) {
+				recording = new Recorder(); // Start a new Recording
+				startRecording = false;
+			} else if (startPlayback) {
+				playback.startReplay();
+				startPlayback = false;
 			}
 		}
 		/* Handle keybinds and tick advance */
@@ -92,15 +88,10 @@ public final class TASmod {
 	private static boolean _was52pressed;
 	/** Temporary variable for tickrate zero to work */
 	private static boolean _undoTickrate;
-
-	/** Whether a playback or recording should happen */
-	public static boolean shouldRecordOrPlayback;
-	/** TAS File to play back if set */
-	public static File tasFile;
-	/** Where the TAS should stop and rerecord at */
-	public static boolean shouldStop;
-	/** ^, but the tick for it */
-	public static int tickToStopAt;
+	/** Whether a recording should start */
+	public static boolean startRecording;
+	/** Whether a playback should start */
+	public static boolean startPlayback;
 
 	/**
 	 * Ticks frame based stuff.

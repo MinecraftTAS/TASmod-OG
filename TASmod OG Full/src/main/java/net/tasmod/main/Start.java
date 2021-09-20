@@ -77,6 +77,11 @@ public class Start
 			"net/minecraft/src/EntityRenderer"
 	);
 
+	/** Whether the game should start already */
+	public static boolean shouldStart;
+	/** Resolution the game should start at */
+	public static String resolution;
+
 	public static void main(String[] args) throws Exception {
 		Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
 		inst.addTransformer(new ClassFileTransformer() {
