@@ -147,9 +147,7 @@ public class InfoHud extends GuiScreen {
 	 */
 	private void saveConfig() {
 		try {
-			File tasmodDir = new File(TASmod.mc.mcDataDir, "tasmodog");
-			tasmodDir.mkdir();
-			File configFile = new File(tasmodDir, "infogui.cfg");
+			File configFile = new File(TASmod.mc.mcDataDir, "infogui.cfg");
 			if (!configFile.exists()) configFile.createNewFile();
 			configuration.store(new FileOutputStream(configFile, false), "DO NOT EDIT MANUALLY");
 		} catch (IOException e) {
@@ -170,9 +168,7 @@ public class InfoHud extends GuiScreen {
 		/* Check whether already rendered before */
 		try {
 			configuration = new Properties();
-			File tasmodDir = new File(TASmod.mc.mcDataDir, "tasmodog");
-			tasmodDir.mkdir();
-			File configFile = new File(tasmodDir, "infogui.cfg");
+			File configFile = new File(TASmod.mc.mcDataDir, "infogui.cfg");
 			if (!configFile.exists()) configFile.createNewFile();
 			configuration.load(new FileReader(configFile));
 			lists = new ArrayList<InfoLabel>();

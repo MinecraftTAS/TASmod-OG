@@ -91,6 +91,7 @@ public class NewFrame extends Frame {
 		JMenuItem load = new JMenuItem("Load TAS");
 		JMenuItem create = new JMenuItem("Create TAS");
 		JMenuItem save = new JMenuItem("Save TAS");
+		JMenuItem start = new JMenuItem("Launch normally");
 		save.addActionListener(e -> {
 			if (TASmod.isRecording()) {
 				String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
@@ -145,9 +146,18 @@ public class NewFrame extends Frame {
 			create.setEnabled(false);
 			load.setEnabled(false);
 		});
+		start.addActionListener(e -> {
+			Start.resolution = "854x480";
+			Start.shouldStart = true;
+			Start.isNormalLaunch = true;
+			create.setEnabled(false);
+			save.setEnabled(false);
+			load.setEnabled(false);
+		});
 		file.add(load);
 		file.add(create);
 		file.add(save);
+		file.add(start);
 		
 		bar.add(file);
 		bar.add(game);

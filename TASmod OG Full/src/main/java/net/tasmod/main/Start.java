@@ -1,11 +1,13 @@
 package net.tasmod.main;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.List;
@@ -77,6 +79,8 @@ public class Start
 			"net/minecraft/src/EntityRenderer"
 	);
 
+	/** Whether the options.txt and infoGui.data should be saved or not */
+	public static boolean isNormalLaunch;
 	/** Whether the game should start already */
 	public static boolean shouldStart;
 	/** Resolution the game should start at */
@@ -117,17 +121,35 @@ public class Start
 		Field.setAccessible(new Field[] { f }, true);
 		f.set(null, mcfolder);
 		
+		// Copy some basic minecraft files
+		File optionsTxt = new File(mcfolder, "options.txt");
+		File infoGuiCfg = new File(mcfolder, "infogui.cfg");
+		File originalOptionsTxt = new File("options.txt");
+		File originalInfoGuiCfg = new File("infogui.cfg");
+		if (originalOptionsTxt.exists()) Files.copy(originalOptionsTxt.toPath(), optionsTxt.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		if (originalInfoGuiCfg.exists()) Files.copy(originalInfoGuiCfg.toPath(), infoGuiCfg.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		
 		System.out.println("Running .minecraft in: " + mcfolder.getAbsolutePath());
+		
+		// Add a shutdown hook
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			try {
+				// Save some files
+				if (isNormalLaunch) {
+					Files.copy(optionsTxt.toPath(), originalOptionsTxt.toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(infoGuiCfg.toPath(), originalInfoGuiCfg.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				}
+				
+				Utils.deleteDirectory(mcfolder);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}));
 		
 		// Run Minecraft
 		Minecraft.main(new String[0]);
 		NewFrame.mcThread.join();
 		NewFrame.window.dispose();
-		
-		// Stop the recording after the game is closed
-		if (TASmod.isRecording()) TASmod.getRecording().endRecording();
-		
-		Utils.deleteDirectory(mcfolder);
 	}
 	
 }
