@@ -40,34 +40,28 @@ public final class Utils {
 	 * Used for Fake Camera
 	 * @author Mojang Studios
 	 */
-    public static void setAngles(float f, float f1) {
-        float f2 = rotationPitch;
-        float f3 = rotationYaw;
-        rotationYaw += f * 0.14999999999999999D;
-        rotationPitch -= f1 * 0.14999999999999999D;
-        if(rotationPitch < -90F)
-        {
-            rotationPitch = -90F;
-        }
-        if(rotationPitch > 90F)
-        {
-            rotationPitch = 90F;
-        }
-        prevRotationPitch += rotationPitch - f2;
-        prevRotationYaw += rotationYaw - f3;
-    }
-    
-    /**
-     * Small Utility that deletes a Directory recursively
-     */
-	public static final boolean deleteDirectory(final File directoryToBeDeleted) {
+	public static void setAngles(final float f, final float f1) {
+		final float f2 = rotationPitch;
+		final float f3 = rotationYaw;
+		rotationYaw += f * 0.14999999999999999D;
+		rotationPitch -= f1 * 0.14999999999999999D;
+		if(rotationPitch < -90F)
+			rotationPitch = -90F;
+		if(rotationPitch > 90F)
+			rotationPitch = 90F;
+		prevRotationPitch += rotationPitch - f2;
+		prevRotationYaw += rotationYaw - f3;
+	}
+
+	/**
+	 * Small Utility that deletes a Directory recursively
+	 */
+	public static boolean deleteDirectory(final File directoryToBeDeleted) {
 		final File[] allContents = directoryToBeDeleted.listFiles();
-	    if (allContents != null) {
-	        for (final File file : allContents) {
-	            deleteDirectory(file);
-	        }
-	    }
-	    return directoryToBeDeleted.delete();
+		if (allContents != null)
+			for (final File file : allContents)
+				deleteDirectory(file);
+		return directoryToBeDeleted.delete();
 	}
 
 	/**
@@ -75,7 +69,7 @@ public final class Utils {
 	 * The Value dX is being added over frames
 	 */
 	public static int getDX() {
-		int value = dX;
+		final int value = dX;
 		dX = 0;
 		return value;
 	}
@@ -85,7 +79,7 @@ public final class Utils {
 	 * The Value dY is being added over frames
 	 */
 	public static int getDY() {
-		int value = dY;
+		final int value = dY;
 		dY = 0;
 		return value;
 	}
@@ -101,7 +95,7 @@ public final class Utils {
 		final Field mathRandomField = Class.forName("java.lang.Math$RandomNumberGeneratorHolder").getDeclaredField("randomNumberGenerator");
 		mathRandomField.setAccessible(true);
 		/* Remove Final */
-		Field modifiersField = Field.class.getDeclaredField("modifiers");
+		final Field modifiersField = Field.class.getDeclaredField("modifiers");
 		modifiersField.setAccessible(true);
 		modifiersField.setInt(mathRandomField, mathRandomField.getModifiers() & ~Modifier.FINAL);
 		/* Replace Random of Math with Modded one */
@@ -117,7 +111,7 @@ public final class Utils {
 		Field theMinecraftField;
 		try {
 			theMinecraftField = clazz.getDeclaredField("theMinecraft");
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			theMinecraftField = clazz.getDeclaredField("a");
 		}
 		theMinecraftField.setAccessible(true);
@@ -133,7 +127,7 @@ public final class Utils {
 		Field theTimerField;
 		try {
 			theTimerField = clazz.getDeclaredField("timer");
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			theTimerField = clazz.getDeclaredField("X");
 		}
 		theTimerField.setAccessible(true);

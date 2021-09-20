@@ -6,7 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.tasmod.infogui.InfoHud;
-import net.tasmod.main.NewFrame;
+import net.tasmod.main.EmulatorFrame;
 import net.tasmod.recorder.Recorder;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
@@ -36,11 +36,32 @@ public final class TASmod {
 	/** The only Info Hud Instance :CsGun: */
 	public static InfoHud infoHud = new InfoHud();
 
+	/** Temporary variable to avoid pressing a key twice */
+	private static boolean _was66pressed;
+	
+	/** Temporary variable to avoid pressing a key twice */
+	private static boolean _was67pressed;
+	
+	/** Temporary variable to avoid pressing a key twice */
+	private static boolean _was51pressed;
+	
+	/** Temporary variable to avoid pressing a key twice */
+	private static boolean _was52pressed;
+	
+	/** Temporary variable for tickrate zero to work */
+	private static boolean _undoTickrate;
+	
+	/** Whether a recording should start */
+	public static boolean startRecording;
+	
+	/** Whether a playback should start */
+	public static boolean startPlayback;
+
 	/**
 	 * Ticks all kinds of things
 	 * @throws IOException Unexpected File End
 	 */
-	public static final void tick() {
+	public static void tick() {
 		/* Tick Recording/Playback if needed */
 		if (recording != null) recording.tick();
 		if (playback != null) playback.tick();
@@ -49,7 +70,7 @@ public final class TASmod {
 			hasBeenTransformed = true;
 			try {
 				TASmod.mc = Utils.obtainMinecraftInstance();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 			if (startRecording) {
@@ -61,43 +82,27 @@ public final class TASmod {
 			}
 		}
 		/* Handle keybinds and tick advance */
-        try {
+		try {
 			if (Keyboard.isKeyDown(64)) TASmod.mc.displayGuiScreen(infoHud);
-			if ((_undoTickrate) ? !(_undoTickrate = !_undoTickrate) : false) {
+			if (_undoTickrate ? !(_undoTickrate = !_undoTickrate) : false)
 				TickrateChanger.updateTickrate(0f);
-			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-        infoHud.tick();
-        /* Update the Label */
-        int currentTick = 0;
-        if (TASmod.isPlayback()) currentTick = TASmod.getPlayback().currentTick;
-        else if (TASmod.isRecording()) currentTick = TASmod.getRecording().currentTick;
-        String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d", mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
-        NewFrame.label.setText(label);
+		infoHud.tick();
+		/* Update the Label */
+		int currentTick = 0;
+		if (playback != null) currentTick = playback.currentTick;
+		else if (recording != null) currentTick = recording.currentTick;
+		final String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d", mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
+		EmulatorFrame.label.setText(label);
 	}
-
-	/** Temporary variable to avoid pressing a key twice */
-	private static boolean _was66pressed;
-	/** Temporary variable to avoid pressing a key twice */
-	private static boolean _was67pressed;
-	/** Temporary variable to avoid pressing a key twice */
-	private static boolean _was51pressed;
-	/** Temporary variable to avoid pressing a key twice */
-	private static boolean _was52pressed;
-	/** Temporary variable for tickrate zero to work */
-	private static boolean _undoTickrate;
-	/** Whether a recording should start */
-	public static boolean startRecording;
-	/** Whether a playback should start */
-	public static boolean startPlayback;
 
 	/**
 	 * Ticks frame based stuff.
 	 * @throws Exception Throws Exception whenever something bad happens
 	 */
-	public static final void render() {
+	public static void render() {
 		try {
 			if (!_was51pressed && Keyboard.isKeyDown(51)) TickrateChanger.slower();
 			if (!_was52pressed && Keyboard.isKeyDown(52)) TickrateChanger.faster();
@@ -105,12 +110,12 @@ public final class TASmod {
 			_was52pressed = Keyboard.isKeyDown(52);
 			if (Keyboard.isKeyDown(66) && !_was66pressed) TickrateChanger.toggleTickadvance();
 			_was66pressed = Keyboard.isKeyDown(66);
-			if (Keyboard.isKeyDown(67) && !_was67pressed && !isPlayback() && TickrateChanger.isTickAdvance) {
+			if (Keyboard.isKeyDown(67) && !_was67pressed && playback == null && TickrateChanger.isTickAdvance) {
 				TickrateChanger.updateTickrate(TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed]);
 				_undoTickrate = true;
 			}
 			_was67pressed = Keyboard.isKeyDown(67);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -119,7 +124,7 @@ public final class TASmod {
 	 * Whenever a new Keyboard Event gets called
 	 * @param event The Keyboard Event
 	 */
-	public static final void keyboardTick(final VirtualKeyEvent event) {
+	public static void keyboardTick(final VirtualKeyEvent event) {
 		if (recording != null) recording.keyboardTick(event);
 	}
 
@@ -127,37 +132,12 @@ public final class TASmod {
 	 * Whenever a new Mouse Event gets called
 	 * @param event The Mouse Event
 	 */
-	public static final void mouseTick(final VirtualMouseEvent event) {
+	public static void mouseTick(final VirtualMouseEvent event) {
 		if (recording != null) recording.mouseTick(event);
 	}
 
-	/**
-	 * @return Returns whether a Playback is running
-	 */
-	public static boolean isPlayback() {
-		return playback != null;
-	}
+	/** The Thread that minecraft runs on */
+	public static Thread mcThread;
 
-	/**
-	 * @return Returns whether a Recording is running
-	 */
-	public static boolean isRecording() {
-		return recording != null;
-	}
-
-	/**
-	 * End the current Playback
-	 */
-	public static void endPlayback() {
-		playback = null;
-	}
-
-	public static Recorder getRecording() {
-		return recording;
-	}
-
-	public static Replayer getPlayback() {
-		return playback;
-	}
 
 }

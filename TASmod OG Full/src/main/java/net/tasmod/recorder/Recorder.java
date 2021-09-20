@@ -23,12 +23,12 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
  * @author Pancake
  */
 public final class Recorder {
-	
+
 	private final Minecraft mc;
-	private final Queue<String> linesToPrint = new LinkedList<String>();
-	
+	private final Queue<String> linesToPrint = new LinkedList<>();
+
 	public int currentTick;
-	
+
 	/**
 	 * Prepares the Recording File
 	 * @param name The TAS name
@@ -38,33 +38,32 @@ public final class Recorder {
 		this.mc = TASmod.mc;
 		SimpleRandomMod.updateSeed(0L);
 		WeightedRandomMod.intCalls = 0;
-		
+
 		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
 		VirtualMouse.getDX();
 		VirtualMouse.getDY();
-		
+
 		linesToPrint.add(Start.resolution + "\n");
-		
+
 		VirtualKeyboard.listen = true;
 		VirtualMouse.listen = true;
 	}
-	
+
 	private volatile List<VirtualKeyEvent> keyEventsPerTick = new ArrayList<>();
 	private volatile List<VirtualMouseEvent> mouseEventsPerTick = new ArrayList<>();
-	
+
 	/**
 	 * Write all Keybindings into the File
 	 */
-	public final void tick() {
+	public void tick() {
 		while (true) {
 			String events = "";
 			if (keyEventsPerTick.size() == 0) {
 				linesToPrint.add("\n");
 				break;
 			}
-			for (final VirtualKeyEvent virtualKeyEvent : keyEventsPerTick) {
+			for (final VirtualKeyEvent virtualKeyEvent : keyEventsPerTick)
 				events += virtualKeyEvent + ":";
-			}
 			linesToPrint.add(events.substring(0, events.length() - 1) + "\n");
 			keyEventsPerTick.clear();
 			break;
@@ -87,36 +86,35 @@ public final class Recorder {
 		this.currentTick++;
 		SimpleRandomMod.updateSeed(currentTick);
 	}
-	
+
 	/**
 	 * End the Recording
 	 */
-	public final void endRecording() {
+	public void endRecording() {
 		VirtualKeyboard.listen = false;
 		VirtualMouse.listen = false;
 	}
-	
+
 	/**
-	 * Adds Mouse Events to a List 
+	 * Adds Mouse Events to a List
 	 */
-	public final void keyboardTick(final VirtualKeyEvent event) {
+	public void keyboardTick(final VirtualKeyEvent event) {
 		if (event.key != -1) keyEventsPerTick.add(event);
 	}
 
 	/**
-	 * Adds Mouse Events to a List 
+	 * Adds Mouse Events to a List
 	 */
-	public final void mouseTick(final VirtualMouseEvent event) {
+	public void mouseTick(final VirtualMouseEvent event) {
 		if (event.posX != -1 || event.eventButton != -1) mouseEventsPerTick.add(event);
 	}
 
-	public void saveTo(File file) throws Exception {
+	public void saveTo(final File file) throws Exception {
 		file.createNewFile();
-		FileWriter f = new FileWriter(file);
-		while (!linesToPrint.isEmpty()) {
+		final FileWriter f = new FileWriter(file);
+		while (!linesToPrint.isEmpty())
 			f.write(linesToPrint.poll());
-		}
 		f.close();
 	}
-	
+
 }

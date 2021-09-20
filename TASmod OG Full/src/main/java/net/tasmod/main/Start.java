@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -28,15 +29,15 @@ import net.tasmod.asm.WeightedRandomnessVisitor;
 
 public class Start
 {
-	
+
 	/**
 	 * List of classes that need their RNG to be weighted/removed
 	 */
 	public static final List<String> deadlockablerng = Arrays.asList(
 			"net/minecraft/src/GuiEnchantment",
 			"net/minecraft/src/TileEntityEnchantmentTable"
-	);
-	
+			);
+
 	/**
 	 * List of classes that need their RNG to be removed
 	 */
@@ -62,8 +63,8 @@ public class Start
 			"net/minecraft/src/TileEntityDispenser",
 			"net/minecraft/src/GuiCreateWorld",
 			"net/minecraft/src/World" // World is only being replaced in the contructor!
-	);
-	
+			);
+
 	/**
 	 * List of classes that need their Keyboard/Mouse to be removed
 	 */
@@ -77,7 +78,7 @@ public class Start
 			"net/minecraft/src/GuiSlotStats",
 			"net/minecraft/src/MouseHelper",
 			"net/minecraft/src/EntityRenderer"
-	);
+			);
 
 	/** Whether the options.txt and infoGui.data should be saved or not */
 	public static boolean isNormalLaunch;
@@ -86,51 +87,50 @@ public class Start
 	/** Resolution the game should start at */
 	public static String resolution;
 
-	public static void main(String[] args) throws Exception {
-		Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
+	public static void main(final String[] args) throws Exception {
+		final Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
 		inst.addTransformer(new ClassFileTransformer() {
-			
+
 			@Override
-			public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+			public byte[] transform(final ClassLoader loader, final String className, final Class<?> classBeingRedefined, final ProtectionDomain protectionDomain, final byte[] classfileBuffer) throws IllegalClassFormatException {
 				if (!className.toLowerCase().startsWith("net/minecraft")) return classfileBuffer;
-				ClassReader reader = new ClassReader(classfileBuffer);
-				ClassWriter writer = new ClassWriter(reader, 0);
-				
-				if (rng.contains(className)) {
+				final ClassReader reader = new ClassReader(classfileBuffer);
+				final ClassWriter writer = new ClassWriter(reader, 0);
+
+				if (rng.contains(className))
 					reader.accept(RandomnessVisitor.classVisitor(className, writer), 0);
-				} else if (input.contains(className)) {
+				else if (input.contains(className))
 					reader.accept(VirtualInputVisitor.classVisitor(className, writer), 0);
-				} else if (deadlockablerng.contains(className)) {
+				else if (deadlockablerng.contains(className))
 					reader.accept(WeightedRandomnessVisitor.classVisitor(className, writer), 0);
-				} else {
+				else
 					return classfileBuffer;
-				}
-				
+
 				return writer.toByteArray();
 			}
 		});
 		Utils.transformRandom();
-		
+
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		
-		File mcfolder = Files.createTempDirectory(".minecraft").toFile();
+
+		final File mcfolder = Files.createTempDirectory(".minecraft").toFile();
 		if (!mcfolder.exists()) mcfolder.mkdir();
-		
+
 		// Change MC Settings
-		Field f = Minecraft.class.getDeclaredField("minecraftDir");
-		Field.setAccessible(new Field[] { f }, true);
+		final Field f = Minecraft.class.getDeclaredField("minecraftDir");
+		AccessibleObject.setAccessible(new Field[] { f }, true);
 		f.set(null, mcfolder);
-		
+
 		// Copy some basic minecraft files
-		File optionsTxt = new File(mcfolder, "options.txt");
-		File infoGuiCfg = new File(mcfolder, "infogui.cfg");
-		File originalOptionsTxt = new File("options.txt");
-		File originalInfoGuiCfg = new File("infogui.cfg");
+		final File optionsTxt = new File(mcfolder, "options.txt");
+		final File infoGuiCfg = new File(mcfolder, "infogui.cfg");
+		final File originalOptionsTxt = new File("options.txt");
+		final File originalInfoGuiCfg = new File("infogui.cfg");
 		if (originalOptionsTxt.exists()) Files.copy(originalOptionsTxt.toPath(), optionsTxt.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		if (originalInfoGuiCfg.exists()) Files.copy(originalInfoGuiCfg.toPath(), infoGuiCfg.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		
+
 		System.out.println("Running .minecraft in: " + mcfolder.getAbsolutePath());
-		
+
 		// Add a shutdown hook
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			try {
@@ -139,17 +139,17 @@ public class Start
 					Files.copy(optionsTxt.toPath(), originalOptionsTxt.toPath(), StandardCopyOption.REPLACE_EXISTING);
 					Files.copy(infoGuiCfg.toPath(), originalInfoGuiCfg.toPath(), StandardCopyOption.REPLACE_EXISTING);
 				}
-				
+
 				Utils.deleteDirectory(mcfolder);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}));
-		
+
 		// Run Minecraft
 		Minecraft.main(new String[0]);
-		NewFrame.mcThread.join();
-		NewFrame.window.dispose();
+		TASmod.mcThread.join();
+		EmulatorFrame.window.dispose();
 	}
-	
+
 }

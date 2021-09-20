@@ -27,30 +27,37 @@ import net.tasmod.tools.TickrateChanger;
  * A new Frame for Minecraft with some more gui stuff do it
  * @author Pancake
  */
-public class NewFrame extends Frame {
+public class EmulatorFrame extends Frame {
 
 	private static final long serialVersionUID = 3759537254483840058L;
 
-	public static Thread mcThread;
-	public static NewFrame window;
+	/** The Singleton of this File */
+	public static EmulatorFrame window;
+	/** The Top Bar of the window */
 	public static JMenuBar bar;
+	/** The Bottom Bar of the window */
 	public static JLabel label;
-	
+	/** The Canvas of the Minecraft Game */
 	public static Component mcCanvas;
+	/** The Panel that holds the Minecraft Canvas at a specific resolution */
 	public static Panel gamePanel;
-	
-	public NewFrame(String title) {
+
+	/**
+	 * Initializes the Menu Bar and Bottom Label such as their Actions
+	 * @param title Title of the window
+	 */
+	public EmulatorFrame(final String title) {
 		super(title);
 		window = this;
 		getInsets().set(0, 0, 0, 0);
 		bar = new JMenuBar();
 		// create jmenubar
-		JMenu file = new JMenu("File");
-		JMenu game = new JMenu("Game");
-		JMenu help = new JMenu("Help");
-		
-		JMenuItem source = new JMenuItem("Source");
-		JMenuItem wiki = new JMenuItem("Wiki");
+		final JMenu file = new JMenu("File");
+		final JMenu game = new JMenu("Game");
+		final JMenu help = new JMenu("Help");
+
+		final JMenuItem source = new JMenuItem("Source");
+		final JMenuItem wiki = new JMenuItem("Wiki");
 		source.addActionListener(e -> {
 			try {
 				if (Desktop.isDesktopSupported()) Desktop.getDesktop().browse(new URI("https://github.com/MCPfannkuchenYT/TASmod-OG"));
@@ -67,10 +74,10 @@ public class NewFrame extends Frame {
 		});
 		help.add(source);
 		help.add(wiki);
-		
-		JMenuItem faster = new JMenuItem("Faster");
-		JMenuItem slower = new JMenuItem("Slower");
-		JMenuItem pause = new JMenuItem("Pause/Resume");
+
+		final JMenuItem faster = new JMenuItem("Faster");
+		final JMenuItem slower = new JMenuItem("Slower");
+		final JMenuItem pause = new JMenuItem("Pause/Resume");
 		faster.addActionListener(e -> {
 			TickrateChanger.faster();
 		});
@@ -80,42 +87,42 @@ public class NewFrame extends Frame {
 		pause.addActionListener(e -> {
 			try {
 				TickrateChanger.toggleTickadvance();
-			} catch (Exception e1) {
+			} catch (final Exception e1) {
 				e1.printStackTrace();
 			}
 		});
 		game.add(faster);
 		game.add(slower);
 		game.add(pause);
-		
-		JMenuItem load = new JMenuItem("Load TAS");
-		JMenuItem create = new JMenuItem("Create TAS");
-		JMenuItem save = new JMenuItem("Save TAS");
-		JMenuItem start = new JMenuItem("Launch normally");
+
+		final JMenuItem load = new JMenuItem("Load TAS");
+		final JMenuItem create = new JMenuItem("Create TAS");
+		final JMenuItem save = new JMenuItem("Save TAS");
+		final JMenuItem start = new JMenuItem("Launch normally");
 		save.addActionListener(e -> {
-			if (TASmod.isRecording()) {
-				String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
+			if (TASmod.recording != null) {
+				final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
 				if (out == null) return;
-				TASmod.getRecording().endRecording();
+				TASmod.recording.endRecording();
 				try {
-					TASmod.getRecording().saveTo(new File(out));
-				} catch (Exception e1) {
+					TASmod.recording.saveTo(new File(out));
+				} catch (final Exception e1) {
 					e1.printStackTrace();
 				}
 				save.setEnabled(false);
 			}
 		});
 		load.addActionListener(e -> {
-			String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
+			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
 			if (out == null) return;
-			File tasFile = new File(out);
+			final File tasFile = new File(out);
 			try {
 				TASmod.playback = new Replayer(tasFile);
-			} catch (Exception e1) {
+			} catch (final Exception e1) {
 				e1.printStackTrace();
 			}
-			int width = Integer.parseInt(Start.resolution.split("x")[0]);
-	        int height = Integer.parseInt(Start.resolution.split("x")[1]);
+			final int width = Integer.parseInt(Start.resolution.split("x")[0]);
+			final int height = Integer.parseInt(Start.resolution.split("x")[1]);
 			mcCanvas.setBounds(0, 0, width, height);
 			gamePanel.setBounds(0, 0, width, height);
 			pack();
@@ -126,22 +133,22 @@ public class NewFrame extends Frame {
 			load.setEnabled(false);
 		});
 		create.addActionListener(e -> {
-			String out = JOptionPane.showInputDialog("Select a screen resolution for Minecraft", "854x480");
+			final String out = JOptionPane.showInputDialog("Select a screen resolution for Minecraft", "854x480");
 			if (out == null) return;
-			
+
 			Start.resolution = out;
 			try {
-				int width = Integer.parseInt(Start.resolution.split("x")[0]);
-		        int height = Integer.parseInt(Start.resolution.split("x")[1]);	
+				final int width = Integer.parseInt(Start.resolution.split("x")[0]);
+				final int height = Integer.parseInt(Start.resolution.split("x")[1]);
 				mcCanvas.setBounds(0, 0, width, height);
 				gamePanel.setBounds(0, 0, width, height);
-			} catch (Exception error) {
+			} catch (final Exception error) {
 				return;
 			}
 			pack();
 			setLocationRelativeTo(null);
 			Start.shouldStart = true;
-			
+
 			TASmod.startRecording = true;
 			create.setEnabled(false);
 			load.setEnabled(false);
@@ -158,7 +165,7 @@ public class NewFrame extends Frame {
 		file.add(create);
 		file.add(save);
 		file.add(start);
-		
+
 		bar.add(file);
 		bar.add(game);
 		if (Desktop.isDesktopSupported()) bar.add(help);
@@ -167,22 +174,22 @@ public class NewFrame extends Frame {
 			private static final long serialVersionUID = -4459139147755002132L;
 
 			@Override
-			protected void paintComponent(Graphics g) {
-				BufferedImage img = new BufferedImage(label.getWidth(), label.getHeight(), BufferedImage.TYPE_INT_ARGB);
-				Graphics2D gr = img.createGraphics();
+			protected void paintComponent(final Graphics g) {
+				final BufferedImage img = new BufferedImage(label.getWidth(), label.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				final Graphics2D gr = img.createGraphics();
 				super.paintComponent(gr);
 				g.drawImage(img, 2, 0, null);
 			}
 		};
 	}
-	
+
 	/**
 	 * Changes the Canvas to have an extra Panel around it
 	 */
 	@Override
-	public void add(Component comp, Object constraints) {
+	public void add(final Component comp, final Object constraints) {
 		if ("Center".equals(constraints)) {
-			Panel p = new Panel(null);
+			final Panel p = new Panel(null);
 			gamePanel = p;
 			mcCanvas = comp;
 			comp.setBounds(0, 0, 854, 480);
@@ -195,5 +202,5 @@ public class NewFrame extends Frame {
 		}
 		super.add(comp, constraints);
 	}
-	
+
 }
