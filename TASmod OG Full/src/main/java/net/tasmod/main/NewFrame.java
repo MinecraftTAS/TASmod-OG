@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Panel;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -150,7 +153,17 @@ public class NewFrame extends Frame {
 		bar.add(game);
 		if (Desktop.isDesktopSupported()) bar.add(help);
 		// create jlabel
-		label = new JLabel("Loading...");
+		label = new JLabel("Loading...") {
+			private static final long serialVersionUID = -4459139147755002132L;
+
+			@Override
+			protected void paintComponent(Graphics g) {
+				BufferedImage img = new BufferedImage(label.getWidth(), label.getHeight(), BufferedImage.TYPE_INT_ARGB);
+				Graphics2D gr = img.createGraphics();
+				super.paintComponent(gr);
+				g.drawImage(img, 2, 0, null);
+			}
+		};
 	}
 	
 	/**
