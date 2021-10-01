@@ -42,12 +42,12 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
-@@ -1945,15 +1965,26 @@
+@@ -1945,14 +1965,24 @@
      {
          boolean flag = false;
          String s3 = s;
 -        Frame frame = new Frame("Minecraft");
-+        Frame frame = new net.tasmod.main.NewFrame("Minecraft"); // Replace Minecrafts frame with a new one with some more stuff do it
++        Frame frame = new net.tasmod.main.EmulatorFrame("Minecraft"); // Replace Minecrafts frame with a new one with some more stuff do it
          Canvas canvas = new Canvas();
          frame.setLayout(new BorderLayout());
          frame.add(canvas, "Center");
@@ -68,11 +68,9 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +        canvas.setPreferredSize(new Dimension(width, height));
 +        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, width, height, flag, frame);
          Thread thread = new Thread(minecraftimpl, "Minecraft main thread");
-+        net.tasmod.main.NewFrame.mcThread = thread; // I'd like to get the thread here >:)
          thread.setPriority(10);
          minecraftimpl.minecraftUri = "www.minecraft.net";
-         if(s3 != null && s1 != null)
-@@ -1968,7 +1999,6 @@
+@@ -1968,7 +1998,6 @@
              String as[] = s2.split(":");
              minecraftimpl.setServer(as[0], Integer.parseInt(as[1]));
          }
@@ -272,7 +270,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src
                      }
 -                    downloadAndInstallResource(url, s, l, i);
 +                    // This is just a small change to fix the game audio, because the files aren't online on the original link anymore. By doing this i download the ogg files from my website instead.
-+                    downloadAndInstallResource(new URL("http://mgnet.work/archive/1.0-sounds/"), s, l, i);
++                    downloadAndInstallResource(new URL("https://maven.mgnet.work/archive/1.0-sounds/"), s, l, i);
                      if(closing)
                      {
                          return;
