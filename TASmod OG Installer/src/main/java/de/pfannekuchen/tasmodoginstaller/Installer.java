@@ -17,7 +17,7 @@ public class Installer {
 	public static void main(String[] args) throws Exception {
 		/* Create the Window */
 		File potionFile = File.createTempFile("potion", ".png");
-		Files.copy(new URL("http://mgnet.work/potion.png").openStream(), potionFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(new URL("https://data.mgnet.work/potion.png").openStream(), potionFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		InstallerWindow dialog = new InstallerWindow();
 		dialog.setResizable(false);
 		dialog.setSize(400, 400);
@@ -32,24 +32,24 @@ public class Installer {
 			try {
 				if (netIsAvailable()) {
 					System.out.println("Downloading Game Files..");
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/jinput-dx8.dll").openStream(), new File(instance, "jinput-dx8.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/jinput-dx8_64.dll").openStream(), new File(instance, "jinput-dx8_64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/jinput-raw.dll").openStream(), new File(instance, "jinput-raw.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/jinput-raw_64.dll").openStream(), new File(instance, "jinput-raw_64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/lwjgl.dll").openStream(), new File(instance, "lwjgl.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/lwjgl64.dll").openStream(), new File(instance, "lwjgl64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/OpenAL32.dll").openStream(), new File(instance, "OpenAL32.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/OpenAL64.dll").openStream(), new File(instance, "OpenAL64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/libjinput-osx.dylib").openStream(), new File(instance, "libjinput-osx.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/liblwjgl.dylib").openStream(), new File(instance, "liblwjgl.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/openal.dylib").openStream(), new File(instance, "openal.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/libjinput-linux.so").openStream(), new File(instance, "libjinput-linux.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/libjinput-linux64.so").openStream(), new File(instance, "libjinput-linux64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/liblwjgl.so").openStream(), new File(instance, "liblwjgl.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/liblwjgl64.so").openStream(), new File(instance, "liblwjgl64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/libopenal.so").openStream(), new File(instance, "libopenal.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/cfg/1.0natives/libopenal64.so").openStream(), new File(instance, "libopenal64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
-					Files.copy(new URL("https://mgnet.work/TASmod_OG-" + (dialog.fullRadioBox.isSelected() ? "full" : "light") + "-" + (dialog.earlyAccessRadioBox.isSelected() ? "earlyaccess" : "release") + ".jar").openStream(), new File(instance, "minecraft.jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/jinput-dx8.dll").openStream(), new File(instance, "jinput-dx8.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/jinput-dx8_64.dll").openStream(), new File(instance, "jinput-dx8_64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/jinput-raw.dll").openStream(), new File(instance, "jinput-raw.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/jinput-raw_64.dll").openStream(), new File(instance, "jinput-raw_64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/lwjgl.dll").openStream(), new File(instance, "lwjgl.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/lwjgl64.dll").openStream(), new File(instance, "lwjgl64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/OpenAL32.dll").openStream(), new File(instance, "OpenAL32.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/OpenAL64.dll").openStream(), new File(instance, "OpenAL64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libjinput-osx.dylib").openStream(), new File(instance, "libjinput-osx.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/liblwjgl.dylib").openStream(), new File(instance, "liblwjgl.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/openal.dylib").openStream(), new File(instance, "openal.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libjinput-linux.so").openStream(), new File(instance, "libjinput-linux.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libjinput-linux64.so").openStream(), new File(instance, "libjinput-linux64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/liblwjgl.so").openStream(), new File(instance, "liblwjgl.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/liblwjgl64.so").openStream(), new File(instance, "liblwjgl64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libopenal.so").openStream(), new File(instance, "libopenal.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libopenal64.so").openStream(), new File(instance, "libopenal64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+					Files.copy(new URL("https://data.mgnet.work/tasmodog/TASmod_OG-" + (dialog.fullRadioBox.isSelected() ? "full" : "light") + "-" + (dialog.earlyAccessRadioBox.isSelected() ? "earlyaccess" : "release") + ".jar").openStream(), new File(instance, "minecraft.jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
 				}
 				if (new File(instance, "minecraft.jar").exists()) {
 					findJRE8();
