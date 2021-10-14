@@ -47,7 +47,7 @@ public class InstallerBackend {
 		}
 		if (new File(instance, "minecraft.jar").exists()) {
 			findJRE8();
-			ProcessBuilder builder = new ProcessBuilder(new String[] {javaexe.getAbsolutePath(), "-Djdk.attach.allowAttachSelf=true", "-Djava.library.path=.", "-jar", "minecraft.jar", Base64.getEncoder().encodeToString(new File("tasmodog").getParentFile().getAbsolutePath().getBytes(StandardCharsets.UTF_8))});
+			ProcessBuilder builder = new ProcessBuilder(new String[] {javaexe.getAbsolutePath(), "-Djdk.attach.allowAttachSelf=true", "-Djava.library.path=.", "-jar", "minecraft.jar", Base64.getEncoder().encodeToString(new File(".").getAbsolutePath().getBytes(StandardCharsets.UTF_8))});
 			builder.directory(instance);
 			builder.inheritIO();
 			builder.start();
