@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -48,7 +48,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../net/tasmod/TASmodFull.html" title="class in net.tasmod"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../net/tasmod/Utils.html" title="class in net.tasmod"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../index.html?net/tasmod/TASmod.html" target="_top">Frames</a></li>
@@ -140,6 +140,36 @@ extends java.lang.Object</pre>
 <div class="block">Minecraft Instance obtained via Reflection</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.Thread</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#mcThread">mcThread</a></span></code>
+<div class="block">The Thread that minecraft runs on</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../net/tasmod/replayer/Replayer.html" title="class in net.tasmod.replayer">Replayer</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#playback">playback</a></span></code>
+<div class="block">Currently running Playback</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../net/tasmod/recorder/Recorder.html" title="class in net.tasmod.recorder">Recorder</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#recording">recording</a></span></code>
+<div class="block">Currently running Recording</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#startPlayback">startPlayback</a></span></code>
+<div class="block">Whether a playback should start</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#startRecording">startRecording</a></span></code>
+<div class="block">Whether a recording should start</div>
+</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -174,68 +204,23 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#endPlayback--">endPlayback</a></span>()</code>
-<div class="block">End the current Playback</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#endRecording--">endRecording</a></span>()</code>
-<div class="block">Ends the current recording</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>static <a href="../../net/tasmod/replayer/Replayer.html" title="class in net.tasmod.replayer">Replayer</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#getPlayback--">getPlayback</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>static <a href="../../net/tasmod/recorder/Recorder.html" title="class in net.tasmod.recorder">Recorder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#getRecording--">getRecording</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#isPlayback--">isPlayback</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#isRecording--">isRecording</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#keyboardTick-net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent-">keyboardTick</a></span>(<a href="../../net/tasmod/virtual/VirtualKeyboard.VirtualKeyEvent.html" title="class in net.tasmod.virtual">VirtualKeyboard.VirtualKeyEvent</a>&nbsp;event)</code>
 <div class="block">Whenever a new Keyboard Event gets called</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#mouseTick-net.tasmod.virtual.VirtualMouse.VirtualMouseEvent-">mouseTick</a></span>(<a href="../../net/tasmod/virtual/VirtualMouse.VirtualMouseEvent.html" title="class in net.tasmod.virtual">VirtualMouse.VirtualMouseEvent</a>&nbsp;event)</code>
 <div class="block">Whenever a new Mouse Event gets called</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#render--">render</a></span>()</code>
 <div class="block">Ticks frame based stuff.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#startPlayback-java.lang.String-">startPlayback</a></span>(java.lang.String&nbsp;fileName)</code>
-<div class="block">Joins the World of the Playback and starts the Playback</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#startRecording-long-int-boolean-boolean-java.lang.String-java.lang.String-">startRecording</a></span>(long&nbsp;worldseed,
-              int&nbsp;worldtype,
-              boolean&nbsp;hardcore,
-              boolean&nbsp;mapFeatures,
-              java.lang.String&nbsp;folderName,
-              java.lang.String&nbsp;worldName)</code>
-<div class="block">Join a World and start the Recording</div>
-</td>
-</tr>
-<tr id="i11" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#tick--">tick</a></span>()</code>
 <div class="block">Ticks all kinds of things</div>
@@ -263,6 +248,26 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Field Detail</h3>
+<a name="recording">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>recording</h4>
+<pre>public static volatile&nbsp;<a href="../../net/tasmod/recorder/Recorder.html" title="class in net.tasmod.recorder">Recorder</a> recording</pre>
+<div class="block">Currently running Recording</div>
+</li>
+</ul>
+<a name="playback">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>playback</h4>
+<pre>public static volatile&nbsp;<a href="../../net/tasmod/replayer/Replayer.html" title="class in net.tasmod.replayer">Replayer</a> playback</pre>
+<div class="block">Currently running Playback</div>
+</li>
+</ul>
 <a name="mc">
 <!--   -->
 </a>
@@ -276,11 +281,41 @@ extends java.lang.Object</pre>
 <a name="infoHud">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>infoHud</h4>
 <pre>public static&nbsp;<a href="../../net/tasmod/infogui/InfoHud.html" title="class in net.tasmod.infogui">InfoHud</a> infoHud</pre>
 <div class="block">The only Info Hud Instance :CsGun:</div>
+</li>
+</ul>
+<a name="startRecording">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>startRecording</h4>
+<pre>public static&nbsp;boolean startRecording</pre>
+<div class="block">Whether a recording should start</div>
+</li>
+</ul>
+<a name="startPlayback">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>startPlayback</h4>
+<pre>public static&nbsp;boolean startPlayback</pre>
+<div class="block">Whether a playback should start</div>
+</li>
+</ul>
+<a name="mcThread">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>mcThread</h4>
+<pre>public static&nbsp;java.lang.Thread mcThread</pre>
+<div class="block">The Thread that minecraft runs on</div>
 </li>
 </ul>
 </li>
@@ -308,37 +343,13 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="startRecording-long-int-boolean-boolean-java.lang.String-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>startRecording</h4>
-<pre>public static final&nbsp;boolean&nbsp;startRecording(long&nbsp;worldseed,
-                                           int&nbsp;worldtype,
-                                           boolean&nbsp;hardcore,
-                                           boolean&nbsp;mapFeatures,
-                                           java.lang.String&nbsp;folderName,
-                                           java.lang.String&nbsp;worldName)
-                                    throws java.io.IOException</pre>
-<div class="block">Join a World and start the Recording</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>seed</code> - Create a world with this seed</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>Returns whether the action was successful</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code> - This Exception cannot be thrown, unless something is terribly wrong.</dd>
-</dl>
-</li>
-</ul>
 <a name="tick--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>tick</h4>
-<pre>public static final&nbsp;void&nbsp;tick()</pre>
+<pre>public static&nbsp;void&nbsp;tick()</pre>
 <div class="block">Ticks all kinds of things</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -352,7 +363,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>render</h4>
-<pre>public static final&nbsp;void&nbsp;render()</pre>
+<pre>public static&nbsp;void&nbsp;render()</pre>
 <div class="block">Ticks frame based stuff.</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -366,7 +377,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>keyboardTick</h4>
-<pre>public static final&nbsp;void&nbsp;keyboardTick(<a href="../../net/tasmod/virtual/VirtualKeyboard.VirtualKeyEvent.html" title="class in net.tasmod.virtual">VirtualKeyboard.VirtualKeyEvent</a>&nbsp;event)</pre>
+<pre>public static&nbsp;void&nbsp;keyboardTick(<a href="../../net/tasmod/virtual/VirtualKeyboard.VirtualKeyEvent.html" title="class in net.tasmod.virtual">VirtualKeyboard.VirtualKeyEvent</a>&nbsp;event)</pre>
 <div class="block">Whenever a new Keyboard Event gets called</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -377,102 +388,15 @@ extends java.lang.Object</pre>
 <a name="mouseTick-net.tasmod.virtual.VirtualMouse.VirtualMouseEvent-">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>mouseTick</h4>
-<pre>public static final&nbsp;void&nbsp;mouseTick(<a href="../../net/tasmod/virtual/VirtualMouse.VirtualMouseEvent.html" title="class in net.tasmod.virtual">VirtualMouse.VirtualMouseEvent</a>&nbsp;event)</pre>
+<pre>public static&nbsp;void&nbsp;mouseTick(<a href="../../net/tasmod/virtual/VirtualMouse.VirtualMouseEvent.html" title="class in net.tasmod.virtual">VirtualMouse.VirtualMouseEvent</a>&nbsp;event)</pre>
 <div class="block">Whenever a new Mouse Event gets called</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>event</code> - The Mouse Event</dd>
 </dl>
-</li>
-</ul>
-<a name="endRecording--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>endRecording</h4>
-<pre>public static final&nbsp;boolean&nbsp;endRecording()
-                                  throws java.io.IOException</pre>
-<div class="block">Ends the current recording</div>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code></dd>
-</dl>
-</li>
-</ul>
-<a name="isPlayback--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isPlayback</h4>
-<pre>public static&nbsp;boolean&nbsp;isPlayback()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>Returns whether a Playback is running</dd>
-</dl>
-</li>
-</ul>
-<a name="isRecording--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isRecording</h4>
-<pre>public static&nbsp;boolean&nbsp;isRecording()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>Returns whether a Recording is running</dd>
-</dl>
-</li>
-</ul>
-<a name="startPlayback-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>startPlayback</h4>
-<pre>public static final&nbsp;boolean&nbsp;startPlayback(java.lang.String&nbsp;fileName)</pre>
-<div class="block">Joins the World of the Playback and starts the Playback</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>seed</code> - Create a world with this seed</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>Returns whether the action was successful</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.io.IOException</code> - Thrown if the File doesn't exists</dd>
-</dl>
-</li>
-</ul>
-<a name="endPlayback--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>endPlayback</h4>
-<pre>public static&nbsp;void&nbsp;endPlayback()</pre>
-<div class="block">End the current Playback</div>
-</li>
-</ul>
-<a name="getRecording--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getRecording</h4>
-<pre>public static&nbsp;<a href="../../net/tasmod/recorder/Recorder.html" title="class in net.tasmod.recorder">Recorder</a>&nbsp;getRecording()</pre>
-</li>
-</ul>
-<a name="getPlayback--">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getPlayback</h4>
-<pre>public static&nbsp;<a href="../../net/tasmod/replayer/Replayer.html" title="class in net.tasmod.replayer">Replayer</a>&nbsp;getPlayback()</pre>
 </li>
 </ul>
 </li>
@@ -503,7 +427,7 @@ extends java.lang.Object</pre>
 <div class="subNav">
 <ul class="navList">
 <li>Prev&nbsp;Class</li>
-<li><a href="../../net/tasmod/TASmodFull.html" title="class in net.tasmod"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../net/tasmod/Utils.html" title="class in net.tasmod"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../index.html?net/tasmod/TASmod.html" target="_top">Frames</a></li>

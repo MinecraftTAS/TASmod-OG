@@ -288,8 +288,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>keyEventsForTick</h4>
 <pre>public static final&nbsp;java.util.Queue&lt;<a href="../../../net/tasmod/virtual/VirtualKeyboard.VirtualKeyEvent.html" title="class in net.tasmod.virtual">VirtualKeyboard.VirtualKeyEvent</a>&gt; keyEventsForTick</pre>
-<div class="block">General Idea: LWJGL uses Events, these Events contain a bit of Information <a href="../../../net/tasmod/virtual/VirtualKeyboard.VirtualKeyEvent.html" title="class in net.tasmod.virtual"><code>VirtualKeyboard.VirtualKeyEvent</code></a>. You go trough them by running next() and then you access their Information using getEvent****. 
- So every time next() is called, a new VirtualKeyEvent is being created, that is slowly being filled with data, by Minecraft Code that is accessing them. So if the MC Code asks for the Event Key, then our Code puts that Information into 
+<div class="block">General Idea: LWJGL uses Events, these Events contain a bit of Information <a href="../../../net/tasmod/virtual/VirtualKeyboard.VirtualKeyEvent.html" title="class in net.tasmod.virtual"><code>VirtualKeyboard.VirtualKeyEvent</code></a>. You go trough them by running next() and then you access their Information using getEvent****.
+ So every time next() is called, a new VirtualKeyEvent is being created, that is slowly being filled with data, by Minecraft Code that is accessing them. So if the MC Code asks for the Event Key, then our Code puts that Information into
  the VirtualKeyEvent. Replaying works the same, but instead of listening, it hacks the LWJGL Keyboard like a Man In The Middle</div>
 </li>
 </ul>
@@ -432,7 +432,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public static final&nbsp;boolean&nbsp;next()</pre>
+<pre>public static&nbsp;boolean&nbsp;next()</pre>
 </li>
 </ul>
 <a name="getEventKey--">
@@ -441,7 +441,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getEventKey</h4>
-<pre>public static final&nbsp;int&nbsp;getEventKey()</pre>
+<pre>public static&nbsp;int&nbsp;getEventKey()</pre>
 </li>
 </ul>
 <a name="getEventCharacter--">
@@ -450,7 +450,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getEventCharacter</h4>
-<pre>public static final&nbsp;char&nbsp;getEventCharacter()</pre>
+<pre>public static&nbsp;char&nbsp;getEventCharacter()</pre>
 </li>
 </ul>
 <a name="getEventKeyState--">
@@ -459,7 +459,7 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getEventKeyState</h4>
-<pre>public static final&nbsp;boolean&nbsp;getEventKeyState()</pre>
+<pre>public static&nbsp;boolean&nbsp;getEventKeyState()</pre>
 </li>
 </ul>
 <a name="isKeyDown-int-">
@@ -468,7 +468,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>isKeyDown</h4>
-<pre>public static final&nbsp;boolean&nbsp;isKeyDown(int&nbsp;i)</pre>
+<pre>public static&nbsp;boolean&nbsp;isKeyDown(int&nbsp;i)</pre>
 <div class="block">isKeyDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Keyboard)
  Update: ._. This is frame based and messes up Mouse Inputs entirely.
  Solution: Yeet this, and do a lazy play in next()
@@ -481,7 +481,7 @@ extends java.lang.Object</pre>
                         }
                         return val;
                 }
-                for (final VirtualKeyEvent virtualKeyEvent : keyEventsForTick) 
+                for (final VirtualKeyEvent virtualKeyEvent : keyEventsForTick)
                         if (virtualKeyEvent.key == i && virtualKeyEvent.state == true) return true;
                 return false;
         }</div>

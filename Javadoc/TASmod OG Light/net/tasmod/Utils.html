@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -73,13 +73,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -116,69 +116,6 @@ extends java.lang.Object</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field.summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#dX">dX</a></span></code>
-<div class="block">X Position that the mouse moved in-between Ticks</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#dY">dY</a></span></code>
-<div class="block">Y Position that the mouse moved in-between Ticks</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#isObfuscated">isObfuscated</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#lastX">lastX</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#lastY">lastY</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static float</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#prevRotationPitch">prevRotationPitch</a></span></code>
-<div class="block">Previous Pitch of the Fake Camera</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static float</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#prevRotationYaw">prevRotationYaw</a></span></code>
-<div class="block">Previous Yaw of the Fake Camera</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static float</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#rotationPitch">rotationPitch</a></span></code>
-<div class="block">Pitch of the Fake Camera</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static float</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#rotationYaw">rotationYaw</a></span></code>
-<div class="block">Yaw of the Fake Camera</div>
-</td>
-</tr>
-</table>
-</li>
-</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -209,39 +146,26 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#getDX--">getDX</a></span>()</code>
-<div class="block">Used by VirtualMouse, to get the dX for one tick.</div>
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#deleteDirectory-java.io.File-">deleteDirectory</a></span>(java.io.File&nbsp;directoryToBeDeleted)</code>
+<div class="block">Small Utility that deletes a Directory recursively</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#getDY--">getDY</a></span>()</code>
-<div class="block">Used by VirtualMouse, to get the dY for one tick.</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#lazyKeyboard--">lazyKeyboard</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#lazyMouse--">lazyMouse</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static net.minecraft.client.Minecraft</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#obtainMinecraftInstance--">obtainMinecraftInstance</a></span>()</code>
 <div class="block">Obtains the inaccessible Singleton from the Minecraft Class</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#setAngles-float-float-">setAngles</a></span>(float&nbsp;f,
-         float&nbsp;f1)</code>
-<div class="block">Method used to update Yaw and Pitch using Mouse Coordinates.</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#transformRandom--">transformRandom</a></span>()</code>
 <div class="block">Transforms the Random Variable for Math.random()</div>
@@ -263,101 +187,6 @@ extends java.lang.Object</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field.detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="dX">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>dX</h4>
-<pre>public static&nbsp;int dX</pre>
-<div class="block">X Position that the mouse moved in-between Ticks</div>
-</li>
-</ul>
-<a name="dY">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>dY</h4>
-<pre>public static&nbsp;int dY</pre>
-<div class="block">Y Position that the mouse moved in-between Ticks</div>
-</li>
-</ul>
-<a name="lastX">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>lastX</h4>
-<pre>public static&nbsp;int lastX</pre>
-</li>
-</ul>
-<a name="lastY">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>lastY</h4>
-<pre>public static&nbsp;int lastY</pre>
-</li>
-</ul>
-<a name="rotationPitch">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>rotationPitch</h4>
-<pre>public static&nbsp;float rotationPitch</pre>
-<div class="block">Pitch of the Fake Camera</div>
-</li>
-</ul>
-<a name="rotationYaw">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>rotationYaw</h4>
-<pre>public static&nbsp;float rotationYaw</pre>
-<div class="block">Yaw of the Fake Camera</div>
-</li>
-</ul>
-<a name="prevRotationPitch">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>prevRotationPitch</h4>
-<pre>public static&nbsp;float prevRotationPitch</pre>
-<div class="block">Previous Pitch of the Fake Camera</div>
-</li>
-</ul>
-<a name="prevRotationYaw">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>prevRotationYaw</h4>
-<pre>public static&nbsp;float prevRotationYaw</pre>
-<div class="block">Previous Yaw of the Fake Camera</div>
-</li>
-</ul>
-<a name="isObfuscated">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>isObfuscated</h4>
-<pre>public static&nbsp;boolean isObfuscated</pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
@@ -381,38 +210,14 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="setAngles-float-float-">
+<a name="deleteDirectory-java.io.File-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setAngles</h4>
-<pre>public static&nbsp;void&nbsp;setAngles(float&nbsp;f,
-                             float&nbsp;f1)</pre>
-<div class="block">Method used to update Yaw and Pitch using Mouse Coordinates.
- Used for Fake Camera</div>
-</li>
-</ul>
-<a name="getDX--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDX</h4>
-<pre>public static&nbsp;int&nbsp;getDX()</pre>
-<div class="block">Used by VirtualMouse, to get the dX for one tick.
- The Value dX is being added over frames</div>
-</li>
-</ul>
-<a name="getDY--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDY</h4>
-<pre>public static&nbsp;int&nbsp;getDY()</pre>
-<div class="block">Used by VirtualMouse, to get the dY for one tick.
- The Value dY is being added over frames</div>
+<h4>deleteDirectory</h4>
+<pre>public static&nbsp;boolean&nbsp;deleteDirectory(java.io.File&nbsp;directoryToBeDeleted)</pre>
+<div class="block">Small Utility that deletes a Directory recursively</div>
 </li>
 </ul>
 <a name="transformRandom--">
@@ -516,13 +321,13 @@ extends java.lang.Object</pre>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

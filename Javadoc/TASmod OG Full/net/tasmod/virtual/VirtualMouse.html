@@ -310,8 +310,8 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>mouseEventsForTick</h4>
 <pre>public static final&nbsp;java.util.Queue&lt;<a href="../../../net/tasmod/virtual/VirtualMouse.VirtualMouseEvent.html" title="class in net.tasmod.virtual">VirtualMouse.VirtualMouseEvent</a>&gt; mouseEventsForTick</pre>
-<div class="block">General Idea: LWJGL uses Events, these Events contain a bit of Information <a href="../../../net/tasmod/virtual/VirtualMouse.VirtualMouseEvent.html" title="class in net.tasmod.virtual"><code>VirtualMouse.VirtualMouseEvent</code></a>. You go trough them by running next() and then you access their Information using getEvent****. 
- So every time next() is called, a new VirtualMouseEvent is being created, that is slowly being filled with data, by Minecraft Code that is accessing them. So if the MC Code asks for the Mouse Button, then our Code puts that Information into 
+<div class="block">General Idea: LWJGL uses Events, these Events contain a bit of Information <a href="../../../net/tasmod/virtual/VirtualMouse.VirtualMouseEvent.html" title="class in net.tasmod.virtual"><code>VirtualMouse.VirtualMouseEvent</code></a>. You go trough them by running next() and then you access their Information using getEvent****.
+ So every time next() is called, a new VirtualMouseEvent is being created, that is slowly being filled with data, by Minecraft Code that is accessing them. So if the MC Code asks for the Mouse Button, then our Code puts that Information into
  the VirtualMouseEvent. Replaying works the same, but instead of listening, it hacks the LWJGL Mouse like a Man In The Middle</div>
 </li>
 </ul>
@@ -503,7 +503,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getDX</h4>
 <pre>public static final&nbsp;int&nbsp;getDX()</pre>
-<div class="block">To make the Interpolation work, we are not asking LWJGL, but a Custom Util, that adds all the LWJGL Calls per Tick. 
+<div class="block">To make the Interpolation work, we are not asking LWJGL, but a Custom Util, that adds all the LWJGL Calls per Tick.
  Does not change anything with the Mouse</div>
 </li>
 </ul>
@@ -514,7 +514,7 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>getDY</h4>
 <pre>public static final&nbsp;int&nbsp;getDY()</pre>
-<div class="block">To make the Interpolation work, we are not asking LWJGL, but a Custom Util, that adds all the LWJGL Calls per Tick. 
+<div class="block">To make the Interpolation work, we are not asking LWJGL, but a Custom Util, that adds all the LWJGL Calls per Tick.
  Does not change anything with the Mouse</div>
 </li>
 </ul>
@@ -528,7 +528,7 @@ extends java.lang.Object</pre>
 <div class="block">isButtonDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Mouse)
 
  Update: ._. This is frame based and messes up Mouse Inputs entirely.
- Solution: Yeet this, and do a lazy play in next(). 
+ Solution: Yeet this, and do a lazy play in next().
  Problem with that is, that officially left and right clicking in all Slot Menus (Singleplayer, Stats, Texture Pack, etc) is working a bit less.
         public final static boolean isButtonDown(final int i) {
                 if (!hack) {
@@ -539,7 +539,7 @@ extends java.lang.Object</pre>
                         }
                         return val;
                 }
-                for (final VirtualMouseEvent virtualMouseEvent : mouseEventsForTick) 
+                for (final VirtualMouseEvent virtualMouseEvent : mouseEventsForTick)
                         if (virtualMouseEvent.eventState == true && virtualMouseEvent.eventButton == i) return true;
                 return false;
         }</div>

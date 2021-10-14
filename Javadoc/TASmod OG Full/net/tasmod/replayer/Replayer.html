@@ -129,20 +129,8 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../net/tasmod/replayer/Replayer.html#author">author</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../net/tasmod/replayer/Replayer.html#hoursOfWork">hoursOfWork</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../net/tasmod/replayer/Replayer.html#shouldFreeze">shouldFreeze</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../net/tasmod/replayer/Replayer.html#ticksTotal">ticksTotal</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../net/tasmod/replayer/Replayer.html#currentTick">currentTick</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -159,7 +147,7 @@ extends java.lang.Object</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../net/tasmod/replayer/Replayer.html#Replayer-java.lang.String-">Replayer</a></span>(java.lang.String&nbsp;fileName)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../net/tasmod/replayer/Replayer.html#Replayer-java.io.File-">Replayer</a></span>(java.io.File&nbsp;name)</code>
 <div class="block">Loads a File and reads some ticks from it</div>
 </td>
 </tr>
@@ -181,7 +169,7 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../net/tasmod/replayer/Replayer.html#startReplay--">startReplay</a></span>()</code>
-<div class="block">Create a new World, and join it.</div>
+<div class="block">Start the replay</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -212,40 +200,13 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="author">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>author</h4>
-<pre>public final&nbsp;java.lang.String author</pre>
-</li>
-</ul>
-<a name="hoursOfWork">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>hoursOfWork</h4>
-<pre>public final&nbsp;long hoursOfWork</pre>
-</li>
-</ul>
-<a name="ticksTotal">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ticksTotal</h4>
-<pre>public final&nbsp;long ticksTotal</pre>
-</li>
-</ul>
-<a name="shouldFreeze">
+<a name="currentTick">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>shouldFreeze</h4>
-<pre>public&nbsp;boolean shouldFreeze</pre>
+<h4>currentTick</h4>
+<pre>public&nbsp;int currentTick</pre>
 </li>
 </ul>
 </li>
@@ -256,13 +217,13 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="Replayer-java.lang.String-">
+<a name="Replayer-java.io.File-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Replayer</h4>
-<pre>public&nbsp;Replayer(java.lang.String&nbsp;fileName)
+<pre>public&nbsp;Replayer(java.io.File&nbsp;name)
          throws java.lang.Exception</pre>
 <div class="block">Loads a File and reads some ticks from it</div>
 <dl>
@@ -286,8 +247,8 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>startReplay</h4>
-<pre>public final&nbsp;void&nbsp;startReplay()</pre>
-<div class="block">Create a new World, and join it.</div>
+<pre>public&nbsp;void&nbsp;startReplay()</pre>
+<div class="block">Start the replay</div>
 </li>
 </ul>
 <a name="tick--">
@@ -296,7 +257,7 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>tick</h4>
-<pre>public final&nbsp;void&nbsp;tick()</pre>
+<pre>public&nbsp;void&nbsp;tick()</pre>
 <div class="block">Replay Read Ticks</div>
 </li>
 </ul>
