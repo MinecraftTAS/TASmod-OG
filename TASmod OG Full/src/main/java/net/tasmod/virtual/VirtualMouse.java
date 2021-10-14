@@ -154,7 +154,6 @@ public class VirtualMouse {
 	public final static int getEventX() {
 		if (!hack) {
 			final int val = Mouse.getEventX();
-			System.out.println(val);
 			if (listen)
 				currentlyListening.posX = val;
 			return val;
