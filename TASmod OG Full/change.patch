@@ -243,6 +243,18 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiAchievements.java src/main/ja
          {
              int k = (width - achievementsPaneWidth) / 2;
              int l = (height - achievementsPaneHeight) / 2;
+diff -ruN build/src/minecraft/net/minecraft/src/GuiContainerCreative.java src/main/java/net/minecraft/src/GuiContainerCreative.java
+--- build/src/minecraft/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
+@@ -168,7 +168,7 @@
+ 
+     public void drawScreen(int i, int j, float f)
+     {
+-        boolean flag = Mouse.isButtonDown(0);
++        boolean flag = net.tasmod.virtual.VirtualMouse.isButton0Down;
+         int k = field_40216_e;
+         int l = field_40215_f;
+         int i1 = k + 155;
 diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net/minecraft/src/GuiIngame.java
 --- build/src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
