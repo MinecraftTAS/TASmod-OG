@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.GuiScreen;
 import net.tasmod.infogui.InfoHud;
 import net.tasmod.main.EmulatorFrame;
 import net.tasmod.recorder.Recorder;
@@ -57,6 +58,9 @@ public final class TASmod {
 	/** Whether a playback should start */
 	public static boolean startPlayback;
 
+	/** When the game should Tab back in */
+	public static boolean shouldTabIn;
+	
 	/**
 	 * Ticks all kinds of things
 	 * @throws IOException Unexpected File End
@@ -79,6 +83,17 @@ public final class TASmod {
 			} else if (startPlayback) {
 				playback.startReplay();
 				startPlayback = false;
+			}
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_F4)) {
+			try {
+				if (mc.currentScreen == null) {
+					mc.displayGuiScreen(new GuiScreen());
+					shouldTabIn = true;
+				}
+				if (!TickrateChanger.isTickAdvance) TickrateChanger.toggleTickadvance();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		/* Handle keybinds and tick advance */
@@ -111,7 +126,13 @@ public final class TASmod {
 			if (!_was52pressed && Keyboard.isKeyDown(52)) TickrateChanger.faster();
 			_was51pressed = Keyboard.isKeyDown(51);
 			_was52pressed = Keyboard.isKeyDown(52);
-			if (Keyboard.isKeyDown(66) && !_was66pressed) TickrateChanger.toggleTickadvance();
+			if (Keyboard.isKeyDown(66) && !_was66pressed) {
+				TickrateChanger.toggleTickadvance();
+				if (shouldTabIn) {
+					mc.displayGuiScreen(null);
+					shouldTabIn = false;
+				}
+			}
 			_was66pressed = Keyboard.isKeyDown(66);
 			if (Keyboard.isKeyDown(67) && !_was67pressed && playback == null && TickrateChanger.isTickAdvance) {
 				TickrateChanger.updateTickrate(TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed]);
