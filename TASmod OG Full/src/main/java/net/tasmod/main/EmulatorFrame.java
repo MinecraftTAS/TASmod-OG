@@ -79,14 +79,14 @@ public class EmulatorFrame extends Frame {
 		final JMenuItem slower = new JMenuItem("Slower");
 		final JMenuItem pause = new JMenuItem("Pause/Resume");
 		faster.addActionListener(e -> {
-			TickrateChanger.faster();
+			if (Start.shouldStart) TickrateChanger.faster();
 		});
 		slower.addActionListener(e -> {
-			TickrateChanger.slower();
+			if (Start.shouldStart) TickrateChanger.slower();
 		});
 		pause.addActionListener(e -> {
 			try {
-				TickrateChanger.toggleTickadvance();
+				if (Start.shouldStart) TickrateChanger.toggleTickadvance();
 			} catch (final Exception e1) {
 				e1.printStackTrace();
 			}
