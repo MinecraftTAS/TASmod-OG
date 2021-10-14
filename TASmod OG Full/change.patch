@@ -9,6 +9,15 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          for(int i = 0; i < timer.elapsedTicks; i++)
          {
              ticksRan++;
+@@ -810,7 +811,7 @@
+ 
+     private void screenshotListener()
+     {
+-        if(Keyboard.isKeyDown(60))
++        if(net.tasmod.virtual.VirtualKeyboard.isKey60Down)
+         {
+             if(!isTakingScreenshot)
+             {
 @@ -1313,6 +1314,24 @@
                  currentScreen.updateScreen();
              }
