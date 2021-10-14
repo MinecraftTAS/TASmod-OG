@@ -231,6 +231,18 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiAchievement.java src/main/jav
          if(!haveAchiement && !haveAchiement && (d < 0.0D || d > 1.0D))
          {
              achievementTime = 0L;
+diff -ruN build/src/minecraft/net/minecraft/src/GuiAchievements.java src/main/java/net/minecraft/src/GuiAchievements.java
+--- build/src/minecraft/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
+@@ -80,7 +80,7 @@
+ 
+     public void drawScreen(int i, int j, float f)
+     {
+-        if(Mouse.isButtonDown(0))
++        if(net.tasmod.virtual.VirtualMouse.isButton0Down)
+         {
+             int k = (width - achievementsPaneWidth) / 2;
+             int l = (height - achievementsPaneHeight) / 2;
 diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net/minecraft/src/GuiIngame.java
 --- build/src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
