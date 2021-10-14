@@ -1,148 +1,172 @@
 package de.pfannekuchen.tasmodoginstaller;
 
 import java.awt.Color;
-import java.awt.ComponentOrientation;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
-public class InstallerWindow extends JFrame {
+public class InstallerWindow extends JFrame implements MouseListener {
 
-	private static final long serialVersionUID = 5155442058664945274L;
-	public JButton launchButton;
-	public JTextPane infobox;
+	private static final long serialVersionUID = -6865515862194100993L;
+
+	public static int stage = 0;
+	public static boolean selected = false;
+	public static String title1 = "TASmod OG ";
+	public static String title2 = "Which TASmod OG Version do you want?";
+	public static String choice1 = "Full";
+	public static String choice2 = "Light";
+	public static int offsetX = 0;
 	
-	private String string1 = "TASmod OG Full is the full package to create and playback TASes.\nIt contains all tools needed to efficiently create a TAS.";
-	private String string2 = "The Early Access Channel contains stable builds that require\n testing before they can be released.";
-	public JRadioButton earlyAccessRadioBox;
-	public JRadioButton releaseRadioBox;
-	public JRadioButton lightRadioBox;
-	public JRadioButton fullRadioBox;
+	private static boolean fullOrLight;
+	private static boolean earlyAccessOrNot;
+	private static boolean cacheOrNot;
+	
+	public InstallerWindow() throws IOException {
+		super("Installer");
+		
+		File potionFile = File.createTempFile("potion", ".png");
+		Files.copy(new URL("https://data.mgnet.work/potion.png").openStream(), potionFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		setIconImage(new ImageIcon(Files.readAllBytes(potionFile.toPath())).getImage());
+		
+		setSize(380, 200);
+		addMouseListener(this);
+		setResizable(false);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setVisible(true);
+	}
 	
 	@Override
 	public void paint(Graphics g) {
-		super.paintComponents(g);
-	}
-	
-	public InstallerWindow() {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
+		BufferedImage img = new BufferedImage(380, 200, BufferedImage.TYPE_INT_RGB);
+		Graphics2D gr = img.createGraphics();
+		gr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		gr.setColor(new Color(20, 23, 41));
+		gr.fillRect(0, 0, 380, 200);
+		gr.setColor(new Color(89, 93, 114));
+		gr.fillRect(20, 120, 340, 5);
+		
+		if (stage == 0) gr.setColor(new Color(31, 144, 245));
+		else gr.setColor(new Color(204, 204, 204));
+		gr.fillOval(17, 117, 11, 11);
+		
+		if (stage == 1) gr.setColor(new Color(31, 144, 245));
+		else gr.setColor(new Color(204, 204, 204));
+		gr.fillOval(129, 117, 11, 11);
+		
+		if (stage == 2) gr.setColor(new Color(31, 144, 245));
+		else gr.setColor(new Color(204, 204, 204));
+		gr.fillOval(241, 117, 11, 11);
+		
+		if (stage == 3) gr.setColor(new Color(31, 144, 245));
+		else gr.setColor(new Color(204, 204, 204));
+		gr.fillOval(353, 117, 11, 11);
+		
+		gr.setColor(new Color(0, 71, 119));
+		RoundRectangle2D round = new RoundRectangle2D.Float(15, 40, 60, 60, 25, 25);
+		gr.fill(round);
+		
+		gr.setColor(new Color(254, 254, 254));
+		gr.setFont(new Font("Segoe UI", 0, 14));
+		gr.drawString(title1, 84, 60);
+		
+		if (stage < 3) {
+			if (selected) gr.setColor(Color.LIGHT_GRAY);
+			else gr.setColor(new Color(254, 254, 254));
+			gr.drawString(choice1, 70 + offsetX, 164);
+			if (!selected) gr.setColor(Color.LIGHT_GRAY);
+			else gr.setColor(new Color(254, 254, 254));
+			gr.drawString(choice2, 165, 164);
+			
+			gr.setColor(new Color(60, 64, 85));
+			RoundRectangle2D r2 = new RoundRectangle2D.Float(105, 150, 50, 18, 18, 18);
+			gr.fill(r2);
+			
+			gr.setColor(new Color(31, 144, 245));
+			gr.fillOval(selected ? 135 : 105, 148, 22, 22);
+			
+			gr.setColor(new Color(88, 92, 113));
+			RoundRectangle2D r3 = new RoundRectangle2D.Float(285, 145, 75, 30, 15, 15);
+			gr.fill(r3);
+			
+			gr.setColor(new Color(204, 204, 204));
+			gr.setFont(new Font("Segoe UI", 0, 14));
+			gr.drawString("Continue", 295, 164);
 		}
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 400, 400);
-		JPanel contentPane = new JPanel() {
-			private static final long serialVersionUID = 6120882840307218106L;
-			@Override
-			protected void paintComponent(Graphics g) {
-				int heightPerStripe = getHeight() / 4;
-				g.setColor(new Color(0, 48, 54));
-				g.fillRect(0, heightPerStripe * 0, getWidth(), heightPerStripe * 1);
-				g.setColor(new Color(2, 90, 95));
-				g.fillRect(0, heightPerStripe * 1, getWidth(), heightPerStripe * 2);
-				g.setColor(new Color(3, 131, 135));
-				g.fillRect(0, heightPerStripe * 2, getWidth(), heightPerStripe * 3);
-				g.setColor(new Color(39, 182, 188));
-				g.fillRect(0, heightPerStripe * 3, getWidth(), heightPerStripe * 4);
-			}
-		};
-		contentPane.setBounds(0, 0, getWidth(), getHeight());
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		contentPane.setOpaque(false);
-		contentPane.setBackground(new Color(0, 0, 0, 0));
+		gr.setColor(Color.LIGHT_GRAY);
+		gr.drawString(title2, 84, 84);
 		
-		launchButton = new JButton("Launch");
-		launchButton.setBounds(10, 327, 364, 23);
-		launchButton.setBackground(new Color(0, 0, 0, 0));
-		launchButton.setOpaque(false);
-		contentPane.add(launchButton);
-		
-		infobox = new JTextPane();
-		infobox.setBounds(10, 45, 364, 76);
-		infobox.setEditable(false);
-		infobox.setOpaque(false);
-		infobox.setForeground(Color.CYAN);
-		infobox.setText("TASmod OG Full is the full package to create and playback TASes.\nIt contains all tools needed to efficiently create a TAS.\n\nThe Early Access Channel contains stable builds that require\n testing before they can be released.");
-		infobox.setBackground(new Color(0, 0, 0, 0));
-		contentPane.add(infobox);
-		
-		JLabel title = new JLabel("TASmod OG Installer");
-		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 24));
-		title.setBounds(10, 11, 364, 24);
-		title.setForeground(Color.white);
-		contentPane.add(title);
-		
-		ButtonGroup versionGroup = new ButtonGroup();
-		ButtonGroup channelGroup = new ButtonGroup();
-		
-		fullRadioBox = new JRadioButton("TASmod Full");
-		fullRadioBox.setSelected(true);
-		fullRadioBox.setForeground(Color.white);
-		fullRadioBox.setBackground(new Color(0, 0, 0, 0));
-		fullRadioBox.setBounds(10, 271, 181, 23);
-		fullRadioBox.setOpaque(false);
-		fullRadioBox.addActionListener((c) -> {
-			string1 = "TASmod OG Full is the full package to create and playback TASes.\nIt contains all tools needed to efficiently create a TAS.";
-			updateText();
-		});
-		versionGroup.add(fullRadioBox);
-		contentPane.add(fullRadioBox);
-		
-		lightRadioBox = new JRadioButton("TASmod Light");
-		lightRadioBox.setBounds(10, 297, 181, 23);
-		lightRadioBox.setForeground(Color.white);
-		lightRadioBox.setBackground(new Color(0, 0, 0, 0));
-		lightRadioBox.setOpaque(false);
-		lightRadioBox.addActionListener((c) -> {
-			string1 = "TASmod OG Light is the bare minimum to replay a TAS File.\nYou can hold 'ALT' to manually input to mc.";
-			updateText();
-		});
-		contentPane.add(lightRadioBox);
-		versionGroup.add(lightRadioBox);
-		
-		releaseRadioBox = new JRadioButton("Release Channel");
-		releaseRadioBox.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		releaseRadioBox.setForeground(Color.white);
-		releaseRadioBox.setBounds(156, 297, 218, 23);
-		releaseRadioBox.setBackground(new Color(0, 0, 0, 0));
-		releaseRadioBox.setOpaque(false);
-		releaseRadioBox.addActionListener((c) -> {
-			string2 = "";
-			updateText();
-		});
-		contentPane.add(releaseRadioBox);
-		channelGroup.add(releaseRadioBox);
-		
-		earlyAccessRadioBox = new JRadioButton("Early Access Channel");
-		earlyAccessRadioBox.setSelected(true);
-		earlyAccessRadioBox.setForeground(Color.white);
-		earlyAccessRadioBox.setBackground(new Color(0, 0, 0, 0));
-		earlyAccessRadioBox.applyComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-		earlyAccessRadioBox.setBounds(156, 271, 218, 23);
-		earlyAccessRadioBox.setOpaque(false);
-		earlyAccessRadioBox.addActionListener((c) -> {
-			string2 = "The Early Access Channel contains stable builds that require\n testing before they can be released.";
-			updateText();
-		});
-		contentPane.add(earlyAccessRadioBox);
-		channelGroup.add(earlyAccessRadioBox);
-		
+		g.drawImage(img, 0, 0, null);
 	}
 	
-	private void updateText() {
-		infobox.setText(string1 + "\n\n" + string2);
+	public static void main(String[] args) throws IOException {
+		new InstallerWindow();
 	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		int posX = e.getX();
+		int posY = e.getY();
+		if (posX > 105 && posX < 155) {
+			if (posY > 145 && posY < 165) {
+				selected = !selected;
+				repaint();
+			}
+		}
+		if (posX > 285 && posX < 360) {
+			if (posY > 145 && posY < 175) {
+				stage++;
+				switch (stage) {
+				case 1:
+					title1 += (selected ? "Light " : "Full ");
+					title2 = "Which TASmod OG Channel do you want?";
+					offsetX = -20;
+					choice1 = "Release";
+					choice2 = "Early Access";
+					fullOrLight = !selected;
+					break;
+				case 2:
+					title1 += selected ? "- Early Access" : "- Release";
+					title2 = "Should the installer use temporary files?";
+					choice1 = "Keep";
+					choice2 = "Remove";
+					offsetX = 0;
+					earlyAccessOrNot = selected;
+					break;
+				case 3:
+					title2 = "Downloading TASmod OG";
+					cacheOrNot = !selected;
+					new Thread(() -> {
+						try {
+							InstallerBackend.download(fullOrLight, earlyAccessOrNot, cacheOrNot);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					}).start();
+					break;
+				}
+				selected = false;
+				repaint();
+			}
+		}
+	}
+
+	@Override public void mouseClicked(MouseEvent e) {}
+	@Override public void mouseReleased(MouseEvent e) {}
+	@Override public void mouseEntered(MouseEvent e) {}
+	@Override public void mouseExited(MouseEvent e) {}
 	
 }

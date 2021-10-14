@@ -3,6 +3,7 @@ package net.tasmod.recorder;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
 import net.tasmod.main.Start;
 import net.tasmod.random.SimpleRandomMod;
-import net.tasmod.random.WeightedRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse;
@@ -28,25 +28,26 @@ public final class Recorder {
 	private final Queue<String> linesToPrint = new LinkedList<>();
 
 	public int currentTick;
-
+	public int startingTick;
+	
 	/**
 	 * Prepares the Recording File
 	 * @param name The TAS name
 	 * @throws IOException Cannot be thrown, unless something is terribly wrong.
 	 */
-	public Recorder() {
+	public Recorder(int tick) {
 		this.mc = TASmod.mc;
-		SimpleRandomMod.updateSeed(0L);
-		WeightedRandomMod.intCalls = 0;
 
 		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
 		VirtualMouse.getDX();
 		VirtualMouse.getDY();
 
-		linesToPrint.add(Start.resolution + "\n");
+		if (tick == 0) linesToPrint.add(Start.resolution + "\n");
 
 		VirtualKeyboard.listen = true;
 		VirtualMouse.listen = true;
+		currentTick = tick;
+		startingTick = tick;
 	}
 
 	private volatile List<VirtualKeyEvent> keyEventsPerTick = new ArrayList<>();
@@ -109,6 +110,18 @@ public final class Recorder {
 		if (event.posX != -1 || event.eventButton != -1) mouseEventsPerTick.add(event);
 	}
 
+	public void saveTo(final File file, int tick) throws Exception {
+		List<String> lines = Files.readAllLines(file.toPath());
+		lines = lines.subList(0, (tick*2)-1);
+		final FileWriter f = new FileWriter(file);
+		for (String line : lines)
+			f.write(line + "\n");
+		while (!linesToPrint.isEmpty())
+			f.write(linesToPrint.poll());
+		f.close();
+	}
+
+	
 	public void saveTo(final File file) throws Exception {
 		file.createNewFile();
 		final FileWriter f = new FileWriter(file);

@@ -1,12 +1,17 @@
 package net.tasmod;
 
+import java.io.File;
 import java.io.IOException;
+
+import javax.swing.JOptionPane;
 
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.GuiScreen;
 import net.tasmod.infogui.InfoHud;
 import net.tasmod.main.EmulatorFrame;
+import net.tasmod.main.Start;
 import net.tasmod.recorder.Recorder;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
@@ -57,11 +62,29 @@ public final class TASmod {
 	/** Whether a playback should start */
 	public static boolean startPlayback;
 
+	/** When the game should Tab back in */
+	public static boolean shouldTabIn;
+	
+	/** Whether the current TAS is being rerecorded */
+	public static File rerecord;
+	
+	/** The Thread that minecraft runs on */
+	public static Thread mcThread;
+	
+	/** Tick to pause playback at */
+	public static int pauseAt = -1;
+	
+	/** Synchronize */
+	public static boolean wait;
+	
 	/**
 	 * Ticks all kinds of things
 	 * @throws IOException Unexpected File End
 	 */
 	public static void tick() {
+		/* During a playback, ask the user if TAS should be rerecorded from here */
+		if (playback != null && Keyboard.isKeyDown(Keyboard.KEY_F3))
+			pauseAt = playback.currentTick + 1; // pause on this tick
 		/* Tick Recording/Playback if needed */
 		if (recording != null) recording.tick();
 		if (playback != null) playback.tick();
@@ -74,11 +97,22 @@ public final class TASmod {
 				e.printStackTrace();
 			}
 			if (startRecording) {
-				recording = new Recorder(); // Start a new Recording
+				recording = new Recorder(0); // Start a new Recording
 				startRecording = false;
 			} else if (startPlayback) {
 				playback.startReplay();
 				startPlayback = false;
+			}
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_F4)) {
+			try {
+				if (mc.currentScreen == null) {
+					mc.displayGuiScreen(new GuiScreen());
+					shouldTabIn = true;
+				}
+				if (!TickrateChanger.isTickAdvance) TickrateChanger.toggleTickadvance();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		/* Handle keybinds and tick advance */
@@ -90,11 +124,44 @@ public final class TASmod {
 			e.printStackTrace();
 		}
 		infoHud.tick();
+		// Hacky solution to make the cursor work
+		if (mc.currentScreen != null) EmulatorFrame.window.setCursor(EmulatorFrame.origCursor);
+		else EmulatorFrame.window.setCursor(EmulatorFrame.blankCursor);
+		if (TASmod.wait) {
+			TASmod.wait = false;
+			try {
+				if (!TickrateChanger.isTickAdvance) TickrateChanger.toggleTickadvance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			new Thread(() -> {
+				File outFile = TASmod.rerecord;
+				if (outFile == null) {
+					final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
+					if (out == null) return;
+					outFile = new File(Start.tasDir, out);
+					TASmod.recording.endRecording();
+					try {
+						TASmod.recording.saveTo(outFile);
+					} catch (final Exception e1) {
+						e1.printStackTrace();
+					}
+				} else {
+					TASmod.recording.endRecording();
+					try {
+						TASmod.recording.saveTo(outFile, TASmod.recording.startingTick);
+					} catch (final Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+				EmulatorFrame.save.setEnabled(false);				
+			}).start();
+		}
 		/* Update the Label */
 		int currentTick = 0;
 		if (playback != null) currentTick = playback.currentTick;
 		else if (recording != null) currentTick = recording.currentTick;
-		final String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d", mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
+		final String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d" + ((playback != null) ? ", F3 to rerecord from here." : "."), mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
 		EmulatorFrame.label.setText(label);
 	}
 
@@ -108,7 +175,13 @@ public final class TASmod {
 			if (!_was52pressed && Keyboard.isKeyDown(52)) TickrateChanger.faster();
 			_was51pressed = Keyboard.isKeyDown(51);
 			_was52pressed = Keyboard.isKeyDown(52);
-			if (Keyboard.isKeyDown(66) && !_was66pressed) TickrateChanger.toggleTickadvance();
+			if (Keyboard.isKeyDown(66) && !_was66pressed) {
+				TickrateChanger.toggleTickadvance();
+				if (shouldTabIn) {
+					mc.displayGuiScreen(null);
+					shouldTabIn = false;
+				}
+			}
 			_was66pressed = Keyboard.isKeyDown(66);
 			if (Keyboard.isKeyDown(67) && !_was67pressed && playback == null && TickrateChanger.isTickAdvance) {
 				TickrateChanger.updateTickrate(TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed]);
@@ -135,9 +208,5 @@ public final class TASmod {
 	public static void mouseTick(final VirtualMouseEvent event) {
 		if (recording != null) recording.mouseTick(event);
 	}
-
-	/** The Thread that minecraft runs on */
-	public static Thread mcThread;
-
 
 }

@@ -4,7 +4,7 @@ plugins {
 
 jar { 
     manifest {
-    	attributes("Main-Class": "de.pfannekuchen.tasmodoginstaller.Installer")
+    	attributes("Main-Class": "de.pfannekuchen.tasmodoginstaller.InstallerWindow")
     }
 }
 

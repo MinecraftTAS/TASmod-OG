@@ -2,11 +2,14 @@ package net.tasmod.main;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Panel;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -41,13 +44,21 @@ public class EmulatorFrame extends Frame {
 	public static Component mcCanvas;
 	/** The Panel that holds the Minecraft Canvas at a specific resolution */
 	public static Panel gamePanel;
-
+	/** The Original Cursor to avoid a cursor madness */
+	public static Cursor origCursor;
+	/** The Original Cursor to avoid a cursor madness */
+	public static Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "blank cursor");
+	/** The Save TAS button */
+	public static JMenuItem save;
+	
+	
 	/**
 	 * Initializes the Menu Bar and Bottom Label such as their Actions
 	 * @param title Title of the window
 	 */
 	public EmulatorFrame(final String title) {
 		super(title);
+		origCursor = getCursor();
 		window = this;
 		getInsets().set(0, 0, 0, 0);
 		bar = new JMenuBar();
@@ -79,10 +90,10 @@ public class EmulatorFrame extends Frame {
 		final JMenuItem slower = new JMenuItem("Slower");
 		final JMenuItem pause = new JMenuItem("Pause/Resume");
 		faster.addActionListener(e -> {
-			if (Start.shouldStart) TickrateChanger.faster();
+			if (Start.shouldStart && !TickrateChanger.isTickAdvance) TickrateChanger.faster();
 		});
 		slower.addActionListener(e -> {
-			if (Start.shouldStart) TickrateChanger.slower();
+			if (Start.shouldStart && !TickrateChanger.isTickAdvance) TickrateChanger.slower();
 		});
 		pause.addActionListener(e -> {
 			try {
@@ -97,25 +108,23 @@ public class EmulatorFrame extends Frame {
 
 		final JMenuItem load = new JMenuItem("Load TAS");
 		final JMenuItem create = new JMenuItem("Create TAS");
-		final JMenuItem save = new JMenuItem("Save TAS");
+		save = new JMenuItem("Save TAS");
+		save.setEnabled(false);
 		final JMenuItem start = new JMenuItem("Launch normally");
 		save.addActionListener(e -> {
 			if (TASmod.recording != null) {
-				final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
-				if (out == null) return;
-				TASmod.recording.endRecording();
-				try {
-					TASmod.recording.saveTo(new File(out));
-				} catch (final Exception e1) {
-					e1.printStackTrace();
-				}
-				save.setEnabled(false);
+				TASmod.wait = true;
 			}
 		});
 		load.addActionListener(e -> {
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
 			if (out == null) return;
-			final File tasFile = new File(out);
+			final File tasFile = new File(Start.tasDir, out);
+			String tick = JOptionPane.showInputDialog("Enter tick to rerecord at (leave empty for full playback): ", "");
+			if (tick == null) return;
+			if (!tick.isEmpty()) {
+				TASmod.pauseAt = Integer.parseInt(tick);
+			}
 			try {
 				TASmod.playback = new Replayer(tasFile);
 			} catch (final Exception e1) {
@@ -130,6 +139,7 @@ public class EmulatorFrame extends Frame {
 			Start.shouldStart = true;
 			TASmod.startPlayback = true;
 			create.setEnabled(false);
+			start.setEnabled(false);
 			load.setEnabled(false);
 		});
 		create.addActionListener(e -> {
@@ -151,14 +161,16 @@ public class EmulatorFrame extends Frame {
 
 			TASmod.startRecording = true;
 			create.setEnabled(false);
+			save.setEnabled(true);
+			start.setEnabled(false);
 			load.setEnabled(false);
 		});
 		start.addActionListener(e -> {
 			Start.resolution = "854x480";
 			Start.shouldStart = true;
 			Start.isNormalLaunch = true;
+			start.setEnabled(false);
 			create.setEnabled(false);
-			save.setEnabled(false);
 			load.setEnabled(false);
 		});
 		file.add(load);

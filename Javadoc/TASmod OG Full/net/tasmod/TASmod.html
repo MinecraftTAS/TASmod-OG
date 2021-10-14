@@ -147,27 +147,51 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#pauseAt">pauseAt</a></span></code>
+<div class="block">Tick to pause playback at</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../net/tasmod/replayer/Replayer.html" title="class in net.tasmod.replayer">Replayer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#playback">playback</a></span></code>
 <div class="block">Currently running Playback</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../net/tasmod/recorder/Recorder.html" title="class in net.tasmod.recorder">Recorder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#recording">recording</a></span></code>
 <div class="block">Currently running Recording</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.io.File</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#rerecord">rerecord</a></span></code>
+<div class="block">Whether the current TAS is being rerecorded</div>
+</td>
+</tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#shouldTabIn">shouldTabIn</a></span></code>
+<div class="block">When the game should Tab back in</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#startPlayback">startPlayback</a></span></code>
 <div class="block">Whether a playback should start</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#startRecording">startRecording</a></span></code>
 <div class="block">Whether a recording should start</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/TASmod.html#wait">wait</a></span></code>
+<div class="block">Synchronize</div>
 </td>
 </tr>
 </table>
@@ -308,14 +332,54 @@ extends java.lang.Object</pre>
 <div class="block">Whether a playback should start</div>
 </li>
 </ul>
+<a name="shouldTabIn">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>shouldTabIn</h4>
+<pre>public static&nbsp;boolean shouldTabIn</pre>
+<div class="block">When the game should Tab back in</div>
+</li>
+</ul>
+<a name="rerecord">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>rerecord</h4>
+<pre>public static&nbsp;java.io.File rerecord</pre>
+<div class="block">Whether the current TAS is being rerecorded</div>
+</li>
+</ul>
 <a name="mcThread">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>mcThread</h4>
 <pre>public static&nbsp;java.lang.Thread mcThread</pre>
 <div class="block">The Thread that minecraft runs on</div>
+</li>
+</ul>
+<a name="pauseAt">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>pauseAt</h4>
+<pre>public static&nbsp;int pauseAt</pre>
+<div class="block">Tick to pause playback at</div>
+</li>
+</ul>
+<a name="wait">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>wait</h4>
+<pre>public static&nbsp;boolean wait</pre>
+<div class="block">Synchronize</div>
 </li>
 </ul>
 </li>

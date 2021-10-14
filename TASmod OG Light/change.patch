@@ -10,7 +10,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          {
              if(!isTakingScreenshot)
              {
-@@ -1313,6 +1313,24 @@
+@@ -1313,6 +1313,19 @@
                  currentScreen.updateScreen();
              }
          }
@@ -23,19 +23,14 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +            mouseHelper.mouseXYChange(); // Call the real one, but actually call the virtual one
 +            
 +            thePlayer.setAngles((float) mouseHelper.deltaX * f2, (float) mouseHelper.deltaY * f2);
-+            
-+//            net.tasmod.Utils.prevRotationPitch = thePlayer.prevRotationPitch;
-+//            net.tasmod.Utils.prevRotationYaw = thePlayer.prevRotationYaw;
-+//            net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
-+//            net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
 +        }
-+//        net.tasmod.Utils.lastX = Mouse.getEventX();
-+//        net.tasmod.Utils.lastY = Mouse.getEventY();
++        net.tasmod.Utils.lastX = Mouse.getEventX();
++        net.tasmod.Utils.lastY = Mouse.getEventY();
 +        // End-Edit
          if(currentScreen == null || currentScreen.allowUserInput)
          {
              Profiler.endStartSection("mouse");
-@@ -1540,6 +1558,7 @@
+@@ -1540,6 +1553,7 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
@@ -43,7 +38,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
-@@ -1943,18 +1962,21 @@
+@@ -1943,18 +1957,21 @@
  
      public static void startMainThread(String s, String s1, String s2)
      {

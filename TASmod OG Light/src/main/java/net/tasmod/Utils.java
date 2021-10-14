@@ -15,6 +15,11 @@ import net.tasmod.virtual.VirtualMouse;
  */
 public final class Utils {
 
+	/* X Position that the mouse is currently per Tick */
+	public static int lastX;
+	/* Y Position that the mouse is currently per Tick */
+	public static int lastY;
+	
 	/**
 	 * Small Utility that deletes a Directory recursively
 	 */

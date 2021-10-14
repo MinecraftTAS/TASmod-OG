@@ -11,9 +11,12 @@ import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
+import net.tasmod.main.EmulatorFrame;
 import net.tasmod.main.Start;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.random.WeightedRandomMod;
+import net.tasmod.recorder.Recorder;
+import net.tasmod.tools.TickrateChanger;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse;
@@ -86,6 +89,19 @@ public final class Replayer {
 		tickMouse();
 		SimpleRandomMod.updateSeed(currentTick);
 		this.currentTick++;
+		if (TASmod.pauseAt == this.currentTick) {
+			try {
+				if (!TickrateChanger.isTickAdvance) TickrateChanger.toggleTickadvance();
+				TASmod.rerecord = file;
+				TASmod.playback = null;
+				VirtualKeyboard.hack = false;
+				VirtualMouse.hack = false;
+				TASmod.recording = new Recorder(currentTick);
+				EmulatorFrame.save.setEnabled(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private void tickKeyboad() {
