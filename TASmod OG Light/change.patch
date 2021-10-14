@@ -1,6 +1,15 @@
 diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/net/minecraft/client/Minecraft.java
 --- build/src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
+@@ -810,7 +810,7 @@
+ 
+     private void screenshotListener()
+     {
+-        if(Keyboard.isKeyDown(60))
++        if(net.tasmod.virtual.VirtualKeyboard.isKey60Down)
+         {
+             if(!isTakingScreenshot)
+             {
 @@ -1313,6 +1313,24 @@
                  currentScreen.updateScreen();
              }
@@ -15,13 +24,13 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +            
 +            thePlayer.setAngles((float) mouseHelper.deltaX * f2, (float) mouseHelper.deltaY * f2);
 +            
-+            net.tasmod.Utils.prevRotationPitch = thePlayer.prevRotationPitch;
-+            net.tasmod.Utils.prevRotationYaw = thePlayer.prevRotationYaw;
-+            net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
-+            net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
++//            net.tasmod.Utils.prevRotationPitch = thePlayer.prevRotationPitch;
++//            net.tasmod.Utils.prevRotationYaw = thePlayer.prevRotationYaw;
++//            net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
++//            net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
 +        }
-+        net.tasmod.Utils.lastX = Mouse.getEventX();
-+        net.tasmod.Utils.lastY = Mouse.getEventY();
++//        net.tasmod.Utils.lastX = Mouse.getEventX();
++//        net.tasmod.Utils.lastY = Mouse.getEventY();
 +        // End-Edit
          if(currentScreen == null || currentScreen.allowUserInput)
          {
@@ -34,6 +43,30 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
+@@ -1943,18 +1962,21 @@
+ 
+     public static void startMainThread(String s, String s1, String s2)
+     {
++        int width = Integer.parseInt(net.tasmod.main.Start.resolution.split("x")[0]);
++        int height = Integer.parseInt(net.tasmod.main.Start.resolution.split("x")[1]);
+         boolean flag = false;
+         String s3 = s;
+         Frame frame = new Frame("Minecraft");
+         Canvas canvas = new Canvas();
+         frame.setLayout(new BorderLayout());
+         frame.add(canvas, "Center");
+-        canvas.setPreferredSize(new Dimension(854, 480));
++        canvas.setPreferredSize(new Dimension(width, height));
+         frame.pack();
+         frame.setLocationRelativeTo(null);
+-        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, 854, 480, flag, frame);
++        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, width, height, flag, frame);
+         Thread thread = new Thread(minecraftimpl, "Minecraft main thread");
+         thread.setPriority(10);
++        net.tasmod.TASmod.mcThread = thread;
+         minecraftimpl.minecraftUri = "www.minecraft.net";
+         if(s3 != null && s1 != null)
+         {
 diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java/net/minecraft/src/ChunkProvider.java
 --- build/src/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
@@ -110,6 +143,30 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
          }
          Profiler.endSection();
          if(mc.skipRenderWorld)
+diff -ruN build/src/minecraft/net/minecraft/src/GuiAchievements.java src/main/java/net/minecraft/src/GuiAchievements.java
+--- build/src/minecraft/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
+@@ -80,7 +80,7 @@
+ 
+     public void drawScreen(int i, int j, float f)
+     {
+-        if(Mouse.isButtonDown(0))
++        if(net.tasmod.virtual.VirtualMouse.isButton0Down)
+         {
+             int k = (width - achievementsPaneWidth) / 2;
+             int l = (height - achievementsPaneHeight) / 2;
+diff -ruN build/src/minecraft/net/minecraft/src/GuiContainerCreative.java src/main/java/net/minecraft/src/GuiContainerCreative.java
+--- build/src/minecraft/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
+@@ -168,7 +168,7 @@
+ 
+     public void drawScreen(int i, int j, float f)
+     {
+-        boolean flag = Mouse.isButtonDown(0);
++        boolean flag = net.tasmod.virtual.VirtualMouse.isButton0Down;
+         int k = field_40216_e;
+         int l = field_40215_f;
+         int i1 = k + 155;
 diff -ruN build/src/minecraft/net/minecraft/src/GuiSlot.java src/main/java/net/minecraft/src/GuiSlot.java
 --- build/src/minecraft/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100

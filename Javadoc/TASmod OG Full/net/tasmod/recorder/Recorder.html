@@ -73,13 +73,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -116,6 +116,25 @@ extends java.lang.Object</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../net/tasmod/recorder/Recorder.html#currentTick">currentTick</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -128,13 +147,8 @@ extends java.lang.Object</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../net/tasmod/recorder/Recorder.html#Recorder-long-int-boolean-boolean-java.lang.String-java.lang.String-">Recorder</a></span>(long&nbsp;worldseed,
-        int&nbsp;worldtype,
-        boolean&nbsp;hardcore,
-        boolean&nbsp;mapFeatures,
-        java.lang.String&nbsp;folderName,
-        java.lang.String&nbsp;worldName)</code>
-<div class="block">Creates a new File and prints the Header into it</div>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../net/tasmod/recorder/Recorder.html#Recorder--">Recorder</a></span>()</code>
+<div class="block">Prepares the Recording File</div>
 </td>
 </tr>
 </table>
@@ -155,7 +169,7 @@ extends java.lang.Object</pre>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../net/tasmod/recorder/Recorder.html#endRecording--">endRecording</a></span>()</code>
-<div class="block">End the Recording by writing '#' to the File</div>
+<div class="block">End the Recording</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -172,9 +186,7 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../net/tasmod/recorder/Recorder.html#startRecording--">startRecording</a></span>()</code>
-<div class="block">Create a new World, and join it.</div>
-</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../net/tasmod/recorder/Recorder.html#saveTo-java.io.File-">saveTo</a></span>(java.io.File&nbsp;file)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -198,32 +210,40 @@ extends java.lang.Object</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="currentTick">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>currentTick</h4>
+<pre>public&nbsp;int currentTick</pre>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="Recorder-long-int-boolean-boolean-java.lang.String-java.lang.String-">
+<a name="Recorder--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Recorder</h4>
-<pre>public&nbsp;Recorder(long&nbsp;worldseed,
-                int&nbsp;worldtype,
-                boolean&nbsp;hardcore,
-                boolean&nbsp;mapFeatures,
-                java.lang.String&nbsp;folderName,
-                java.lang.String&nbsp;worldName)
-         throws java.io.IOException</pre>
-<div class="block">Creates a new File and prints the Header into it</div>
+<pre>public&nbsp;Recorder()</pre>
+<div class="block">Prepares the Recording File</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>worldseed</code> - World Seed of the TAS.</dd>
-<dd><code>worldtype</code> - Gamemode of the TAS</dd>
-<dd><code>worldName</code> - </dd>
-<dd><code>folderName</code> - </dd>
+<dd><code>name</code> - The TAS name</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>java.io.IOException</code> - Cannot be thrown, unless something is terribly wrong.</dd>
 </dl>
@@ -237,23 +257,13 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="startRecording--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>startRecording</h4>
-<pre>public final&nbsp;void&nbsp;startRecording()</pre>
-<div class="block">Create a new World, and join it.</div>
-</li>
-</ul>
 <a name="tick--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>tick</h4>
-<pre>public final&nbsp;void&nbsp;tick()</pre>
+<pre>public&nbsp;void&nbsp;tick()</pre>
 <div class="block">Write all Keybindings into the File</div>
 </li>
 </ul>
@@ -263,8 +273,8 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>endRecording</h4>
-<pre>public final&nbsp;void&nbsp;endRecording()</pre>
-<div class="block">End the Recording by writing '#' to the File</div>
+<pre>public&nbsp;void&nbsp;endRecording()</pre>
+<div class="block">End the Recording</div>
 </li>
 </ul>
 <a name="keyboardTick-net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent-">
@@ -273,18 +283,32 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>keyboardTick</h4>
-<pre>public final&nbsp;void&nbsp;keyboardTick(<a href="../../../net/tasmod/virtual/VirtualKeyboard.VirtualKeyEvent.html" title="class in net.tasmod.virtual">VirtualKeyboard.VirtualKeyEvent</a>&nbsp;event)</pre>
+<pre>public&nbsp;void&nbsp;keyboardTick(<a href="../../../net/tasmod/virtual/VirtualKeyboard.VirtualKeyEvent.html" title="class in net.tasmod.virtual">VirtualKeyboard.VirtualKeyEvent</a>&nbsp;event)</pre>
 <div class="block">Adds Mouse Events to a List</div>
 </li>
 </ul>
 <a name="mouseTick-net.tasmod.virtual.VirtualMouse.VirtualMouseEvent-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>mouseTick</h4>
-<pre>public final&nbsp;void&nbsp;mouseTick(<a href="../../../net/tasmod/virtual/VirtualMouse.VirtualMouseEvent.html" title="class in net.tasmod.virtual">VirtualMouse.VirtualMouseEvent</a>&nbsp;event)</pre>
+<pre>public&nbsp;void&nbsp;mouseTick(<a href="../../../net/tasmod/virtual/VirtualMouse.VirtualMouseEvent.html" title="class in net.tasmod.virtual">VirtualMouse.VirtualMouseEvent</a>&nbsp;event)</pre>
 <div class="block">Adds Mouse Events to a List</div>
+</li>
+</ul>
+<a name="saveTo-java.io.File-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>saveTo</h4>
+<pre>public&nbsp;void&nbsp;saveTo(java.io.File&nbsp;file)
+            throws java.lang.Exception</pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>java.lang.Exception</code></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -340,13 +364,13 @@ extends java.lang.Object</pre>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

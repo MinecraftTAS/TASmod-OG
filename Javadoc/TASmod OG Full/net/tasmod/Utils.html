@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -47,7 +47,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../net/tasmod/TASmodFull.html" title="class in net.tasmod"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../net/tasmod/TASmod.html" title="class in net.tasmod"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li>Next&nbsp;Class</li>
 </ul>
 <ul class="navList">
@@ -153,28 +153,24 @@ extends java.lang.Object</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#lastY">lastY</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#linesRead">linesRead</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#prevRotationPitch">prevRotationPitch</a></span></code>
 <div class="block">Previous Pitch of the Fake Camera</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#prevRotationYaw">prevRotationYaw</a></span></code>
 <div class="block">Previous Yaw of the Fake Camera</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#rotationPitch">rotationPitch</a></span></code>
 <div class="block">Pitch of the Fake Camera</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#rotationYaw">rotationYaw</a></span></code>
 <div class="block">Yaw of the Fake Camera</div>
@@ -213,97 +209,62 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#checkDesync-net.minecraft.client.Minecraft-java.lang.String-">checkDesync</a></span>(net.minecraft.client.Minecraft&nbsp;mc,
-           java.lang.String&nbsp;line)</code>
-<div class="block">Tool that double checks Position and Rotation of the Player, to see if the Playback has desynced</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#deleteDirectory-java.io.File-">deleteDirectory</a></span>(java.io.File&nbsp;directoryToBeDeleted)</code>
 <div class="block">Small Utility that deletes a Directory recursively</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>static java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#formatDuration-java.time.Duration-">formatDuration</a></span>(java.time.Duration&nbsp;duration)</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#getDX--">getDX</a></span>()</code>
 <div class="block">Used by VirtualMouse, to get the dX for one tick.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#getDY--">getDY</a></span>()</code>
 <div class="block">Used by VirtualMouse, to get the dY for one tick.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#getOriginalX--">getOriginalX</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#getOriginalY--">getOriginalY</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#isZero-double-double-">isZero</a></span>(double&nbsp;value,
-      double&nbsp;threshold)</code>
-<div class="block">Utility to see if a double is near zero</div>
-</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#isZeroFloat-float-float-">isZeroFloat</a></span>(float&nbsp;value,
-           float&nbsp;threshold)</code>
-<div class="block">Utility to see if a float is near zero</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#lazyKeyboard--">lazyKeyboard</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#lazyMouse--">lazyMouse</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static net.minecraft.client.Minecraft</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#obtainMinecraftInstance--">obtainMinecraftInstance</a></span>()</code>
 <div class="block">Obtains the inaccessible Singleton from the Minecraft Class</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static java.lang.Object</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#obtainTimerInstance--">obtainTimerInstance</a></span>()</code>
 <div class="block">Obtains the inaccessible Timer instance from the minecraft class</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>static java.lang.String</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#readLastLine-java.io.File-">readLastLine</a></span>(java.io.File&nbsp;file)</code>&nbsp;</td>
-</tr>
-<tr id="i14" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#setAngles-float-float-">setAngles</a></span>(float&nbsp;f,
          float&nbsp;f1)</code>
 <div class="block">Method used to update Yaw and Pitch using Mouse Coordinates.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#transformRandom--">transformRandom</a></span>()</code>
 <div class="block">Transforms the Random Variable for Math.random()</div>
-</td>
-</tr>
-<tr id="i16" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../net/tasmod/Utils.html#transformStringTranslate--">transformStringTranslate</a></span>()</code>
-<div class="block">Changes the Name of a few Buttons to match their use without editing Minecraft Code</div>
 </td>
 </tr>
 </table>
@@ -409,19 +370,10 @@ extends java.lang.Object</pre>
 <a name="isObfuscated">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>isObfuscated</h4>
 <pre>public static&nbsp;boolean isObfuscated</pre>
-</li>
-</ul>
-<a name="linesRead">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>linesRead</h4>
-<pre>public static&nbsp;int linesRead</pre>
 </li>
 </ul>
 </li>
@@ -467,39 +419,8 @@ extends java.lang.Object</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>deleteDirectory</h4>
-<pre>public static final&nbsp;boolean&nbsp;deleteDirectory(java.io.File&nbsp;directoryToBeDeleted)</pre>
+<pre>public static&nbsp;boolean&nbsp;deleteDirectory(java.io.File&nbsp;directoryToBeDeleted)</pre>
 <div class="block">Small Utility that deletes a Directory recursively</div>
-</li>
-</ul>
-<a name="formatDuration-java.time.Duration-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>formatDuration</h4>
-<pre>public static&nbsp;java.lang.String&nbsp;formatDuration(java.time.Duration&nbsp;duration)</pre>
-</li>
-</ul>
-<a name="isZeroFloat-float-float-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isZeroFloat</h4>
-<pre>public static&nbsp;boolean&nbsp;isZeroFloat(float&nbsp;value,
-                                  float&nbsp;threshold)</pre>
-<div class="block">Utility to see if a float is near zero</div>
-</li>
-</ul>
-<a name="isZero-double-double-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isZero</h4>
-<pre>public static&nbsp;boolean&nbsp;isZero(double&nbsp;value,
-                             double&nbsp;threshold)</pre>
-<div class="block">Utility to see if a double is near zero</div>
 </li>
 </ul>
 <a name="getDX--">
@@ -522,21 +443,6 @@ extends java.lang.Object</pre>
 <pre>public static&nbsp;int&nbsp;getDY()</pre>
 <div class="block">Used by VirtualMouse, to get the dY for one tick.
  The Value dY is being added over frames</div>
-</li>
-</ul>
-<a name="transformStringTranslate--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>transformStringTranslate</h4>
-<pre>public static&nbsp;void&nbsp;transformStringTranslate()
-                                     throws java.lang.Exception</pre>
-<div class="block">Changes the Name of a few Buttons to match their use without editing Minecraft Code</div>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.Exception</code></dd>
-</dl>
 </li>
 </ul>
 <a name="transformRandom--">
@@ -584,17 +490,6 @@ extends java.lang.Object</pre>
 </dl>
 </li>
 </ul>
-<a name="checkDesync-net.minecraft.client.Minecraft-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>checkDesync</h4>
-<pre>public static&nbsp;void&nbsp;checkDesync(net.minecraft.client.Minecraft&nbsp;mc,
-                               java.lang.String&nbsp;line)</pre>
-<div class="block">Tool that double checks Position and Rotation of the Player, to see if the Playback has desynced</div>
-</li>
-</ul>
 <a name="lazyMouse--">
 <!--   -->
 </a>
@@ -611,20 +506,6 @@ extends java.lang.Object</pre>
 <li class="blockList">
 <h4>lazyKeyboard</h4>
 <pre>public static&nbsp;void&nbsp;lazyKeyboard()</pre>
-</li>
-</ul>
-<a name="readLastLine-java.io.File-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>readLastLine</h4>
-<pre>public static&nbsp;java.lang.String&nbsp;readLastLine(java.io.File&nbsp;file)
-                                     throws java.lang.Exception</pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code>java.lang.Exception</code></dd>
-</dl>
 </li>
 </ul>
 <a name="getOriginalX--">
@@ -672,7 +553,7 @@ extends java.lang.Object</pre>
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../net/tasmod/TASmodFull.html" title="class in net.tasmod"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../net/tasmod/TASmod.html" title="class in net.tasmod"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li>Next&nbsp;Class</li>
 </ul>
 <ul class="navList">
