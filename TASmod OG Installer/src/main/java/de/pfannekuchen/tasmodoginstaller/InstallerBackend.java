@@ -6,8 +6,10 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Base64;
 
 import javax.swing.JOptionPane;
 
@@ -45,7 +47,7 @@ public class InstallerBackend {
 		}
 		if (new File(instance, "minecraft.jar").exists()) {
 			findJRE8();
-			ProcessBuilder builder = new ProcessBuilder(new String[] {javaexe.getAbsolutePath(), "-Djdk.attach.allowAttachSelf=true", "-Djava.library.path=.", "-jar", "minecraft.jar"});
+			ProcessBuilder builder = new ProcessBuilder(new String[] {javaexe.getAbsolutePath(), "-Djdk.attach.allowAttachSelf=true", "-Djava.library.path=.", "-jar", "minecraft.jar", Base64.getEncoder().encodeToString(new File("tasmodog").getParentFile().getAbsolutePath().getBytes(StandardCharsets.UTF_8))});
 			builder.directory(instance);
 			builder.inheritIO();
 			builder.start();
