@@ -1,6 +1,23 @@
 diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/net/minecraft/client/Minecraft.java
 --- build/src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
+@@ -655,11 +655,11 @@
+ 
+     private void func_40001_x()
+     {
+-        if(mcApplet != null && !mcApplet.isActive())
+-        {
+-            running = false;
+-            return;
+-        }
++//        if(mcApplet != null && !mcApplet.isActive())
++//        {
++//            running = false;
++//            return;
++//        }
+         AxisAlignedBB.clearBoundingBoxPool();
+         Vec3D.initialize();
+         Profiler.startSection("root");
 @@ -678,6 +678,7 @@
          }
          long l = System.nanoTime();
@@ -9,6 +26,21 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          for(int i = 0; i < timer.elapsedTicks; i++)
          {
              ticksRan++;
+@@ -731,10 +732,10 @@
+         }
+         GL11.glFlush();
+         Profiler.endSection();
+-        if(!Display.isActive() && fullscreen)
+-        {
+-            toggleFullscreen();
+-        }
++//        if(!Display.isActive() && fullscreen)
++//        {
++//            toggleFullscreen();
++//        }
+         Profiler.endSection();
+         if(gameSettings.showDebugInfo)
+         {
 @@ -810,7 +811,7 @@
  
      private void screenshotListener()
@@ -18,6 +50,21 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          {
              if(!isTakingScreenshot)
              {
+@@ -1020,10 +1021,10 @@
+ 
+     public void setIngameFocus()
+     {
+-        if(!Display.isActive())
+-        {
+-            return;
+-        }
++//        if(!Display.isActive())
++//        {
++//            return;
++//        }
+         if(inGameHasFocus)
+         {
+             return;
 @@ -1313,6 +1314,24 @@
                  currentScreen.updateScreen();
              }
@@ -162,7 +209,29 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
          }
          GL11.glTranslatef(0.0F, f1, 0.0F);
          d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
-@@ -692,29 +695,17 @@
+@@ -679,42 +682,30 @@
+             updateLightmap();
+         }
+         Profiler.endSection();
+-        if(!Display.isActive())
+-        {
+-            if(System.currentTimeMillis() - prevFrameTime > 500L)
+-            {
+-                mc.displayInGameMenu();
+-            }
+-        } else
+-        {
++//        if(!Display.isActive())
++//        {
++//            if(System.currentTimeMillis() - prevFrameTime > 500L)
++//            {
++//                mc.displayInGameMenu();
++//            }
++//        } else
++//        {
+             prevFrameTime = System.currentTimeMillis();
+-        }
++//        }
          Profiler.startSection("mouse");
          if(mc.inGameHasFocus)
          {
