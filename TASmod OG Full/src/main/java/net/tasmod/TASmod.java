@@ -1,5 +1,6 @@
 package net.tasmod;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.lwjgl.input.Keyboard;
@@ -61,11 +62,23 @@ public final class TASmod {
 	/** When the game should Tab back in */
 	public static boolean shouldTabIn;
 	
+	/** Whether the current TAS is being rerecorded */
+	public static File rerecord;
+	
+	/** The Thread that minecraft runs on */
+	public static Thread mcThread;
+	
+	/** Tick to pause playback at */
+	public static int pauseAt = -1;
+	
 	/**
 	 * Ticks all kinds of things
 	 * @throws IOException Unexpected File End
 	 */
 	public static void tick() {
+		/* During a playback, ask the user if TAS should be rerecorded from here */
+		if (playback != null && Keyboard.isKeyDown(Keyboard.KEY_F3))
+			pauseAt = playback.currentTick + 1; // pause on this tick
 		/* Tick Recording/Playback if needed */
 		if (recording != null) recording.tick();
 		if (playback != null) playback.tick();
@@ -78,7 +91,7 @@ public final class TASmod {
 				e.printStackTrace();
 			}
 			if (startRecording) {
-				recording = new Recorder(); // Start a new Recording
+				recording = new Recorder(0); // Start a new Recording
 				startRecording = false;
 			} else if (startPlayback) {
 				playback.startReplay();
@@ -112,7 +125,7 @@ public final class TASmod {
 		int currentTick = 0;
 		if (playback != null) currentTick = playback.currentTick;
 		else if (recording != null) currentTick = recording.currentTick;
-		final String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d", mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
+		final String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d" + ((playback != null) ? ", F3 to rerecord from here." : "."), mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
 		EmulatorFrame.label.setText(label);
 	}
 
@@ -159,9 +172,5 @@ public final class TASmod {
 	public static void mouseTick(final VirtualMouseEvent event) {
 		if (recording != null) recording.mouseTick(event);
 	}
-
-	/** The Thread that minecraft runs on */
-	public static Thread mcThread;
-
 
 }

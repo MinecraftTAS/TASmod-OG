@@ -48,6 +48,8 @@ public class EmulatorFrame extends Frame {
 	public static Cursor origCursor;
 	/** The Original Cursor to avoid a cursor madness */
 	public static Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "blank cursor");
+	/** The Save TAS button */
+	public static JMenuItem save;
 	
 	
 	/**
@@ -106,18 +108,29 @@ public class EmulatorFrame extends Frame {
 
 		final JMenuItem load = new JMenuItem("Load TAS");
 		final JMenuItem create = new JMenuItem("Create TAS");
-		final JMenuItem save = new JMenuItem("Save TAS");
+		save = new JMenuItem("Save TAS");
 		save.setEnabled(false);
 		final JMenuItem start = new JMenuItem("Launch normally");
 		save.addActionListener(e -> {
 			if (TASmod.recording != null) {
-				final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
-				if (out == null) return;
-				TASmod.recording.endRecording();
-				try {
-					TASmod.recording.saveTo(new File(out));
-				} catch (final Exception e1) {
-					e1.printStackTrace();
+				File outFile = TASmod.rerecord;
+				if (outFile == null) {
+					final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
+					if (out == null) return;
+					outFile = new File(out);
+					TASmod.recording.endRecording();
+					try {
+						TASmod.recording.saveTo(outFile);
+					} catch (final Exception e1) {
+						e1.printStackTrace();
+					}
+				} else {
+					TASmod.recording.endRecording();
+					try {
+						TASmod.recording.saveTo(outFile, TASmod.recording.startingTick);
+					} catch (final Exception e1) {
+						e1.printStackTrace();
+					}
 				}
 				save.setEnabled(false);
 			}
@@ -126,6 +139,11 @@ public class EmulatorFrame extends Frame {
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
 			if (out == null) return;
 			final File tasFile = new File(out);
+			String tick = JOptionPane.showInputDialog("Enter tick to rerecord at (leave empty for full playback): ", "");
+			if (tick == null) return;
+			if (!tick.isEmpty()) {
+				TASmod.pauseAt = Integer.parseInt(tick);
+			}
 			try {
 				TASmod.playback = new Replayer(tasFile);
 			} catch (final Exception e1) {
