@@ -2,11 +2,14 @@ package net.tasmod.main;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Panel;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -41,13 +44,19 @@ public class EmulatorFrame extends Frame {
 	public static Component mcCanvas;
 	/** The Panel that holds the Minecraft Canvas at a specific resolution */
 	public static Panel gamePanel;
-
+	/** The Original Cursor to avoid a cursor madness */
+	public static Cursor origCursor;
+	/** The Original Cursor to avoid a cursor madness */
+	public static Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "blank cursor");
+	
+	
 	/**
 	 * Initializes the Menu Bar and Bottom Label such as their Actions
 	 * @param title Title of the window
 	 */
 	public EmulatorFrame(final String title) {
 		super(title);
+		origCursor = getCursor();
 		window = this;
 		getInsets().set(0, 0, 0, 0);
 		bar = new JMenuBar();

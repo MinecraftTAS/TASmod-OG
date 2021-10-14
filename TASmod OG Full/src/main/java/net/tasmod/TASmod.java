@@ -90,6 +90,9 @@ public final class TASmod {
 			e.printStackTrace();
 		}
 		infoHud.tick();
+		// Hacky solution to make the cursor work
+		if (mc.currentScreen != null) EmulatorFrame.window.setCursor(EmulatorFrame.origCursor);
+		else EmulatorFrame.window.setCursor(EmulatorFrame.blankCursor);
 		/* Update the Label */
 		int currentTick = 0;
 		if (playback != null) currentTick = playback.currentTick;
