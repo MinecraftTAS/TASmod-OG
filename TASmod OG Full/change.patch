@@ -9,6 +9,15 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          for(int i = 0; i < timer.elapsedTicks; i++)
          {
              ticksRan++;
+@@ -810,7 +811,7 @@
+ 
+     private void screenshotListener()
+     {
+-        if(Keyboard.isKeyDown(60))
++        if(net.tasmod.virtual.VirtualKeyboard.isKey60Down)
+         {
+             if(!isTakingScreenshot)
+             {
 @@ -1313,6 +1314,24 @@
                  currentScreen.updateScreen();
              }
@@ -42,6 +51,45 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
+@@ -1945,16 +1965,27 @@
+     {
+         boolean flag = false;
+         String s3 = s;
+-        Frame frame = new Frame("Minecraft");
++        Frame frame = new net.tasmod.main.EmulatorFrame("Minecraft"); // Replace Minecrafts frame with a new one with some more stuff do it
+         Canvas canvas = new Canvas();
+         frame.setLayout(new BorderLayout());
+         frame.add(canvas, "Center");
+-        canvas.setPreferredSize(new Dimension(854, 480));
+         frame.pack();
+         frame.setLocationRelativeTo(null);
+-        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, 854, 480, flag, frame);
++        frame.setVisible(true);
++        try {
++        	while (!net.tasmod.main.Start.shouldStart) {
++        		Thread.sleep(20);
++        	}
++		} catch (InterruptedException e) {
++			e.printStackTrace();
++		}
++        int width = Integer.parseInt(net.tasmod.main.Start.resolution.split("x")[0]);
++        int height = Integer.parseInt(net.tasmod.main.Start.resolution.split("x")[1]);
++        canvas.setPreferredSize(new Dimension(width, height));
++        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, width, height, flag, frame);
+         Thread thread = new Thread(minecraftimpl, "Minecraft main thread");
+         thread.setPriority(10);
++        net.tasmod.TASmod.mcThread = thread;
+         minecraftimpl.minecraftUri = "www.minecraft.net";
+         if(s3 != null && s1 != null)
+         {
+@@ -1968,7 +1999,6 @@
+             String as[] = s2.split(":");
+             minecraftimpl.setServer(as[0], Integer.parseInt(as[1]));
+         }
+-        frame.setVisible(true);
+         frame.addWindowListener(new GameWindowListener(minecraftimpl, thread));
+         thread.start();
+     }
 diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java/net/minecraft/src/ChunkProvider.java
 --- build/src/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
@@ -183,51 +231,38 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiAchievement.java src/main/jav
          if(!haveAchiement && !haveAchiement && (d < 0.0D || d > 1.0D))
          {
              achievementTime = 0L;
-diff -ruN build/src/minecraft/net/minecraft/src/GuiCreateWorld.java src/main/java/net/minecraft/src/GuiCreateWorld.java
---- build/src/minecraft/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/GuiCreateWorld.java	2021-01-01 00:00:00.000000000 +0100
-@@ -157,17 +157,13 @@
-                     l = s.hashCode();
-                 }
-             }
--            int i = 0;
--            if(field_35364_f.equals("creative"))
--            {
--                i = 1;
--                mc.playerController = new PlayerControllerCreative(mc);
--            } else
--            {
--                mc.playerController = new PlayerControllerSP(mc);
-+            // This Edits the behaviour of the "Create World" Button. Instead of directly creating the Player and Loading the World, we start the Recording, which eventually does the exact same
-+            try {
-+                net.tasmod.TASmod.startRecording(l, field_35364_f.equals("creative") ? 1 : 0, field_40232_h, field_35365_g, folderName, textboxWorldName.getText());
-+            } catch (java.io.IOException e) {
-+                e.printStackTrace();
-             }
--            mc.startWorld(folderName, textboxWorldName.getText(), new WorldSettings(l, i, field_35365_g, field_40232_h));
--            mc.displayGuiScreen(null);
-+            // End-Edit
-         } else
-         if(guibutton.id == 3)
+diff -ruN build/src/minecraft/net/minecraft/src/GuiAchievements.java src/main/java/net/minecraft/src/GuiAchievements.java
+--- build/src/minecraft/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
+@@ -80,7 +80,7 @@
+ 
+     public void drawScreen(int i, int j, float f)
+     {
+-        if(Mouse.isButtonDown(0))
++        if(net.tasmod.virtual.VirtualMouse.isButton0Down)
          {
+             int k = (width - achievementsPaneWidth) / 2;
+             int l = (height - achievementsPaneHeight) / 2;
+diff -ruN build/src/minecraft/net/minecraft/src/GuiContainerCreative.java src/main/java/net/minecraft/src/GuiContainerCreative.java
+--- build/src/minecraft/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
+@@ -168,7 +168,7 @@
+ 
+     public void drawScreen(int i, int j, float f)
+     {
+-        boolean flag = Mouse.isButtonDown(0);
++        boolean flag = net.tasmod.virtual.VirtualMouse.isButton0Down;
+         int k = field_40216_e;
+         int l = field_40215_f;
+         int i1 = k + 155;
 diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net/minecraft/src/GuiIngame.java
 --- build/src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
-@@ -76,6 +76,25 @@
+@@ -76,6 +76,15 @@
                  renderPortalOverlay(f1, k, l);
              }
          }
 +        // Render TAS Stuff here. Does not have any effect on minecraft.
-+        if (net.tasmod.TASmod.isPlayback() && net.tasmod.tools.TickrateChanger.isTickAdvance) {
-+            GL11.glPushMatrix();
-+            drawRect(0, scaledresolution.getScaledHeight() / 5, scaledresolution.getScaledWidth(), scaledresolution.getScaledHeight() / 5 * 4, 0xAA000000);
-+            GL11.glScaled(2, 2, 1);
-+            drawCenteredString(fontrenderer, "TAS in " + net.tasmod.Utils.formatDuration(java.time.Duration.ofMillis(net.tasmod.TASmod.getPlayback().ticksTotal * 50)) + "", scaledresolution.getScaledWidth() / 4, scaledresolution.getScaledHeight() / 4 - fontrenderer.field_41063_b / 2, 0xFFFFFF);
-+            GL11.glPopMatrix();
-+            drawCenteredString(fontrenderer, net.tasmod.TASmod.getPlayback().ticksTotal + " Ticks", scaledresolution.getScaledWidth() / 2, scaledresolution.getScaledHeight() / 2 + (scaledresolution.getScaledHeight() / 14), 0xFFFFFF);
-+            drawString(fontrenderer, "Performed by: " + net.tasmod.TASmod.getPlayback().author, 5, scaledresolution.getScaledHeight() / 5 + 2, 0x0AFFFF);
-+            drawString(fontrenderer, "Hours spend on TAS: " + net.tasmod.TASmod.getPlayback().hoursOfWork, 5, scaledresolution.getScaledHeight() / 5 + 4 + fontrenderer.field_41063_b, 0x0AFFFF);
-+        }
 +        if (mc.theWorld != null) {
 +            if (mc.currentScreen != null) {
 +                if (mc.currentScreen.getClass().getSimpleName().contains("InfoHud")) net.tasmod.TASmod.infoHud.drawHud();
@@ -239,138 +274,29 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net
          if(!mc.playerController.func_35643_e())
          {
              GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-diff -ruN build/src/minecraft/net/minecraft/src/GuiIngameMenu.java src/main/java/net/minecraft/src/GuiIngameMenu.java
---- build/src/minecraft/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/GuiIngameMenu.java	2021-01-01 00:00:00.000000000 +0100
-@@ -29,7 +29,9 @@
-         updateCounter2 = 0;
-         controlList.clear();
-         byte byte0 = -16;
--        controlList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + byte0, "Save and quit to title"));
-+        // Change the message of the Disconnect Button
-+        controlList.add(new GuiButton(1, width / 2 - 100, height / 4 + 120 + byte0, net.tasmod.TASmod.isRecording() ? "End Recording and Quit" : "Save and quit to title"));
-+        // End-Edit
-         if(mc.isMultiplayerWorld())
-         {
-             ((GuiButton)controlList.get(0)).displayString = "Disconnect";
-@@ -48,6 +50,13 @@
-         }
-         if(guibutton.id == 1)
-         {
-+            // End the recording when leaving a world
-+            try {
-+                if (net.tasmod.TASmod.isRecording()) net.tasmod.TASmod.endRecording();
-+            } catch (Exception e) {
-+                e.printStackTrace();
-+            }
-+            // End-Edit
-             mc.statFileWriter.readStat(StatList.leaveGameStat, 1);
-             if(mc.isMultiplayerWorld())
-             {
-diff -ruN build/src/minecraft/net/minecraft/src/GuiMultiplayer.java src/main/java/net/minecraft/src/GuiMultiplayer.java
---- build/src/minecraft/net/minecraft/src/GuiMultiplayer.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/GuiMultiplayer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -65,21 +65,37 @@
- 
-     private void loadServerList()
-     {
--        try
--        {
--            NBTTagCompound nbttagcompound = CompressedStreamTools.func_35622_a(new File(mc.mcDataDir, "servers.dat"));
--            NBTTagList nbttaglist = nbttagcompound.getTagList("servers");
--            serverList.clear();
--            for(int i = 0; i < nbttaglist.tagCount(); i++)
--            {
--                serverList.add(ServerNBTStorage.createServerNBTStorage((NBTTagCompound)nbttaglist.tagAt(i)));
--            }
-+        // Instead of Loading a List of servers from the servers.dat File, we browse the .minecraft directory for .tas Files and Add them to the List instead
-+        for (File f : mc.mcDataDir.listFiles(new FilenameFilter() {
- 
-+            @Override
-+            public boolean accept(File dir, String name) {
-+                return name.toLowerCase().endsWith(".tas");
-+            }
-+        })) {
-+            try {
-+                BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
-+
-+                reader.readLine();
-+                reader.readLine();
-+
-+                ServerNBTStorage storage = new ServerNBTStorage(f.getName().split(".tas")[0], Long.parseLong(reader.readLine().split(": ")[1].split(" ")[0]) + "");
-+
-+                boolean hardcore = Boolean.parseBoolean(reader.readLine().split(": ")[1].split(" ")[0]);
-+                boolean mapFeatures = Boolean.parseBoolean(reader.readLine().split(": ")[1].split(" ")[0]);
-+                int worldtype = Integer.parseInt(reader.readLine().split(": ")[1].split(" ")[0]);
-+                reader.close();
-+
-+                storage.motd = (worldtype == 1 ? "Creative, " : (hardcore ? "Hardcore, " : "Survival, ")) + (mapFeatures ? "with Structures" : "without Structures");
-+                storage.lag = 420691337L;
-+                storage.playerCount = f.getName();
-+                storage.polled = true;
-+                serverList.add(storage);
-+            } catch(Exception exception) {
-+                exception.printStackTrace();
-+            }
-         }
--        catch(Exception exception)
--        {
--            exception.printStackTrace();
--        }
-+        // End-Edit
-     }
- 
-     private void saveServerList()
-@@ -131,22 +147,16 @@
-         }
-         if(guibutton.id == 2)
-         {
--            String s = ((ServerNBTStorage)serverList.get(selectedServer)).name;
--            if(s != null)
--            {
--                deleteClicked = true;
--                StringTranslate stringtranslate = StringTranslate.getInstance();
--                String s1 = stringtranslate.translateKey("selectServer.deleteQuestion");
--                String s2 = (new StringBuilder()).append("'").append(s).append("' ").append(stringtranslate.translateKey("selectServer.deleteWarning")).toString();
--                String s3 = stringtranslate.translateKey("selectServer.deleteButton");
--                String s4 = stringtranslate.translateKey("gui.cancel");
--                GuiYesNo guiyesno = new GuiYesNo(this, s1, s2, s3, s4, selectedServer);
--                mc.displayGuiScreen(guiyesno);
--            }
-+            // Instead of deleting an entry from the servers.dat, with a warning gui popping up, we just delete the TAS File.
-+            new File(mc.mcDataDir, ((ServerNBTStorage) serverList.get(selectedServer)).playerCount).delete();
-+            mc.displayGuiScreen(new GuiMultiplayer(parentScreen));
-+            // End-Edit
-         } else
-         if(guibutton.id == 1)
-         {
--            joinServer(selectedServer);
-+            // Start the TAS Playback instead of joining a Minecraft Server
-+            net.tasmod.TASmod.startPlayback(((ServerNBTStorage) serverList.get(selectedServer)).playerCount.split(".tas")[0]);
-+            // End-Edit
-         } else
-         if(guibutton.id == 4)
-         {
 diff -ruN build/src/minecraft/net/minecraft/src/GuiSlot.java src/main/java/net/minecraft/src/GuiSlot.java
 --- build/src/minecraft/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
-@@ -6,6 +6,7 @@
- 
- import java.util.List;
- import net.minecraft.client.Minecraft;
-+
- import org.lwjgl.input.Mouse;
- import org.lwjgl.opengl.GL11;
- 
-@@ -159,7 +160,7 @@
-         int k = getSize();
-         int l = width / 2 + 124;
-         int i1 = l + 6;
--        if(Mouse.isButtonDown(0))
-+        if((net.tasmod.TASmod.isPlayback() || net.tasmod.TASmod.isRecording()) ? net.tasmod.virtual.VirtualMouse.isButtonDown(0) : net.tasmod.TASmodFull.checkRealMouseButtonDown(0))
+@@ -223,7 +223,9 @@
+             }
+         } else
          {
-             if(initialClickY == -1F)
+-            do
++            /*
++             * FIXME: This is a temporary fix for the GuiSlot because frame based Mouse Events are a big no no for TASmod
++             * do
              {
+                 if(!Mouse.next())
+                 {
+@@ -242,7 +244,7 @@
+                     }
+                     amountScrolled += (j1 * slotHeight) / 2;
+                 }
+-            } while(true);
++            } while(true);*/
+             initialClickY = -1F;
+         }
+         bindAmountScrolled();
 diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src/main/java/net/minecraft/src/ThreadDownloadResources.java
 --- build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
@@ -380,7 +306,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src
                      }
 -                    downloadAndInstallResource(url, s, l, i);
 +                    // This is just a small change to fix the game audio, because the files aren't online on the original link anymore. By doing this i download the ogg files from my website instead.
-+                    downloadAndInstallResource(new URL("http://mgnet.work/archive/1.0-sounds/"), s, l, i);
++                    downloadAndInstallResource(new URL("https://maven.mgnet.work/archive/1.0-sounds/"), s, l, i);
                      if(closing)
                      {
                          return;

@@ -9,48 +9,48 @@ import net.tasmod.Utils;
  * @author Pancake
  */
 public class TickrateChanger {
- 
-	
-	
+
+
+
 	/** Whether the game is currently in tick advance mode */
 	public static boolean isTickAdvance;
 	/** Selected index from array below */
 	public static int selectedGamespeed = 6;
 	/** Array of all available gamespeeds */
 	public static float[] availableGamespeeds = new float[] {
-		0.025f, // 0
-		0.05f, // 1
-		0.1f, // 2
-		0.2f, // 3
-		0.4f, // 4
-		0.5f, // 5
-		1f, // 6
-		2.0f // 7
+			0.025f, // 0
+			0.05f, // 1
+			0.1f, // 2
+			0.2f, // 3
+			0.4f, // 4
+			0.5f, // 5
+			1f, // 6
+			2.0f // 7
 	};
-	
+
 	public static long timeOffset = 0L;
 	public static long timeSinceZero = System.currentTimeMillis();
 	public static long timeSinceTC = System.currentTimeMillis();
 	public static long fakeTimeSinceTC = System.currentTimeMillis();
 	public static long getMilliseconds() {
 		long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
-		time *= ((availableGamespeeds[selectedGamespeed] * 20.0f) / 20F);
+		time *= availableGamespeeds[selectedGamespeed] * 20.0f / 20F;
 		return fakeTimeSinceTC + time;
 	}
-	
+
 	/**
 	 * Increases the gamespeed by one (see {@link #availableGamespeeds}).
 	 */
 	public static void faster() {
-		if (selectedGamespeed != (availableGamespeeds.length - 1)) selectedGamespeed++;
+		if (selectedGamespeed != availableGamespeeds.length - 1) selectedGamespeed++;
 		try {
 			updateTickrate(availableGamespeeds[selectedGamespeed]);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.err.println("Error changing gamespeed...");
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Decreases the gamespeed by one (see {@link #availableGamespeeds}).
 	 */
@@ -58,40 +58,39 @@ public class TickrateChanger {
 		if (selectedGamespeed != 0) selectedGamespeed--;
 		try {
 			updateTickrate(availableGamespeeds[selectedGamespeed]);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.err.println("Error changing gamespeed...");
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Enters or leaves tick advance
 	 */
 	public static void toggleTickadvance() throws Exception {
-		if (!(isTickAdvance = !isTickAdvance)) {
+		if (!(isTickAdvance = !isTickAdvance))
 			updateTickrate(availableGamespeeds[selectedGamespeed]);
-		} else {
+		else
 			updateTickrate(0f);
-		}
 	}
-	
+
 	/**
 	 * This method is used to slow down the game. It replaces the 'timerSpeed' field in the Timer class.
 	 * @param gamespeed New Speed of game (1.0 = normal speed)
 	 * @throws Exception Throws exception whenever invalid reflection target is set
 	 */
-	public static void updateTickrate(float gamespeed) throws Exception {
+	public static void updateTickrate(final float gamespeed) throws Exception {
 		if (gamespeed <= 0.02F) timeSinceZero = System.currentTimeMillis() - timeOffset;
-		
-		long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
-		fakeTimeSinceTC += (long) (time * ((gamespeed * 20.0f) / 20F));
+
+		final long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
+		fakeTimeSinceTC += (long) (time * (gamespeed * 20.0f / 20F));
 		timeSinceTC = System.currentTimeMillis() - timeOffset;
 		/* Get Field in Obfuscated or Non-Obfuscated Environment */
 		Field translateTableField;
 		try {
 			/* Non-Obfuscated net.minecraft.src.Timer.timerSpeed */
 			translateTableField = Class.forName("net.minecraft.src.Timer").getDeclaredField("timerSpeed");
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			/* Obfuscated: aij.d */
 			translateTableField = Class.forName("aij").getDeclaredField("d");
 		}
@@ -99,5 +98,5 @@ public class TickrateChanger {
 		translateTableField.setAccessible(true);
 		translateTableField.setFloat(Utils.obtainTimerInstance(), gamespeed);
 	}
-	
+
 }

@@ -110,6 +110,29 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
          }
          Profiler.endSection();
          if(mc.skipRenderWorld)
+diff -ruN build/src/minecraft/net/minecraft/src/GuiSlot.java src/main/java/net/minecraft/src/GuiSlot.java
+--- build/src/minecraft/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
+@@ -223,7 +223,9 @@
+             }
+         } else
+         {
+-            do
++        	/*
++             * FIXME: This is a temporary fix for the GuiSlot because frame based Mouse Events are a big no no for TASmod
++             * do
+             {
+                 if(!Mouse.next())
+                 {
+@@ -242,7 +244,7 @@
+                     }
+                     amountScrolled += (j1 * slotHeight) / 2;
+                 }
+-            } while(true);
++            } while(true);*/
+             initialClickY = -1F;
+         }
+         bindAmountScrolled();
 diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src/main/java/net/minecraft/src/ThreadDownloadResources.java
 --- build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
@@ -119,7 +142,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src
                      }
 -                    downloadAndInstallResource(url, s, l, i);
 +                    // This is just a small change to fix the game audio, because the files aren't online on the original link anymore. By doing this i download the ogg files from my website instead.
-+                    downloadAndInstallResource(new URL("http://mgnet.work/archive/1.0-sounds/"), s, l, i);
++                    downloadAndInstallResource(new URL("https://maven.mgnet.work/archive/1.0-sounds/"), s, l, i);
                      if(closing)
                      {
                          return;
