@@ -3,7 +3,6 @@ package net.tasmod.main;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
-import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
