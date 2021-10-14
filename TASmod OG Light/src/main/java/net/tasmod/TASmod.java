@@ -1,6 +1,5 @@
 package net.tasmod;
 
-import java.io.File;
 import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
@@ -15,22 +14,22 @@ import net.tasmod.replayer.Replayer;
 public final class TASmod {
 
 	/** Currently running Playback */
-	private static volatile Replayer playback;
+	public static volatile Replayer playback;
 
 	/** Hacky boolean, to run Code once when MC starts, without requiring more Code Edits */
 	private static boolean hasBeenTransformed;
 
 	/** Minecraft Instance obtained via Reflection */
 	public static Minecraft mc;
-
-	/** TAS File to play back if set */
-	public static File tasFile;
+	
+	/** Whether a playback should start */
+	public static boolean startPlayback;
 
 	/**
 	 * Ticks all kinds of things
 	 * @throws IOException Unexpected File End
 	 */
-	public static final void tick() {
+	public static void tick() {
 		/* Tick Playback if needed */
 		if (playback != null) playback.tick();
 		/* Run Code when MC Ticks the First Time */
@@ -38,52 +37,25 @@ public final class TASmod {
 			hasBeenTransformed = true;
 			try {
 				TASmod.mc = Utils.obtainMinecraftInstance();
-				// start a playback or recording if needed
-				if (tasFile != null) {
-					playback = new Replayer(tasFile);
-					playback.startReplay();
-				}
 			} catch (final Exception e) {
 				e.printStackTrace();
+			}
+			if (startPlayback) {
+				playback.startReplay();
+				startPlayback = false;
 			}
 		}
 	}
 
 	/**
-	 * @return Returns whether a Playback is running
+	 * Ticks frame based stuff.
+	 * @throws Exception Throws Exception whenever something bad happens
 	 */
-	public static boolean isPlayback() {
-		return playback != null;
+	public static void render() {
+		
 	}
 
-	/**
-	 * Joins the World of the Playback and starts the Playback
-	 *
-	 * @param seed Create a world with this seed
-	 * @return Returns whether the action was successful
-	 * @throws IOException Thrown if the File doesn't exists
-	 */
-	public static final boolean startPlayback(final File tasFile) {
-		if (playback != null) return false;
-		try {
-			playback = new Replayer(tasFile);
-		} catch (final Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		playback.startReplay();
-		return true;
-	}
-
-	/**
-	 * End the current Playback
-	 */
-	public static void endPlayback() {
-		playback = null;
-	}
-
-	public static Replayer getPlayback() {
-		return playback;
-	}
+	/** The Thread that minecraft runs on */
+	public static Thread mcThread;
 
 }

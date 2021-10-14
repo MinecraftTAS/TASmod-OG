@@ -1,7 +1,9 @@
 package net.tasmod.main;
+
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.io.File;
+import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
@@ -25,6 +27,7 @@ import net.tasmod.Utils;
 import net.tasmod.asm.RandomnessVisitor;
 import net.tasmod.asm.VirtualInputVisitor;
 import net.tasmod.asm.WeightedRandomnessVisitor;
+import net.tasmod.replayer.Replayer;
 
 public class Start
 {
@@ -50,7 +53,6 @@ public class Start
 			"net/minecraft/src/EnchantmentHelper",
 			"net/minecraft/src/EnchantmentNameParts",
 			"net/minecraft/src/Entity",
-			"net/minecraft/src/GuiCreateWorld",
 			"net/minecraft/src/Explosion",
 			"net/minecraft/src/FontRenderer",
 			"net/minecraft/src/GuiMainMenu",
@@ -61,6 +63,7 @@ public class Start
 			"net/minecraft/src/SoundPool",
 			"net/minecraft/src/Teleporter",
 			"net/minecraft/src/TileEntityDispenser",
+			"net/minecraft/src/GuiCreateWorld",
 			"net/minecraft/src/World" // World is only being replaced in the contructor!
 			);
 
@@ -79,6 +82,12 @@ public class Start
 			"net/minecraft/src/EntityRenderer"
 			);
 
+	/** Whether the options.txt and infoGui.data should be saved or not */
+	public static boolean isNormalLaunch;
+	/** Whether the game should start already */
+	public static boolean shouldStart;
+	/** Resolution the game should start at */
+	public static String resolution;
 
 	public static void main(final String[] args) throws Exception {
 		final Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
@@ -90,20 +99,21 @@ public class Start
 				final ClassReader reader = new ClassReader(classfileBuffer);
 				final ClassWriter writer = new ClassWriter(reader, 0);
 
-				if (rng.contains(className)) {
+				if (rng.contains(className))
 					reader.accept(RandomnessVisitor.classVisitor(className, writer), 0);
-				} else if (input.contains(className)) {
+				else if (input.contains(className))
 					reader.accept(VirtualInputVisitor.classVisitor(className, writer), 0);
-				} else if (deadlockablerng.contains(className)) {
+				else if (deadlockablerng.contains(className))
 					reader.accept(WeightedRandomnessVisitor.classVisitor(className, writer), 0);
-				} else {
+				else
 					return classfileBuffer;
-				}
 
 				return writer.toByteArray();
 			}
 		});
 		Utils.transformRandom();
+
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		final File mcfolder = Files.createTempDirectory(".minecraft").toFile();
 		if (!mcfolder.exists()) mcfolder.mkdir();
@@ -113,6 +123,7 @@ public class Start
 		AccessibleObject.setAccessible(new Field[] { f }, true);
 		f.set(null, mcfolder);
 
+		// Copy some basic minecraft files
 		System.setProperty("java.awt.headless", "false");
 		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (final Exception e) {}
 		final FileDialog taspicker = new FileDialog((Frame) null, "Pick a TAS to play", FileDialog.LOAD);
@@ -124,14 +135,20 @@ public class Start
 		}
 		taspicker.setVisible(true);
 		final File tasFile = taspicker.getFiles()[0];
-		TASmod.tasFile = tasFile;
+		TASmod.playback = new Replayer(tasFile);
+		TASmod.startPlayback = true;
 		if (tasFile == null) return;
-
+		
 		System.out.println("Running .minecraft in: " + mcfolder.getAbsolutePath());
+
+		// Add a shutdown hook
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			Utils.deleteDirectory(mcfolder);
+		}));
 
 		// Run Minecraft
 		Minecraft.main(new String[0]);
-
-		Utils.deleteDirectory(mcfolder);
+		TASmod.mcThread.join();
 	}
+
 }

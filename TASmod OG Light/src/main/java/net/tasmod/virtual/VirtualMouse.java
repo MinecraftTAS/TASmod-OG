@@ -124,14 +124,14 @@ public class VirtualMouse {
 	 * This Method is being called at only one point, that one being EntityRenderer, which is frame based. To make it be tick based, we replace this value with one, that is based on Ticks
 	 */
 	public final static int getX() {
-		return Utils.lastX;
+		return currentMouseEvents.dX;
 	}
 
 	/**
 	 * This Method is being called at only one point, that one being EntityRenderer, which is frame based. To make it be tick based, we replace this value with one, that is based on Ticks
 	 */
 	public final static int getY() {
-		return Utils.lastY;
+		return currentMouseEvents.dY;
 	}
 
 	/**

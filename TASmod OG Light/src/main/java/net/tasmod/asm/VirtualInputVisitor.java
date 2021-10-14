@@ -25,9 +25,9 @@ public class VirtualInputVisitor {
 						|| "getEventKeyState".equalsIgnoreCase(name)
 						|| "getEventCharacter".equalsIgnoreCase(name)
 						|| "next".equalsIgnoreCase(name)
-						|| "isKeyDown".equalsIgnoreCase(name)) && owner.equalsIgnoreCase("org/lwjgl/input/Keyboard") && opcode == Opcodes.INVOKESTATIC) {
+						|| "isKeyDown".equalsIgnoreCase(name)) && owner.equalsIgnoreCase("org/lwjgl/input/Keyboard") && opcode == Opcodes.INVOKESTATIC)
 					owner = "net/tasmod/virtual/VirtualKeyboard";
-				} else if ((
+				else if ((
 						"getEventDWheel".equalsIgnoreCase(name)
 						|| "getEventButton".equalsIgnoreCase(name)
 						|| "getEventButtonState".equalsIgnoreCase(name)
@@ -40,9 +40,8 @@ public class VirtualInputVisitor {
 						|| "getDX".equalsIgnoreCase(name)
 						|| "getY".equalsIgnoreCase(name)
 						|| "getX".equalsIgnoreCase(name)
-						|| "isButtonDown".equalsIgnoreCase(name)) && owner.equalsIgnoreCase("org/lwjgl/input/Mouse") && opcode == Opcodes.INVOKESTATIC) {
+						|| "isButtonDown".equalsIgnoreCase(name)) && owner.equalsIgnoreCase("org/lwjgl/input/Mouse") && opcode == Opcodes.INVOKESTATIC)
 					owner = "net/tasmod/virtual/VirtualMouse";
-				}
 				super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
 			}
 		};

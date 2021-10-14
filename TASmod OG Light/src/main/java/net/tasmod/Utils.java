@@ -15,80 +15,16 @@ import net.tasmod.virtual.VirtualMouse;
  */
 public final class Utils {
 
-	/** X Position that the mouse moved in-between Ticks */
-	public static int dX;
-	/** Y Position that the mouse moved in-between Ticks */
-	public static int dY;
-	/* X Position that the mouse is currently per Tick */
-	public static int lastX;
-	/* Y Position that the mouse is currently per Tick */
-	public static int lastY;
-
-	/** Pitch of the Fake Camera */
-	public static float rotationPitch = 0f;
-	/** Yaw of the Fake Camera */
-	public static float rotationYaw = 0f;
-	/** Previous Pitch of the Fake Camera */
-	public static float prevRotationPitch = 0f;
-	/** Previous Yaw of the Fake Camera */
-	public static float prevRotationYaw = 0f;
-
-	/**
-	 * Method used to update Yaw and Pitch using Mouse Coordinates.
-	 * Used for Fake Camera
-	 * @author Mojang Studios
-	 */
-	public static void setAngles(final float f, final float f1) {
-		final float f2 = rotationPitch;
-		final float f3 = rotationYaw;
-		rotationYaw += f * 0.14999999999999999D;
-		rotationPitch -= f1 * 0.14999999999999999D;
-		if(rotationPitch < -90F)
-		{
-			rotationPitch = -90F;
-		}
-		if(rotationPitch > 90F)
-		{
-			rotationPitch = 90F;
-		}
-		prevRotationPitch += rotationPitch - f2;
-		prevRotationYaw += rotationYaw - f3;
-	}
-
-	/**
-	 * Used by VirtualMouse, to get the dX for one tick.
-	 * The Value dX is being added over frames
-	 */
-	public static int getDX() {
-		final int value = dX;
-		dX = 0;
-		return value;
-	}
-
 	/**
 	 * Small Utility that deletes a Directory recursively
 	 */
-	public static final boolean deleteDirectory(final File directoryToBeDeleted) {
+	public static boolean deleteDirectory(final File directoryToBeDeleted) {
 		final File[] allContents = directoryToBeDeleted.listFiles();
-		if (allContents != null) {
-			for (final File file : allContents) {
+		if (allContents != null)
+			for (final File file : allContents)
 				deleteDirectory(file);
-			}
-		}
 		return directoryToBeDeleted.delete();
 	}
-
-	/**
-	 * Used by VirtualMouse, to get the dY for one tick.
-	 * The Value dY is being added over frames
-	 */
-	public static int getDY() {
-		final int value = dY;
-		dY = 0;
-		return value;
-	}
-
-	public static boolean isObfuscated;
 
 	/**
 	 * Transforms the Random Variable for Math.random()
@@ -116,7 +52,6 @@ public final class Utils {
 			theMinecraftField = clazz.getDeclaredField("theMinecraft");
 		} catch (final Exception e) {
 			theMinecraftField = clazz.getDeclaredField("a");
-			isObfuscated = true;
 		}
 		theMinecraftField.setAccessible(true);
 		return (Minecraft) theMinecraftField.get(null);
