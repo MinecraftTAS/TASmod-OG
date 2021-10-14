@@ -107,6 +107,7 @@ public class EmulatorFrame extends Frame {
 		final JMenuItem load = new JMenuItem("Load TAS");
 		final JMenuItem create = new JMenuItem("Create TAS");
 		final JMenuItem save = new JMenuItem("Save TAS");
+		save.setEnabled(false);
 		final JMenuItem start = new JMenuItem("Launch normally");
 		save.addActionListener(e -> {
 			if (TASmod.recording != null) {
@@ -139,6 +140,7 @@ public class EmulatorFrame extends Frame {
 			Start.shouldStart = true;
 			TASmod.startPlayback = true;
 			create.setEnabled(false);
+			start.setEnabled(false);
 			load.setEnabled(false);
 		});
 		create.addActionListener(e -> {
@@ -160,14 +162,16 @@ public class EmulatorFrame extends Frame {
 
 			TASmod.startRecording = true;
 			create.setEnabled(false);
+			save.setEnabled(true);
+			start.setEnabled(false);
 			load.setEnabled(false);
 		});
 		start.addActionListener(e -> {
 			Start.resolution = "854x480";
 			Start.shouldStart = true;
 			Start.isNormalLaunch = true;
+			start.setEnabled(false);
 			create.setEnabled(false);
-			save.setEnabled(false);
 			load.setEnabled(false);
 		});
 		file.add(load);
