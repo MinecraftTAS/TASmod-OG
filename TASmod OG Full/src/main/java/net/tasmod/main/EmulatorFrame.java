@@ -119,7 +119,7 @@ public class EmulatorFrame extends Frame {
 		load.addActionListener(e -> {
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
 			if (out == null) return;
-			final File tasFile = new File(out);
+			final File tasFile = new File(Start.tasDir, out);
 			String tick = JOptionPane.showInputDialog("Enter tick to rerecord at (leave empty for full playback): ", "");
 			if (tick == null) return;
 			if (!tick.isEmpty()) {

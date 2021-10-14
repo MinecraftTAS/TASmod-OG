@@ -7,10 +7,12 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 import javax.swing.UIManager;
@@ -86,8 +88,16 @@ public class Start
 	public static boolean shouldStart;
 	/** Resolution the game should start at */
 	public static String resolution;
-
+	/** Directory for all TAS files */
+	public static File tasDir;
+	
 	public static void main(final String[] args) throws Exception {
+		if (args.length == 1) {
+			tasDir = new File(new String(Base64.getDecoder().decode(args[0]), StandardCharsets.UTF_8));
+			System.out.println("Using given TAS directory: " + tasDir.getAbsolutePath());
+		} else {
+			tasDir = new File(".").getAbsoluteFile();
+		}
 		final Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
 		inst.addTransformer(new ClassFileTransformer() {
 

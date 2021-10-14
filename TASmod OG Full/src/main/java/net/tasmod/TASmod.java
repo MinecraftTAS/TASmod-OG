@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
 import net.tasmod.infogui.InfoHud;
 import net.tasmod.main.EmulatorFrame;
+import net.tasmod.main.Start;
 import net.tasmod.recorder.Recorder;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
@@ -138,7 +139,7 @@ public final class TASmod {
 				if (outFile == null) {
 					final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
 					if (out == null) return;
-					outFile = new File(out);
+					outFile = new File(Start.tasDir, out);
 					TASmod.recording.endRecording();
 					try {
 						TASmod.recording.saveTo(outFile);
