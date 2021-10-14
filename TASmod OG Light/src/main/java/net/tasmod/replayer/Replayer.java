@@ -23,25 +23,25 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
  * @author Pancake
  */
 public final class Replayer {
-	
+
 	private final Minecraft mc;
 	private final File file;
 	private final BufferedReader reader;
 	private final Queue<String> linesRead = new LinkedList<String>();
 	private final Thread fileReader;
 	private int currentTick;
-	
+
 	/**
 	 * Loads a File and reads some ticks from it
 	 * @throws IOException Cannot be thrown, unless something is terribly wrong.
 	 */
-	public Replayer(File name) throws Exception {
+	public Replayer(final File name) throws Exception {
 		this.mc = TASmod.mc;
 		this.file = name;
 		this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file)));
-		
+
 		this.fileReader = new Thread(new Runnable() {
-			
+
 			/**
 			 * Thread that will read the file and store it in the Queue
 			 */
@@ -50,48 +50,48 @@ public final class Replayer {
 				try {
 					while (true) {
 						// Only read up to 20 ticks
-						if (linesRead.size() < 60) {
-							final String line = reader.readLine();
+						if (Replayer.this.linesRead.size() < 60) {
+							final String line = Replayer.this.reader.readLine();
 							if (line == null) break;
-							linesRead.add(line);
+							Replayer.this.linesRead.add(line);
 						} else {
 							Thread.sleep(32);
 						}
 					}
-					reader.close();
+					Replayer.this.reader.close();
 					System.out.println("Read Finished.");
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-		fileReader.start();
+		this.fileReader.start();
 	}
-	
+
 	/**
 	 * Start the replay
 	 */
 	public final void startReplay() {
 		SimpleRandomMod.updateSeed(0L);
 		WeightedRandomMod.intCalls = 0;
-		
-		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
+
+		VirtualMouse.setCursorPosition(this.mc.displayWidth / 2, this.mc.displayHeight / 2);
 		VirtualMouse.getDX();
 		VirtualMouse.getDY();
 	}
-	
+
 	/**
 	 * Replay Read Ticks
 	 */
 	public final void tick() {
-		tickKeyboad();
-		tickMouse();
-		SimpleRandomMod.updateSeed(currentTick);
+		this.tickKeyboad();
+		this.tickMouse();
+		SimpleRandomMod.updateSeed(this.currentTick);
 		this.currentTick++;
 	}
-	
+
 	private final void tickKeyboad() {
-		final String line = linesRead.poll();
+		final String line = this.linesRead.poll();
 		if (line != null) {
 			if (line.isEmpty()) return;
 			final Queue<VirtualKeyEvent> queue = VirtualKeyboard.keyEventsForTick;
@@ -103,20 +103,20 @@ public final class Replayer {
 			TASmod.endPlayback();
 		}
 	}
-	
+
 	private final void tickMouse() {
-		final String line = linesRead.poll();
+		final String line = this.linesRead.poll();
 		if (line != null) {
 			if (line.isEmpty()) return;
 			final Queue<VirtualMouseEvent> queue = VirtualMouse.mouseEventsForTick;
 			queue.clear();
 			Arrays.asList(line.split(":")).forEach(c -> {
-				VirtualMouseEvent c2 = VirtualMouseEvent.fromString(c);
+				final VirtualMouseEvent c2 = VirtualMouseEvent.fromString(c);
 				queue.add(c2);
 				VirtualMouse.dX = c2.dX;
 				VirtualMouse.dY = c2.dY;
 			});
 		}
 	}
-	
+
 }

@@ -7,25 +7,25 @@ import net.minecraft.client.Minecraft;
 import net.tasmod.replayer.Replayer;
 
 /**
- * 
+ *
  * Heart of the TASmod, all stuff that needs to be accessed from different Parts of MC Code
- * 
+ *
  * @author Pancake
  */
 public final class TASmod {
 
 	/** Currently running Playback */
 	private static volatile Replayer playback;
-	
+
 	/** Hacky boolean, to run Code once when MC starts, without requiring more Code Edits */
 	private static boolean hasBeenTransformed;
 
 	/** Minecraft Instance obtained via Reflection */
 	public static Minecraft mc;
-	
+
 	/** TAS File to play back if set */
 	public static File tasFile;
-	
+
 	/**
 	 * Ticks all kinds of things
 	 * @throws IOException Unexpected File End
@@ -43,31 +43,31 @@ public final class TASmod {
 					playback = new Replayer(tasFile);
 					playback.startReplay();
 				}
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
 	/**
-	 * @return Returns whether a Playback is running	
+	 * @return Returns whether a Playback is running
 	 */
 	public static boolean isPlayback() {
 		return playback != null;
 	}
-	
+
 	/**
 	 * Joins the World of the Playback and starts the Playback
-	 * 
+	 *
 	 * @param seed Create a world with this seed
 	 * @return Returns whether the action was successful
 	 * @throws IOException Thrown if the File doesn't exists
 	 */
-	public static final boolean startPlayback(File tasFile) {
+	public static final boolean startPlayback(final File tasFile) {
 		if (playback != null) return false;
 		try {
 			playback = new Replayer(tasFile);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -85,5 +85,5 @@ public final class TASmod {
 	public static Replayer getPlayback() {
 		return playback;
 	}
-	
+
 }

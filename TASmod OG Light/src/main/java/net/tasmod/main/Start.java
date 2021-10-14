@@ -5,6 +5,7 @@ import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
+import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.security.ProtectionDomain;
@@ -27,15 +28,15 @@ import net.tasmod.asm.WeightedRandomnessVisitor;
 
 public class Start
 {
-	
+
 	/**
 	 * List of classes that need their RNG to be weighted/removed
 	 */
 	public static final List<String> deadlockablerng = Arrays.asList(
 			"net/minecraft/src/GuiEnchantment",
 			"net/minecraft/src/TileEntityEnchantmentTable"
-	);
-	
+			);
+
 	/**
 	 * List of classes that need their RNG to be removed
 	 */
@@ -61,8 +62,8 @@ public class Start
 			"net/minecraft/src/Teleporter",
 			"net/minecraft/src/TileEntityDispenser",
 			"net/minecraft/src/World" // World is only being replaced in the contructor!
-	);
-	
+			);
+
 	/**
 	 * List of classes that need their Keyboard/Mouse to be removed
 	 */
@@ -76,19 +77,19 @@ public class Start
 			"net/minecraft/src/GuiSlotStats",
 			"net/minecraft/src/MouseHelper",
 			"net/minecraft/src/EntityRenderer"
-	);
-	
-	
-	public static void main(String[] args) throws Exception {
-		Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
+			);
+
+
+	public static void main(final String[] args) throws Exception {
+		final Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
 		inst.addTransformer(new ClassFileTransformer() {
-			
+
 			@Override
-			public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined, ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
+			public byte[] transform(final ClassLoader loader, final String className, final Class<?> classBeingRedefined, final ProtectionDomain protectionDomain, final byte[] classfileBuffer) throws IllegalClassFormatException {
 				if (!className.toLowerCase().startsWith("net/minecraft")) return classfileBuffer;
-				ClassReader reader = new ClassReader(classfileBuffer);
-				ClassWriter writer = new ClassWriter(reader, 0);
-				
+				final ClassReader reader = new ClassReader(classfileBuffer);
+				final ClassWriter writer = new ClassWriter(reader, 0);
+
 				if (rng.contains(className)) {
 					reader.accept(RandomnessVisitor.classVisitor(className, writer), 0);
 				} else if (input.contains(className)) {
@@ -98,39 +99,39 @@ public class Start
 				} else {
 					return classfileBuffer;
 				}
-				
+
 				return writer.toByteArray();
 			}
 		});
 		Utils.transformRandom();
-		
-		File mcfolder = Files.createTempDirectory(".minecraft").toFile();
+
+		final File mcfolder = Files.createTempDirectory(".minecraft").toFile();
 		if (!mcfolder.exists()) mcfolder.mkdir();
-		
+
 		// Change MC Settings
-		Field f = Minecraft.class.getDeclaredField("minecraftDir");
-		Field.setAccessible(new Field[] { f }, true);
+		final Field f = Minecraft.class.getDeclaredField("minecraftDir");
+		AccessibleObject.setAccessible(new Field[] { f }, true);
 		f.set(null, mcfolder);
-		
+
 		System.setProperty("java.awt.headless", "false");
-		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception e) {}
-		FileDialog taspicker = new FileDialog((Frame) null, "Pick a TAS to play", FileDialog.LOAD);
+		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (final Exception e) {}
+		final FileDialog taspicker = new FileDialog((Frame) null, "Pick a TAS to play", FileDialog.LOAD);
 		taspicker.setMultipleMode(false);
 		try {
 			taspicker.setDirectory(System.getenv("AppData") + "\\.minecraft");
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// not on win
 		}
 		taspicker.setVisible(true);
-		File tasFile = taspicker.getFiles()[0];
+		final File tasFile = taspicker.getFiles()[0];
 		TASmod.tasFile = tasFile;
 		if (tasFile == null) return;
-		
+
 		System.out.println("Running .minecraft in: " + mcfolder.getAbsolutePath());
-		
+
 		// Run Minecraft
 		Minecraft.main(new String[0]);
-		
+
 		Utils.deleteDirectory(mcfolder);
 	}
 }
