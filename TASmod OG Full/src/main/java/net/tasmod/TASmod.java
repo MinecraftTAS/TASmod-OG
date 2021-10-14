@@ -3,6 +3,8 @@ package net.tasmod;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
@@ -71,6 +73,9 @@ public final class TASmod {
 	/** Tick to pause playback at */
 	public static int pauseAt = -1;
 	
+	/** Synchronize */
+	public static boolean wait;
+	
 	/**
 	 * Ticks all kinds of things
 	 * @throws IOException Unexpected File End
@@ -121,6 +126,36 @@ public final class TASmod {
 		// Hacky solution to make the cursor work
 		if (mc.currentScreen != null) EmulatorFrame.window.setCursor(EmulatorFrame.origCursor);
 		else EmulatorFrame.window.setCursor(EmulatorFrame.blankCursor);
+		if (TASmod.wait) {
+			TASmod.wait = false;
+			try {
+				if (!TickrateChanger.isTickAdvance) TickrateChanger.toggleTickadvance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			new Thread(() -> {
+				File outFile = TASmod.rerecord;
+				if (outFile == null) {
+					final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
+					if (out == null) return;
+					outFile = new File(out);
+					TASmod.recording.endRecording();
+					try {
+						TASmod.recording.saveTo(outFile);
+					} catch (final Exception e1) {
+						e1.printStackTrace();
+					}
+				} else {
+					TASmod.recording.endRecording();
+					try {
+						TASmod.recording.saveTo(outFile, TASmod.recording.startingTick);
+					} catch (final Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+				EmulatorFrame.save.setEnabled(false);				
+			}).start();
+		}
 		/* Update the Label */
 		int currentTick = 0;
 		if (playback != null) currentTick = playback.currentTick;

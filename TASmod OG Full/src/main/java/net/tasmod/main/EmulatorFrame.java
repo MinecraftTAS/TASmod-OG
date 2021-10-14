@@ -113,26 +113,7 @@ public class EmulatorFrame extends Frame {
 		final JMenuItem start = new JMenuItem("Launch normally");
 		save.addActionListener(e -> {
 			if (TASmod.recording != null) {
-				File outFile = TASmod.rerecord;
-				if (outFile == null) {
-					final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
-					if (out == null) return;
-					outFile = new File(out);
-					TASmod.recording.endRecording();
-					try {
-						TASmod.recording.saveTo(outFile);
-					} catch (final Exception e1) {
-						e1.printStackTrace();
-					}
-				} else {
-					TASmod.recording.endRecording();
-					try {
-						TASmod.recording.saveTo(outFile, TASmod.recording.startingTick);
-					} catch (final Exception e1) {
-						e1.printStackTrace();
-					}
-				}
-				save.setEnabled(false);
+				TASmod.wait = true;
 			}
 		});
 		load.addActionListener(e -> {
