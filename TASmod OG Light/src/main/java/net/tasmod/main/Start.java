@@ -21,6 +21,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.SoundManager;
 import net.tasmod.TASmod;
 import net.tasmod.Utils;
 import net.tasmod.asm.RandomnessVisitor;
@@ -146,8 +147,12 @@ public class Start
 		}));
 
 		// Run Minecraft
-		Minecraft.main(new String[0]);
-		TASmod.mcThread.join();
+		while (TASmod.playback != null) {
+			Minecraft.main(new String[0]);
+			TASmod.mcThread.join();
+			SoundManager.loaded = false;
+		}
+		System.exit(0);
 	}
 
 }
