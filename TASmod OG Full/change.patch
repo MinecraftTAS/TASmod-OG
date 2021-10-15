@@ -99,7 +99,20 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          if(currentScreen == null || currentScreen.allowUserInput)
          {
              Profiler.endStartSection("mouse");
-@@ -1540,6 +1559,7 @@
+@@ -1378,6 +1397,12 @@
+                 }
+                 if(Keyboard.getEventKeyState())
+                 {
++                	// Add a custom keybind that replaces ALT+F4 or the close menu
++                	if (Keyboard.getEventKey() == Keyboard.KEY_F12) {
++                		shutdown();
++                		return; // Return-early to "crash"
++                	}
++                	// End-Edit
+                     if(Keyboard.getEventKey() == 87)
+                     {
+                         toggleFullscreen();
+@@ -1540,6 +1565,7 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
@@ -107,7 +120,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
-@@ -1945,16 +1965,27 @@
+@@ -1945,16 +1971,27 @@
      {
          boolean flag = false;
          String s3 = s;
@@ -138,7 +151,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          minecraftimpl.minecraftUri = "www.minecraft.net";
          if(s3 != null && s1 != null)
          {
-@@ -1968,7 +1999,6 @@
+@@ -1968,7 +2005,6 @@
              String as[] = s2.split(":");
              minecraftimpl.setServer(as[0], Integer.parseInt(as[1]));
          }
@@ -282,12 +295,20 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 diff -ruN build/src/minecraft/net/minecraft/src/GameWindowListener.java src/main/java/net/minecraft/src/GameWindowListener.java
 --- build/src/minecraft/net/minecraft/src/GameWindowListener.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/GameWindowListener.java	2021-01-01 00:00:00.000000000 +0100
-@@ -32,6 +32,6 @@
+@@ -23,6 +23,7 @@
+ 
+     public void windowClosing(WindowEvent windowevent)
+     {
++    	/*
+         mc.shutdown();
+         try
+         {
+@@ -32,6 +33,6 @@
          {
              interruptedexception.printStackTrace();
          }
 -        System.exit(0);
-+        //System.exit(0);
++        System.exit(0);*/
      }
  }
 diff -ruN build/src/minecraft/net/minecraft/src/GuiAchievement.java src/main/java/net/minecraft/src/GuiAchievement.java
