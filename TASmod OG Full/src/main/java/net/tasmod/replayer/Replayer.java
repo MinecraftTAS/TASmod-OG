@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
 import net.tasmod.main.EmulatorFrame;
 import net.tasmod.main.Start;
@@ -28,7 +27,6 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
  */
 public final class Replayer {
 
-	private Minecraft mc;
 	private final File file;
 	private final BufferedReader reader;
 	private final Queue<String> linesRead = new LinkedList<>();
@@ -72,11 +70,10 @@ public final class Replayer {
 	 * Start the replay
 	 */
 	public void startReplay() {
-		this.mc = TASmod.mc;
 		SimpleRandomMod.updateSeed(0L);
 		WeightedRandomMod.intCalls = 0;
 
-		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
+		VirtualMouse.setCursorPosition(TASmod.mc.displayWidth / 2, TASmod.mc.displayHeight / 2);
 		VirtualMouse.getDX();
 		VirtualMouse.getDY();
 	}

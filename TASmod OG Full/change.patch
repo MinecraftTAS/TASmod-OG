@@ -1,6 +1,15 @@
 diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/net/minecraft/client/Minecraft.java
 --- build/src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
+@@ -599,7 +599,7 @@
+             Display.destroy();
+             if(!hasCrashed)
+             {
+-                System.exit(0);
++                //System.exit(0);
+             }
+         }
+         System.gc();
 @@ -655,11 +655,11 @@
  
      private void func_40001_x()
@@ -270,6 +279,17 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
          }
          Profiler.endSection();
          if(mc.skipRenderWorld)
+diff -ruN build/src/minecraft/net/minecraft/src/GameWindowListener.java src/main/java/net/minecraft/src/GameWindowListener.java
+--- build/src/minecraft/net/minecraft/src/GameWindowListener.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/GameWindowListener.java	2021-01-01 00:00:00.000000000 +0100
+@@ -32,6 +32,6 @@
+         {
+             interruptedexception.printStackTrace();
+         }
+-        System.exit(0);
++        //System.exit(0);
+     }
+ }
 diff -ruN build/src/minecraft/net/minecraft/src/GuiAchievement.java src/main/java/net/minecraft/src/GuiAchievement.java
 --- build/src/minecraft/net/minecraft/src/GuiAchievement.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/GuiAchievement.java	2021-01-01 00:00:00.000000000 +0100
@@ -366,6 +386,18 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiSlot.java src/main/java/net/m
              initialClickY = -1F;
          }
          bindAmountScrolled();
+diff -ruN build/src/minecraft/net/minecraft/src/SoundManager.java src/main/java/net/minecraft/src/SoundManager.java
+--- build/src/minecraft/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
+@@ -26,7 +26,7 @@
+     private SoundPool soundPoolMusic;
+     private int latestSoundID;
+     private GameSettings options;
+-    private static boolean loaded = false;
++    public static boolean loaded = false;
+     private Random rand;
+     private int ticksBeforeMusic;
+ 
 diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src/main/java/net/minecraft/src/ThreadDownloadResources.java
 --- build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100

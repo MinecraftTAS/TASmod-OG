@@ -23,6 +23,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.SoundManager;
 import net.tasmod.TASmod;
 import net.tasmod.Utils;
 import net.tasmod.asm.RandomnessVisitor;
@@ -88,6 +89,8 @@ public class Start
 	public static boolean shouldStart;
 	/** Resolution the game should start at */
 	public static String resolution;
+	/** Is this the first launch */
+	public static boolean isFirstLaunch = true;
 	/** Directory for all TAS files */
 	public static File tasDir;
 	
@@ -157,9 +160,14 @@ public class Start
 		}));
 
 		// Run Minecraft
-		Minecraft.main(new String[0]);
-		TASmod.mcThread.join();
-		EmulatorFrame.window.dispose();
+		while (TASmod.recording != null || TASmod.playback != null || isFirstLaunch) {
+			isFirstLaunch = false;
+			Minecraft.main(new String[0]);
+			TASmod.mcThread.join();
+			EmulatorFrame.window.dispose();
+			SoundManager.loaded = false;
+		}
+		System.exit(0);
 	}
 
 }
