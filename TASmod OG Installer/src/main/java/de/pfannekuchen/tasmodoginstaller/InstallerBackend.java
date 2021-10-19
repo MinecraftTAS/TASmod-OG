@@ -81,6 +81,7 @@ public class InstallerBackend {
 		if (programFilesFolder.exists()) {
 			// Check all known Dirs
 			checkDir(programFilesFolder, "AdoptOpenJDK", "jdk-8");
+			checkDir(programFilesFolder, "Eclipse Foundation", "jdk-8");
 			checkDir(programFilesFolder, "Java", "jdk1.8");
 			checkDir(programFilesFolder, "Java", "jdk8");
 			checkDir(programFilesFolder, "Oracle\\Java", "jdk1.8");
@@ -89,6 +90,7 @@ public class InstallerBackend {
 		if (programFilesx86Folder.exists()) {
 			// Check all known Dirs in the 32-bit Program Files Folder
 			checkDir(programFilesx86Folder, "AdoptOpenJDK", "jdk-8");
+			checkDir(programFilesx86Folder, "Eclipse Foundation", "jdk-8");
 			checkDir(programFilesx86Folder, "Java", "jdk1.8");
 			checkDir(programFilesx86Folder, "Java", "jdk8");
 			checkDir(programFilesx86Folder, "Oracle\\Java", "jdk1.8");
