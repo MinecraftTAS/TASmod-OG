@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
 import net.tasmod.main.Start;
 import net.tasmod.random.SimpleRandomMod;
@@ -23,6 +24,7 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
  */
 public final class Recorder {
 
+	private final Minecraft mc;
 	private final Queue<String> linesToPrint = new LinkedList<>();
 
 	public int currentTick;
@@ -34,7 +36,9 @@ public final class Recorder {
 	 * @throws IOException Cannot be thrown, unless something is terribly wrong.
 	 */
 	public Recorder(int tick) {
-		VirtualMouse.setCursorPosition(TASmod.mc.displayWidth / 2, TASmod.mc.displayHeight / 2);
+		this.mc = TASmod.mc;
+
+		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
 		VirtualMouse.getDX();
 		VirtualMouse.getDY();
 
@@ -115,7 +119,6 @@ public final class Recorder {
 		while (!linesToPrint.isEmpty())
 			f.write(linesToPrint.poll());
 		f.close();
-		TASmod.recording = null;
 	}
 
 	
@@ -125,7 +128,6 @@ public final class Recorder {
 		while (!linesToPrint.isEmpty())
 			f.write(linesToPrint.poll());
 		f.close();
-		TASmod.recording = null;
 	}
 
 }

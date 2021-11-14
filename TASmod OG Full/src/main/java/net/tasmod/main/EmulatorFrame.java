@@ -193,13 +193,6 @@ public class EmulatorFrame extends Frame {
 				g.drawImage(img, 2, 0, null);
 			}
 		};
-		if (TASmod.recording != null) {
-			save.setEnabled(true);
-			create.setEnabled(false);
-			start.setEnabled(false);
-			load.setEnabled(false);
-		}
-		
 	}
 
 	/**
