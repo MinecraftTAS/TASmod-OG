@@ -123,7 +123,6 @@ public final class TASmod {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		infoHud.tick();
 		// Hacky solution to make the cursor work
 		if (mc.currentScreen != null) EmulatorFrame.window.setCursor(EmulatorFrame.origCursor);
 		else EmulatorFrame.window.setCursor(EmulatorFrame.blankCursor);
