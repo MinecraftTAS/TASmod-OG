@@ -5,9 +5,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.lang.ProcessBuilder.Redirect;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
@@ -28,13 +33,16 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
  */
 public final class Replayer {
 
+	private static final String ffmpeg = "C:\\Users\\games\\.dotnet\\tools\\ffmpeg.exe -y -hwaccel vulkan -hwaccel_output_format cuda -f rawvideo -c:v rawvideo -s %WIDTH%x%HEIGHT% -pix_fmt rgb24 -r 20 -i - -vf vflip -b:v 32M -pix_fmt yuv420p -c:v h264_nvenc %OUTPUT%";
+	
 	private Minecraft mc;
 	private final File file;
 	private final BufferedReader reader;
 	private final Queue<String> linesRead = new LinkedList<>();
 	private final Thread fileReader;
 	public int currentTick;
-
+	private OutputStream stream;
+	
 	/**
 	 * Loads a File and reads some ticks from it
 	 * @throws IOException Cannot be thrown, unless something is terribly wrong.
@@ -79,12 +87,33 @@ public final class Replayer {
 		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
 		VirtualMouse.getDX();
 		VirtualMouse.getDY();
+		
+		TASmod.mc.gameSettings.limitFramerate = 20;
+		
+		ProcessBuilder pb = new ProcessBuilder(ffmpeg.replace("%WIDTH%", TASmod.mc.displayWidth + "").replace("%HEIGHT%", TASmod.mc.displayHeight + "").replace("%OUTPUT%", "\"" + this.file + ".mp4\"").split(" "));
+		pb.redirectOutput(Redirect.INHERIT);
+		pb.redirectErrorStream(true);
+		pb.redirectError(Redirect.INHERIT);
+		try {
+			Process p = pb.start();
+			stream = p.getOutputStream();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			TickrateChanger.updateTickrate(50.0f);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
+	ByteBuffer b;
+	byte[] ba;
+	
 	/**
 	 * Replay Read Ticks
 	 */
-	public void tick() {
+	public void tick() {	
 		tickKeyboad();
 		tickMouse();
 		SimpleRandomMod.updateSeed(currentTick);
@@ -104,6 +133,29 @@ public final class Replayer {
 		}
 	}
 
+	public void render() {
+		try {
+			if (mc != null) {
+				TASmod.mc.timer.elapsedTicks = 1;
+				if (b == null) {
+					b = ByteBuffer.allocateDirect(mc.displayWidth*mc.displayHeight*3);
+					ba = new byte[mc.displayWidth*mc.displayHeight*3];
+				} else {
+					b.clear();
+					GL11.glReadPixels(0, 0, mc.displayWidth, mc.displayHeight, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, b);
+					b.get(ba);
+					try {
+						stream.write(ba);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void tickKeyboad() {
 		final String line = linesRead.poll();
 		if (line != null) {
@@ -117,6 +169,13 @@ public final class Replayer {
 		} else {
 			VirtualKeyboard.hack = false;
 			TASmod.playback = null;
+			try {
+				stream.flush();
+				stream.close();
+				TickrateChanger.toggleTickadvance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

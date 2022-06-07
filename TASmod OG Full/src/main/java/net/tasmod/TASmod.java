@@ -169,6 +169,7 @@ public final class TASmod {
 	 * @throws Exception Throws Exception whenever something bad happens
 	 */
 	public static void render() {
+		if (playback != null) playback.render();
 		try {
 			if (!_was51pressed && Keyboard.isKeyDown(51)) TickrateChanger.slower();
 			if (!_was52pressed && Keyboard.isKeyDown(52)) TickrateChanger.faster();
