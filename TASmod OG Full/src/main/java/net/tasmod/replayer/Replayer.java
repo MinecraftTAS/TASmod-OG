@@ -33,7 +33,7 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
  */
 public final class Replayer {
 
-	private static final String ffmpeg = "\"C:\\Program Files (x86)\\VMware\\VMware Workstation\\bin\\ffmpeg.exe\" -y -hwaccel vulkan -hwaccel_output_format cuda -f rawvideo -c:v rawvideo -s %WIDTH%x%HEIGHT% -pix_fmt rgb24 -r 20 -i - -vf vflip -b:v 32M -pix_fmt yuv420p -c:v h264_nvenc %OUTPUT%";
+	private static final String ffmpeg = "\"C:\\Program Files (x86)\\VMware\\VMware Workstation\\bin\\ffmpeg.exe\" -y -hwaccel vulkan -hwaccel_output_format cuda -f rawvideo -c:v rawvideo -s %WIDTH%x%HEIGHT% -pix_fmt rgb24 -r 120 -i - -vf vflip -b:v 32M -pix_fmt yuv420p -c:v h264_nvenc %OUTPUT%";
 	
 	private Minecraft mc;
 	private final File file;
@@ -42,6 +42,7 @@ public final class Replayer {
 	private final Thread fileReader;
 	public int currentTick;
 	private OutputStream stream;
+	private int i;
 	
 	/**
 	 * Loads a File and reads some ticks from it
@@ -88,12 +89,12 @@ public final class Replayer {
 		VirtualMouse.getDX();
 		VirtualMouse.getDY();
 		
-		TASmod.mc.gameSettings.limitFramerate = 20;
-		
 		ProcessBuilder pb = new ProcessBuilder(ffmpeg.replace("%WIDTH%", TASmod.mc.displayWidth + "").replace("%HEIGHT%", TASmod.mc.displayHeight + "").replace("%OUTPUT%", "\"" + this.file + ".mp4\"").split(" "));
 		pb.redirectOutput(Redirect.INHERIT);
 		pb.redirectErrorStream(true);
 		pb.redirectError(Redirect.INHERIT);
+		i = 0;
+		this.mc.timer.renderPartialTicks = 0f;
 		try {
 			Process p = pb.start();
 			stream = p.getOutputStream();
@@ -101,7 +102,7 @@ public final class Replayer {
 			e.printStackTrace();
 		}
 		try {
-			TickrateChanger.updateTickrate(50.0f);
+			TickrateChanger.updateTickrate(500.0f);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -136,7 +137,14 @@ public final class Replayer {
 	public void render() {
 		try {
 			if (mc != null) {
-				TASmod.mc.timer.elapsedTicks = 1;
+				i++;
+				if (i == 6) {
+					TASmod.mc.timer.elapsedTicks = 1;
+					i = 0;
+				} else {
+					TASmod.mc.timer.elapsedTicks = 0;
+				}
+				TASmod.mc.timer.renderPartialTicks = i * 0.166666667f;
 				if (b == null) {
 					b = ByteBuffer.allocateDirect(mc.displayWidth*mc.displayHeight*3);
 					ba = new byte[mc.displayWidth*mc.displayHeight*3];
@@ -155,7 +163,7 @@ public final class Replayer {
 			e.printStackTrace();
 		}
 	}
-	
+		 
 	private void tickKeyboad() {
 		final String line = linesRead.poll();
 		if (line != null) {
