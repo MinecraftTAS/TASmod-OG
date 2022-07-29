@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Callable;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -19,7 +18,6 @@ import net.tasmod.TASmod;
 import net.tasmod.Utils;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.tools.TickrateChanger;
-import net.tasmod.virtual.VirtualKeyboard;
 
 /**
  * The info hud is a hud that is always being rendered ontop of the screen, it can show some stuff such as coordinates, etc.,

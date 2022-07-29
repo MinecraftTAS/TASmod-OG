@@ -143,7 +143,7 @@ public class EmulatorFrame extends Frame {
 			load.setEnabled(false);
 		});
 		create.addActionListener(e -> {
-			final String out = JOptionPane.showInputDialog("Select a screen resolution for Minecraft", "854x480");
+			final String out = JOptionPane.showInputDialog("Select a screen resolution for Minecraft", "1728x972");
 			if (out == null) return;
 
 			Start.resolution = out;
@@ -166,7 +166,7 @@ public class EmulatorFrame extends Frame {
 			load.setEnabled(false);
 		});
 		start.addActionListener(e -> {
-			Start.resolution = "854x480";
+			Start.resolution = "1728x972";
 			Start.shouldStart = true;
 			Start.isNormalLaunch = true;
 			start.setEnabled(false);

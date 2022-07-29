@@ -33,7 +33,7 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
  */
 public final class Replayer {
 
-	private static final String ffmpeg = "C:\\Users\\games\\.dotnet\\tools\\ffmpeg.exe -y -hwaccel vulkan -hwaccel_output_format cuda -f rawvideo -c:v rawvideo -s %WIDTH%x%HEIGHT% -pix_fmt rgb24 -r 20 -i - -vf vflip -b:v 32M -pix_fmt yuv420p -c:v h264_nvenc %OUTPUT%";
+	private static final String ffmpeg = "\"C:\\Program Files (x86)\\VMware\\VMware Workstation\\bin\\ffmpeg.exe\" -y -hwaccel vulkan -hwaccel_output_format cuda -f rawvideo -c:v rawvideo -s %WIDTH%x%HEIGHT% -pix_fmt rgb24 -r 20 -i - -vf vflip -b:v 32M -pix_fmt yuv420p -c:v h264_nvenc %OUTPUT%";
 	
 	private Minecraft mc;
 	private final File file;
