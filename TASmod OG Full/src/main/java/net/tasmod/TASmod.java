@@ -1,5 +1,6 @@
 package net.tasmod;
 
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 
@@ -85,6 +86,11 @@ public final class TASmod {
 		/* During a playback, ask the user if TAS should be rerecorded from here */
 		if (playback != null && Keyboard.isKeyDown(Keyboard.KEY_F3))
 			pauseAt = playback.currentTick + 1; // pause on this tick
+		/* During a recording, ask the user if TAS should be saved here */
+		if (recording != null && Keyboard.isKeyDown(Keyboard.KEY_F3)) {
+			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
+			EmulatorFrame.save.doClick();
+		}
 		/* Tick Recording/Playback if needed */
 		if (recording != null) recording.tick();
 		if (playback != null) playback.tick();
@@ -124,8 +130,13 @@ public final class TASmod {
 			e.printStackTrace();
 		}
 		// Hacky solution to make the cursor work
-		if (mc.currentScreen != null) EmulatorFrame.window.setCursor(EmulatorFrame.origCursor);
-		else EmulatorFrame.window.setCursor(EmulatorFrame.blankCursor);
+		if (EmulatorFrame.frame != null) {
+			if (mc.currentScreen != null) EmulatorFrame.frame.setCursor(EmulatorFrame.origCursor);
+			else EmulatorFrame.frame.setCursor(EmulatorFrame.blankCursor);
+		} else {
+			if (mc.currentScreen != null) EmulatorFrame.window.setCursor(EmulatorFrame.origCursor);
+			else EmulatorFrame.window.setCursor(EmulatorFrame.blankCursor);
+		}
 		if (TASmod.wait) {
 			TASmod.wait = false;
 			try {

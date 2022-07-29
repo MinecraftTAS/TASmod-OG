@@ -7,6 +7,7 @@ import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -21,6 +22,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 
 import net.tasmod.TASmod;
 import net.tasmod.replayer.Replayer;
@@ -50,6 +54,8 @@ public class EmulatorFrame extends Frame {
 	public static Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "blank cursor");
 	/** The Save TAS button */
 	public static JMenuItem save;
+	/** Virtual Fullscreen frame */
+	public static Frame frame;
 	
 	
 	/**
@@ -130,6 +136,33 @@ public class EmulatorFrame extends Frame {
 			} catch (final Exception e1) {
 				e1.printStackTrace();
 			}
+			if (Start.resolution.startsWith("00")) { // fullscreen
+				// resize canvas
+				DisplayMode mode = Display.getDesktopDisplayMode();
+				int width = mode.getWidth();
+				int height = mode.getHeight();
+				mcCanvas.setBounds(0, 0, width, height);
+				Start.resolution = width + "x" + height;
+				
+				// make custom one
+				frame = new Frame();
+				frame.add(mcCanvas);
+				frame.pack();
+				frame.setVisible(true);
+				window.setVisible(false);
+				GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+				
+				pack();
+				setLocationRelativeTo(null);
+				
+				Start.shouldStart = true;
+				TASmod.startPlayback = true;
+				create.setEnabled(false);
+				save.setEnabled(true);
+				start.setEnabled(false);
+				load.setEnabled(false);
+				return;
+			}
 			final int width = Integer.parseInt(Start.resolution.split("x")[0]);
 			final int height = Integer.parseInt(Start.resolution.split("x")[1]);
 			mcCanvas.setBounds(0, 0, width, height);
@@ -143,8 +176,34 @@ public class EmulatorFrame extends Frame {
 			load.setEnabled(false);
 		});
 		create.addActionListener(e -> {
-			final String out = JOptionPane.showInputDialog("Select a screen resolution for Minecraft", "1728x972");
-			if (out == null) return;
+			String out = JOptionPane.showInputDialog("Select a screen resolution for Minecraft, leave empty for virtual fullscreen. (in virtual fullscreen, press F3 to save the TAS)", "");
+			if (out == null || out.isEmpty()) { // fullscreen
+				// resize canvas
+				DisplayMode mode = Display.getDesktopDisplayMode();
+				int width = mode.getWidth();
+				int height = mode.getHeight();
+				mcCanvas.setBounds(0, 0, width, height);
+				Start.resolution = "00" + width + "x" + height;
+				
+				// make custom one
+				frame = new Frame();
+				frame.add(mcCanvas);
+				frame.pack();
+				frame.setVisible(true);
+				window.setVisible(false);
+				GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
+				
+				pack();
+				setLocationRelativeTo(null);
+				Start.shouldStart = true;
+
+				TASmod.startRecording = true;
+				create.setEnabled(false);
+				save.setEnabled(true);
+				start.setEnabled(false);
+				load.setEnabled(false);
+				return;
+			}
 
 			Start.resolution = out;
 			try {
