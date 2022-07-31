@@ -64,7 +64,7 @@ public class Start
 			"net/minecraft/src/Teleporter",
 			"net/minecraft/src/TileEntityDispenser",
 			"net/minecraft/src/GuiCreateWorld",
-			"net/minecraft/src/World" // World is only being replaced in the contructor!
+			"net/minecraft/src/World" // World is only being replaced in the constructor!
 			);
 
 	/**
