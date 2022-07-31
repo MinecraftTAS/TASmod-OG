@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.util.function.Consumer;
 
 import javax.swing.JButton;
@@ -53,7 +54,7 @@ public class RenderDialog extends JFrame {
 	public String resolution = "1920x1080";
 	public int framerate = 60;
 	public int crf = 18;
-	public String codec = "h264";
+	public String codec = "libx264";
 
 	public RenderDialog(Consumer<RenderDialog> cc) {
 		super();
@@ -85,11 +86,13 @@ public class RenderDialog extends JFrame {
 		this._everythingPanel.add(this.framerate60);
 		this._everythingPanel.add(this.framerate30);
 		this._everythingPanel.add(this.framerate24);
+		this.framerate30.setEnabled(false);
+		this.framerate24.setEnabled(false);
 		this._everythingPanel.add(this._placeholder1);
 		this._everythingPanel.add(this._qualityLabel);
 		this.qualitySlider.setValue(18);
 		this.qualitySlider.setPreferredSize(new Dimension(290, 26));
-		this.qualitySlider.setMaximum(50);
+		this.qualitySlider.setMaximum(63);
 		this._everythingPanel.add(this.qualitySlider);
 		this._everythingPanel.add(this.qualityLabel);
 		this._everythingPanel.add(this._codecLabel);
@@ -303,6 +306,12 @@ public class RenderDialog extends JFrame {
 		
 		renderBtn.setEnabled(false);
 		renderBtn.addActionListener(b -> {
+			// save render settings
+			try {
+				Files.write(new File("render.cfg").toPath(), (ffmpeg + "\n" + resolution + "\n" + framerate + "\n" + crf + "\n" + codec + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			cc.accept(this);
 		});
 	}

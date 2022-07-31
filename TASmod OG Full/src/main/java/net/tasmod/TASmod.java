@@ -156,7 +156,7 @@ public final class TASmod {
 		if (playback != null) currentTick = playback.currentTick;
 		else if (recording != null) currentTick = recording.currentTick;
 		if (TASmod.playback != null && !TASmod.playback.isVisible()) {
-			final String label = String.format("Rendering %s at %dp%d. Progress: %d ticks", playback.file.getName(), mc.displayHeight, 120, currentTick);
+			final String label = String.format("Tick %d", currentTick);
 			EmulatorFrame.label.setText(label);
 		} else {
 			final String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d, F4 to toggle the menu" + ((playback != null) ? ", F3 to rerecord from here." : "."), mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);

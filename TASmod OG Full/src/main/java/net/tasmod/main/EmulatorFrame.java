@@ -148,16 +148,26 @@ public class EmulatorFrame extends Frame {
 			if (out == null) return;
 			final File tasFile = new File(Start.tasDir, out);
 			try {
-				TASmod.playback = new Renderer(tasFile);
+				Renderer ren = new Renderer(tasFile);
+				TASmod.playback = ren;
+				new RenderDialog(res -> {
+					ren.path = res.ffmpeg;
+					ren.resolution = res.resolution;
+					ren.framerate = res.framerate;
+					ren.crf = res.crf;
+					ren.codec = res.codec;
+					res.setVisible(false);
+					
+					Start.shouldStart = true;
+					TASmod.startPlayback = true;
+					create.setEnabled(false);
+					start.setEnabled(false);
+					load.setEnabled(false);
+					GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(window);
+				}).setVisible(true);
 			} catch (final Exception e1) {
 				e1.printStackTrace();
 			}
-			Start.shouldStart = true;
-			TASmod.startPlayback = true;
-			create.setEnabled(false);
-			start.setEnabled(false);
-			load.setEnabled(false);
-			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(window);
 		});
 		create.addActionListener(e -> {
 			Start.shouldStart = true;

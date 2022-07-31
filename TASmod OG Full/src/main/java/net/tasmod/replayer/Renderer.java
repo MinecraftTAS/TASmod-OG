@@ -13,12 +13,16 @@ import net.tasmod.tools.TickrateChanger;
 
 public final class Renderer extends Replayer {
 
-	private static final String ffmpeg = "\"C:\\Program Files (x86)\\VMware\\VMware Workstation\\bin\\ffmpeg.exe\" -y -hwaccel vulkan -hwaccel_output_format cuda -f rawvideo -c:v rawvideo -s %WIDTH%x%HEIGHT% -pix_fmt rgb24 -r 120 -i - -vf vflip -b:v 32M -pix_fmt yuv420p -c:v h264_nvenc %OUTPUT%";
-	
 	private OutputStream stream;
 	private int framesPerTick;
 	private ByteBuffer b;
 	private byte[] ba;
+	
+	public String path;
+	public String resolution = "1920x1080";
+	public int framerate = 60;
+	public int crf = 18;
+	public String codec = "libx264";
 	
 	public Renderer(File name) throws Exception {
 		super(name);
@@ -31,7 +35,9 @@ public final class Renderer extends Replayer {
 	public void startReplay() {
 		super.startReplay();
 		
-		ProcessBuilder pb = new ProcessBuilder(ffmpeg.replace("%WIDTH%", TASmod.mc.displayWidth + "").replace("%HEIGHT%", TASmod.mc.displayHeight + "").replace("%OUTPUT%", "\"" + this.file + ".mp4\"").split(" "));
+		String ffmpeg = '"' + path + '"' + " -y -f rawvideo -c:v rawvideo -s 1920x1080 -pix_fmt rgb24 -r " + framerate + " -i - -vf vflip -pix_fmt yuv420p -c:v " + codec + " -s " + resolution + ("libx264".equals(codec) ? " -preset veryslow -tune film -profile high -rc-lookahead 120" : " -tier high -preset 4 -la_depth 120 -sc_detection true -hielevel 4level") + " -qp " + crf + " -crf " + crf + " \"" + file.getName() + ".mp4\"";
+		System.out.println(ffmpeg);
+		ProcessBuilder pb = new ProcessBuilder(ffmpeg);
 		pb.redirectOutput(Redirect.INHERIT);
 		pb.redirectErrorStream(true);
 		pb.redirectError(Redirect.INHERIT);
@@ -60,13 +66,13 @@ public final class Renderer extends Replayer {
 		try {
 			if (this.mc != null) {
 				this.framesPerTick++;
-				if (this.framesPerTick == 6) {
+				if (this.framesPerTick == (framerate / 20)) {
 					TASmod.mc.timer.elapsedTicks = 1;
 					this.framesPerTick = 0;
 				} else {
 					TASmod.mc.timer.elapsedTicks = 0;
 				}
-				TASmod.mc.timer.renderPartialTicks = this.framesPerTick * 0.166666667f;
+				TASmod.mc.timer.renderPartialTicks = this.framesPerTick * (1 / (framerate / 20.0f));
 				if (b == null) {
 					this.b = ByteBuffer.allocateDirect(this.mc.displayWidth*this.mc.displayHeight*3);
 					this.ba = new byte[this.mc.displayWidth*this.mc.displayHeight*3];
