@@ -23,9 +23,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-
 import net.tasmod.TASmod;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
