@@ -51,8 +51,6 @@ public class EmulatorFrame extends Frame {
 	public static Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "blank cursor");
 	/** The Save TAS button */
 	public static JMenuItem save;
-	/** Virtual Fullscreen frame */
-	public static Frame frame;
 	
 	
 	/**

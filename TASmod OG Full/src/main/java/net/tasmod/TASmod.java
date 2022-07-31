@@ -117,14 +117,6 @@ public final class TASmod {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
-		// Hacky solution to make the cursor work
-		if (EmulatorFrame.frame != null) {
-			if (mc.currentScreen != null) EmulatorFrame.frame.setCursor(EmulatorFrame.origCursor);
-			else EmulatorFrame.frame.setCursor(EmulatorFrame.blankCursor);
-		} else {
-			if (mc.currentScreen != null) EmulatorFrame.window.setCursor(EmulatorFrame.origCursor);
-			else EmulatorFrame.window.setCursor(EmulatorFrame.blankCursor);
-		}
 		if (TASmod.wait) {
 			TASmod.wait = false;
 			try {
