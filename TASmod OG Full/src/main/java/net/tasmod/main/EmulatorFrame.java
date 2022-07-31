@@ -67,6 +67,7 @@ public class EmulatorFrame extends Frame {
 		origCursor = getCursor();
 		window = this;
 		getInsets().set(0, 0, 0, 0);
+		GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(window);
 		bar = new JMenuBar();
 		// create jmenubar
 		final JMenu file = new JMenu("File");
@@ -123,6 +124,7 @@ public class EmulatorFrame extends Frame {
 			}
 		});
 		load.addActionListener(e -> {
+			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
 			if (out == null) return;
 			final File tasFile = new File(Start.tasDir, out);
@@ -136,86 +138,14 @@ public class EmulatorFrame extends Frame {
 			} catch (final Exception e1) {
 				e1.printStackTrace();
 			}
-			if (Start.resolution.startsWith("00")) { // fullscreen
-				// resize canvas
-				DisplayMode mode = Display.getDesktopDisplayMode();
-				int width = mode.getWidth();
-				int height = mode.getHeight();
-				mcCanvas.setBounds(0, 0, width, height);
-				Start.resolution = width + "x" + height;
-				
-				// make custom one
-				frame = new Frame();
-				frame.add(mcCanvas);
-				frame.pack();
-				frame.setVisible(true);
-				window.setVisible(false);
-				GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
-				
-				pack();
-				setLocationRelativeTo(null);
-				
-				Start.shouldStart = true;
-				TASmod.startPlayback = true;
-				create.setEnabled(false);
-				save.setEnabled(true);
-				start.setEnabled(false);
-				load.setEnabled(false);
-				return;
-			}
-			final int width = Integer.parseInt(Start.resolution.split("x")[0]);
-			final int height = Integer.parseInt(Start.resolution.split("x")[1]);
-			mcCanvas.setBounds(0, 0, width, height);
-			gamePanel.setBounds(0, 0, width, height);
-			pack();
-			setLocationRelativeTo(null);
 			Start.shouldStart = true;
 			TASmod.startPlayback = true;
 			create.setEnabled(false);
 			start.setEnabled(false);
 			load.setEnabled(false);
+			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(window);
 		});
 		create.addActionListener(e -> {
-			String out = JOptionPane.showInputDialog("Select a screen resolution for Minecraft, leave empty for virtual fullscreen. (in virtual fullscreen, press F3 to save the TAS)", "");
-			if (out == null || out.isEmpty()) { // fullscreen
-				// resize canvas
-				DisplayMode mode = Display.getDesktopDisplayMode();
-				int width = mode.getWidth();
-				int height = mode.getHeight();
-				mcCanvas.setBounds(0, 0, width, height);
-				Start.resolution = "00" + width + "x" + height;
-				
-				// make custom one
-				frame = new Frame();
-				frame.add(mcCanvas);
-				frame.pack();
-				frame.setVisible(true);
-				window.setVisible(false);
-				GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(frame);
-				
-				pack();
-				setLocationRelativeTo(null);
-				Start.shouldStart = true;
-
-				TASmod.startRecording = true;
-				create.setEnabled(false);
-				save.setEnabled(true);
-				start.setEnabled(false);
-				load.setEnabled(false);
-				return;
-			}
-
-			Start.resolution = out;
-			try {
-				final int width = Integer.parseInt(Start.resolution.split("x")[0]);
-				final int height = Integer.parseInt(Start.resolution.split("x")[1]);
-				mcCanvas.setBounds(0, 0, width, height);
-				gamePanel.setBounds(0, 0, width, height);
-			} catch (final Exception error) {
-				return;
-			}
-			pack();
-			setLocationRelativeTo(null);
 			Start.shouldStart = true;
 
 			TASmod.startRecording = true;
@@ -225,7 +155,6 @@ public class EmulatorFrame extends Frame {
 			load.setEnabled(false);
 		});
 		start.addActionListener(e -> {
-			Start.resolution = "1728x972";
 			Start.shouldStart = true;
 			Start.isNormalLaunch = true;
 			start.setEnabled(false);
@@ -263,8 +192,8 @@ public class EmulatorFrame extends Frame {
 			final Panel p = new Panel(null);
 			gamePanel = p;
 			mcCanvas = comp;
-			comp.setBounds(0, 0, 854, 480);
-			p.setBounds(0, 0, 854, 480);
+			comp.setBounds(0, 0, 1920, 1080);
+			p.setBounds(0, -40, 1920, 1040);
 			p.add(comp);
 			super.add(p, BorderLayout.CENTER);
 			super.add(bar, BorderLayout.NORTH);

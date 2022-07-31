@@ -86,8 +86,6 @@ public class Start
 	public static boolean isNormalLaunch;
 	/** Whether the game should start already */
 	public static boolean shouldStart;
-	/** Resolution the game should start at */
-	public static String resolution;
 	/** Directory for all TAS files */
 	public static File tasDir;
 	

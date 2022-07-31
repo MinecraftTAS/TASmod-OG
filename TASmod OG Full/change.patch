@@ -128,8 +128,8 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +		} catch (InterruptedException e) {
 +			e.printStackTrace();
 +		}
-+        int width = Integer.parseInt(net.tasmod.main.Start.resolution.split("x")[0]);
-+        int height = Integer.parseInt(net.tasmod.main.Start.resolution.split("x")[1]);
++        int width = 1920;
++        int height = 1080;
 +        canvas.setPreferredSize(new Dimension(width, height));
 +        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, width, height, flag, frame);
          Thread thread = new Thread(minecraftimpl, "Minecraft main thread");

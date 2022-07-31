@@ -11,7 +11,6 @@ import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
-import net.tasmod.main.Start;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
@@ -41,8 +40,6 @@ public final class Recorder {
 		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
 		VirtualMouse.getDX();
 		VirtualMouse.getDY();
-
-		if (tick == 0) linesToPrint.add(Start.resolution + "\n");
 
 		VirtualKeyboard.listen = true;
 		VirtualMouse.listen = true;

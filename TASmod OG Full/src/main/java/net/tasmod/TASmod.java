@@ -9,7 +9,6 @@ import javax.swing.JOptionPane;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.GuiScreen;
 import net.tasmod.infogui.InfoHud;
 import net.tasmod.main.EmulatorFrame;
 import net.tasmod.main.Start;
@@ -41,7 +40,7 @@ public final class TASmod {
 
 	/** The only Info Hud Instance :CsGun: */
 	public static InfoHud infoHud = new InfoHud();
-
+	
 	/** Temporary variable to avoid pressing a key twice */
 	private static boolean _was66pressed;
 	
@@ -54,6 +53,9 @@ public final class TASmod {
 	/** Temporary variable to avoid pressing a key twice */
 	private static boolean _was52pressed;
 	
+	/** Temporary variable to avoid pressing a key twice */
+	private static boolean _was62pressed;
+	
 	/** Temporary variable for tickrate zero to work */
 	private static boolean _undoTickrate;
 	
@@ -62,9 +64,6 @@ public final class TASmod {
 	
 	/** Whether a playback should start */
 	public static boolean startPlayback;
-
-	/** When the game should Tab back in */
-	public static boolean shouldTabIn;
 	
 	/** Whether the current TAS is being rerecorded */
 	public static File rerecord;
@@ -110,17 +109,6 @@ public final class TASmod {
 				startPlayback = false;
 			}
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_F4)) {
-			try {
-				if (mc.currentScreen == null) {
-					mc.displayGuiScreen(new GuiScreen());
-					shouldTabIn = true;
-				}
-				if (!TickrateChanger.isTickAdvance) TickrateChanger.toggleTickadvance();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 		/* Handle keybinds and tick advance */
 		try {
 			if (Keyboard.isKeyDown(64)) TASmod.mc.displayGuiScreen(infoHud);
@@ -147,6 +135,7 @@ public final class TASmod {
 			new Thread(() -> {
 				File outFile = TASmod.rerecord;
 				if (outFile == null) {
+					GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
 					final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
 					if (out == null) return;
 					outFile = new File(Start.tasDir, out);
@@ -171,7 +160,7 @@ public final class TASmod {
 		int currentTick = 0;
 		if (playback != null) currentTick = playback.currentTick;
 		else if (recording != null) currentTick = recording.currentTick;
-		final String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d" + ((playback != null) ? ", F3 to rerecord from here." : "."), mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
+		final String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d, F4 to toggle the menu" + ((playback != null) ? ", F3 to rerecord from here." : "."), mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
 		EmulatorFrame.label.setText(label);
 	}
 
@@ -188,12 +177,13 @@ public final class TASmod {
 			_was52pressed = Keyboard.isKeyDown(52);
 			if (Keyboard.isKeyDown(66) && !_was66pressed) {
 				TickrateChanger.toggleTickadvance();
-				if (shouldTabIn) {
-					mc.displayGuiScreen(null);
-					shouldTabIn = false;
-				}
 			}
 			_was66pressed = Keyboard.isKeyDown(66);
+			if (Keyboard.isKeyDown(62) && !_was62pressed) {
+				EmulatorFrame.bar.setVisible(!EmulatorFrame.bar.isVisible());
+				EmulatorFrame.label.setVisible(EmulatorFrame.bar.isVisible());
+			}
+			_was62pressed = Keyboard.isKeyDown(62);
 			if (Keyboard.isKeyDown(67) && !_was67pressed && playback == null && TickrateChanger.isTickAdvance) {
 				TickrateChanger.updateTickrate(TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed]);
 				_undoTickrate = true;
