@@ -19,6 +19,9 @@ tas.minecraft/
 *.settings
 *.tas
 *.backup
-TASmod OG Full/options.txt
+*.mp4
+*.mkv
 
+TASmod OG Full/options.txt
+TASmod OG Full/render.cfg
 TASmod OG Full/infogui.cfg
