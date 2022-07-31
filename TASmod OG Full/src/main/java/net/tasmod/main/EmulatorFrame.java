@@ -24,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import net.tasmod.TASmod;
+import net.tasmod.replayer.Renderer;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
 
@@ -109,6 +110,7 @@ public class EmulatorFrame extends Frame {
 		game.add(pause);
 
 		final JMenuItem load = new JMenuItem("Load TAS");
+		final JMenuItem render = new JMenuItem("Render TAS");
 		final JMenuItem create = new JMenuItem("Create TAS");
 		save = new JMenuItem("Save TAS");
 		save.setEnabled(false);
@@ -140,6 +142,23 @@ public class EmulatorFrame extends Frame {
 			load.setEnabled(false);
 			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(window);
 		});
+		render.addActionListener(e -> {
+			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
+			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to render", "");
+			if (out == null) return;
+			final File tasFile = new File(Start.tasDir, out);
+			try {
+				TASmod.playback = new Renderer(tasFile);
+			} catch (final Exception e1) {
+				e1.printStackTrace();
+			}
+			Start.shouldStart = true;
+			TASmod.startPlayback = true;
+			create.setEnabled(false);
+			start.setEnabled(false);
+			load.setEnabled(false);
+			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(window);
+		});
 		create.addActionListener(e -> {
 			Start.shouldStart = true;
 
@@ -159,6 +178,7 @@ public class EmulatorFrame extends Frame {
 		file.add(load);
 		file.add(create);
 		file.add(save);
+		file.add(render);
 		file.add(start);
 
 		bar.add(file);

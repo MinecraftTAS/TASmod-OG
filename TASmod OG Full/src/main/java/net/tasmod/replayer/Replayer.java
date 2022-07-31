@@ -5,14 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.lang.ProcessBuilder.Redirect;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
-
-import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
@@ -30,19 +25,15 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
  * Records a Speedrun, and saves it into a File.
  * @author Pancake
  */
-public final class Replayer {
+public class Replayer {
 
-	private static final String ffmpeg = "\"C:\\Program Files (x86)\\VMware\\VMware Workstation\\bin\\ffmpeg.exe\" -y -hwaccel vulkan -hwaccel_output_format cuda -f rawvideo -c:v rawvideo -s %WIDTH%x%HEIGHT% -pix_fmt rgb24 -r 120 -i - -vf vflip -b:v 32M -pix_fmt yuv420p -c:v h264_nvenc %OUTPUT%";
-	
-	private Minecraft mc;
-	private final File file;
-	private final BufferedReader reader;
-	private final Queue<String> linesRead = new LinkedList<>();
-	private final Thread fileReader;
+	protected Minecraft mc;
+	protected final BufferedReader reader;
+	protected final Queue<String> linesRead = new LinkedList<>();
+	protected final Thread fileReader;
+	public final File file;
 	public int currentTick;
-	private OutputStream stream;
-	private int i;
-	
+
 	/**
 	 * Loads a File and reads some ticks from it
 	 * @throws IOException Cannot be thrown, unless something is terribly wrong.
@@ -86,33 +77,12 @@ public final class Replayer {
 		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
 		VirtualMouse.getDX();
 		VirtualMouse.getDY();
-		
-		ProcessBuilder pb = new ProcessBuilder(ffmpeg.replace("%WIDTH%", TASmod.mc.displayWidth + "").replace("%HEIGHT%", TASmod.mc.displayHeight + "").replace("%OUTPUT%", "\"" + this.file + ".mp4\"").split(" "));
-		pb.redirectOutput(Redirect.INHERIT);
-		pb.redirectErrorStream(true);
-		pb.redirectError(Redirect.INHERIT);
-		i = 0;
-		this.mc.timer.renderPartialTicks = 0f;
-		try {
-			Process p = pb.start();
-			stream = p.getOutputStream();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			TickrateChanger.updateTickrate(500.0f);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
-	ByteBuffer b;
-	byte[] ba;
-	
 	/**
 	 * Replay Read Ticks
 	 */
-	public void tick() {	
+	public void tick() {
 		tickKeyboad();
 		tickMouse();
 		SimpleRandomMod.updateSeed(currentTick);
@@ -132,34 +102,11 @@ public final class Replayer {
 		}
 	}
 
+	/**
+	 * Empty method for future implementations that run in the render loop
+	 */
 	public void render() {
-		try {
-			if (mc != null) {
-				i++;
-				if (i == 6) {
-					TASmod.mc.timer.elapsedTicks = 1;
-					i = 0;
-				} else {
-					TASmod.mc.timer.elapsedTicks = 0;
-				}
-				TASmod.mc.timer.renderPartialTicks = i * 0.166666667f;
-				if (b == null) {
-					b = ByteBuffer.allocateDirect(mc.displayWidth*mc.displayHeight*3);
-					ba = new byte[mc.displayWidth*mc.displayHeight*3];
-				} else {
-					b.clear();
-					GL11.glReadPixels(0, 0, mc.displayWidth, mc.displayHeight, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, b);
-					b.get(ba);
-					try {
-						stream.write(ba);
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 	}
 		 
 	private void tickKeyboad() {
@@ -175,13 +122,6 @@ public final class Replayer {
 		} else {
 			VirtualKeyboard.hack = false;
 			TASmod.playback = null;
-			try {
-				stream.flush();
-				stream.close();
-				TickrateChanger.toggleTickadvance();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -200,6 +140,13 @@ public final class Replayer {
 			VirtualMouse.hack = true;
 		} else
 			VirtualMouse.hack = false;
+	}
+	
+	/**
+	 * Whether the hud should be visible
+	 */
+	public boolean isVisible() {
+		return true;
 	}
 
 }

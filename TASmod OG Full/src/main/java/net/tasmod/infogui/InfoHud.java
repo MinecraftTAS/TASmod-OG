@@ -102,7 +102,8 @@ public class InfoHud extends GuiScreen {
 		yOffset = -1;
 	}
 
-	@Override protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) {
+	@Override 
+	protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) {
 		if (mouseButton == 1) {
 			identify(mouseX, mouseY);
 			if (currentlyDraggedIndex != -1) {
@@ -129,7 +130,8 @@ public class InfoHud extends GuiScreen {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
-	@Override protected void mouseMovedOrUp(final int mouseX, final int mouseY, final int k) {
+	@Override 
+	protected void mouseMovedOrUp(final int mouseX, final int mouseY, final int k) {
 		if (currentlyDraggedIndex != -1 && k == -1) {
 			final String dragging = lists.get(currentlyDraggedIndex).displayName;
 			lists.get(currentlyDraggedIndex).x = mouseX - xOffset;
@@ -230,6 +232,8 @@ public class InfoHud extends GuiScreen {
 	 */
 	public void drawHud() {
 		if (TASmod.mc == null)
+			return;
+		if (TASmod.playback != null && !TASmod.playback.isVisible())
 			return;
 		if (!checkInit())
 			if (TASmod.mc.thePlayer != null) 

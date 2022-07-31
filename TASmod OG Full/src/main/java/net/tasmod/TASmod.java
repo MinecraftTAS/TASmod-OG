@@ -117,6 +117,9 @@ public final class TASmod {
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
+		// Hacky solution to make the cursor work
+		if (mc.currentScreen != null) EmulatorFrame.window.setCursor(EmulatorFrame.origCursor);
+		else EmulatorFrame.window.setCursor(EmulatorFrame.blankCursor);
 		if (TASmod.wait) {
 			TASmod.wait = false;
 			try {
@@ -152,8 +155,13 @@ public final class TASmod {
 		int currentTick = 0;
 		if (playback != null) currentTick = playback.currentTick;
 		else if (recording != null) currentTick = recording.currentTick;
-		final String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d, F4 to toggle the menu" + ((playback != null) ? ", F3 to rerecord from here." : "."), mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
-		EmulatorFrame.label.setText(label);
+		if (TASmod.playback != null && !TASmod.playback.isVisible()) {
+			final String label = String.format("Rendering %s at %dp%d. Progress: %d ticks", playback.file.getName(), mc.displayHeight, 120, currentTick);
+			EmulatorFrame.label.setText(label);
+		} else {
+			final String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d, F4 to toggle the menu" + ((playback != null) ? ", F3 to rerecord from here." : "."), mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
+			EmulatorFrame.label.setText(label);
+		}
 	}
 
 	/**
