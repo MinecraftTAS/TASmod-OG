@@ -184,7 +184,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityPlayerSP.java src/main/jav
 diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/java/net/minecraft/src/EntityRenderer.java
 --- build/src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -396,8 +396,19 @@
+@@ -396,8 +396,24 @@
          }
          if(!mc.gameSettings.debugCamEnable)
          {
@@ -194,10 +194,15 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 +            // For the Interpolation, this Camera will be using a custom coordinate that updates more than 20 times a second.
 +        	// ... another word from the future: What's meant by interpolation is a 60 fps camera independent from minecraft. Now there is an additional actual interpolation for rendering
 +        	if (net.tasmod.TASmod.playback != null && !net.tasmod.TASmod.playback.isVisible()) {
-+        		float pitch = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationPitch, net.tasmod.Utils.rotationPitch, f);
-+        		float yaw = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationYaw, net.tasmod.Utils.rotationYaw, f);
-+        		GL11.glRotatef(pitch, 1.0f, 0f, 0f);
-+        		GL11.glRotatef(yaw + 180f, 0.0f, 1f, 0f);
++        		if (mc.currentScreen == null) {
++        			float pitch = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationPitch, net.tasmod.Utils.rotationPitch, f);
++        			float yaw = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationYaw, net.tasmod.Utils.rotationYaw, f);
++        			GL11.glRotatef(pitch, 1.0f, 0f, 0f);
++        			GL11.glRotatef(yaw + 180f, 0.0f, 1f, 0f);
++        		} else {
++        			GL11.glRotatef(net.tasmod.Utils.rotationPitch, 1.0f, 0f, 0f);
++        			GL11.glRotatef(net.tasmod.Utils.rotationYaw + 180f, 0.0f, 1f, 0f);
++        		}
 +        	} else {
 +        		GL11.glRotatef(net.tasmod.Utils.prevRotationPitch + (net.tasmod.Utils.rotationPitch - net.tasmod.Utils.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
 +        		GL11.glRotatef(net.tasmod.Utils.prevRotationYaw + (net.tasmod.Utils.rotationYaw - net.tasmod.Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
@@ -206,7 +211,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
          }
          GL11.glTranslatef(0.0F, f1, 0.0F);
          d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
-@@ -679,42 +690,30 @@
+@@ -679,42 +695,30 @@
              updateLightmap();
          }
          Profiler.endSection();
