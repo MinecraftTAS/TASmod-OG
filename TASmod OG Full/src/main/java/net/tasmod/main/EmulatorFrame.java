@@ -124,7 +124,7 @@ public class EmulatorFrame extends Frame {
 			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
 			if (out == null) return;
-			final File tasFile = new File(Start.tasDir, out);
+			final File tasFile = new File(Start.tasDir, out + ".tas");
 			String tick = JOptionPane.showInputDialog("Enter tick to rerecord at (leave empty for full playback): ", "");
 			if (tick == null) return;
 			if (!tick.isEmpty()) {
@@ -146,7 +146,7 @@ public class EmulatorFrame extends Frame {
 			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to render", "");
 			if (out == null) return;
-			final File tasFile = new File(Start.tasDir, out);
+			final File tasFile = new File(Start.tasDir, out + ".tas");
 			try {
 				Renderer ren = new Renderer(tasFile);
 				TASmod.playback = ren;

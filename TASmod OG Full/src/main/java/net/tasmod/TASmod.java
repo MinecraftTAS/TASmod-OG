@@ -135,7 +135,7 @@ public final class TASmod {
 					GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
 					final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
 					if (out == null) return;
-					outFile = new File(Start.tasDir, out);
+					outFile = new File(Start.tasDir, out + ".tas");
 					TASmod.recording.endRecording();
 					try {
 						TASmod.recording.saveTo(outFile);
