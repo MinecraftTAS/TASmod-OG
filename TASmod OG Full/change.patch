@@ -194,8 +194,8 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 +            // For the Interpolation, this Camera will be using a custom coordinate that updates more than 20 times a second.
 +        	// ... another word from the future: What's meant by interpolation is a 60 fps camera independent from minecraft. Now there is an additional actual interpolation for rendering
 +        	if (net.tasmod.TASmod.playback != null && !net.tasmod.TASmod.playback.isVisible()) {
-+        		float pitch = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationPitch, net.tasmod.Utils.rotationPitch, mc.timer.renderPartialTicks);
-+        		float yaw = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationYaw, net.tasmod.Utils.rotationYaw, mc.timer.renderPartialTicks);
++        		float pitch = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationPitch, net.tasmod.Utils.rotationPitch, f);
++        		float yaw = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationYaw, net.tasmod.Utils.rotationYaw, f);
 +        		GL11.glRotatef(pitch, 1.0f, 0f, 0f);
 +        		GL11.glRotatef(yaw + 180f, 0.0f, 1f, 0f);
 +        	} else {
