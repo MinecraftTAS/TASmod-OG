@@ -55,6 +55,7 @@ public final class Renderer extends Replayer {
 			this.timer = Utils.obtainTimerInstance();
 			this.timer.renderPartialTicks = 0f;
 			TickrateChanger.updateTickrate(500.0f);
+			TickrateChanger.shouldOverrideRenderTime = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,6 +78,7 @@ public final class Renderer extends Replayer {
 					this.timer.elapsedTicks = 0;
 				}
 				this.timer.renderPartialTicks = this.framesPerTick * (1 / (framerate / 20.0f));
+				TickrateChanger.overrideRenderTime += ((1.0f / framerate) * 1000);
 				if (b == null) {
 					this.b = ByteBuffer.allocateDirect(this.mc.displayWidth*this.mc.displayHeight*3);
 					this.ba = new byte[this.mc.displayWidth*this.mc.displayHeight*3];

@@ -32,7 +32,13 @@ public class TickrateChanger {
 	public static long timeSinceZero = System.currentTimeMillis();
 	public static long timeSinceTC = System.currentTimeMillis();
 	public static long fakeTimeSinceTC = System.currentTimeMillis();
+	public static boolean shouldOverrideRenderTime; // overrides the milliseconds
+	public static long overrideRenderTime;
+	
 	public static long getMilliseconds() {
+		if (shouldOverrideRenderTime) {
+			return overrideRenderTime;
+		}
 		long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
 		time *= availableGamespeeds[selectedGamespeed] * 20.0f / 20F;
 		return fakeTimeSinceTC + time;
