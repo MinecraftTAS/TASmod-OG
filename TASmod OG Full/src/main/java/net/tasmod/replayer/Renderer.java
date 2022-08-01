@@ -8,7 +8,9 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.src.Timer;
 import net.tasmod.TASmod;
+import net.tasmod.Utils;
 import net.tasmod.tools.TickrateChanger;
 
 public final class Renderer extends Replayer {
@@ -17,6 +19,7 @@ public final class Renderer extends Replayer {
 	private int framesPerTick;
 	private ByteBuffer b;
 	private byte[] ba;
+	private Timer timer;
 	
 	public String path;
 	public String resolution = "1920x1080";
@@ -42,7 +45,6 @@ public final class Renderer extends Replayer {
 		pb.redirectErrorStream(true);
 		pb.redirectError(Redirect.INHERIT);
 		this.framesPerTick = 0;
-		this.mc.timer.renderPartialTicks = 0f;
 		try {
 			Process p = pb.start();
 			this.stream = p.getOutputStream();
@@ -50,6 +52,8 @@ public final class Renderer extends Replayer {
 			e.printStackTrace();
 		}
 		try {
+			this.timer = Utils.obtainTimerInstance();
+			this.timer.renderPartialTicks = 0f;
 			TickrateChanger.updateTickrate(500.0f);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -67,12 +71,12 @@ public final class Renderer extends Replayer {
 			if (this.mc != null) {
 				this.framesPerTick++;
 				if (this.framesPerTick == (framerate / 20)) {
-					TASmod.mc.timer.elapsedTicks = 1;
+					this.timer.elapsedTicks = 1;
 					this.framesPerTick = 0;
 				} else {
-					TASmod.mc.timer.elapsedTicks = 0;
+					this.timer.elapsedTicks = 0;
 				}
-				TASmod.mc.timer.renderPartialTicks = this.framesPerTick * (1 / (framerate / 20.0f));
+				this.timer.renderPartialTicks = this.framesPerTick * (1 / (framerate / 20.0f));
 				if (b == null) {
 					this.b = ByteBuffer.allocateDirect(this.mc.displayWidth*this.mc.displayHeight*3);
 					this.ba = new byte[this.mc.displayWidth*this.mc.displayHeight*3];

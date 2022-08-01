@@ -1,15 +1,6 @@
 diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/net/minecraft/client/Minecraft.java
 --- build/src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
-@@ -133,7 +133,7 @@
-     public int displayWidth;
-     public int displayHeight;
-     private OpenGlCapsChecker glCapabilities;
--    private Timer timer;
-+    public Timer timer;
-     public World theWorld;
-     public RenderGlobal renderGlobal;
-     public EntityPlayerSP thePlayer;
 @@ -161,7 +161,7 @@
      public ModelBiped playerModelBiped;
      public MovingObjectPosition objectMouseOver;
