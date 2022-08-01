@@ -156,5 +156,12 @@ public final class Utils {
 	public static int getOriginalY() {
 		return Mouse.getDY();
 	}
+	
+	public static float clampedLerp(float lowerBnd, float upperBnd, float slide) {
+		if (slide < 0.0F)
+			return lowerBnd;
+		else
+			return slide > 1.0F ? upperBnd : lowerBnd + (upperBnd - lowerBnd) * slide;
+	}
 
 }

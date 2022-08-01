@@ -74,7 +74,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          if(inGameHasFocus)
          {
              return;
-@@ -1313,6 +1314,24 @@
+@@ -1313,6 +1314,30 @@
                  currentScreen.updateScreen();
              }
          }
@@ -88,10 +88,16 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +            
 +            thePlayer.setAngles((float) mouseHelper.deltaX * f2, (float) mouseHelper.deltaY * f2);
 +            
-+            net.tasmod.Utils.prevRotationPitch = thePlayer.prevRotationPitch;
-+            net.tasmod.Utils.prevRotationYaw = thePlayer.prevRotationYaw;
-+            net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
-+            net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
++            // interpolation part 1
++        	if (net.tasmod.TASmod.playback != null && !net.tasmod.TASmod.playback.isVisible()) {
++        		net.tasmod.Utils.prevRotationPitch = net.tasmod.Utils.rotationPitch;
++        		net.tasmod.Utils.prevRotationYaw = net.tasmod.Utils.rotationYaw;
++        	} else {        		
++        		net.tasmod.Utils.prevRotationPitch = thePlayer.prevRotationPitch;
++        		net.tasmod.Utils.prevRotationYaw = thePlayer.prevRotationYaw;
++        	}
++        	net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
++        	net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
 +        }
 +        net.tasmod.Utils.lastX = Mouse.getEventX();
 +        net.tasmod.Utils.lastY = Mouse.getEventY();
@@ -99,7 +105,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          if(currentScreen == null || currentScreen.allowUserInput)
          {
              Profiler.endStartSection("mouse");
-@@ -1540,6 +1559,7 @@
+@@ -1540,6 +1565,7 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
@@ -107,7 +113,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
-@@ -1945,16 +1965,27 @@
+@@ -1945,16 +1971,27 @@
      {
          boolean flag = false;
          String s3 = s;
@@ -138,7 +144,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          minecraftimpl.minecraftUri = "www.minecraft.net";
          if(s3 != null && s1 != null)
          {
-@@ -1968,7 +1999,6 @@
+@@ -1968,7 +2005,6 @@
              String as[] = s2.split(":");
              minecraftimpl.setServer(as[0], Integer.parseInt(as[1]));
          }
@@ -204,7 +210,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityPlayerSP.java src/main/jav
 diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/java/net/minecraft/src/EntityRenderer.java
 --- build/src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -396,8 +396,11 @@
+@@ -396,8 +396,19 @@
          }
          if(!mc.gameSettings.debugCamEnable)
          {
@@ -212,13 +218,21 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 -            GL11.glRotatef(entityliving.prevRotationYaw + (entityliving.rotationYaw - entityliving.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
 +            // This Code rotates the Camera matching the Players Yaw and Pitch
 +            // For the Interpolation, this Camera will be using a custom coordinate that updates more than 20 times a second.
-+            GL11.glRotatef(net.tasmod.Utils.prevRotationPitch + (net.tasmod.Utils.rotationPitch - net.tasmod.Utils.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
-+            GL11.glRotatef(net.tasmod.Utils.prevRotationYaw + (net.tasmod.Utils.rotationYaw - net.tasmod.Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++        	// ... another word from the future: What's meant by interpolation is a 60 fps camera independent from minecraft. Now there is an additional actual interpolation for rendering
++        	if (net.tasmod.TASmod.playback != null && !net.tasmod.TASmod.playback.isVisible()) {
++        		float pitch = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationPitch, net.tasmod.Utils.rotationPitch, mc.timer.renderPartialTicks);
++        		float yaw = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationYaw, net.tasmod.Utils.rotationYaw, mc.timer.renderPartialTicks);
++        		GL11.glRotatef(pitch, 1.0f, 0f, 0f);
++        		GL11.glRotatef(yaw + 180f, 0.0f, 1f, 0f);
++        	} else {
++        		GL11.glRotatef(net.tasmod.Utils.prevRotationPitch + (net.tasmod.Utils.rotationPitch - net.tasmod.Utils.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
++        		GL11.glRotatef(net.tasmod.Utils.prevRotationYaw + (net.tasmod.Utils.rotationYaw - net.tasmod.Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++        	}
 +            // End-Edit
          }
          GL11.glTranslatef(0.0F, f1, 0.0F);
          d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
-@@ -679,42 +682,30 @@
+@@ -679,42 +690,30 @@
              updateLightmap();
          }
          Profiler.endSection();
