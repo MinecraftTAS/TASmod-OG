@@ -130,8 +130,16 @@ public final class Utils {
 		} catch (final Exception e) {
 			theTimerField = clazz.getDeclaredField("X");
 		}
-		theTimerField.setAccessible(true);
-		return theTimerField.get(TASmod.mc);
+
+	/**
+	 * Obtains the inaccessible Timer instance from the minecraft class
+	 */
+	public static void updateMcApplet(MinecraftApplet mcapplet) throws Exception {
+		/* Get Field in Obfuscated or Non-Obfuscated Environment */
+		final Class<?> clazz = Class.forName("net.minecraft.client.Minecraft");
+		Field mcAppletField = clazz.getDeclaredField("mcApplet");
+		mcAppletField.setAccessible(true);
+		mcAppletField.set(TASmod.mc, mcapplet);
 	}
 
 	public static void lazyMouse() {

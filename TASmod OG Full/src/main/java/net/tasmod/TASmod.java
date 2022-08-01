@@ -98,6 +98,7 @@ public final class TASmod {
 			hasBeenTransformed = true;
 			try {
 				TASmod.mc = Utils.obtainMinecraftInstance();
+				Utils.updateMcApplet(null);
 				TickrateChanger.toggleTickadvance();
 			} catch (final Exception e) {
 				e.printStackTrace();

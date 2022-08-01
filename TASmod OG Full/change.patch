@@ -10,23 +10,15 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      public World theWorld;
      public RenderGlobal renderGlobal;
      public EntityPlayerSP thePlayer;
-@@ -655,11 +655,11 @@
- 
-     private void func_40001_x()
-     {
--        if(mcApplet != null && !mcApplet.isActive())
--        {
--            running = false;
--            return;
--        }
-+//        if(mcApplet != null && !mcApplet.isActive())
-+//        {
-+//            running = false;
-+//            return;
-+//        }
-         AxisAlignedBB.clearBoundingBoxPool();
-         Vec3D.initialize();
-         Profiler.startSection("root");
+@@ -161,7 +161,7 @@
+     public ModelBiped playerModelBiped;
+     public MovingObjectPosition objectMouseOver;
+     public GameSettings gameSettings;
+-    protected MinecraftApplet mcApplet;
++    private MinecraftApplet mcApplet;
+     public SoundManager sndManager;
+     public MouseHelper mouseHelper;
+     public TexturePackList texturePackList;
 @@ -678,6 +678,7 @@
          }
          long l = System.nanoTime();
