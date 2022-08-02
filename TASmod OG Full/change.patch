@@ -1,7 +1,15 @@
 diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/net/minecraft/client/Minecraft.java
 --- build/src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
-@@ -678,6 +678,7 @@
+@@ -357,6 +357,7 @@
+         {
+             downloadResourcesThread = new ThreadDownloadResources(mcDataDir, this);
+             downloadResourcesThread.start();
++            downloadResourcesThread.join(); // wait until sounds are downloading before launching
+         }
+         catch(Exception exception1) { }
+         checkGLError("Post startup");
+@@ -678,6 +679,7 @@
          }
          long l = System.nanoTime();
          Profiler.startSection("tick");
@@ -9,7 +17,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          for(int i = 0; i < timer.elapsedTicks; i++)
          {
              ticksRan++;
-@@ -731,10 +732,10 @@
+@@ -731,10 +733,10 @@
          }
          GL11.glFlush();
          Profiler.endSection();
@@ -24,7 +32,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          Profiler.endSection();
          if(gameSettings.showDebugInfo)
          {
-@@ -810,7 +811,7 @@
+@@ -810,7 +812,7 @@
  
      private void screenshotListener()
      {
@@ -33,7 +41,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          {
              if(!isTakingScreenshot)
              {
-@@ -1020,10 +1021,10 @@
+@@ -1020,10 +1022,10 @@
  
      public void setIngameFocus()
      {
@@ -48,7 +56,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          if(inGameHasFocus)
          {
              return;
-@@ -1313,6 +1314,30 @@
+@@ -1313,6 +1315,30 @@
                  currentScreen.updateScreen();
              }
          }
@@ -79,7 +87,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          if(currentScreen == null || currentScreen.allowUserInput)
          {
              Profiler.endStartSection("mouse");
-@@ -1540,6 +1565,7 @@
+@@ -1540,6 +1566,7 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
@@ -87,7 +95,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
-@@ -1945,16 +1971,27 @@
+@@ -1945,16 +1972,27 @@
      {
          boolean flag = false;
          String s3 = s;
@@ -118,7 +126,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          minecraftimpl.minecraftUri = "www.minecraft.net";
          if(s3 != null && s1 != null)
          {
-@@ -1968,7 +2005,6 @@
+@@ -1968,7 +2006,6 @@
              String as[] = s2.split(":");
              minecraftimpl.setServer(as[0], Integer.parseInt(as[1]));
          }
@@ -368,9 +376,30 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiSlot.java src/main/java/net/m
              initialClickY = -1F;
          }
          bindAmountScrolled();
+diff -ruN build/src/minecraft/net/minecraft/src/SoundManager.java src/main/java/net/minecraft/src/SoundManager.java
+--- build/src/minecraft/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
+@@ -59,7 +59,7 @@
+             options.soundVolume = 0.0F;
+             options.musicVolume = 0.0F;
+             options.saveOptions();
+-            SoundSystemConfig.addLibrary(paulscode.sound.libraries.LibraryLWJGLOpenAL.class);
++            SoundSystemConfig.addLibrary(net.tasmod.renderer.LibraryJOAL.class);
+             SoundSystemConfig.setCodec("ogg", paulscode.sound.codecs.CodecJOrbis.class);
+             SoundSystemConfig.setCodec("mus", net.minecraft.src.CodecMus.class);
+             SoundSystemConfig.setCodec("wav", paulscode.sound.codecs.CodecWav.class);
 diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src/main/java/net/minecraft/src/ThreadDownloadResources.java
 --- build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
+@@ -24,7 +24,7 @@
+         mc = minecraft;
+         setName("Resource download thread");
+         setDaemon(true);
+-        resourcesFolder = new File(file, "resources/");
++        resourcesFolder = new File("resources/"); // move resources folder in order to keep sounds from redownloading
+         if(!resourcesFolder.exists() && !resourcesFolder.mkdirs())
+         {
+             throw new RuntimeException((new StringBuilder()).append("The working directory could not be created: ").append(resourcesFolder).toString());
 @@ -59,7 +59,8 @@
                      {
                          continue;

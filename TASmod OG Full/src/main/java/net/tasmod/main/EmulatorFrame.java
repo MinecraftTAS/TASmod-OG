@@ -24,7 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import net.tasmod.TASmod;
-import net.tasmod.replayer.Renderer;
+import net.tasmod.renderer.Renderer;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
 

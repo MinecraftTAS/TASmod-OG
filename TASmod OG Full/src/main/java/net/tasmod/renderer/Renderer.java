@@ -1,6 +1,7 @@
-package net.tasmod.replayer;
+package net.tasmod.renderer;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.ProcessBuilder.Redirect;
@@ -8,17 +9,25 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.opengl.GL11;
 
+import com.jogamp.openal.ALCdevice;
+import com.jogamp.openal.ALExt;
+
 import net.minecraft.src.Timer;
 import net.tasmod.TASmod;
 import net.tasmod.Utils;
+import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
 
 public final class Renderer extends Replayer {
 
+	public static ALCdevice dev;
+	public static ALExt ext;
+	
 	private OutputStream stream;
 	private int framesPerTick;
 	private ByteBuffer b;
 	private byte[] ba;
+	private ByteBuffer aa = ByteBuffer.allocate(2 * 2205 * 4);
 	private Timer timer;
 	
 	public String path;
@@ -26,6 +35,7 @@ public final class Renderer extends Replayer {
 	public int framerate = 60;
 	public int crf = 18;
 	public String codec = "libx264";
+	public FileOutputStream out;
 	
 	public Renderer(File name) throws Exception {
 		super(name);
@@ -38,7 +48,7 @@ public final class Renderer extends Replayer {
 	public void startReplay() {
 		super.startReplay();
 		
-		String ffmpeg = '"' + path + '"' + " -y -f rawvideo -c:v rawvideo -s 1920x1080 -pix_fmt rgb24 -r " + framerate + " -i - -vf vflip -pix_fmt yuv420p -c:v " + codec + " -s " + resolution + ("libx264".equals(codec) ? " -preset veryslow -tune film -profile high -rc-lookahead 120" : " -tier high -preset 4 -la_depth 120 -sc_detection true -hielevel 4level") + " -qp " + crf + " -crf " + crf + " \"" + file.getName() + ".mp4\"";
+		String ffmpeg = '"' + path + '"' + " -y -f rawvideo -c:v rawvideo -s 1920x1080 -pix_fmt rgb24 -r " + framerate + " -i - -vf vflip -pix_fmt yuv420p -c:v " + codec + " -s " + resolution + ("libx264".equals(codec) ? " -preset veryslow -tune film -profile high -rc-lookahead 120" : " -tier high -preset 4 -la_depth 120 -sc_detection true -hielevel 4level") + " -qp " + crf + " -crf " + crf + " \"" + file.getName() + ".mp4.video\"";
 		System.out.println(ffmpeg);
 		ProcessBuilder pb = new ProcessBuilder(ffmpeg);
 		pb.redirectOutput(Redirect.INHERIT);
@@ -51,6 +61,13 @@ public final class Renderer extends Replayer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		try {
+			out = new FileOutputStream(new File(file.getName() + ".snd"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
 		try {
 			this.timer = Utils.obtainTimerInstance();
 			this.timer.renderPartialTicks = 0f;
@@ -99,16 +116,29 @@ public final class Renderer extends Replayer {
 	}
 	
 	/**
-	 * Stops ffmpeg if tas is done
+	 * Stops ffmpeg if tas is done and renders audio
 	 */
 	@Override
 	public void tick() {
 		super.tick();
 		
+		if (out != null && dev != null) {
+			try {
+        		ext.alcRenderSamplesSOFT(dev, aa, 2205);
+				out.write(aa.array());
+				aa.clear();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		if (TASmod.playback == null) { // playback ended
 			try {
 				stream.flush();
 				stream.close();
+				out.flush();
+				out.close();
+				out = null;
 				TickrateChanger.toggleTickadvance();
 			} catch (Exception e) {
 				e.printStackTrace();
