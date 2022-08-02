@@ -156,6 +156,8 @@ public class EmulatorFrame extends Frame {
 					ren.framerate = res.framerate;
 					ren.crf = res.crf;
 					ren.codec = res.codec;
+					ren.acodec = res.acodec;
+					ren.abitrate = res.abitrate;
 					res.setVisible(false);
 					
 					Start.shouldStart = true;

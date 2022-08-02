@@ -38,6 +38,8 @@ public final class Renderer extends Replayer {
 	public int crf = 18;
 	public String codec = "libx264";
 	public boolean startRender;
+	public String acodec;
+	public int abitrate;
 	
 	public Renderer(File name) throws Exception {
 		super(name);
@@ -66,7 +68,7 @@ public final class Renderer extends Replayer {
 		}
 		
 		// start audio ffmpeg
-		ffmpeg = '"' + path + '"' + " -y -f f32le -ar 44100 -ac 2 -i - -c:a libopus -b:a 320K -vn -sn -vbr on \"" + file.getName() + ".opus\"";
+		ffmpeg = '"' + path + '"' + " -y -f f32le -ar 44100 -ac 2 -i - -c:a " + acodec + " -b:a " + abitrate + "K -vn -sn \"" + file.getName() + ((acodec == "aac") ? ".aac" : ((acodec == "libvorbis") ? ".ogg" : ".opus")) + "\"";
 		System.out.println(ffmpeg);
 		pb = new ProcessBuilder(ffmpeg);
 		pb.redirectOutput(Redirect.INHERIT);
@@ -155,7 +157,7 @@ public final class Renderer extends Replayer {
 					videoProcess.waitFor();
 				if (audioProcess.isAlive())
 					audioProcess.waitFor();
-				String ffmpeg = '"' + path + '"' + " -y -i \"" + file.getName() + ".mp4\" -i \"" + file.getName() + ".opus\" -c copy " + file.getName() + ".mkv\"";
+				String ffmpeg = '"' + path + '"' + " -y -i \"" + file.getName() + ".mp4\" -i \"" + file.getName() + ((acodec == "aac") ? ".aac" : ((acodec == "libvorbis") ? ".ogg" : ".opus")) + "\" -c copy " + file.getName() + ".mkv\"";
 				ProcessBuilder pb = new ProcessBuilder(ffmpeg);
 				pb.redirectOutput(Redirect.INHERIT);
 				pb.redirectErrorStream(true);

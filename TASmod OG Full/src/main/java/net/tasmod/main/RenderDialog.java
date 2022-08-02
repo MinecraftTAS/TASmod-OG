@@ -49,22 +49,33 @@ public class RenderDialog extends JFrame {
 	private final JRadioButton codecAv1 = new JRadioButton("av1");
 	private final JPanel _buttonsPanel = new JPanel();
 	private final JButton renderBtn = new JButton("Render");
-
+	private final JLabel _acodecLabel = new JLabel("Audio Codec");
+	private final JRadioButton acodecOpus = new JRadioButton("opus");
+	private final JRadioButton acodecAac = new JRadioButton("aac");
+	private final JLabel _abitrateLabel = new JLabel("Audio Bitrate");
+	private final JSlider abitrateSlider = new JSlider();
+	private final JLabel abitrateLabel = new JLabel("120k");
+	private final JRadioButton acodecVorbis = new JRadioButton("vorbis");
+	private final JPanel _placeholder2 = new JPanel();
+	private final JPanel _placeholder3 = new JPanel();
+	
 	public String ffmpeg;
 	public String resolution = "1920x1080";
 	public int framerate = 60;
 	public int crf = 18;
 	public String codec = "libx264";
-
+	public String acodec = "libopus";
+	public int abitrate = 120;
+	
 	public RenderDialog(Consumer<RenderDialog> cc) {
 		super();
 		
 		setVisible(false);
 		setTitle("TASmod OG Render Settings");
-		setBounds(100, 100, 450, 194);
+		setBounds(100, 100, 450, 250);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(null);
-		this._everythingPanel.setBounds(4, 4, 427, 119);
+		this._everythingPanel.setBounds(4, 4, 427, 174);
 		getContentPane().add(this._everythingPanel);
 		this._everythingPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
 		this._everythingPanel.add(this._ffmpegLabel);
@@ -73,6 +84,10 @@ public class RenderDialog extends JFrame {
 		this._everythingPanel.add(this.ffmpegBtn);
 		this._everythingPanel.add(this._resolutionLabel);
 		this._everythingPanel.add(this.resolution2160p);
+		resolution2160p.setEnabled(false);
+		resolution1440p.setEnabled(false);
+		framerate360.setEnabled(false);
+		framerate240.setEnabled(false);
 		this._everythingPanel.add(this.resolution1440p);
 		this.resolution1080p.setSelected(true);
 		this._everythingPanel.add(this.resolution1080p);
@@ -99,7 +114,25 @@ public class RenderDialog extends JFrame {
 		this.codecH264.setSelected(true);
 		this._everythingPanel.add(this.codecH264);
 		this._everythingPanel.add(this.codecAv1);
-		this._buttonsPanel.setBounds(4, 122, 427, 33);
+		FlowLayout flowLayout = (FlowLayout) this._placeholder2.getLayout();
+		flowLayout.setHgap(100);
+		this._everythingPanel.add(this._placeholder2);
+		this._everythingPanel.add(this._acodecLabel);
+		this.acodecOpus.setSelected(true);
+		this._everythingPanel.add(this.acodecOpus);
+		this._everythingPanel.add(this.acodecAac);
+		this._everythingPanel.add(this.acodecVorbis);
+		FlowLayout flowLayout_1 = (FlowLayout) this._placeholder3.getLayout();
+		flowLayout_1.setHgap(75);
+		this._everythingPanel.add(this._placeholder3);
+		this._everythingPanel.add(this._abitrateLabel);
+		this.abitrateSlider.setMinimum(32);
+		this.abitrateSlider.setValue(120);
+		this.abitrateSlider.setPreferredSize(new Dimension(290, 26));
+		this.abitrateSlider.setMaximum(320);
+		this._everythingPanel.add(this.abitrateSlider);
+		this._everythingPanel.add(this.abitrateLabel);
+		this._buttonsPanel.setBounds(4, 178, 427, 33);
 		getContentPane().add(this._buttonsPanel);
 		this._buttonsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		this._buttonsPanel.add(this.renderBtn);
@@ -115,10 +148,14 @@ public class RenderDialog extends JFrame {
 				framerate = Integer.parseInt(lines[2]);
 				crf = Integer.parseInt(lines[3]);
 				codec = lines[4];
+				acodec = lines[5];
+				abitrate = Integer.parseInt(lines[6]);
 				
 				ffmpegPath.setText(ffmpeg);
 				qualitySlider.setValue(crf);
 				qualityLabel.setText("CRF " + crf);
+				abitrateSlider.setValue(abitrate);
+				abitrateLabel.setText(abitrate + "k");
 				resolution1080p.setSelected(false);
 				if (resolution.equals("3840x2160")) {
 					resolution2160p.setSelected(true);
@@ -150,6 +187,15 @@ public class RenderDialog extends JFrame {
 					framerate30.setSelected(true);
 				} else if (framerate == 24) {
 					framerate24.setSelected(true);
+				}
+				codecH264.setSelected(false);
+				acodecOpus.setSelected(false);
+				if (acodec.equals("libopus")) {
+					acodecOpus.setSelected(true);
+				} else if (acodec.equals("libvorbis")) {
+					acodecVorbis.setSelected(true);
+				} else if (acodec.equals("aac")) {
+					acodecAac.setSelected(true);
 				}
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -304,11 +350,34 @@ public class RenderDialog extends JFrame {
 			crf = qualitySlider.getValue();
 		});
 		
+		acodecVorbis.addActionListener(c -> {
+			acodecOpus.setSelected(false);
+			acodecAac.setSelected(false);
+			acodec = "libvorbis";
+		});
+		
+		acodecOpus.addActionListener(c -> {
+			acodecAac.setSelected(false);
+			acodecVorbis.setSelected(false);
+			acodec = "libopus";
+		});
+		
+		acodecAac.addActionListener(c -> {
+			acodecOpus.setSelected(false);
+			acodecVorbis.setSelected(false);
+			acodec = "aac";
+		});
+		
+		abitrateSlider.addChangeListener(l -> {
+			abitrateLabel.setText(abitrateSlider.getValue() + "k");
+			abitrate = abitrateSlider.getValue();
+		});
+		
 		renderBtn.setEnabled(false);
 		renderBtn.addActionListener(b -> {
 			// save render settings
 			try {
-				Files.write(new File("render.cfg").toPath(), (ffmpeg + "\n" + resolution + "\n" + framerate + "\n" + crf + "\n" + codec + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
+				Files.write(new File("render.cfg").toPath(), (ffmpeg + "\n" + resolution + "\n" + framerate + "\n" + crf + "\n" + codec + "\n" + acodec + "\n" + abitrate + "\n").getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
