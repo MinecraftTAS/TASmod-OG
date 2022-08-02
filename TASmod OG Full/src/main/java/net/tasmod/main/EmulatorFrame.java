@@ -9,6 +9,8 @@ import java.awt.Frame;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +51,6 @@ public class EmulatorFrame extends Frame {
 	/** The Save TAS button */
 	public static JMenuItem save;
 	
-	
 	/**
 	 * Initializes the Menu Bar and Bottom Label such as their Actions
 	 * @param title Title of the window
@@ -63,6 +64,19 @@ public class EmulatorFrame extends Frame {
 		addWindowStateListener(l -> {
 			if (l.getOldState() == JFrame.MAXIMIZED_BOTH)
 				setState(JFrame.MAXIMIZED_BOTH);
+		});
+		addWindowListener(new WindowListener() {
+			@Override public void windowOpened(WindowEvent e) {}
+			@Override public void windowIconified(WindowEvent e) {}
+			@Override public void windowDeiconified(WindowEvent e) {}
+			@Override public void windowDeactivated(WindowEvent e) {}
+			@Override public void windowClosed(WindowEvent e) {}
+			@Override public void windowActivated(WindowEvent e) {}
+			@Override 
+			public void windowClosing(WindowEvent e) {
+				if (TASmod.mc == null)
+					System.exit(0);
+			}
 		});
 		bar = new JMenuBar();
 		// create jmenubar

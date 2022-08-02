@@ -172,7 +172,6 @@ public final class TASmod {
 			_was66pressed = Keyboard.isKeyDown(66);
 			if (Keyboard.isKeyDown(62) && !_was62pressed) {
 				EmulatorFrame.bar.setVisible(!EmulatorFrame.bar.isVisible());
-				if (EmulatorFrame.bar.isVisible()) EmulatorFrame.bar.repaint();
 			}
 			_was62pressed = Keyboard.isKeyDown(62);
 			if (Keyboard.isKeyDown(67) && !_was67pressed && playback == null && TickrateChanger.isTickAdvance) {
