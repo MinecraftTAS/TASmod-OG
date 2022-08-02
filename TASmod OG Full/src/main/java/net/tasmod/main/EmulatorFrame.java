@@ -60,6 +60,10 @@ public class EmulatorFrame extends Frame {
 		window = this;
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		getInsets().set(0, 0, 0, 0);
+		addWindowStateListener(l -> {
+			if (l.getOldState() == JFrame.MAXIMIZED_BOTH)
+				setState(JFrame.MAXIMIZED_BOTH);
+		});
 		bar = new JMenuBar();
 		// create jmenubar
 		final JMenu file = new JMenu("File");
