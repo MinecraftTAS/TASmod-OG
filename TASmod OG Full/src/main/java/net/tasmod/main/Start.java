@@ -157,7 +157,7 @@ public class Start
 		// Run Minecraft
 		Minecraft.main(new String[0]);
 		TASmod.mcThread.join();
-		EmulatorFrame.window.dispose();
+//		EmulatorFrame.window.dispose();
 	}
 
 }

@@ -24,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import net.tasmod.TASmod;
+import net.tasmod.recorder.Recorder;
 import net.tasmod.renderer.Renderer;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
@@ -74,7 +75,7 @@ public class EmulatorFrame extends Frame {
 			@Override public void windowActivated(WindowEvent e) {}
 			@Override 
 			public void windowClosing(WindowEvent e) {
-				if (TASmod.mc == null)
+				if (TASmod.mc == null || !TASmod.mc.running || TickrateChanger.isTickAdvance)
 					System.exit(0);
 			}
 		});
@@ -131,7 +132,11 @@ public class EmulatorFrame extends Frame {
 		final JMenuItem start = new JMenuItem("Launch normally");
 		save.addActionListener(e -> {
 			if (TASmod.recording != null) {
-				TASmod.wait = true;
+				if (TASmod.mc.running) {
+					TASmod.wait = true;
+				} else {
+					Recorder.saveTAS();
+				}
 			}
 		});
 		load.addActionListener(e -> {
@@ -153,6 +158,7 @@ public class EmulatorFrame extends Frame {
 			create.setEnabled(false);
 			start.setEnabled(false);
 			load.setEnabled(false);
+			render.setEnabled(false);
 		});
 		render.addActionListener(e -> {
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to render", "");
@@ -176,7 +182,7 @@ public class EmulatorFrame extends Frame {
 					create.setEnabled(false);
 					start.setEnabled(false);
 					load.setEnabled(false);
-					
+					render.setEnabled(false);
 				}).setVisible(true);
 			} catch (final Exception e1) {
 				e1.printStackTrace();
@@ -190,6 +196,7 @@ public class EmulatorFrame extends Frame {
 			save.setEnabled(true);
 			start.setEnabled(false);
 			load.setEnabled(false);
+			render.setEnabled(false);
 		});
 		start.addActionListener(e -> {
 			Start.shouldStart = true;
@@ -197,6 +204,7 @@ public class EmulatorFrame extends Frame {
 			start.setEnabled(false);
 			create.setEnabled(false);
 			load.setEnabled(false);
+			render.setEnabled(false);
 		});
 		file.add(load);
 		file.add(create);

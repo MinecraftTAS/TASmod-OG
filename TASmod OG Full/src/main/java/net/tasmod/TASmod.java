@@ -4,14 +4,11 @@ import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JOptionPane;
-
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.tasmod.infogui.InfoHud;
 import net.tasmod.main.EmulatorFrame;
-import net.tasmod.main.Start;
 import net.tasmod.recorder.Recorder;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
@@ -130,27 +127,7 @@ public final class TASmod {
 				e.printStackTrace();
 			}
 			new Thread(() -> {
-				File outFile = TASmod.rerecord;
-				if (outFile == null) {
-					GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
-					final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
-					if (out == null) return;
-					outFile = new File(Start.tasDir, out + ".tas");
-					TASmod.recording.endRecording();
-					try {
-						TASmod.recording.saveTo(outFile);
-					} catch (final Exception e1) {
-						e1.printStackTrace();
-					}
-				} else {
-					TASmod.recording.endRecording();
-					try {
-						TASmod.recording.saveTo(outFile, TASmod.recording.startingTick);
-					} catch (final Exception e1) {
-						e1.printStackTrace();
-					}
-				}
-				EmulatorFrame.save.setEnabled(false);				
+				Recorder.saveTAS();
 			}).start();
 		}
 	}
