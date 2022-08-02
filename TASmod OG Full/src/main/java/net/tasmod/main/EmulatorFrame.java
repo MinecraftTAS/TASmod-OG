@@ -4,10 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -17,7 +15,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.swing.JLabel;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -40,8 +38,6 @@ public class EmulatorFrame extends Frame {
 	public static EmulatorFrame window;
 	/** The Top Bar of the window */
 	public static JMenuBar bar;
-	/** The Bottom Bar of the window */
-	public static JLabel label;
 	/** The Canvas of the Minecraft Game */
 	public static Component mcCanvas;
 	/** The Panel that holds the Minecraft Canvas at a specific resolution */
@@ -62,8 +58,8 @@ public class EmulatorFrame extends Frame {
 		super(title);
 		origCursor = getCursor();
 		window = this;
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		getInsets().set(0, 0, 0, 0);
-		GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(window);
 		bar = new JMenuBar();
 		// create jmenubar
 		final JMenu file = new JMenu("File");
@@ -71,7 +67,7 @@ public class EmulatorFrame extends Frame {
 		final JMenu help = new JMenu("Help");
 
 		final JMenuItem source = new JMenuItem("Source");
-		final JMenuItem wiki = new JMenuItem("Wiki");
+		final JMenuItem wiki = new JMenuItem("Wiki");	
 		source.addActionListener(e -> {
 			try {
 				if (Desktop.isDesktopSupported()) Desktop.getDesktop().browse(new URI("https://github.com/MCPfannkuchenYT/TASmod-OG"));
@@ -121,7 +117,6 @@ public class EmulatorFrame extends Frame {
 			}
 		});
 		load.addActionListener(e -> {
-			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
 			if (out == null) return;
 			final File tasFile = new File(Start.tasDir, out + ".tas");
@@ -140,10 +135,8 @@ public class EmulatorFrame extends Frame {
 			create.setEnabled(false);
 			start.setEnabled(false);
 			load.setEnabled(false);
-			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(window);
 		});
 		render.addActionListener(e -> {
-			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to render", "");
 			if (out == null) return;
 			final File tasFile = new File(Start.tasDir, out + ".tas");
@@ -165,7 +158,7 @@ public class EmulatorFrame extends Frame {
 					create.setEnabled(false);
 					start.setEnabled(false);
 					load.setEnabled(false);
-					GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(window);
+					
 				}).setVisible(true);
 			} catch (final Exception e1) {
 				e1.printStackTrace();
@@ -196,20 +189,13 @@ public class EmulatorFrame extends Frame {
 		bar.add(file);
 		bar.add(game);
 		if (Desktop.isDesktopSupported()) bar.add(help);
-		// create jlabel
-		label = new JLabel("Loading...") {
-			private static final long serialVersionUID = -4459139147755002132L;
-
-			@Override
-			protected void paintComponent(final Graphics g) {
-				final BufferedImage img = new BufferedImage(label.getWidth(), label.getHeight(), BufferedImage.TYPE_INT_ARGB);
-				final Graphics2D gr = img.createGraphics();
-				super.paintComponent(gr);
-				g.drawImage(img, 2, 0, null);
-			}
-		};
 	}
 
+	@Override
+	public void setPreferredSize(Dimension preferredSize) {
+		super.setPreferredSize(new Dimension(1920, 1080 - 51));
+	}
+	
 	/**
 	 * Changes the Canvas to have an extra Panel around it
 	 */
@@ -219,12 +205,11 @@ public class EmulatorFrame extends Frame {
 			final Panel p = new Panel(null);
 			gamePanel = p;
 			mcCanvas = comp;
-			comp.setBounds(0, 0, 1920, 1080);
-			p.setBounds(0, -40, 1920, 1040);
+			comp.setBounds(0, -21, 1920, 1080);
+			p.setBounds(0, -21, 1920, 1080);
 			p.add(comp);
 			super.add(p, BorderLayout.CENTER);
 			super.add(bar, BorderLayout.NORTH);
-			super.add(label, BorderLayout.SOUTH);
 			return;
 		}
 		super.add(comp, constraints);

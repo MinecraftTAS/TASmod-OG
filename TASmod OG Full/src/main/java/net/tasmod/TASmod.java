@@ -153,17 +153,6 @@ public final class TASmod {
 				EmulatorFrame.save.setEnabled(false);				
 			}).start();
 		}
-		/* Update the Label */
-		int currentTick = 0;
-		if (playback != null) currentTick = playback.currentTick;
-		else if (recording != null) currentTick = recording.currentTick;
-		if (TASmod.playback != null && !TASmod.playback.isVisible()) {
-			final String label = String.format("Tick %d", currentTick);
-			EmulatorFrame.label.setText(label);
-		} else {
-			final String label = String.format("Resolution: %dx%d, Gamespeed: %.2f, Current Tick: %d, F4 to toggle the menu" + ((playback != null) ? ", F3 to rerecord from here." : "."), mc.displayWidth, mc.displayHeight, TickrateChanger.availableGamespeeds[TickrateChanger.selectedGamespeed], currentTick);
-			EmulatorFrame.label.setText(label);
-		}
 	}
 
 	/**
@@ -183,7 +172,7 @@ public final class TASmod {
 			_was66pressed = Keyboard.isKeyDown(66);
 			if (Keyboard.isKeyDown(62) && !_was62pressed) {
 				EmulatorFrame.bar.setVisible(!EmulatorFrame.bar.isVisible());
-				EmulatorFrame.label.setVisible(EmulatorFrame.bar.isVisible());
+				if (EmulatorFrame.bar.isVisible()) EmulatorFrame.bar.repaint();
 			}
 			_was62pressed = Keyboard.isKeyDown(62);
 			if (Keyboard.isKeyDown(67) && !_was67pressed && playback == null && TickrateChanger.isTickAdvance) {
