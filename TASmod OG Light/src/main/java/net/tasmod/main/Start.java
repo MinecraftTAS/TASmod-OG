@@ -85,8 +85,6 @@ public class Start
 	public static boolean isNormalLaunch;
 	/** Whether the game should start already */
 	public static boolean shouldStart;
-	/** Resolution the game should start at */
-	public static String resolution;
 
 	public static void main(final String[] args) throws Exception {
 		final Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
