@@ -5,6 +5,7 @@ net.tasmod.infogui
 net.tasmod.main
 net.tasmod.random
 net.tasmod.recorder
+net.tasmod.renderer
 net.tasmod.replayer
 net.tasmod.tools
 net.tasmod.virtual
