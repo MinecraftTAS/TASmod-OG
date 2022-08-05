@@ -151,7 +151,17 @@ public class InstallerWindow extends JFrame implements MouseListener {
 					cacheOrNot = !selected;
 					new Thread(() -> {
 						try {
-							InstallerBackend.download(fullOrLight, earlyAccessOrNot, cacheOrNot);
+							Process b = InstallerBackend.download(fullOrLight, earlyAccessOrNot, cacheOrNot);
+							if (!fullOrLight) {
+								System.exit(0);
+							}
+							title2 = "TASmod will restart if this window is open";
+							repaint();
+							while (isVisible()) {
+								b.waitFor();
+								System.out.println("Restarting");
+								b = InstallerBackend.download(fullOrLight, earlyAccessOrNot, cacheOrNot);
+							}
 						} catch (Exception e1) {
 							e1.printStackTrace();
 						}

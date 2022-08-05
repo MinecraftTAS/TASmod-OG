@@ -17,7 +17,7 @@ import de.pfannekuchen.tasmodoginstaller.Utils.OS;
 
 public class InstallerBackend {
 
-	public static void download(boolean fullOrLight, boolean earlyAccessOrNot, boolean cacheOrNot) throws IOException, URISyntaxException {
+	public static Process download(boolean fullOrLight, boolean earlyAccessOrNot, boolean cacheOrNot) throws IOException, URISyntaxException {
 		File instance = cacheOrNot ? new File("tasmodog") : Files.createTempDirectory("tasmodog").toFile();
 		if (!instance.exists()) instance.mkdir();
 		OS os = Utils.getOS();
@@ -31,10 +31,16 @@ public class InstallerBackend {
 				if (!new File(instance, "lwjgl64.dll").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/lwjgl64.dll").openStream(), new File(instance, "lwjgl64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
 				if (!new File(instance, "OpenAL32.dll").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/OpenAL32.dll").openStream(), new File(instance, "OpenAL32.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
 				if (!new File(instance, "OpenAL64.dll").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/OpenAL64.dll").openStream(), new File(instance, "OpenAL64.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+				if (!new File(instance, "gluegen-rt.dll").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/gluegen-rt.dll").openStream(), new File(instance, "gluegen-rt.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+				if (!new File(instance, "joal.dll").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/joal.dll").openStream(), new File(instance, "joal.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
+				if (!new File(instance, "soft_oal.dll").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/soft_oal.dll").openStream(), new File(instance, "soft_oal.dll").toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} else if (os == OS.MACOS) {
 				if (!new File(instance, "libjinput-osx.dylib").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libjinput-osx.dylib").openStream(), new File(instance, "libjinput-osx.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
 				if (!new File(instance, "liblwjgl.dylib").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/liblwjgl.dylib").openStream(), new File(instance, "liblwjgl.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
 				if (!new File(instance, "openal.dylib").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/openal.dylib").openStream(), new File(instance, "openal.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
+				if (!new File(instance, "libgluegen-rt.dylib").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libgluegen-rt.dylib").openStream(), new File(instance, "libgluegen-rt.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
+				if (!new File(instance, "libjoal.dylib").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libjoal.dylib").openStream(), new File(instance, "libjoal.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
+				if (!new File(instance, "libopenal.dylib").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libopenal.dylib").openStream(), new File(instance, "libopenal.dylib").toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} else if (os == OS.LINUX) {
 				if (!new File(instance, "libjinput-linux.so").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libjinput-linux.so").openStream(), new File(instance, "libjinput-linux.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
 				if (!new File(instance, "libjinput-linux64.so").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libjinput-linux64.so").openStream(), new File(instance, "libjinput-linux64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -42,6 +48,8 @@ public class InstallerBackend {
 				if (!new File(instance, "liblwjgl64.so").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/liblwjgl64.so").openStream(), new File(instance, "liblwjgl64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
 				if (!new File(instance, "libopenal.so").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libopenal.so").openStream(), new File(instance, "libopenal.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
 				if (!new File(instance, "libopenal64.so").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libopenal64.so").openStream(), new File(instance, "libopenal64.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+				if (!new File(instance, "libgluegen-rt.so").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libgluegen-rt.so").openStream(), new File(instance, "libgluegen-rt.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
+				if (!new File(instance, "libjoal.so").exists()) Files.copy(new URL("https://data.mgnet.work/mcp4gradle/natives/libjoal.so").openStream(), new File(instance, "libjoal.so").toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
 			Files.copy(new URL("https://data.mgnet.work/tasmodog/TASmod_OG-" + (fullOrLight ? "full" : "light") + "-" + (earlyAccessOrNot ? "earlyaccess" : "release") + ".jar").openStream(), new File(instance, "minecraft.jar").toPath(), StandardCopyOption.REPLACE_EXISTING);
 		}
@@ -50,8 +58,9 @@ public class InstallerBackend {
 			ProcessBuilder builder = new ProcessBuilder(new String[] {javaexe.getAbsolutePath(), "-Djdk.attach.allowAttachSelf=true", "-Djava.library.path=.", "-jar", "minecraft.jar", Base64.getEncoder().encodeToString(new File(".").getAbsolutePath().getBytes(StandardCharsets.UTF_8))});
 			builder.directory(instance);
 			builder.inheritIO();
-			builder.start();
+			return builder.start();
 		}
+		return null;
 	}
 	
 	private static boolean netIsAvailable() {
@@ -82,6 +91,7 @@ public class InstallerBackend {
 			// Check all known Dirs
 			checkDir(programFilesFolder, "AdoptOpenJDK", "jdk-8");
 			checkDir(programFilesFolder, "Eclipse Foundation", "jdk-8");
+			checkDir(programFilesFolder, "Eclipse Adoptium", "jdk-8");
 			checkDir(programFilesFolder, "Java", "jdk1.8");
 			checkDir(programFilesFolder, "Java", "jdk8");
 			checkDir(programFilesFolder, "Oracle\\Java", "jdk1.8");
@@ -91,6 +101,7 @@ public class InstallerBackend {
 			// Check all known Dirs in the 32-bit Program Files Folder
 			checkDir(programFilesx86Folder, "AdoptOpenJDK", "jdk-8");
 			checkDir(programFilesx86Folder, "Eclipse Foundation", "jdk-8");
+			checkDir(programFilesx86Folder, "Eclipse Adoptium", "jdk-8");
 			checkDir(programFilesx86Folder, "Java", "jdk1.8");
 			checkDir(programFilesx86Folder, "Java", "jdk8");
 			checkDir(programFilesx86Folder, "Oracle\\Java", "jdk1.8");
