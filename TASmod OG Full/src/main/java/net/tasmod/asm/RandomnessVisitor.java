@@ -26,10 +26,32 @@ public class RandomnessVisitor {
 					type = "net/tasmod/random/SimpleRandomMod";
 				super.visitTypeInsn(opcode, type);
 			}
+			int i = 0;
 			@Override
 			public void visitMethodInsn(final int opcode, String owner, final String name, final String descriptor, final boolean isInterface) {
 				if (name.equalsIgnoreCase("<init>") && owner.equalsIgnoreCase("java/util/Random") && opcode == Opcodes.INVOKESPECIAL)
 					owner = "net/tasmod/random/SimpleRandomMod";
+				else if (owner.equalsIgnoreCase("java/util/Random") && name.contains("next")) {
+					super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+					i++;
+					System.out.println("A: " + i);
+					if (i == 0)
+						super.visitInsn(Opcodes.ICONST_0);
+					else if (i == 1)
+						super.visitInsn(Opcodes.ICONST_1);
+					else if (i == 2)
+						super.visitInsn(Opcodes.ICONST_2);
+					else if (i == 3)
+						super.visitInsn(Opcodes.ICONST_3);
+					else if (i == 4)
+						super.visitInsn(Opcodes.ICONST_4);
+					else if (i == 5)
+						super.visitInsn(Opcodes.ICONST_5);
+					else 
+						super.visitIntInsn(Opcodes.BIPUSH, i);
+					super.visitFieldInsn(Opcodes.PUTSTATIC, "net/tasmod/random/SimpleRandomMod", "INSN", "I");
+					return;
+				}
 				super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
 			}
 		};

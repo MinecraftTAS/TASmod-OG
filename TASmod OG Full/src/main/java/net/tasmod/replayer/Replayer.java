@@ -13,7 +13,6 @@ import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
 import net.tasmod.main.EmulatorFrame;
 import net.tasmod.random.SimpleRandomMod;
-import net.tasmod.random.WeightedRandomMod;
 import net.tasmod.recorder.Recorder;
 import net.tasmod.tools.TickrateChanger;
 import net.tasmod.virtual.VirtualKeyboard;
@@ -72,7 +71,6 @@ public class Replayer {
 	public void startReplay() {
 		this.mc = TASmod.mc;
 		SimpleRandomMod.updateSeed(0L);
-		WeightedRandomMod.intCalls = 0;
 
 		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
 		VirtualMouse.getDX();

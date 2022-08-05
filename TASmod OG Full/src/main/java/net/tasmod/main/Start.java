@@ -27,18 +27,9 @@ import net.tasmod.TASmod;
 import net.tasmod.Utils;
 import net.tasmod.asm.RandomnessVisitor;
 import net.tasmod.asm.VirtualInputVisitor;
-import net.tasmod.asm.WeightedRandomnessVisitor;
 
 public class Start
 {
-
-	/**
-	 * List of classes that need their RNG to be weighted/removed
-	 */
-	public static final List<String> deadlockablerng = Arrays.asList(
-			"net/minecraft/src/GuiEnchantment",
-			"net/minecraft/src/TileEntityEnchantmentTable"
-			);
 
 	/**
 	 * List of classes that need their RNG to be removed
@@ -64,6 +55,8 @@ public class Start
 			"net/minecraft/src/Teleporter",
 			"net/minecraft/src/TileEntityDispenser",
 			"net/minecraft/src/GuiCreateWorld",
+			"net/minecraft/src/GuiEnchantment",
+			"net/minecraft/src/TileEntityEnchantmentTable",
 			"net/minecraft/src/World" // World is only being replaced in the constructor!
 			);
 
@@ -109,8 +102,6 @@ public class Start
 					reader.accept(RandomnessVisitor.classVisitor(className, writer), 0);
 				else if (input.contains(className))
 					reader.accept(VirtualInputVisitor.classVisitor(className, writer), 0);
-				else if (deadlockablerng.contains(className))
-					reader.accept(WeightedRandomnessVisitor.classVisitor(className, writer), 0);
 				else
 					return classfileBuffer;
 
