@@ -12,7 +12,6 @@ import java.util.Queue;
 import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
 import net.tasmod.main.EmulatorFrame;
-import net.tasmod.main.Start;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.random.WeightedRandomMod;
 import net.tasmod.recorder.Recorder;
@@ -26,13 +25,13 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
  * Records a Speedrun, and saves it into a File.
  * @author Pancake
  */
-public final class Replayer {
+public class Replayer {
 
-	private Minecraft mc;
-	private final File file;
-	private final BufferedReader reader;
-	private final Queue<String> linesRead = new LinkedList<>();
-	private final Thread fileReader;
+	protected Minecraft mc;
+	protected final BufferedReader reader;
+	protected final Queue<String> linesRead = new LinkedList<>();
+	protected final Thread fileReader;
+	public final File file;
 	public int currentTick;
 
 	/**
@@ -42,7 +41,6 @@ public final class Replayer {
 	public Replayer(final File name) throws Exception {
 		this.file = name;
 		this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file)));
-		Start.resolution = reader.readLine();
 		this.fileReader = new Thread(new Runnable() {
 
 			/**
@@ -104,6 +102,13 @@ public final class Replayer {
 		}
 	}
 
+	/**
+	 * Empty method for future implementations that run in the render loop
+	 */
+	public void render() {
+
+	}
+		 
 	private void tickKeyboad() {
 		final String line = linesRead.poll();
 		if (line != null) {
@@ -135,6 +140,13 @@ public final class Replayer {
 			VirtualMouse.hack = true;
 		} else
 			VirtualMouse.hack = false;
+	}
+	
+	/**
+	 * Whether the hud should be visible
+	 */
+	public boolean isVisible() {
+		return true;
 	}
 
 }

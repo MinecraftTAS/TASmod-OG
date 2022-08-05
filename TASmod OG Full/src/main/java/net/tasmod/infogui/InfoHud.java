@@ -15,6 +15,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.KeyBinding;
 import net.tasmod.TASmod;
+import net.tasmod.Utils;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.tools.TickrateChanger;
 
@@ -43,7 +44,7 @@ public class InfoHud extends GuiScreen {
 			this.text = text;
 		}
 
-		public void tick() {
+		public void update() {
 			try {
 				renderText = text.call();
 			} catch (final Exception e) {
@@ -101,7 +102,8 @@ public class InfoHud extends GuiScreen {
 		yOffset = -1;
 	}
 
-	@Override protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) {
+	@Override 
+	protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) {
 		if (mouseButton == 1) {
 			identify(mouseX, mouseY);
 			if (currentlyDraggedIndex != -1) {
@@ -128,7 +130,8 @@ public class InfoHud extends GuiScreen {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
-	@Override protected void mouseMovedOrUp(final int mouseX, final int mouseY, final int k) {
+	@Override 
+	protected void mouseMovedOrUp(final int mouseX, final int mouseY, final int k) {
 		if (currentlyDraggedIndex != -1 && k == -1) {
 			final String dragging = lists.get(currentlyDraggedIndex).displayName;
 			lists.get(currentlyDraggedIndex).x = mouseX - xOffset;
@@ -153,14 +156,6 @@ public class InfoHud extends GuiScreen {
 		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Updates every tick
-	 */
-	public void tick() {
-		if (checkInit()) return;
-		for (final InfoLabel label : lists) label.tick();
 	}
 
 	public boolean checkInit() {
@@ -207,6 +202,10 @@ public class InfoHud extends GuiScreen {
 				if ((TASmod.mc == null) || (TASmod.mc.thePlayer == null)) return "";
 				return "Sprinting Hint: " + (!TASmod.mc.thePlayer.isSprinting() ? TASmod.mc.thePlayer.sprintToggleTimer > 5 ? "Unpress" : "Press" : "Hold");
 			}));
+			if (configuration.getProperty("facing_x", "err").equals("err")) setDefaults("facing");
+			lists.add(new InfoLabel("facing", Integer.parseInt(configuration.getProperty("facing_x")), Integer.parseInt(configuration.getProperty("facing_y")), Boolean.parseBoolean(configuration.getProperty("facing_visible")), Boolean.parseBoolean(configuration.getProperty("facing_rect")), () -> {
+				return "Facing: " + Utils.rotationYaw + " " + Utils.rotationPitch;
+			}));
 			if (configuration.getProperty("keystrokes_x", "err").equals("err")) setDefaults("keystrokes");
 			lists.add(new InfoLabel("keystrokes", Integer.parseInt(configuration.getProperty("keystrokes_x")), Integer.parseInt(configuration.getProperty("keystrokes_y")), Boolean.parseBoolean(configuration.getProperty("keystrokes_visible")), Boolean.parseBoolean(configuration.getProperty("keystrokes_rect")), () -> {
 				if (TASmod.mc == null) return "";
@@ -232,18 +231,26 @@ public class InfoHud extends GuiScreen {
 	 * Render the Info Hud only
 	 */
 	public void drawHud() {
-		if (TASmod.mc != null) if (!Minecraft.isDebugInfoEnabled()) for (final InfoLabel label : lists)
-			if (label.visible)
-				drawRectWithText(label.renderText, label.x, label.y, label.renderRect);
-			else if (TASmod.mc.currentScreen != null)
-				if (TASmod.mc.currentScreen.getClass().getSimpleName().contains("InfoHud")) {
-					GL11.glPushMatrix();
-					GL11.glEnable(GL11.GL_BLEND);
-					GL11.glBlendFunc(770, 771);
-					TASmod.mc.fontRenderer.drawStringWithShadow(label.renderText, label.x + 2, label.y + 3, 0x40FFFFFF);
-					GL11.glDisable(GL11.GL_BLEND);
-					GL11.glPopMatrix();
-				}
+		if (TASmod.mc == null)
+			return;
+		if (TASmod.playback != null && !TASmod.playback.isVisible())
+			return;
+		if (!checkInit())
+			if (TASmod.mc.thePlayer != null) 
+				for (final InfoLabel label : lists) label.update();
+		if (!Minecraft.isDebugInfoEnabled()) 
+			for (final InfoLabel label : lists)
+				if (label.visible)
+					drawRectWithText(label.renderText, label.x, label.y, label.renderRect);
+				else if (TASmod.mc.currentScreen != null)
+					if (TASmod.mc.currentScreen.getClass().getSimpleName().contains("InfoHud")) {
+						GL11.glPushMatrix();
+						GL11.glEnable(GL11.GL_BLEND);
+						GL11.glBlendFunc(770, 771);
+						TASmod.mc.fontRenderer.drawStringWithShadow(label.renderText, label.x + 2, label.y + 3, 0x40FFFFFF);
+						GL11.glDisable(GL11.GL_BLEND);
+						GL11.glPopMatrix();
+					}
 	}
 
 	/**

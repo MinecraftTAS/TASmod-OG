@@ -11,7 +11,6 @@ import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
-import net.tasmod.main.Start;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.random.WeightedRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
@@ -39,7 +38,6 @@ public final class Replayer {
 	public Replayer(final File name) throws Exception {
 		this.file = name;
 		this.reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.file)));
-		Start.resolution = reader.readLine();
 		this.fileReader = new Thread(new Runnable() {
 
 			/**

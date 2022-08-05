@@ -1,5 +1,6 @@
 package net.tasmod.recorder;
 
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,8 +10,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import javax.swing.JOptionPane;
+
 import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
+import net.tasmod.main.EmulatorFrame;
 import net.tasmod.main.Start;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
@@ -41,8 +45,6 @@ public final class Recorder {
 		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
 		VirtualMouse.getDX();
 		VirtualMouse.getDY();
-
-		if (tick == 0) linesToPrint.add(Start.resolution + "\n");
 
 		VirtualKeyboard.listen = true;
 		VirtualMouse.listen = true;
@@ -128,6 +130,30 @@ public final class Recorder {
 		while (!linesToPrint.isEmpty())
 			f.write(linesToPrint.poll());
 		f.close();
+	}
+
+	public static void saveTAS() {
+		File outFile = TASmod.rerecord;
+		if (outFile == null) {
+			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
+			final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
+			if (out == null) return;
+			outFile = new File(Start.tasDir, out + ".tas");
+			TASmod.recording.endRecording();
+			try {
+				TASmod.recording.saveTo(outFile);
+			} catch (final Exception e1) {
+				e1.printStackTrace();
+			}
+		} else {
+			TASmod.recording.endRecording();
+			try {
+				TASmod.recording.saveTo(outFile, TASmod.recording.startingTick);
+			} catch (final Exception e1) {
+				e1.printStackTrace();
+			}
+		}
+		EmulatorFrame.save.setEnabled(false);	
 	}
 
 }

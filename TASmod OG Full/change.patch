@@ -1,24 +1,24 @@
 diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/net/minecraft/client/Minecraft.java
 --- build/src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
-@@ -655,11 +655,11 @@
- 
-     private void func_40001_x()
-     {
--        if(mcApplet != null && !mcApplet.isActive())
--        {
--            running = false;
--            return;
--        }
-+//        if(mcApplet != null && !mcApplet.isActive())
-+//        {
-+//            running = false;
-+//            return;
-+//        }
-         AxisAlignedBB.clearBoundingBoxPool();
-         Vec3D.initialize();
-         Profiler.startSection("root");
-@@ -678,6 +678,7 @@
+@@ -357,6 +357,7 @@
+         {
+             downloadResourcesThread = new ThreadDownloadResources(mcDataDir, this);
+             downloadResourcesThread.start();
++            downloadResourcesThread.join(); // wait until sounds are downloading before launching
+         }
+         catch(Exception exception1) { }
+         checkGLError("Post startup");
+@@ -599,7 +600,7 @@
+             Display.destroy();
+             if(!hasCrashed)
+             {
+-                System.exit(0);
++//                System.exit(0);
+             }
+         }
+         System.gc();
+@@ -678,6 +679,7 @@
          }
          long l = System.nanoTime();
          Profiler.startSection("tick");
@@ -26,7 +26,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          for(int i = 0; i < timer.elapsedTicks; i++)
          {
              ticksRan++;
-@@ -731,10 +732,10 @@
+@@ -731,10 +733,10 @@
          }
          GL11.glFlush();
          Profiler.endSection();
@@ -41,7 +41,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          Profiler.endSection();
          if(gameSettings.showDebugInfo)
          {
-@@ -810,7 +811,7 @@
+@@ -810,7 +812,7 @@
  
      private void screenshotListener()
      {
@@ -50,7 +50,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          {
              if(!isTakingScreenshot)
              {
-@@ -1020,10 +1021,10 @@
+@@ -1020,10 +1022,10 @@
  
      public void setIngameFocus()
      {
@@ -65,7 +65,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          if(inGameHasFocus)
          {
              return;
-@@ -1313,6 +1314,24 @@
+@@ -1313,6 +1315,30 @@
                  currentScreen.updateScreen();
              }
          }
@@ -79,10 +79,16 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +            
 +            thePlayer.setAngles((float) mouseHelper.deltaX * f2, (float) mouseHelper.deltaY * f2);
 +            
-+            net.tasmod.Utils.prevRotationPitch = thePlayer.prevRotationPitch;
-+            net.tasmod.Utils.prevRotationYaw = thePlayer.prevRotationYaw;
-+            net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
-+            net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
++            // interpolation part 1
++        	if (net.tasmod.TASmod.playback != null && !net.tasmod.TASmod.playback.isVisible()) {
++        		net.tasmod.Utils.prevRotationPitch = net.tasmod.Utils.rotationPitch;
++        		net.tasmod.Utils.prevRotationYaw = net.tasmod.Utils.rotationYaw;
++        	} else {        		
++        		net.tasmod.Utils.prevRotationPitch = thePlayer.prevRotationPitch;
++        		net.tasmod.Utils.prevRotationYaw = thePlayer.prevRotationYaw;
++        	}
++        	net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
++        	net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
 +        }
 +        net.tasmod.Utils.lastX = Mouse.getEventX();
 +        net.tasmod.Utils.lastY = Mouse.getEventY();
@@ -90,7 +96,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          if(currentScreen == null || currentScreen.allowUserInput)
          {
              Profiler.endStartSection("mouse");
-@@ -1540,6 +1559,7 @@
+@@ -1540,6 +1566,7 @@
          }
          Profiler.endSection();
          systemTime = System.currentTimeMillis();
@@ -98,7 +104,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
-@@ -1945,16 +1965,27 @@
+@@ -1945,16 +1972,27 @@
      {
          boolean flag = false;
          String s3 = s;
@@ -119,8 +125,8 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +		} catch (InterruptedException e) {
 +			e.printStackTrace();
 +		}
-+        int width = Integer.parseInt(net.tasmod.main.Start.resolution.split("x")[0]);
-+        int height = Integer.parseInt(net.tasmod.main.Start.resolution.split("x")[1]);
++        int width = 1920;
++        int height = 1080;
 +        canvas.setPreferredSize(new Dimension(width, height));
 +        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, width, height, flag, frame);
          Thread thread = new Thread(minecraftimpl, "Minecraft main thread");
@@ -129,7 +135,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
          minecraftimpl.minecraftUri = "www.minecraft.net";
          if(s3 != null && s1 != null)
          {
-@@ -1968,7 +1999,6 @@
+@@ -1968,7 +2006,6 @@
              String as[] = s2.split(":");
              minecraftimpl.setServer(as[0], Integer.parseInt(as[1]));
          }
@@ -195,7 +201,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityPlayerSP.java src/main/jav
 diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/java/net/minecraft/src/EntityRenderer.java
 --- build/src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -396,8 +396,11 @@
+@@ -396,8 +396,24 @@
          }
          if(!mc.gameSettings.debugCamEnable)
          {
@@ -203,13 +209,26 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 -            GL11.glRotatef(entityliving.prevRotationYaw + (entityliving.rotationYaw - entityliving.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
 +            // This Code rotates the Camera matching the Players Yaw and Pitch
 +            // For the Interpolation, this Camera will be using a custom coordinate that updates more than 20 times a second.
-+            GL11.glRotatef(net.tasmod.Utils.prevRotationPitch + (net.tasmod.Utils.rotationPitch - net.tasmod.Utils.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
-+            GL11.glRotatef(net.tasmod.Utils.prevRotationYaw + (net.tasmod.Utils.rotationYaw - net.tasmod.Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++        	// ... another word from the future: What's meant by interpolation is a 60 fps camera independent from minecraft. Now there is an additional actual interpolation for rendering
++        	if (net.tasmod.TASmod.playback != null && !net.tasmod.TASmod.playback.isVisible()) {
++        		if (mc.currentScreen == null) {
++        			float pitch = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationPitch, net.tasmod.Utils.rotationPitch, f);
++        			float yaw = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationYaw, net.tasmod.Utils.rotationYaw, f);
++        			GL11.glRotatef(pitch, 1.0f, 0f, 0f);
++        			GL11.glRotatef(yaw + 180f, 0.0f, 1f, 0f);
++        		} else {
++        			GL11.glRotatef(net.tasmod.Utils.rotationPitch, 1.0f, 0f, 0f);
++        			GL11.glRotatef(net.tasmod.Utils.rotationYaw + 180f, 0.0f, 1f, 0f);
++        		}
++        	} else {
++        		GL11.glRotatef(net.tasmod.Utils.prevRotationPitch + (net.tasmod.Utils.rotationPitch - net.tasmod.Utils.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
++        		GL11.glRotatef(net.tasmod.Utils.prevRotationYaw + (net.tasmod.Utils.rotationYaw - net.tasmod.Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++        	}
 +            // End-Edit
          }
          GL11.glTranslatef(0.0F, f1, 0.0F);
          d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
-@@ -679,42 +682,30 @@
+@@ -679,42 +695,30 @@
              updateLightmap();
          }
          Profiler.endSection();
@@ -366,9 +385,30 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiSlot.java src/main/java/net/m
              initialClickY = -1F;
          }
          bindAmountScrolled();
+diff -ruN build/src/minecraft/net/minecraft/src/SoundManager.java src/main/java/net/minecraft/src/SoundManager.java
+--- build/src/minecraft/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
++++ src/main/java/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
+@@ -59,7 +59,7 @@
+             options.soundVolume = 0.0F;
+             options.musicVolume = 0.0F;
+             options.saveOptions();
+-            SoundSystemConfig.addLibrary(paulscode.sound.libraries.LibraryLWJGLOpenAL.class);
++            SoundSystemConfig.addLibrary(net.tasmod.renderer.LibraryJOAL.class);
+             SoundSystemConfig.setCodec("ogg", paulscode.sound.codecs.CodecJOrbis.class);
+             SoundSystemConfig.setCodec("mus", net.minecraft.src.CodecMus.class);
+             SoundSystemConfig.setCodec("wav", paulscode.sound.codecs.CodecWav.class);
 diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src/main/java/net/minecraft/src/ThreadDownloadResources.java
 --- build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
 +++ src/main/java/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
+@@ -24,7 +24,7 @@
+         mc = minecraft;
+         setName("Resource download thread");
+         setDaemon(true);
+-        resourcesFolder = new File(file, "resources/");
++        resourcesFolder = new File("resources/"); // move resources folder in order to keep sounds from redownloading
+         if(!resourcesFolder.exists() && !resourcesFolder.mkdirs())
+         {
+             throw new RuntimeException((new StringBuilder()).append("The working directory could not be created: ").append(resourcesFolder).toString());
 @@ -59,7 +59,8 @@
                      {
                          continue;

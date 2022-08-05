@@ -8,6 +8,8 @@ version = "a1.0.0-SNAPSHOT"
 dependencies {
 	implementation 'org.apache.openjpa:openjpa:3.2.0'
 	implementation 'org.ow2.asm:asm:9.2'
+	implementation group: 'org.jogamp.joal', name: 'joal-main', version: '2.3.2'
+	implementation group: 'org.jogamp.gluegen', name: 'gluegen-rt-main', version: '2.3.2'
 }
 
 jar { 

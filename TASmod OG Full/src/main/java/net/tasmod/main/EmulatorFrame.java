@@ -4,25 +4,28 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.swing.JLabel;
+import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import net.tasmod.TASmod;
+import net.tasmod.recorder.Recorder;
+import net.tasmod.renderer.Renderer;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
 
@@ -38,8 +41,6 @@ public class EmulatorFrame extends Frame {
 	public static EmulatorFrame window;
 	/** The Top Bar of the window */
 	public static JMenuBar bar;
-	/** The Bottom Bar of the window */
-	public static JLabel label;
 	/** The Canvas of the Minecraft Game */
 	public static Component mcCanvas;
 	/** The Panel that holds the Minecraft Canvas at a specific resolution */
@@ -51,7 +52,6 @@ public class EmulatorFrame extends Frame {
 	/** The Save TAS button */
 	public static JMenuItem save;
 	
-	
 	/**
 	 * Initializes the Menu Bar and Bottom Label such as their Actions
 	 * @param title Title of the window
@@ -60,7 +60,25 @@ public class EmulatorFrame extends Frame {
 		super(title);
 		origCursor = getCursor();
 		window = this;
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		getInsets().set(0, 0, 0, 0);
+		addWindowStateListener(l -> {
+			if (l.getOldState() == JFrame.MAXIMIZED_BOTH)
+				setState(JFrame.MAXIMIZED_BOTH);
+		});
+		addWindowListener(new WindowListener() {
+			@Override public void windowOpened(WindowEvent e) {}
+			@Override public void windowIconified(WindowEvent e) {}
+			@Override public void windowDeiconified(WindowEvent e) {}
+			@Override public void windowDeactivated(WindowEvent e) {}
+			@Override public void windowClosed(WindowEvent e) {}
+			@Override public void windowActivated(WindowEvent e) {}
+			@Override 
+			public void windowClosing(WindowEvent e) {
+				if (TASmod.mc == null || !TASmod.mc.running || TickrateChanger.isTickAdvance)
+					System.exit(0);
+			}
+		});
 		bar = new JMenuBar();
 		// create jmenubar
 		final JMenu file = new JMenu("File");
@@ -68,7 +86,7 @@ public class EmulatorFrame extends Frame {
 		final JMenu help = new JMenu("Help");
 
 		final JMenuItem source = new JMenuItem("Source");
-		final JMenuItem wiki = new JMenuItem("Wiki");
+		final JMenuItem wiki = new JMenuItem("Wiki");	
 		source.addActionListener(e -> {
 			try {
 				if (Desktop.isDesktopSupported()) Desktop.getDesktop().browse(new URI("https://github.com/MCPfannkuchenYT/TASmod-OG"));
@@ -107,19 +125,24 @@ public class EmulatorFrame extends Frame {
 		game.add(pause);
 
 		final JMenuItem load = new JMenuItem("Load TAS");
+		final JMenuItem render = new JMenuItem("Render TAS");
 		final JMenuItem create = new JMenuItem("Create TAS");
 		save = new JMenuItem("Save TAS");
 		save.setEnabled(false);
 		final JMenuItem start = new JMenuItem("Launch normally");
 		save.addActionListener(e -> {
 			if (TASmod.recording != null) {
-				TASmod.wait = true;
+				if (TASmod.mc.running) {
+					TASmod.wait = true;
+				} else {
+					Recorder.saveTAS();
+				}
 			}
 		});
 		load.addActionListener(e -> {
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
 			if (out == null) return;
-			final File tasFile = new File(Start.tasDir, out);
+			final File tasFile = new File(Start.tasDir, out + ".tas");
 			String tick = JOptionPane.showInputDialog("Enter tick to rerecord at (leave empty for full playback): ", "");
 			if (tick == null) return;
 			if (!tick.isEmpty()) {
@@ -130,33 +153,42 @@ public class EmulatorFrame extends Frame {
 			} catch (final Exception e1) {
 				e1.printStackTrace();
 			}
-			final int width = Integer.parseInt(Start.resolution.split("x")[0]);
-			final int height = Integer.parseInt(Start.resolution.split("x")[1]);
-			mcCanvas.setBounds(0, 0, width, height);
-			gamePanel.setBounds(0, 0, width, height);
-			pack();
-			setLocationRelativeTo(null);
 			Start.shouldStart = true;
 			TASmod.startPlayback = true;
 			create.setEnabled(false);
 			start.setEnabled(false);
 			load.setEnabled(false);
+			render.setEnabled(false);
+		});
+		render.addActionListener(e -> {
+			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to render", "");
+			if (out == null) return;
+			final File tasFile = new File(Start.tasDir, out + ".tas");
+			try {
+				Renderer ren = new Renderer(tasFile);
+				TASmod.playback = ren;
+				new RenderDialog(res -> {
+					ren.path = res.ffmpeg;
+					ren.resolution = res.resolution;
+					ren.framerate = res.framerate;
+					ren.crf = res.crf;
+					ren.codec = res.codec;
+					ren.acodec = res.acodec;
+					ren.abitrate = res.abitrate;
+					res.setVisible(false);
+					
+					Start.shouldStart = true;
+					TASmod.startPlayback = true;
+					create.setEnabled(false);
+					start.setEnabled(false);
+					load.setEnabled(false);
+					render.setEnabled(false);
+				}).setVisible(true);
+			} catch (final Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 		create.addActionListener(e -> {
-			final String out = JOptionPane.showInputDialog("Select a screen resolution for Minecraft", "854x480");
-			if (out == null) return;
-
-			Start.resolution = out;
-			try {
-				final int width = Integer.parseInt(Start.resolution.split("x")[0]);
-				final int height = Integer.parseInt(Start.resolution.split("x")[1]);
-				mcCanvas.setBounds(0, 0, width, height);
-				gamePanel.setBounds(0, 0, width, height);
-			} catch (final Exception error) {
-				return;
-			}
-			pack();
-			setLocationRelativeTo(null);
 			Start.shouldStart = true;
 
 			TASmod.startRecording = true;
@@ -164,37 +196,32 @@ public class EmulatorFrame extends Frame {
 			save.setEnabled(true);
 			start.setEnabled(false);
 			load.setEnabled(false);
+			render.setEnabled(false);
 		});
 		start.addActionListener(e -> {
-			Start.resolution = "854x480";
 			Start.shouldStart = true;
 			Start.isNormalLaunch = true;
 			start.setEnabled(false);
 			create.setEnabled(false);
 			load.setEnabled(false);
+			render.setEnabled(false);
 		});
 		file.add(load);
 		file.add(create);
 		file.add(save);
+		file.add(render);
 		file.add(start);
 
 		bar.add(file);
 		bar.add(game);
 		if (Desktop.isDesktopSupported()) bar.add(help);
-		// create jlabel
-		label = new JLabel("Loading...") {
-			private static final long serialVersionUID = -4459139147755002132L;
-
-			@Override
-			protected void paintComponent(final Graphics g) {
-				final BufferedImage img = new BufferedImage(label.getWidth(), label.getHeight(), BufferedImage.TYPE_INT_ARGB);
-				final Graphics2D gr = img.createGraphics();
-				super.paintComponent(gr);
-				g.drawImage(img, 2, 0, null);
-			}
-		};
 	}
 
+	@Override
+	public void setPreferredSize(Dimension preferredSize) {
+		super.setPreferredSize(new Dimension(1920, 1080 - 51));
+	}
+	
 	/**
 	 * Changes the Canvas to have an extra Panel around it
 	 */
@@ -204,12 +231,11 @@ public class EmulatorFrame extends Frame {
 			final Panel p = new Panel(null);
 			gamePanel = p;
 			mcCanvas = comp;
-			comp.setBounds(0, 0, 854, 480);
-			p.setBounds(0, 0, 854, 480);
+			comp.setBounds(0, -21, 1920, 1080);
+			p.setBounds(0, -21, 1920, 1080);
 			p.add(comp);
 			super.add(p, BorderLayout.CENTER);
 			super.add(bar, BorderLayout.NORTH);
-			super.add(label, BorderLayout.SOUTH);
 			return;
 		}
 		super.add(comp, constraints);

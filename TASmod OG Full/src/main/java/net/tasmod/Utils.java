@@ -7,6 +7,8 @@ import java.lang.reflect.Modifier;
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftApplet;
+import net.minecraft.src.Timer;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualMouse;
@@ -103,17 +105,12 @@ public final class Utils {
 	}
 
 	/**
-	 * Obtains the inaccessible Singleton from the Minecraft Class
+	 * Obtains the inaccessible Singleton from the minecraft Class
 	 */
 	public static Minecraft obtainMinecraftInstance() throws Exception {
 		/* Get Field in Obfuscated or Non-Obfuscated Environment */
 		final Class<?> clazz = Class.forName("net.minecraft.client.Minecraft");
-		Field theMinecraftField;
-		try {
-			theMinecraftField = clazz.getDeclaredField("theMinecraft");
-		} catch (final Exception e) {
-			theMinecraftField = clazz.getDeclaredField("a");
-		}
+		Field theMinecraftField = clazz.getDeclaredField("theMinecraft");
 		theMinecraftField.setAccessible(true);
 		return (Minecraft) theMinecraftField.get(null);
 	}
@@ -121,17 +118,23 @@ public final class Utils {
 	/**
 	 * Obtains the inaccessible Timer instance from the minecraft class
 	 */
-	public static Object obtainTimerInstance() throws Exception {
+	public static Timer obtainTimerInstance() throws Exception {
 		/* Get Field in Obfuscated or Non-Obfuscated Environment */
 		final Class<?> clazz = Class.forName("net.minecraft.client.Minecraft");
-		Field theTimerField;
-		try {
-			theTimerField = clazz.getDeclaredField("timer");
-		} catch (final Exception e) {
-			theTimerField = clazz.getDeclaredField("X");
-		}
-		theTimerField.setAccessible(true);
-		return theTimerField.get(TASmod.mc);
+		Field timerField = clazz.getDeclaredField("timer");
+		timerField.setAccessible(true);
+		return (Timer) timerField.get(TASmod.mc);
+	}
+
+	/**
+	 * Obtains the inaccessible Timer instance from the minecraft class
+	 */
+	public static void updateMcApplet(MinecraftApplet mcapplet) throws Exception {
+		/* Get Field in Obfuscated or Non-Obfuscated Environment */
+		final Class<?> clazz = Class.forName("net.minecraft.client.Minecraft");
+		Field mcAppletField = clazz.getDeclaredField("mcApplet");
+		mcAppletField.setAccessible(true);
+		mcAppletField.set(TASmod.mc, mcapplet);
 	}
 
 	public static void lazyMouse() {
@@ -155,6 +158,13 @@ public final class Utils {
 
 	public static int getOriginalY() {
 		return Mouse.getDY();
+	}
+	
+	public static float clampedLerp(float lowerBnd, float upperBnd, float slide) {
+		if (slide < 0.0F)
+			return lowerBnd;
+		else
+			return slide > 1.0F ? upperBnd : lowerBnd + (upperBnd - lowerBnd) * slide;
 	}
 
 }

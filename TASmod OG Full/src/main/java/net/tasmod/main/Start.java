@@ -64,7 +64,7 @@ public class Start
 			"net/minecraft/src/Teleporter",
 			"net/minecraft/src/TileEntityDispenser",
 			"net/minecraft/src/GuiCreateWorld",
-			"net/minecraft/src/World" // World is only being replaced in the contructor!
+			"net/minecraft/src/World" // World is only being replaced in the constructor!
 			);
 
 	/**
@@ -86,8 +86,6 @@ public class Start
 	public static boolean isNormalLaunch;
 	/** Whether the game should start already */
 	public static boolean shouldStart;
-	/** Resolution the game should start at */
-	public static String resolution;
 	/** Directory for all TAS files */
 	public static File tasDir;
 	
@@ -159,7 +157,7 @@ public class Start
 		// Run Minecraft
 		Minecraft.main(new String[0]);
 		TASmod.mcThread.join();
-		EmulatorFrame.window.dispose();
+//		EmulatorFrame.window.dispose();
 	}
 
 }
