@@ -9,6 +9,7 @@ import java.lang.instrument.Instrumentation;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.security.ProtectionDomain;
 import java.util.Arrays;
 import java.util.List;
@@ -81,11 +82,6 @@ public class Start
 			"net/minecraft/src/EntityRenderer"
 			);
 
-	/** Whether the options.txt and infoGui.data should be saved or not */
-	public static boolean isNormalLaunch;
-	/** Whether the game should start already */
-	public static boolean shouldStart;
-
 	public static void main(final String[] args) throws Exception {
 		final Instrumentation inst = InstrumentationFactory.getInstrumentation(new NoneLogFactory().getLog("loggers"));
 		inst.addTransformer(new ClassFileTransformer() {
@@ -121,6 +117,10 @@ public class Start
 		f.set(null, mcfolder);
 
 		// Copy some basic minecraft files
+		final File optionsTxt = new File(mcfolder, "options.txt");
+		final File originalOptionsTxt = new File("options.txt");
+		if (originalOptionsTxt.exists()) Files.copy(originalOptionsTxt.toPath(), optionsTxt.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		
 		System.setProperty("java.awt.headless", "false");
 		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (final Exception e) {}
 		final FileDialog taspicker = new FileDialog((Frame) null, "Pick a TAS to play", FileDialog.LOAD);

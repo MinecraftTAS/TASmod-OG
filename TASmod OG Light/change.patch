@@ -38,24 +38,16 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
      }
  
      private void forceReload()
-@@ -1943,18 +1957,21 @@
- 
-     public static void startMainThread(String s, String s1, String s2)
-     {
-+        int width = Integer.parseInt(net.tasmod.main.Start.resolution.split("x")[0]);
-+        int height = Integer.parseInt(net.tasmod.main.Start.resolution.split("x")[1]);
-         boolean flag = false;
-         String s3 = s;
-         Frame frame = new Frame("Minecraft");
+@@ -1949,12 +1963,13 @@
          Canvas canvas = new Canvas();
          frame.setLayout(new BorderLayout());
          frame.add(canvas, "Center");
 -        canvas.setPreferredSize(new Dimension(854, 480));
-+        canvas.setPreferredSize(new Dimension(width, height));
++        canvas.setPreferredSize(new Dimension(1920, 1080));
          frame.pack();
          frame.setLocationRelativeTo(null);
 -        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, 854, 480, flag, frame);
-+        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, width, height, flag, frame);
++        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, 1920, 1080, flag, frame);
          Thread thread = new Thread(minecraftimpl, "Minecraft main thread");
          thread.setPriority(10);
 +        net.tasmod.TASmod.mcThread = thread;
