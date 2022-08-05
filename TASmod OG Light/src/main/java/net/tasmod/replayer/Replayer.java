@@ -11,7 +11,6 @@ import java.util.Queue;
 
 import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
-import net.tasmod.main.Start;
 import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.random.WeightedRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
