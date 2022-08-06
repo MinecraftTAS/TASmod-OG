@@ -12,8 +12,8 @@ import java.util.Queue;
 import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
 import net.tasmod.main.EmulatorFrame;
-import net.tasmod.random.MathRandomMod;
 import net.tasmod.random.SimpleRandomMod;
+import net.tasmod.random.WeightedRandomMod;
 import net.tasmod.recorder.Recorder;
 import net.tasmod.tools.TickrateChanger;
 import net.tasmod.virtual.VirtualKeyboard;
@@ -71,9 +71,9 @@ public class Replayer {
 	 */
 	public void startReplay() {
 		this.mc = TASmod.mc;
-		MathRandomMod.updateSeed(0L);
 		SimpleRandomMod.updateSeed(0L);
-		
+		WeightedRandomMod.intCalls = 0;
+
 		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
 		VirtualMouse.getDX();
 		VirtualMouse.getDY();
@@ -85,7 +85,6 @@ public class Replayer {
 	public void tick() {
 		tickKeyboad();
 		tickMouse();
-		MathRandomMod.updateSeed(currentTick);
 		SimpleRandomMod.updateSeed(currentTick);
 		this.currentTick++;
 		if (TASmod.pauseAt == this.currentTick) {
