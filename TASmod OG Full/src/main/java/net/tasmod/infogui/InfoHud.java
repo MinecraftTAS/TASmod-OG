@@ -16,7 +16,7 @@ import net.minecraft.src.GuiScreen;
 import net.minecraft.src.KeyBinding;
 import net.tasmod.TASmod;
 import net.tasmod.Utils;
-import net.tasmod.random.SimpleRandomMod;
+import net.tasmod.random.MathRandomMod;
 import net.tasmod.tools.TickrateChanger;
 
 /**
@@ -191,7 +191,7 @@ public class InfoHud extends GuiScreen {
 				return String.format("Worldseed: " + TASmod.mc.theWorld.getWorldSeed());
 			}));
 			if (configuration.getProperty("rngseed_x", "err").equals("err")) setDefaults("rngseed");
-			lists.add(new InfoLabel("rngseed", Integer.parseInt(configuration.getProperty("rngseed_x")), Integer.parseInt(configuration.getProperty("rngseed_y")), Boolean.parseBoolean(configuration.getProperty("rngseed_visible")), Boolean.parseBoolean(configuration.getProperty("rngseed_rect")), () -> String.format("Randomness: " + SimpleRandomMod.seed)));
+			lists.add(new InfoLabel("rngseed", Integer.parseInt(configuration.getProperty("rngseed_x")), Integer.parseInt(configuration.getProperty("rngseed_y")), Boolean.parseBoolean(configuration.getProperty("rngseed_visible")), Boolean.parseBoolean(configuration.getProperty("rngseed_rect")), () -> String.format("Randomness: " + MathRandomMod.seed)));
 			if (configuration.getProperty("velocity_x", "err").equals("err")) setDefaults("velocity");
 			lists.add(new InfoLabel("velocity", Integer.parseInt(configuration.getProperty("velocity_x")), Integer.parseInt(configuration.getProperty("velocity_y")), Boolean.parseBoolean(configuration.getProperty("velocity_visible")), Boolean.parseBoolean(configuration.getProperty("velocity_rect")), () -> {
 				if ((TASmod.mc == null) || (TASmod.mc.thePlayer == null)) return "";

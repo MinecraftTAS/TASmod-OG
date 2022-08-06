@@ -9,7 +9,7 @@ import org.lwjgl.input.Mouse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MinecraftApplet;
 import net.minecraft.src.Timer;
-import net.tasmod.random.SimpleRandomMod;
+import net.tasmod.random.MathRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualMouse;
 
@@ -101,7 +101,7 @@ public final class Utils {
 		modifiersField.setAccessible(true);
 		modifiersField.setInt(mathRandomField, mathRandomField.getModifiers() & ~Modifier.FINAL);
 		/* Replace Random of Math with Modded one */
-		mathRandomField.set(null, new SimpleRandomMod());
+		mathRandomField.set(null, new MathRandomMod());
 	}
 
 	/**
