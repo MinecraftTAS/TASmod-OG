@@ -25,7 +25,6 @@ import javax.swing.JOptionPane;
 
 import net.tasmod.TASmod;
 import net.tasmod.recorder.Recorder;
-import net.tasmod.renderer.Renderer;
 import net.tasmod.replayer.Replayer;
 import net.tasmod.tools.TickrateChanger;
 
@@ -125,7 +124,6 @@ public class EmulatorFrame extends Frame {
 		game.add(pause);
 
 		final JMenuItem load = new JMenuItem("Load TAS");
-		final JMenuItem render = new JMenuItem("Render TAS");
 		final JMenuItem create = new JMenuItem("Create TAS");
 		save = new JMenuItem("Save TAS");
 		save.setEnabled(false);
@@ -158,35 +156,6 @@ public class EmulatorFrame extends Frame {
 			create.setEnabled(false);
 			start.setEnabled(false);
 			load.setEnabled(false);
-			render.setEnabled(false);
-		});
-		render.addActionListener(e -> {
-			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to render", "");
-			if (out == null) return;
-			final File tasFile = new File(Start.tasDir, out + ".tas");
-			try {
-				Renderer ren = new Renderer(tasFile);
-				TASmod.playback = ren;
-				new RenderDialog(res -> {
-					ren.path = res.ffmpeg;
-					ren.resolution = res.resolution;
-					ren.framerate = res.framerate;
-					ren.crf = res.crf;
-					ren.codec = res.codec;
-					ren.acodec = res.acodec;
-					ren.abitrate = res.abitrate;
-					res.setVisible(false);
-					
-					Start.shouldStart = true;
-					TASmod.startPlayback = true;
-					create.setEnabled(false);
-					start.setEnabled(false);
-					load.setEnabled(false);
-					render.setEnabled(false);
-				}).setVisible(true);
-			} catch (final Exception e1) {
-				e1.printStackTrace();
-			}
 		});
 		create.addActionListener(e -> {
 			Start.shouldStart = true;
@@ -196,7 +165,6 @@ public class EmulatorFrame extends Frame {
 			save.setEnabled(true);
 			start.setEnabled(false);
 			load.setEnabled(false);
-			render.setEnabled(false);
 		});
 		start.addActionListener(e -> {
 			Start.shouldStart = true;
@@ -204,12 +172,10 @@ public class EmulatorFrame extends Frame {
 			start.setEnabled(false);
 			create.setEnabled(false);
 			load.setEnabled(false);
-			render.setEnabled(false);
 		});
 		file.add(load);
 		file.add(create);
 		file.add(save);
-		file.add(render);
 		file.add(start);
 
 		bar.add(file);

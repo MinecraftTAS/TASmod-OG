@@ -16,7 +16,6 @@ import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
 import net.tasmod.main.EmulatorFrame;
 import net.tasmod.main.Start;
-import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse;
@@ -87,7 +86,6 @@ public final class Recorder {
 			break;
 		}
 		this.currentTick++;
-		SimpleRandomMod.updateSeed(currentTick);
 	}
 
 	/**

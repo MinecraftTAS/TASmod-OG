@@ -1,7 +1,6 @@
 pluginManagement {
 	repositories { 
-		mavenCentral()
-		maven { url "https://maven.mgnet.work/" }
-		maven { url "https://libraries.minecraft.net/" }
+		gradlePluginPortal()
+		maven { url "https://maven.mgnet.work/main" }
 	}
 }
