@@ -2,14 +2,12 @@ package net.tasmod;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MinecraftApplet;
 import net.minecraft.src.Timer;
-import net.tasmod.random.SimpleRandomMod;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualMouse;
 
@@ -87,22 +85,6 @@ public final class Utils {
 	}
 
 	public static boolean isObfuscated;
-
-
-	/**
-	 * Transforms the Random Variable for Math.random()
-	 */
-	public static void transformRandom() throws Exception {
-		/* Get Fields for the Random Value used in Math */
-		final Field mathRandomField = Class.forName("java.lang.Math$RandomNumberGeneratorHolder").getDeclaredField("randomNumberGenerator");
-		mathRandomField.setAccessible(true);
-		/* Remove Final */
-		final Field modifiersField = Field.class.getDeclaredField("modifiers");
-		modifiersField.setAccessible(true);
-		modifiersField.setInt(mathRandomField, mathRandomField.getModifiers() & ~Modifier.FINAL);
-		/* Replace Random of Math with Modded one */
-		mathRandomField.set(null, new SimpleRandomMod());
-	}
 
 	/**
 	 * Obtains the inaccessible Singleton from the minecraft Class

@@ -1,35 +1,17 @@
-diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/net/minecraft/client/Minecraft.java
---- build/src/minecraft/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/client/Minecraft.java	2021-01-01 00:00:00.000000000 +0100
-@@ -357,6 +357,7 @@
-         {
-             downloadResourcesThread = new ThreadDownloadResources(mcDataDir, this);
-             downloadResourcesThread.start();
+==========> Minecraft.java
+--- Minecraft.java
++++ Minecraft.java
+@@ -360,0 +360,1 @@
 +            downloadResourcesThread.join(); // wait until sounds are downloading before launching
-         }
-         catch(Exception exception1) { }
-         checkGLError("Post startup");
-@@ -599,7 +600,7 @@
-             Display.destroy();
-             if(!hasCrashed)
-             {
+@@ -602,1 +603,1 @@
 -                System.exit(0);
 +//                System.exit(0);
-             }
-         }
-         System.gc();
-@@ -678,6 +679,7 @@
-         }
-         long l = System.nanoTime();
-         Profiler.startSection("tick");
+@@ -681,0 +682,1 @@
 +        net.tasmod.TASmod.render(); // Call TASmod Render/Gameloop Tick before runTick() to be able to hijack that
-         for(int i = 0; i < timer.elapsedTicks; i++)
-         {
-             ticksRan++;
-@@ -731,10 +733,10 @@
-         }
-         GL11.glFlush();
-         Profiler.endSection();
+@@ -712,1 +714,1 @@
+-        if(!Keyboard.isKeyDown(65))
++        if(!net.tasmod.virtual.VirtualKeyboard.isKeyDown(65))
+@@ -734,4 +736,4 @@
 -        if(!Display.isActive() && fullscreen)
 -        {
 -            toggleFullscreen();
@@ -38,22 +20,13 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +//        {
 +//            toggleFullscreen();
 +//        }
-         Profiler.endSection();
-         if(gameSettings.showDebugInfo)
-         {
-@@ -810,7 +812,7 @@
- 
-     private void screenshotListener()
-     {
+@@ -755,1 +757,1 @@
+-        if(Keyboard.isKeyDown(65))
++        if(net.tasmod.virtual.VirtualKeyboard.isKeyDown(65))
+@@ -813,1 +815,1 @@
 -        if(Keyboard.isKeyDown(60))
 +        if(net.tasmod.virtual.VirtualKeyboard.isKey60Down)
-         {
-             if(!isTakingScreenshot)
-             {
-@@ -1020,10 +1022,10 @@
- 
-     public void setIngameFocus()
-     {
+@@ -1023,4 +1025,4 @@
 -        if(!Display.isActive())
 -        {
 -            return;
@@ -62,13 +35,7 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +//        {
 +//            return;
 +//        }
-         if(inGameHasFocus)
-         {
-             return;
-@@ -1313,6 +1315,30 @@
-                 currentScreen.updateScreen();
-             }
-         }
+@@ -1316,0 +1318,24 @@
 +        // Moved from EntityRenderer.java / basically just hooked up.
 +        if(inGameHasFocus) {
 +            
@@ -90,32 +57,90 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +        	net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
 +        	net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
 +        }
-+        net.tasmod.Utils.lastX = Mouse.getEventX();
-+        net.tasmod.Utils.lastY = Mouse.getEventY();
++        net.tasmod.Utils.lastX = net.tasmod.virtual.VirtualMouse.getEventX();
++        net.tasmod.Utils.lastY = net.tasmod.virtual.VirtualMouse.getEventY();
 +        // End-Edit
-         if(currentScreen == null || currentScreen.allowUserInput)
-         {
-             Profiler.endStartSection("mouse");
-@@ -1540,6 +1566,7 @@
-         }
-         Profiler.endSection();
-         systemTime = System.currentTimeMillis();
+@@ -1321,1 +1347,1 @@
+-                if(!Mouse.next())
++                if(!net.tasmod.virtual.VirtualMouse.next())
+@@ -1325,2 +1351,2 @@
+-                KeyBinding.setKeyBindState(Mouse.getEventButton() - 100, Mouse.getEventButtonState());
+-                if(Mouse.getEventButtonState())
++                KeyBinding.setKeyBindState(net.tasmod.virtual.VirtualMouse.getEventButton() - 100, net.tasmod.virtual.VirtualMouse.getEventButtonState());
++                if(net.tasmod.virtual.VirtualMouse.getEventButtonState())
+@@ -1328,1 +1354,1 @@
+-                    KeyBinding.onTick(Mouse.getEventButton() - 100);
++                    KeyBinding.onTick(net.tasmod.virtual.VirtualMouse.getEventButton() - 100);
+@@ -1333,1 +1359,1 @@
+-                    int i1 = Mouse.getEventDWheel();
++                    int i1 = net.tasmod.virtual.VirtualMouse.getEventDWheel();
+@@ -1352,1 +1378,1 @@
+-                        if(!inGameHasFocus && Mouse.getEventButtonState())
++                        if(!inGameHasFocus && net.tasmod.virtual.VirtualMouse.getEventButtonState())
+@@ -1370,1 +1396,1 @@
+-                if(!Keyboard.next())
++                if(!net.tasmod.virtual.VirtualKeyboard.next())
+@@ -1374,2 +1400,2 @@
+-                KeyBinding.setKeyBindState(Keyboard.getEventKey(), Keyboard.getEventKeyState());
+-                if(Keyboard.getEventKeyState())
++                KeyBinding.setKeyBindState(net.tasmod.virtual.VirtualKeyboard.getEventKey(), net.tasmod.virtual.VirtualKeyboard.getEventKeyState());
++                if(net.tasmod.virtual.VirtualKeyboard.getEventKeyState())
+@@ -1377,1 +1403,1 @@
+-                    KeyBinding.onTick(Keyboard.getEventKey());
++                    KeyBinding.onTick(net.tasmod.virtual.VirtualKeyboard.getEventKey());
+@@ -1379,1 +1405,1 @@
+-                if(Keyboard.getEventKeyState())
++                if(net.tasmod.virtual.VirtualKeyboard.getEventKeyState())
+@@ -1381,1 +1407,1 @@
+-                    if(Keyboard.getEventKey() == 87)
++                    if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 87)
+@@ -1391,1 +1417,1 @@
+-                            if(Keyboard.getEventKey() == 1)
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 1)
+@@ -1395,1 +1421,1 @@
+-                            if(Keyboard.getEventKey() == 31 && Keyboard.isKeyDown(61))
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 31 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
+@@ -1399,1 +1425,1 @@
+-                            if(Keyboard.getEventKey() == 20 && Keyboard.isKeyDown(61))
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 20 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
+@@ -1403,1 +1429,1 @@
+-                            if(Keyboard.getEventKey() == 33 && Keyboard.isKeyDown(61))
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 33 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
+@@ -1405,1 +1431,1 @@
+-                                boolean flag = Keyboard.isKeyDown(42) | Keyboard.isKeyDown(54);
++                                boolean flag = net.tasmod.virtual.VirtualKeyboard.isKeyDown(42) | net.tasmod.virtual.VirtualKeyboard.isKeyDown(54);
+@@ -1408,1 +1434,1 @@
+-                            if(Keyboard.getEventKey() == 30 && Keyboard.isKeyDown(61))
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 30 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
+@@ -1412,1 +1438,1 @@
+-                            if(Keyboard.getEventKey() == 59)
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 59)
+@@ -1416,1 +1442,1 @@
+-                            if(Keyboard.getEventKey() == 61)
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 61)
+@@ -1420,1 +1446,1 @@
+-                            if(Keyboard.getEventKey() == 63)
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 63)
+@@ -1428,1 +1454,1 @@
+-                            if(Keyboard.getEventKey() == 66)
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 66)
+@@ -1435,1 +1461,1 @@
+-                            if(Keyboard.getEventKey() == 2 + i)
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 2 + i)
+@@ -1443,1 +1469,1 @@
+-                            if(Keyboard.getEventKey() == 11)
++                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 11)
+@@ -1450,1 +1476,1 @@
+-                                if(Keyboard.getEventKey() == 2 + j)
++                                if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 2 + j)
+@@ -1543,0 +1569,1 @@
 +        net.tasmod.TASmod.tick(); // Tick the TASmod
-     }
- 
-     private void forceReload()
-@@ -1945,16 +1972,27 @@
-     {
-         boolean flag = false;
-         String s3 = s;
+@@ -1948,1 +1975,1 @@
 -        Frame frame = new Frame("Minecraft");
 +        Frame frame = new net.tasmod.main.EmulatorFrame("Minecraft"); // Replace Minecrafts frame with a new one with some more stuff do it
-         Canvas canvas = new Canvas();
-         frame.setLayout(new BorderLayout());
-         frame.add(canvas, "Center");
+@@ -1952,1 +1979,0 @@
 -        canvas.setPreferredSize(new Dimension(854, 480));
-         frame.pack();
-         frame.setLocationRelativeTo(null);
+@@ -1955,1 +1981,12 @@
 -        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, 854, 480, flag, frame);
 +        frame.setVisible(true);
 +        try {
@@ -129,82 +154,29 @@ diff -ruN build/src/minecraft/net/minecraft/client/Minecraft.java src/main/java/
 +        int height = 1080;
 +        canvas.setPreferredSize(new Dimension(width, height));
 +        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, width, height, flag, frame);
-         Thread thread = new Thread(minecraftimpl, "Minecraft main thread");
-         thread.setPriority(10);
+@@ -1958,0 +1995,1 @@
 +        net.tasmod.TASmod.mcThread = thread;
-         minecraftimpl.minecraftUri = "www.minecraft.net";
-         if(s3 != null && s1 != null)
-         {
-@@ -1968,7 +2006,6 @@
-             String as[] = s2.split(":");
-             minecraftimpl.setServer(as[0], Integer.parseInt(as[1]));
-         }
+@@ -1971,1 +2009,0 @@
 -        frame.setVisible(true);
-         frame.addWindowListener(new GameWindowListener(minecraftimpl, thread));
-         thread.start();
-     }
-diff -ruN build/src/minecraft/net/minecraft/src/ChunkProvider.java src/main/java/net/minecraft/src/ChunkProvider.java
---- build/src/minecraft/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/ChunkProvider.java	2021-01-01 00:00:00.000000000 +0100
-@@ -93,6 +93,11 @@
-         Chunk chunk = (Chunk)chunkMap.getValueByKey(ChunkCoordIntPair.chunkXZ2Int(i, j));
-         if(chunk == null)
-         {
+==========> ChunkProvider.java
+--- ChunkProvider.java
++++ ChunkProvider.java
+@@ -96,0 +96,5 @@
 +            // Turn off all chunk generating from the rendering methods
 +            boolean check = false;
 +            for (final StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) if (stackTraceElement.getMethodName().equals("runTick") || stackTraceElement.getMethodName().contains("changeWorld")) check = true;
 +            if (!check) return emptyChunk;
 +            // End-Edit
-             return loadChunk(i, j);
-         } else
-         {
-diff -ruN build/src/minecraft/net/minecraft/src/EntityDragon.java src/main/java/net/minecraft/src/EntityDragon.java
---- build/src/minecraft/net/minecraft/src/EntityDragon.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/EntityDragon.java	2021-01-01 00:00:00.000000000 +0100
-@@ -393,6 +393,9 @@
-     private void func_41006_aA()
-     {
-         field_40163_ay = false;
-+        // Create a local random for the dragon to pick a new path, so that it does not deadlock in line 418. This has to be done cuz otherwise id have to change the whole Entity rand
-+        net.tasmod.random.WeightedRandomMod rand = new net.tasmod.random.WeightedRandomMod();
-+        // End-Edit
-         if(rand.nextInt(2) == 0 && worldObj.playerEntities.size() > 0)
-         {
-             field_40179_aC = (Entity)worldObj.playerEntities.get(rand.nextInt(worldObj.playerEntities.size()));
-diff -ruN build/src/minecraft/net/minecraft/src/EntityLiving.java src/main/java/net/minecraft/src/EntityLiving.java
---- build/src/minecraft/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/EntityLiving.java	2021-01-01 00:00:00.000000000 +0100
-@@ -488,9 +488,9 @@
-             {
-                 double d = entity.posX - posX;
-                 double d1;
--                for(d1 = entity.posZ - posZ; d * d + d1 * d1 < 0.0001D; d1 = (Math.random() - Math.random()) * 0.01D)
-+                for(d1 = entity.posZ - posZ; d * d + d1 * d1 < 0.0001D; d1 = (Math.random()/* - Math.random() = 0*/) * 0.01D)
-                 {
--                    d = (Math.random() - Math.random()) * 0.01D;
-+                    d = (Math.random()/* - Math.random() = 0*/) * 0.01D; // Fix a deadlock
-                 }
- 
-                 attackedAtYaw = (float)((Math.atan2(d1, d) * 180D) / 3.1415927410125732D) - rotationYaw;
-diff -ruN build/src/minecraft/net/minecraft/src/EntityPlayerSP.java src/main/java/net/minecraft/src/EntityPlayerSP.java
---- build/src/minecraft/net/minecraft/src/EntityPlayerSP.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/EntityPlayerSP.java	2021-01-01 00:00:00.000000000 +0100
-@@ -25,7 +25,7 @@
- 
-     public MovementInput movementInput;
-     protected Minecraft mc;
+==========> EntityPlayerSP.java
+--- EntityPlayerSP.java
++++ EntityPlayerSP.java
+@@ -28,1 +28,1 @@
 -    protected int sprintToggleTimer;
 +    public int sprintToggleTimer;
-     public int sprintingTicksLeft;
-     public float renderArmYaw;
-     public float renderArmPitch;
-diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/java/net/minecraft/src/EntityRenderer.java
---- build/src/minecraft/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/EntityRenderer.java	2021-01-01 00:00:00.000000000 +0100
-@@ -396,8 +396,24 @@
-         }
-         if(!mc.gameSettings.debugCamEnable)
-         {
+==========> EntityRenderer.java
+--- EntityRenderer.java
++++ EntityRenderer.java
+@@ -399,2 +399,18 @@
 -            GL11.glRotatef(entityliving.prevRotationPitch + (entityliving.rotationPitch - entityliving.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
 -            GL11.glRotatef(entityliving.prevRotationYaw + (entityliving.rotationYaw - entityliving.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
 +            // This Code rotates the Camera matching the Players Yaw and Pitch
@@ -225,13 +197,7 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 +        		GL11.glRotatef(net.tasmod.Utils.prevRotationYaw + (net.tasmod.Utils.rotationYaw - net.tasmod.Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
 +        	}
 +            // End-Edit
-         }
-         GL11.glTranslatef(0.0F, f1, 0.0F);
-         d = entityliving.prevPosX + (entityliving.posX - entityliving.prevPosX) * (double)f;
-@@ -679,42 +695,30 @@
-             updateLightmap();
-         }
-         Profiler.endSection();
+@@ -682,8 +698,8 @@
 -        if(!Display.isActive())
 -        {
 -            if(System.currentTimeMillis() - prevFrameTime > 500L)
@@ -248,16 +214,13 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 +//            }
 +//        } else
 +//        {
-             prevFrameTime = System.currentTimeMillis();
+@@ -691,1 +707,1 @@
 -        }
 +//        }
-         Profiler.startSection("mouse");
-         if(mc.inGameHasFocus)
-         {
+@@ -695,1 +711,1 @@
 -            mc.mouseHelper.mouseXYChange();
 +            // Interpolation. Instead of rotating the player here, we do that in runTick() as if the Game would be running at 20 FPS. Instead we rotate a independent Variable.
-             float f1 = mc.gameSettings.mouseSensitivity * 0.6F + 0.2F;
-             float f2 = f1 * f1 * f1 * 8F;
+@@ -698,20 +714,8 @@
 -            float f3 = (float)mc.mouseHelper.deltaX * f2;
 -            float f4 = (float)mc.mouseHelper.deltaY * f2;
 -            int l = 1;
@@ -286,70 +249,50 @@ diff -ruN build/src/minecraft/net/minecraft/src/EntityRenderer.java src/main/jav
 +            
 +            net.tasmod.Utils.setAngles(dx * f2, dy * f2);
 +            // End-Edit
-         }
-         Profiler.endSection();
-         if(mc.skipRenderWorld)
-diff -ruN build/src/minecraft/net/minecraft/src/GuiAchievement.java src/main/java/net/minecraft/src/GuiAchievement.java
---- build/src/minecraft/net/minecraft/src/GuiAchievement.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/GuiAchievement.java	2021-01-01 00:00:00.000000000 +0100
-@@ -34,7 +34,7 @@
-     {
-         achievementGetLocalText = StatCollector.translateToLocal("achievement.get");
-         achievementStatName = achievement.statName;
+@@ -728,2 +732,2 @@
+-        int k = (Mouse.getX() * i) / mc.displayWidth;
+-        int i1 = j - (Mouse.getY() * j) / mc.displayHeight - 1;
++        int k = (net.tasmod.virtual.VirtualMouse.getX() * i) / mc.displayWidth;
++        int i1 = j - (net.tasmod.virtual.VirtualMouse.getY() * j) / mc.displayHeight - 1;
+==========> GuiAchievement.java
+--- GuiAchievement.java
++++ GuiAchievement.java
+@@ -37,1 +37,1 @@
 -        achievementTime = System.currentTimeMillis();
 +        achievementTime = net.tasmod.tools.TickrateChanger.getMilliseconds();
-         theAchievement = achievement;
-         haveAchiement = false;
-     }
-@@ -43,7 +43,7 @@
-     {
-         achievementGetLocalText = achievement.statName;
-         achievementStatName = achievement.getDescription();
+@@ -46,1 +46,1 @@
 -        achievementTime = System.currentTimeMillis() - 2500L;
 +        achievementTime = net.tasmod.tools.TickrateChanger.getMilliseconds() - 2500L;
-         theAchievement = achievement;
-         haveAchiement = true;
-     }
-@@ -75,7 +75,7 @@
-         {
-             return;
-         }
+@@ -78,1 +78,1 @@
 -        double d = (double)(System.currentTimeMillis() - achievementTime) / 3000D;
 +        double d = (double)(net.tasmod.tools.TickrateChanger.getMilliseconds() - achievementTime) / 3000D;
-         if(!haveAchiement && !haveAchiement && (d < 0.0D || d > 1.0D))
-         {
-             achievementTime = 0L;
-diff -ruN build/src/minecraft/net/minecraft/src/GuiAchievements.java src/main/java/net/minecraft/src/GuiAchievements.java
---- build/src/minecraft/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/GuiAchievements.java	2021-01-01 00:00:00.000000000 +0100
-@@ -80,7 +80,7 @@
- 
-     public void drawScreen(int i, int j, float f)
-     {
+==========> GuiAchievements.java
+--- GuiAchievements.java
++++ GuiAchievements.java
+@@ -10,1 +10,0 @@
+-import org.lwjgl.input.Mouse;
+@@ -83,1 +82,1 @@
 -        if(Mouse.isButtonDown(0))
 +        if(net.tasmod.virtual.VirtualMouse.isButton0Down)
-         {
-             int k = (width - achievementsPaneWidth) / 2;
-             int l = (height - achievementsPaneHeight) / 2;
-diff -ruN build/src/minecraft/net/minecraft/src/GuiContainerCreative.java src/main/java/net/minecraft/src/GuiContainerCreative.java
---- build/src/minecraft/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/GuiContainerCreative.java	2021-01-01 00:00:00.000000000 +0100
-@@ -168,7 +168,7 @@
- 
-     public void drawScreen(int i, int j, float f)
-     {
+==========> GuiContainer.java
+--- GuiContainer.java
++++ GuiContainer.java
+@@ -253,1 +253,1 @@
+-                boolean flag1 = j1 != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
++                boolean flag1 = j1 != -999 && (net.tasmod.virtual.VirtualKeyboard.isKeyDown(42) || net.tasmod.virtual.VirtualKeyboard.isKeyDown(54));
+==========> GuiContainerCreative.java
+--- GuiContainerCreative.java
++++ GuiContainerCreative.java
+@@ -144,1 +144,1 @@
+-        int i = Mouse.getEventDWheel();
++        int i = net.tasmod.virtual.VirtualMouse.getEventDWheel();
+@@ -171,1 +171,1 @@
 -        boolean flag = Mouse.isButtonDown(0);
 +        boolean flag = net.tasmod.virtual.VirtualMouse.isButton0Down;
-         int k = field_40216_e;
-         int l = field_40215_f;
-         int i1 = k + 155;
-diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net/minecraft/src/GuiIngame.java
---- build/src/minecraft/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/GuiIngame.java	2021-01-01 00:00:00.000000000 +0100
-@@ -76,6 +76,15 @@
-                 renderPortalOverlay(f1, k, l);
-             }
-         }
+==========> GuiIngame.java
+--- GuiIngame.java
++++ GuiIngame.java
+@@ -79,0 +79,9 @@
 +        // Render TAS Stuff here. Does not have any effect on minecraft.
 +        if (mc.theWorld != null) {
 +            if (mc.currentScreen != null) {
@@ -359,74 +302,85 @@ diff -ruN build/src/minecraft/net/minecraft/src/GuiIngame.java src/main/java/net
 +            }
 +        }
 +        // End-Edit
-         if(!mc.playerController.func_35643_e())
-         {
-             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-diff -ruN build/src/minecraft/net/minecraft/src/GuiSlot.java src/main/java/net/minecraft/src/GuiSlot.java
---- build/src/minecraft/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/GuiSlot.java	2021-01-01 00:00:00.000000000 +0100
-@@ -223,7 +223,9 @@
-             }
-         } else
-         {
+==========> GuiScreen.java
+--- GuiScreen.java
++++ GuiScreen.java
+@@ -119,2 +119,2 @@
+-        for(; Mouse.next(); handleMouseInput()) { }
+-        for(; Keyboard.next(); handleKeyboardInput()) { }
++        for(; net.tasmod.virtual.VirtualMouse.next(); handleMouseInput()) { }
++        for(; net.tasmod.virtual.VirtualKeyboard.next(); handleKeyboardInput()) { }
+@@ -125,1 +125,1 @@
+-        if(Mouse.getEventButtonState())
++        if(net.tasmod.virtual.VirtualMouse.getEventButtonState())
+@@ -127,3 +127,3 @@
+-            int i = (Mouse.getEventX() * width) / mc.displayWidth;
+-            int k = height - (Mouse.getEventY() * height) / mc.displayHeight - 1;
+-            mouseClicked(i, k, Mouse.getEventButton());
++            int i = (net.tasmod.virtual.VirtualMouse.getEventX() * width) / mc.displayWidth;
++            int k = height - (net.tasmod.virtual.VirtualMouse.getEventY() * height) / mc.displayHeight - 1;
++            mouseClicked(i, k, net.tasmod.virtual.VirtualMouse.getEventButton());
+@@ -132,3 +132,3 @@
+-            int j = (Mouse.getEventX() * width) / mc.displayWidth;
+-            int l = height - (Mouse.getEventY() * height) / mc.displayHeight - 1;
+-            mouseMovedOrUp(j, l, Mouse.getEventButton());
++            int j = (net.tasmod.virtual.VirtualMouse.getEventX() * width) / mc.displayWidth;
++            int l = height - (net.tasmod.virtual.VirtualMouse.getEventY() * height) / mc.displayHeight - 1;
++            mouseMovedOrUp(j, l, net.tasmod.virtual.VirtualMouse.getEventButton());
+@@ -140,1 +140,1 @@
+-        if(Keyboard.getEventKeyState())
++        if(net.tasmod.virtual.VirtualKeyboard.getEventKeyState())
+@@ -142,1 +142,1 @@
+-            if(Keyboard.getEventKey() == 87)
++            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 87)
+@@ -147,1 +147,1 @@
+-            keyTyped(Keyboard.getEventCharacter(), Keyboard.getEventKey());
++            keyTyped(net.tasmod.virtual.VirtualKeyboard.getEventCharacter(), net.tasmod.virtual.VirtualKeyboard.getEventKey());
+==========> GuiSlot.java
+--- GuiSlot.java
++++ GuiSlot.java
+@@ -9,0 +9,1 @@
++
+@@ -162,1 +163,1 @@
+-        if(Mouse.isButtonDown(0))
++        if(net.tasmod.virtual.VirtualMouse.isButtonDown(0))
+@@ -226,1 +227,3 @@
 -            do
 +            /*
 +             * FIXME: This is a temporary fix for the GuiSlot because frame based Mouse Events are a big no no for TASmod
 +             * do
-             {
-                 if(!Mouse.next())
-                 {
-@@ -242,7 +244,7 @@
-                     }
-                     amountScrolled += (j1 * slotHeight) / 2;
-                 }
+@@ -245,1 +248,1 @@
 -            } while(true);
 +            } while(true);*/
-             initialClickY = -1F;
-         }
-         bindAmountScrolled();
-diff -ruN build/src/minecraft/net/minecraft/src/SoundManager.java src/main/java/net/minecraft/src/SoundManager.java
---- build/src/minecraft/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/SoundManager.java	2021-01-01 00:00:00.000000000 +0100
-@@ -59,7 +59,7 @@
-             options.soundVolume = 0.0F;
-             options.musicVolume = 0.0F;
-             options.saveOptions();
--            SoundSystemConfig.addLibrary(paulscode.sound.libraries.LibraryLWJGLOpenAL.class);
-+            SoundSystemConfig.addLibrary(net.tasmod.renderer.LibraryJOAL.class);
-             SoundSystemConfig.setCodec("ogg", paulscode.sound.codecs.CodecJOrbis.class);
-             SoundSystemConfig.setCodec("mus", net.minecraft.src.CodecMus.class);
-             SoundSystemConfig.setCodec("wav", paulscode.sound.codecs.CodecWav.class);
-diff -ruN build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java src/main/java/net/minecraft/src/ThreadDownloadResources.java
---- build/src/minecraft/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/ThreadDownloadResources.java	2021-01-01 00:00:00.000000000 +0100
-@@ -24,7 +24,7 @@
-         mc = minecraft;
-         setName("Resource download thread");
-         setDaemon(true);
+==========> GuiSlotStats.java
+--- GuiSlotStats.java
++++ GuiSlotStats.java
+@@ -53,1 +53,1 @@
+-        if(!Mouse.isButtonDown(0))
++        if(!net.tasmod.virtual.VirtualMouse.isButtonDown(0))
+==========> MouseHelper.java
+--- MouseHelper.java
++++ MouseHelper.java
+@@ -45,1 +45,1 @@
+-        Mouse.setGrabbed(true);
++    	net.tasmod.virtual.VirtualMouse.setGrabbed(true);
+@@ -52,2 +52,2 @@
+-        Mouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
+-        Mouse.setGrabbed(false);
++    	net.tasmod.virtual.VirtualMouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
++    	net.tasmod.virtual.VirtualMouse.setGrabbed(false);
+@@ -58,2 +58,2 @@
+-        deltaX = Mouse.getDX();
+-        deltaY = Mouse.getDY();
++        deltaX = net.tasmod.virtual.VirtualMouse.getDX();
++        deltaY = net.tasmod.virtual.VirtualMouse.getDY();
+==========> ThreadDownloadResources.java
+--- ThreadDownloadResources.java
++++ ThreadDownloadResources.java
+@@ -27,1 +27,1 @@
 -        resourcesFolder = new File(file, "resources/");
 +        resourcesFolder = new File("resources/"); // move resources folder in order to keep sounds from redownloading
-         if(!resourcesFolder.exists() && !resourcesFolder.mkdirs())
-         {
-             throw new RuntimeException((new StringBuilder()).append("The working directory could not be created: ").append(resourcesFolder).toString());
-@@ -59,7 +59,8 @@
-                     {
-                         continue;
-                     }
+@@ -62,1 +62,2 @@
 -                    downloadAndInstallResource(url, s, l, i);
 +                    // This is just a small change to fix the game audio, because the files aren't online on the original link anymore. By doing this i download the ogg files from my website instead.
-+                    downloadAndInstallResource(new URL("https://maven.mgnet.work/archive/1.0-sounds/"), s, l, i);
-                     if(closing)
-                     {
-                         return;
-diff -ruN build/src/minecraft/net/minecraft/src/World.java src/main/java/net/minecraft/src/World.java
---- build/src/minecraft/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
-+++ src/main/java/net/minecraft/src/World.java	2021-01-01 00:00:00.000000000 +0100
-@@ -3452,6 +3452,7 @@
-     public Random setRandomSeed(int i, int j, int k)
-     {
-         long l = (long)i * 0x4f9939f508L + (long)j * 0x1ef1565bd5L + getWorldInfo().getRandomSeed() + (long)k;
-+        Random rand = new Random(); // Return a new Random instead of the worlds one
-         rand.setSeed(l);
-         return rand;
-     }
++                    downloadAndInstallResource(new URL("https://maven.mgnet.work/main/archive/1.0-sounds/"), s, l, i);
