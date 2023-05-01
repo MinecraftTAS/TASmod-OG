@@ -6,7 +6,6 @@ import java.util.Queue;
 import org.lwjgl.input.Keyboard;
 
 import net.tasmod.TASmod;
-import net.tasmod.Utils;
 
 /**
  * This is an interface of the Keyboard Class.
@@ -69,6 +68,19 @@ public final class VirtualKeyboard {
 	public static boolean isKey52Down;
 	public static boolean isKey65Down;
 
+	private static void updateKeyboard() {
+		int key = getEventKey();
+		boolean state = getEventKeyState();
+		if (key == 37) isKey37Down = state;
+		if (key == 42) isKey42Down = state;
+		if (key == 54) isKey54Down = state;
+		if (key == 60) isKey60Down = state;
+		if (key == 61) isKey61Down = state;
+		if (key == 51) isKey51Down = state;
+		if (key == 52) isKey52Down = state;
+		if (key == 65) isKey65Down = state;
+	}
+	
 	public static boolean next() {
 		if (listen) {
 			if (currentlyListening != null && currentlyListening.key != 51 && currentlyListening.key != 52 && currentlyListening.key != 66 && currentlyListening.key != 67)
@@ -77,12 +89,14 @@ public final class VirtualKeyboard {
 		}
 		if (!hack) {
 			final boolean b = Keyboard.next();
-			if (b) Utils.lazyKeyboard();
+			if (b) updateKeyboard();
 			return b;
 		}
 		if (keyEventsForTick.isEmpty()) return false;
 		currentKeyEvent = keyEventsForTick.poll();
-		Utils.lazyKeyboard();
+		
+		updateKeyboard();
+		
 		return true;
 	}
 
