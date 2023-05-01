@@ -9,8 +9,9 @@ bin
 .classpath
 .project
 .settings
-.metadata 
-minecraft
+.metadata
+.factorypath
 
 # Ignore minecraft files
 run
+**/net/minecraft
