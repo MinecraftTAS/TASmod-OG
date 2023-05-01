@@ -22,6 +22,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import net.tasmod.TASmod;
 import net.tasmod.recorder.Recorder;
@@ -57,6 +58,13 @@ public class EmulatorFrame extends Frame {
 	 */
 	public EmulatorFrame(final String title) {
 		super(title);
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		origCursor = getCursor();
 		window = this;
 		setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -107,17 +115,16 @@ public class EmulatorFrame extends Frame {
 		final JMenuItem slower = new JMenuItem("Slower");
 		final JMenuItem pause = new JMenuItem("Pause/Resume");
 		faster.addActionListener(e -> {
-			if (Start.shouldStart && !TickrateChanger.isTickAdvance) TickrateChanger.faster();
+			if (TASmod.isRunning && !TickrateChanger.isTickAdvance)
+				TickrateChanger.faster();
 		});
 		slower.addActionListener(e -> {
-			if (Start.shouldStart && !TickrateChanger.isTickAdvance) TickrateChanger.slower();
+			if (TASmod.isRunning && !TickrateChanger.isTickAdvance)
+				TickrateChanger.slower();
 		});
 		pause.addActionListener(e -> {
-			try {
-				if (Start.shouldStart) TickrateChanger.toggleTickadvance();
-			} catch (final Exception e1) {
-				e1.printStackTrace();
-			}
+			if (TASmod.isRunning)
+				TickrateChanger.toggleTickadvance();
 		});
 		game.add(faster);
 		game.add(slower);
@@ -140,7 +147,7 @@ public class EmulatorFrame extends Frame {
 		load.addActionListener(e -> {
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
 			if (out == null) return;
-			final File tasFile = new File(Start.tasDir, out + ".tas");
+			final File tasFile = new File(TASmod.TAS_DIR, out + ".tas");
 			String tick = JOptionPane.showInputDialog("Enter tick to rerecord at (leave empty for full playback): ", "");
 			if (tick == null) return;
 			if (!tick.isEmpty()) {
@@ -148,30 +155,36 @@ public class EmulatorFrame extends Frame {
 			}
 			try {
 				TASmod.playback = new Replayer(tasFile);
+				Start.startGame(true);
 			} catch (final Exception e1) {
 				e1.printStackTrace();
 			}
-			Start.shouldStart = true;
 			TASmod.startPlayback = true;
 			create.setEnabled(false);
 			start.setEnabled(false);
 			load.setEnabled(false);
 		});
 		create.addActionListener(e -> {
-			Start.shouldStart = true;
-
-			TASmod.startRecording = true;
-			create.setEnabled(false);
-			save.setEnabled(true);
-			start.setEnabled(false);
-			load.setEnabled(false);
+			try {
+				Start.startGame(true);
+				TASmod.startRecording = true;
+				create.setEnabled(false);
+				save.setEnabled(true);
+				start.setEnabled(false);
+				load.setEnabled(false);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 		start.addActionListener(e -> {
-			Start.shouldStart = true;
-			Start.isNormalLaunch = true;
-			start.setEnabled(false);
-			create.setEnabled(false);
-			load.setEnabled(false);
+			try {
+				Start.startGame(false);
+				start.setEnabled(false);
+				create.setEnabled(false);
+				load.setEnabled(false);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		});
 		file.add(load);
 		file.add(create);
