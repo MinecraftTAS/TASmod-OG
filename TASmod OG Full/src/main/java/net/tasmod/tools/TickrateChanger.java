@@ -1,8 +1,6 @@
 package net.tasmod.tools;
 
-import java.lang.reflect.Field;
-
-import net.tasmod.Utils;
+import net.tasmod.TASmod;
 
 /**
  * The TickrateChanger is the part of the mod, that slows down the game to allow for more precise inputs.
@@ -73,7 +71,7 @@ public class TickrateChanger {
 	/**
 	 * Enters or leaves tick advance
 	 */
-	public static void toggleTickadvance() throws Exception {
+	public static void toggleTickadvance() {
 		if (!(isTickAdvance = !isTickAdvance))
 			updateTickrate(availableGamespeeds[selectedGamespeed]);
 		else
@@ -83,26 +81,14 @@ public class TickrateChanger {
 	/**
 	 * This method is used to slow down the game. It replaces the 'timerSpeed' field in the Timer class.
 	 * @param gamespeed New Speed of game (1.0 = normal speed)
-	 * @throws Exception Throws exception whenever invalid reflection target is set
 	 */
-	public static void updateTickrate(final float gamespeed) throws Exception {
+	public static void updateTickrate(final float gamespeed) {
 		if (gamespeed <= 0.02F) timeSinceZero = System.currentTimeMillis() - timeOffset;
 
 		final long time = System.currentTimeMillis() - timeSinceTC - timeOffset;
 		fakeTimeSinceTC += (long) (time * (gamespeed * 20.0f / 20F));
 		timeSinceTC = System.currentTimeMillis() - timeOffset;
-		/* Get Field in Obfuscated or Non-Obfuscated Environment */
-		Field translateTableField;
-		try {
-			/* Non-Obfuscated net.minecraft.src.Timer.timerSpeed */
-			translateTableField = Class.forName("net.minecraft.src.Timer").getDeclaredField("timerSpeed");
-		} catch (final Exception e) {
-			/* Obfuscated: aij.d */
-			translateTableField = Class.forName("aij").getDeclaredField("d");
-		}
-		/* Update Game Speed */
-		translateTableField.setAccessible(true);
-		translateTableField.setFloat(Utils.obtainTimerInstance(), gamespeed);
+		TASmod.mc.timer.timerSpeed = gamespeed;
 	}
 
 }

@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
 import net.tasmod.main.EmulatorFrame;
-import net.tasmod.main.Start;
 import net.tasmod.virtual.VirtualKeyboard;
 import net.tasmod.virtual.VirtualKeyboard.VirtualKeyEvent;
 import net.tasmod.virtual.VirtualMouse;
@@ -136,7 +135,8 @@ public final class Recorder {
 			GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(null);
 			final String out = JOptionPane.showInputDialog("Enter a name for the TAS", "");
 			if (out == null) return;
-			outFile = new File(Start.tasDir, out + ".tas");
+			outFile = new File(TASmod.TAS_DIR, out + ".tas");
+			outFile.getParentFile().mkdirs();
 			TASmod.recording.endRecording();
 			try {
 				TASmod.recording.saveTo(outFile);

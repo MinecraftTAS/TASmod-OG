@@ -23,6 +23,8 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
  */
 public final class TASmod {
 
+	public static final File TAS_DIR = new File("tas");
+	
 	/** Currently running Recording */
 	public static volatile Recorder recording;
 
@@ -73,6 +75,9 @@ public final class TASmod {
 	
 	/** Synchronize */
 	public static boolean wait;
+
+	/** Is game running */
+	public static boolean isRunning;
 	
 	/**
 	 * Ticks all kinds of things
@@ -93,13 +98,9 @@ public final class TASmod {
 		/* Run Code when MC Ticks the First Time */
 		if (!hasBeenTransformed) {
 			hasBeenTransformed = true;
-			try {
-				TASmod.mc = Utils.obtainMinecraftInstance();
-				Utils.updateMcApplet(null);
-				TickrateChanger.toggleTickadvance();
-			} catch (final Exception e) {
-				e.printStackTrace();
-			}
+			TASmod.mc = Minecraft.theMinecraft;
+			TASmod.mc.mcApplet = null;
+			TickrateChanger.toggleTickadvance();
 			if (startRecording) {
 				recording = new Recorder(0); // Start a new Recording
 				startRecording = false;
