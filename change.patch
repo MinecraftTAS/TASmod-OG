@@ -58,17 +58,17 @@
 +            
 +            // interpolation part 1
 +        	if (net.tasmod.TASmod.playback != null && !net.tasmod.TASmod.playback.isVisible()) {
-+        		net.tasmod.Utils.prevRotationPitch = net.tasmod.Utils.rotationPitch;
-+        		net.tasmod.Utils.prevRotationYaw = net.tasmod.Utils.rotationYaw;
++        		net.tasmod.virtual.VirtualCamera.prevRotationPitch = net.tasmod.virtual.VirtualCamera.rotationPitch;
++        		net.tasmod.virtual.VirtualCamera.prevRotationYaw = net.tasmod.virtual.VirtualCamera.rotationYaw;
 +        	} else {        		
-+        		net.tasmod.Utils.prevRotationPitch = thePlayer.prevRotationPitch;
-+        		net.tasmod.Utils.prevRotationYaw = thePlayer.prevRotationYaw;
++        		net.tasmod.virtual.VirtualCamera.prevRotationPitch = thePlayer.prevRotationPitch;
++        		net.tasmod.virtual.VirtualCamera.prevRotationYaw = thePlayer.prevRotationYaw;
 +        	}
-+        	net.tasmod.Utils.rotationPitch = thePlayer.rotationPitch;
-+        	net.tasmod.Utils.rotationYaw = thePlayer.rotationYaw;
++        	net.tasmod.virtual.VirtualCamera.rotationPitch = thePlayer.rotationPitch;
++        	net.tasmod.virtual.VirtualCamera.rotationYaw = thePlayer.rotationYaw;
 +        }
-+        net.tasmod.Utils.lastX = net.tasmod.virtual.VirtualMouse.getEventX();
-+        net.tasmod.Utils.lastY = net.tasmod.virtual.VirtualMouse.getEventY();
++        net.tasmod.virtual.VirtualCamera.lastX = net.tasmod.virtual.VirtualMouse.getEventX();
++        net.tasmod.virtual.VirtualCamera.lastY = net.tasmod.virtual.VirtualMouse.getEventY();
 +        // End-Edit
 @@ -1321,1 +1346,1 @@
 -                if(!Mouse.next())
@@ -148,7 +148,7 @@
 @@ -1948,1 +1974,1 @@
 -        Frame frame = new Frame("Minecraft");
 +        Frame frame = new net.tasmod.main.EmulatorFrame("Minecraft"); // Replace Minecrafts frame with a new one with some more stuff do it
-@@ -1958,0 +1983,1 @@
+@@ -1958,0 +1984,1 @@
 +        net.tasmod.TASmod.mcThread = thread;
 ==========> ChunkProvider.java
 --- ChunkProvider.java
@@ -168,28 +168,16 @@
 ==========> EntityRenderer.java
 --- EntityRenderer.java
 +++ EntityRenderer.java
-@@ -399,2 +399,18 @@
+@@ -399,2 +399,6 @@
 -            GL11.glRotatef(entityliving.prevRotationPitch + (entityliving.rotationPitch - entityliving.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
 -            GL11.glRotatef(entityliving.prevRotationYaw + (entityliving.rotationYaw - entityliving.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
 +            // This Code rotates the Camera matching the Players Yaw and Pitch
 +            // For the Interpolation, this Camera will be using a custom coordinate that updates more than 20 times a second.
 +        	// ... another word from the future: What's meant by interpolation is a 60 fps camera independent from minecraft. Now there is an additional actual interpolation for rendering
-+        	if (net.tasmod.TASmod.playback != null && !net.tasmod.TASmod.playback.isVisible()) {
-+        		if (mc.currentScreen == null) {
-+        			float pitch = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationPitch, net.tasmod.Utils.rotationPitch, f);
-+        			float yaw = net.tasmod.Utils.clampedLerp(net.tasmod.Utils.prevRotationYaw, net.tasmod.Utils.rotationYaw, f);
-+        			GL11.glRotatef(pitch, 1.0f, 0f, 0f);
-+        			GL11.glRotatef(yaw + 180f, 0.0f, 1f, 0f);
-+        		} else {
-+        			GL11.glRotatef(net.tasmod.Utils.rotationPitch, 1.0f, 0f, 0f);
-+        			GL11.glRotatef(net.tasmod.Utils.rotationYaw + 180f, 0.0f, 1f, 0f);
-+        		}
-+        	} else {
-+        		GL11.glRotatef(net.tasmod.Utils.prevRotationPitch + (net.tasmod.Utils.rotationPitch - net.tasmod.Utils.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
-+        		GL11.glRotatef(net.tasmod.Utils.prevRotationYaw + (net.tasmod.Utils.rotationYaw - net.tasmod.Utils.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
-+        	}
++        	GL11.glRotatef(net.tasmod.virtual.VirtualCamera.prevRotationPitch + (net.tasmod.virtual.VirtualCamera.rotationPitch - net.tasmod.virtual.VirtualCamera.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
++        	GL11.glRotatef(net.tasmod.virtual.VirtualCamera.prevRotationYaw + (net.tasmod.virtual.VirtualCamera.rotationYaw - net.tasmod.virtual.VirtualCamera.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
 +            // End-Edit
-@@ -682,8 +698,8 @@
+@@ -682,8 +686,8 @@
 -        if(!Display.isActive())
 -        {
 -            if(System.currentTimeMillis() - prevFrameTime > 500L)
@@ -206,13 +194,13 @@
 +//            }
 +//        } else
 +//        {
-@@ -691,1 +707,1 @@
+@@ -691,1 +695,1 @@
 -        }
 +//        }
-@@ -695,1 +711,1 @@
+@@ -695,1 +699,1 @@
 -            mc.mouseHelper.mouseXYChange();
 +            // Interpolation. Instead of rotating the player here, we do that in runTick() as if the Game would be running at 20 FPS. Instead we rotate a independent Variable.
-@@ -698,20 +714,8 @@
+@@ -698,20 +702,6 @@
 -            float f3 = (float)mc.mouseHelper.deltaX * f2;
 -            float f4 = (float)mc.mouseHelper.deltaY * f2;
 -            int l = 1;
@@ -234,18 +222,16 @@
 -                mc.thePlayer.setAngles(f3, f4 * (float)l);
 -            }
 +
-+            int dx = net.tasmod.Utils.getOriginalX();
-+            int dy = net.tasmod.Utils.getOriginalY();
-+            net.tasmod.Utils.dX += dx;
-+            net.tasmod.Utils.dY += dy;
++            int dx = net.tasmod.virtual.VirtualMouse.getDX();
++            int dy = net.tasmod.virtual.VirtualMouse.getDY();
 +            
-+            net.tasmod.Utils.setAngles(dx * f2, dy * f2);
++            net.tasmod.virtual.VirtualCamera.setFakeAngles(dx * f2, dy * f2);
 +            // End-Edit
-@@ -728,2 +732,2 @@
+@@ -728,2 +718,2 @@
 -        int k = (Mouse.getX() * i) / mc.displayWidth;
 -        int i1 = j - (Mouse.getY() * j) / mc.displayHeight - 1;
-+        int k = (net.tasmod.virtual.VirtualMouse.getX() * i) / mc.displayWidth;
-+        int i1 = j - (net.tasmod.virtual.VirtualMouse.getY() * j) / mc.displayHeight - 1;
++        int k = (net.tasmod.virtual.VirtualCamera.lastX * i) / mc.displayWidth;
++        int i1 = j - (net.tasmod.virtual.VirtualCamera.lastY * j) / mc.displayHeight - 1;
 ==========> GuiAchievement.java
 --- GuiAchievement.java
 +++ GuiAchievement.java
@@ -364,8 +350,8 @@
 @@ -58,2 +58,2 @@
 -        deltaX = Mouse.getDX();
 -        deltaY = Mouse.getDY();
-+        deltaX = net.tasmod.virtual.VirtualMouse.getDX();
-+        deltaY = net.tasmod.virtual.VirtualMouse.getDY();
++        deltaX = net.tasmod.virtual.VirtualMouse.getVirtualDX();
++        deltaY = net.tasmod.virtual.VirtualMouse.getVirtualDY();
 ==========> ThreadDownloadResources.java
 --- ThreadDownloadResources.java
 +++ ThreadDownloadResources.java

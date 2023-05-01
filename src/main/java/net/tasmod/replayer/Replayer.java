@@ -69,10 +69,6 @@ public class Replayer {
 	 */
 	public void startReplay() {
 		this.mc = TASmod.mc;
-
-		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
-		VirtualMouse.getDX();
-		VirtualMouse.getDY();
 	}
 
 	/**
@@ -129,8 +125,8 @@ public class Replayer {
 			Arrays.asList(line.split(":")).forEach(c -> {
 				final VirtualMouseEvent c2 = VirtualMouseEvent.fromString(c);
 				queue.add(c2);
-				VirtualMouse.dX = c2.dX;
-				VirtualMouse.dY = c2.dY;
+				VirtualMouse.dX = VirtualMouse.fdX = c2.dX;
+				VirtualMouse.dY = VirtualMouse.fdX = c2.dY;
 			});
 			VirtualMouse.hack = true;
 		} else

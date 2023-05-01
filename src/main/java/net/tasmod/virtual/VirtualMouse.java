@@ -6,7 +6,6 @@ import java.util.Queue;
 import org.lwjgl.input.Mouse;
 
 import net.tasmod.TASmod;
-import net.tasmod.Utils;
 
 /**
  * This is an interface of the Mouse Class.
@@ -77,9 +76,15 @@ public class VirtualMouse {
 	public static boolean listen = false;
 	public static VirtualMouseEvent currentlyListening = new VirtualMouseEvent(-1, -1, false, -1, -1, false, 0, 0);
 
-	public static int dX;
-	public static int dY;
+	public static int dX, dY;
+	public static int fdX, fdY;
 
+	public static void updateMouse() {
+		int button = getEventButton();
+		boolean state = getEventButtonState();
+		if (button == 0) isButton0Down = state;
+	}
+	
 	public final static boolean next() {
 		if (listen)
 			if (currentlyListening != null) {
@@ -90,12 +95,12 @@ public class VirtualMouse {
 		if (!hack) {
 			final boolean b = Mouse.next();
 			Mouse.poll(); // Apparently this also refreshes mouse events.
-			if (b) Utils.lazyMouse();
+			if (b) updateMouse();
 			return b;
 		}
 		if (mouseEventsForTick.isEmpty()) return false;
 		currentMouseEvents = mouseEventsForTick.poll();
-		Utils.lazyMouse();
+		updateMouse();
 		return true;
 	}
 
@@ -172,26 +177,13 @@ public class VirtualMouse {
 	}
 
 	/**
-	 * This Method is being called at only one point, that one being EntityRenderer, which is frame based. To make it be tick based, we replace this value with one, that is based on Ticks
-	 */
-	public final static int getX() {
-		return Utils.lastX;
-	}
-
-	/**
-	 * This Method is being called at only one point, that one being EntityRenderer, which is frame based. To make it be tick based, we replace this value with one, that is based on Ticks
-	 */
-	public final static int getY() {
-		return Utils.lastY;
-	}
-
-	/**
 	 * To make the Interpolation work, we are not asking LWJGL, but a Custom Util, that adds all the LWJGL Calls per Tick.
 	 * Does not change anything with the Mouse
 	 */
-	public final static int getDX() {
+	public final static int getVirtualDX() {
 		if (!hack) {
-			final int val = Utils.getDX();
+			int val = fdX;
+			fdX = 0;
 			if (listen)
 				dX = val;
 			return val;
@@ -203,9 +195,10 @@ public class VirtualMouse {
 	 * To make the Interpolation work, we are not asking LWJGL, but a Custom Util, that adds all the LWJGL Calls per Tick.
 	 * Does not change anything with the Mouse
 	 */
-	public final static int getDY() {
+	public final static int getVirtualDY() {
 		if (!hack) {
-			final int val = Utils.getDY();
+			int val = fdY;
+			fdY = 0;
 			if (listen)
 				dY = val;
 			return val;
@@ -213,6 +206,28 @@ public class VirtualMouse {
 		return dY;
 	}
 
+	public static int getDX() {
+		if (hack) {
+			int val = fdX;
+			fdX = 0;
+			return val;
+		}
+		int val = Mouse.getDX();
+		fdX += val;
+		return val;
+	}
+	
+	public static int getDY() {
+		if (hack) {
+			int val = fdY;
+			fdY = 0;
+			return val;
+		}
+		int val = Mouse.getDY();
+		fdY += val;
+		return val;
+	}
+	
 	/**
 	 * isButtonDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Mouse)
 	 *

@@ -12,7 +12,6 @@ import java.util.Queue;
 
 import javax.swing.JOptionPane;
 
-import net.minecraft.client.Minecraft;
 import net.tasmod.TASmod;
 import net.tasmod.main.EmulatorFrame;
 import net.tasmod.virtual.VirtualKeyboard;
@@ -26,7 +25,6 @@ import net.tasmod.virtual.VirtualMouse.VirtualMouseEvent;
  */
 public final class Recorder {
 
-	private final Minecraft mc;
 	private final Queue<String> linesToPrint = new LinkedList<>();
 
 	public int currentTick;
@@ -38,12 +36,6 @@ public final class Recorder {
 	 * @throws IOException Cannot be thrown, unless something is terribly wrong.
 	 */
 	public Recorder(int tick) {
-		this.mc = TASmod.mc;
-
-		VirtualMouse.setCursorPosition(mc.displayWidth / 2, mc.displayHeight / 2);
-		VirtualMouse.getDX();
-		VirtualMouse.getDY();
-
 		VirtualKeyboard.listen = true;
 		VirtualMouse.listen = true;
 		currentTick = tick;

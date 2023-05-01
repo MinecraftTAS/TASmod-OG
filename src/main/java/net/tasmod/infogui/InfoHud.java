@@ -15,8 +15,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.KeyBinding;
 import net.tasmod.TASmod;
-import net.tasmod.Utils;
 import net.tasmod.tools.TickrateChanger;
+import net.tasmod.virtual.VirtualCamera;
 
 /**
  * The info hud is a hud that is always being rendered ontop of the screen, it can show some stuff such as coordinates, etc.,
@@ -201,7 +201,7 @@ public class InfoHud extends GuiScreen {
 			}));
 			if (configuration.getProperty("facing_x", "err").equals("err")) setDefaults("facing");
 			lists.add(new InfoLabel("facing", Integer.parseInt(configuration.getProperty("facing_x")), Integer.parseInt(configuration.getProperty("facing_y")), Boolean.parseBoolean(configuration.getProperty("facing_visible")), Boolean.parseBoolean(configuration.getProperty("facing_rect")), () -> {
-				return "Facing: " + Utils.rotationYaw + " " + Utils.rotationPitch;
+				return "Facing: " + VirtualCamera.rotationYaw + " " + VirtualCamera.rotationPitch;
 			}));
 			if (configuration.getProperty("keystrokes_x", "err").equals("err")) setDefaults("keystrokes");
 			lists.add(new InfoLabel("keystrokes", Integer.parseInt(configuration.getProperty("keystrokes_x")), Integer.parseInt(configuration.getProperty("keystrokes_y")), Boolean.parseBoolean(configuration.getProperty("keystrokes_visible")), Boolean.parseBoolean(configuration.getProperty("keystrokes_rect")), () -> {
