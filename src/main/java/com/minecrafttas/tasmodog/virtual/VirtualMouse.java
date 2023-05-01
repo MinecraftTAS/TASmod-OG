@@ -70,12 +70,12 @@ public class VirtualMouse {
 	 * the VirtualMouseEvent. Replaying works the same, but instead of listening, it hacks the LWJGL Mouse like a Man In The Middle
 	 */
 
-	public final static Queue<VirtualMouseEvent> mouseEventsForTick = new LinkedList<>();
-	public static VirtualMouseEvent currentMouseEvents = new VirtualMouseEvent(0, 0, false, 0, 0, false, 0, 0);
+	public static Queue<VirtualMouseEvent> mouseEventsForTick = new LinkedList<>();
+	private static VirtualMouseEvent currentMouseEvents = new VirtualMouseEvent(0, 0, false, 0, 0, false, 0, 0);
 	public static boolean hack = false;
 
 	public static boolean listen = false;
-	public static VirtualMouseEvent currentlyListening = new VirtualMouseEvent(-1, -1, false, -1, -1, false, 0, 0);
+	private static VirtualMouseEvent currentlyListening = new VirtualMouseEvent(-1, -1, false, -1, -1, false, 0, 0);
 
 	public static int dX, dY;
 	public static int fdX, fdY;
