@@ -1,24 +1,25 @@
-package net.tasmod.virtual;
+package com.minecrafttas.tasmodog.virtual;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 import org.lwjgl.input.Keyboard;
 
-import net.tasmod.TASmod;
+import com.minecrafttas.tasmodog.TASmod;
+import com.minecrafttas.tasmodog.container.Recording;
 
 /**
  * This is an interface of the Keyboard Class.
  * This File records or manipulates these Calls
- * @author ScribbleLP, Pancake
+ * @author Scribble, Pancake
  */
-public final class VirtualKeyboard {
+public class VirtualKeyboard {
 
 	/**
 	 * Internal Keyboard Event used to save the Keyboard to a File
-	 * @author ScribbleLP
+	 * @author Scribble
 	 */
-	public static final class VirtualKeyEvent {
+	public static class VirtualKeyEvent {
 
 		/** The current keyboard character being examined */
 		public int character;
@@ -83,8 +84,8 @@ public final class VirtualKeyboard {
 	
 	public static boolean next() {
 		if (listen) {
-			if (currentlyListening != null && currentlyListening.key != 51 && currentlyListening.key != 52 && currentlyListening.key != 66 && currentlyListening.key != 67)
-				TASmod.keyboardTick(currentlyListening);
+			if (currentlyListening != null && currentlyListening.key != 51 && currentlyListening.key != 52 && currentlyListening.key != 66 && currentlyListening.key != 67 && TASmod.instance.getInputContainer() instanceof Recording)
+				((Recording) TASmod.instance.getInputContainer()).keyboardTick(currentlyListening);
 			currentlyListening = new VirtualKeyEvent(-1, -1, false);
 		}
 		if (!hack) {
