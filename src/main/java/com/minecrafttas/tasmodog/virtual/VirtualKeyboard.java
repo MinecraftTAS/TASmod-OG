@@ -53,21 +53,21 @@ public class VirtualKeyboard {
 	 * the VirtualKeyEvent. Replaying works the same, but instead of listening, it hacks the LWJGL Keyboard like a Man In The Middle
 	 */
 
-	public final static Queue<VirtualKeyEvent> keyEventsForTick = new LinkedList<>();
-	public static VirtualKeyEvent currentKeyEvent;
+	public static Queue<VirtualKeyEvent> keyEventsForTick = new LinkedList<>();
+	private static VirtualKeyEvent currentKeyEvent;
 	public static boolean hack = false;
 
 	public static boolean listen = false;
-	public static VirtualKeyEvent currentlyListening;
+	private static VirtualKeyEvent currentlyListening;
 
-	public static boolean isKey61Down;
-	public static boolean isKey60Down;
-	public static boolean isKey54Down;
-	public static boolean isKey42Down;
-	public static boolean isKey37Down;
-	public static boolean isKey51Down;
-	public static boolean isKey52Down;
-	public static boolean isKey65Down;
+	private static boolean isKey61Down;
+	private static boolean isKey60Down;
+	private static boolean isKey54Down;
+	private static boolean isKey42Down;
+	private static boolean isKey37Down;
+	private static boolean isKey51Down;
+	private static boolean isKey52Down;
+	private static boolean isKey65Down;
 
 	private static void updateKeyboard() {
 		int key = getEventKey();
