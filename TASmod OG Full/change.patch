@@ -1,17 +1,27 @@
 ==========> Minecraft.java
 --- Minecraft.java
 +++ Minecraft.java
-@@ -360,0 +360,1 @@
-+            downloadResourcesThread.join(); // wait until sounds are downloading before launching
-@@ -602,1 +603,1 @@
+@@ -129,1 +129,1 @@
+-    private static Minecraft theMinecraft;
++    public static Minecraft theMinecraft;
+@@ -136,1 +136,1 @@
+-    private Timer timer;
++    public Timer timer;
+@@ -164,1 +164,1 @@
+-    protected MinecraftApplet mcApplet;
++    public MinecraftApplet mcApplet;
+@@ -180,1 +180,1 @@
+-    private static File minecraftDir = null;
++    public static File minecraftDir = null;
+@@ -602,1 +602,1 @@
 -                System.exit(0);
 +//                System.exit(0);
-@@ -681,0 +682,1 @@
+@@ -681,0 +681,1 @@
 +        net.tasmod.TASmod.render(); // Call TASmod Render/Gameloop Tick before runTick() to be able to hijack that
-@@ -712,1 +714,1 @@
+@@ -712,1 +713,1 @@
 -        if(!Keyboard.isKeyDown(65))
 +        if(!net.tasmod.virtual.VirtualKeyboard.isKeyDown(65))
-@@ -734,4 +736,4 @@
+@@ -734,4 +735,4 @@
 -        if(!Display.isActive() && fullscreen)
 -        {
 -            toggleFullscreen();
@@ -20,13 +30,13 @@
 +//        {
 +//            toggleFullscreen();
 +//        }
-@@ -755,1 +757,1 @@
+@@ -755,1 +756,1 @@
 -        if(Keyboard.isKeyDown(65))
 +        if(net.tasmod.virtual.VirtualKeyboard.isKeyDown(65))
-@@ -813,1 +815,1 @@
+@@ -813,1 +814,1 @@
 -        if(Keyboard.isKeyDown(60))
 +        if(net.tasmod.virtual.VirtualKeyboard.isKey60Down)
-@@ -1023,4 +1025,4 @@
+@@ -1023,4 +1024,4 @@
 -        if(!Display.isActive())
 -        {
 -            return;
@@ -35,7 +45,7 @@
 +//        {
 +//            return;
 +//        }
-@@ -1316,0 +1318,24 @@
+@@ -1316,0 +1317,24 @@
 +        // Moved from EntityRenderer.java / basically just hooked up.
 +        if(inGameHasFocus) {
 +            
@@ -60,104 +70,86 @@
 +        net.tasmod.Utils.lastX = net.tasmod.virtual.VirtualMouse.getEventX();
 +        net.tasmod.Utils.lastY = net.tasmod.virtual.VirtualMouse.getEventY();
 +        // End-Edit
-@@ -1321,1 +1347,1 @@
+@@ -1321,1 +1346,1 @@
 -                if(!Mouse.next())
 +                if(!net.tasmod.virtual.VirtualMouse.next())
-@@ -1325,2 +1351,2 @@
+@@ -1325,2 +1350,2 @@
 -                KeyBinding.setKeyBindState(Mouse.getEventButton() - 100, Mouse.getEventButtonState());
 -                if(Mouse.getEventButtonState())
 +                KeyBinding.setKeyBindState(net.tasmod.virtual.VirtualMouse.getEventButton() - 100, net.tasmod.virtual.VirtualMouse.getEventButtonState());
 +                if(net.tasmod.virtual.VirtualMouse.getEventButtonState())
-@@ -1328,1 +1354,1 @@
+@@ -1328,1 +1353,1 @@
 -                    KeyBinding.onTick(Mouse.getEventButton() - 100);
 +                    KeyBinding.onTick(net.tasmod.virtual.VirtualMouse.getEventButton() - 100);
-@@ -1333,1 +1359,1 @@
+@@ -1333,1 +1358,1 @@
 -                    int i1 = Mouse.getEventDWheel();
 +                    int i1 = net.tasmod.virtual.VirtualMouse.getEventDWheel();
-@@ -1352,1 +1378,1 @@
+@@ -1352,1 +1377,1 @@
 -                        if(!inGameHasFocus && Mouse.getEventButtonState())
 +                        if(!inGameHasFocus && net.tasmod.virtual.VirtualMouse.getEventButtonState())
-@@ -1370,1 +1396,1 @@
+@@ -1370,1 +1395,1 @@
 -                if(!Keyboard.next())
 +                if(!net.tasmod.virtual.VirtualKeyboard.next())
-@@ -1374,2 +1400,2 @@
+@@ -1374,2 +1399,2 @@
 -                KeyBinding.setKeyBindState(Keyboard.getEventKey(), Keyboard.getEventKeyState());
 -                if(Keyboard.getEventKeyState())
 +                KeyBinding.setKeyBindState(net.tasmod.virtual.VirtualKeyboard.getEventKey(), net.tasmod.virtual.VirtualKeyboard.getEventKeyState());
 +                if(net.tasmod.virtual.VirtualKeyboard.getEventKeyState())
-@@ -1377,1 +1403,1 @@
+@@ -1377,1 +1402,1 @@
 -                    KeyBinding.onTick(Keyboard.getEventKey());
 +                    KeyBinding.onTick(net.tasmod.virtual.VirtualKeyboard.getEventKey());
-@@ -1379,1 +1405,1 @@
+@@ -1379,1 +1404,1 @@
 -                if(Keyboard.getEventKeyState())
 +                if(net.tasmod.virtual.VirtualKeyboard.getEventKeyState())
-@@ -1381,1 +1407,1 @@
+@@ -1381,1 +1406,1 @@
 -                    if(Keyboard.getEventKey() == 87)
 +                    if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 87)
-@@ -1391,1 +1417,1 @@
+@@ -1391,1 +1416,1 @@
 -                            if(Keyboard.getEventKey() == 1)
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 1)
-@@ -1395,1 +1421,1 @@
+@@ -1395,1 +1420,1 @@
 -                            if(Keyboard.getEventKey() == 31 && Keyboard.isKeyDown(61))
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 31 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1399,1 +1425,1 @@
+@@ -1399,1 +1424,1 @@
 -                            if(Keyboard.getEventKey() == 20 && Keyboard.isKeyDown(61))
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 20 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1403,1 +1429,1 @@
+@@ -1403,1 +1428,1 @@
 -                            if(Keyboard.getEventKey() == 33 && Keyboard.isKeyDown(61))
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 33 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1405,1 +1431,1 @@
+@@ -1405,1 +1430,1 @@
 -                                boolean flag = Keyboard.isKeyDown(42) | Keyboard.isKeyDown(54);
 +                                boolean flag = net.tasmod.virtual.VirtualKeyboard.isKeyDown(42) | net.tasmod.virtual.VirtualKeyboard.isKeyDown(54);
-@@ -1408,1 +1434,1 @@
+@@ -1408,1 +1433,1 @@
 -                            if(Keyboard.getEventKey() == 30 && Keyboard.isKeyDown(61))
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 30 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1412,1 +1438,1 @@
+@@ -1412,1 +1437,1 @@
 -                            if(Keyboard.getEventKey() == 59)
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 59)
-@@ -1416,1 +1442,1 @@
+@@ -1416,1 +1441,1 @@
 -                            if(Keyboard.getEventKey() == 61)
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 61)
-@@ -1420,1 +1446,1 @@
+@@ -1420,1 +1445,1 @@
 -                            if(Keyboard.getEventKey() == 63)
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 63)
-@@ -1428,1 +1454,1 @@
+@@ -1428,1 +1453,1 @@
 -                            if(Keyboard.getEventKey() == 66)
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 66)
-@@ -1435,1 +1461,1 @@
+@@ -1435,1 +1460,1 @@
 -                            if(Keyboard.getEventKey() == 2 + i)
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 2 + i)
-@@ -1443,1 +1469,1 @@
+@@ -1443,1 +1468,1 @@
 -                            if(Keyboard.getEventKey() == 11)
 +                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 11)
-@@ -1450,1 +1476,1 @@
+@@ -1450,1 +1475,1 @@
 -                                if(Keyboard.getEventKey() == 2 + j)
 +                                if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 2 + j)
-@@ -1543,0 +1569,1 @@
+@@ -1543,0 +1568,1 @@
 +        net.tasmod.TASmod.tick(); // Tick the TASmod
-@@ -1948,1 +1975,1 @@
+@@ -1948,1 +1974,1 @@
 -        Frame frame = new Frame("Minecraft");
 +        Frame frame = new net.tasmod.main.EmulatorFrame("Minecraft"); // Replace Minecrafts frame with a new one with some more stuff do it
-@@ -1952,1 +1979,0 @@
--        canvas.setPreferredSize(new Dimension(854, 480));
-@@ -1955,1 +1981,12 @@
--        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, 854, 480, flag, frame);
-+        frame.setVisible(true);
-+        try {
-+        	while (!net.tasmod.main.Start.shouldStart) {
-+        		Thread.sleep(20);
-+        	}
-+		} catch (InterruptedException e) {
-+			e.printStackTrace();
-+		}
-+        int width = 1920;
-+        int height = 1080;
-+        canvas.setPreferredSize(new Dimension(width, height));
-+        MinecraftImpl minecraftimpl = new MinecraftImpl(frame, canvas, null, width, height, flag, frame);
-@@ -1958,0 +1995,1 @@
+@@ -1958,0 +1983,1 @@
 +        net.tasmod.TASmod.mcThread = thread;
-@@ -1971,1 +2009,0 @@
--        frame.setVisible(true);
 ==========> ChunkProvider.java
 --- ChunkProvider.java
 +++ ChunkProvider.java

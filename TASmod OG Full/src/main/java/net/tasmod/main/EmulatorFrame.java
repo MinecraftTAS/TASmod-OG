@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -67,12 +66,12 @@ public class EmulatorFrame extends Frame {
 		
 		origCursor = getCursor();
 		window = this;
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		getInsets().set(0, 0, 0, 0);
-		addWindowStateListener(l -> {
-			if (l.getOldState() == JFrame.MAXIMIZED_BOTH)
-				setState(JFrame.MAXIMIZED_BOTH);
-		});
+//		addWindowStateListener(l -> {
+//			if (l.getOldState() == JFrame.MAXIMIZED_BOTH)
+//				setState(JFrame.MAXIMIZED_BOTH);
+//		});
 		addWindowListener(new WindowListener() {
 			@Override public void windowOpened(WindowEvent e) {}
 			@Override public void windowIconified(WindowEvent e) {}
@@ -198,7 +197,7 @@ public class EmulatorFrame extends Frame {
 
 	@Override
 	public void setPreferredSize(Dimension preferredSize) {
-		super.setPreferredSize(new Dimension(1920, 1080 - 51));
+		super.setPreferredSize(new Dimension(854, 480 - 51));
 	}
 	
 	/**
@@ -210,8 +209,8 @@ public class EmulatorFrame extends Frame {
 			final Panel p = new Panel(null);
 			gamePanel = p;
 			mcCanvas = comp;
-			comp.setBounds(0, -21, 1920, 1080);
-			p.setBounds(0, -21, 1920, 1080);
+			comp.setBounds(0, 0, 854, 480);
+			p.setBounds(0, 0, 854, 480);
 			p.add(comp);
 			super.add(p, BorderLayout.CENTER);
 			super.add(bar, BorderLayout.NORTH);
@@ -220,4 +219,19 @@ public class EmulatorFrame extends Frame {
 		super.add(comp, constraints);
 	}
 
+	@Override
+	public void setLocationRelativeTo(Component c) {
+		super.setLocationRelativeTo(c);
+		
+		this.setVisible(true);
+        try {
+        	while (!net.tasmod.TASmod.isRunning) {
+        		Thread.sleep(20);
+        	}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+        this.getComponent(0).setPreferredSize(new Dimension(854, 480));
+	}
+	
 }
