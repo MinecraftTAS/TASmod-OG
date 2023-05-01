@@ -1,11 +1,10 @@
-package net.tasmod.main;
+package com.minecrafttas.tasmodog.main;
 
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 
 import net.minecraft.client.Minecraft;
-import net.tasmod.TASmod;
 
 public class Start {
 	
@@ -14,7 +13,7 @@ public class Start {
 	 * @param args Launch parameters
 	 * @throws Exception Filesystem/Internet Exception
 	 */
-	public static void main(final String[] args) throws Exception {	
+	public static void main(final String[] args) throws Exception {
 		// download natives
 		File natives = new File("natives");
 		if (!natives.exists()) {
@@ -48,11 +47,11 @@ public class Start {
 	}
 
 	/**
-	 * Start Minecraft
+	 * Setup minecraft filestructure
 	 * @param isTemp Should run in main .minecraft or temporary .minecraft folder
-	 * @throws Exception Filesystem/Internet Exception
+	 * @throws Exception Filesystem Exception
 	 */
-	public static void startGame(boolean isTemp) throws Exception {
+	public static void setupFilestructure(boolean isTemp) throws Exception {
 		// setup file structure
 		File mainMinecraft = new File(".minecraft");
 		if (isTemp) {
@@ -70,9 +69,6 @@ public class Start {
 			Minecraft.minecraftDir = mainMinecraft;
 			mainMinecraft.mkdirs();
 		}
-		
-		// launch game
-		TASmod.isRunning = true;
 	}
 
 }

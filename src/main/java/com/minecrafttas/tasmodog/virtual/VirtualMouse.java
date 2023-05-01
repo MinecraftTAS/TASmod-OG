@@ -1,22 +1,23 @@
-package net.tasmod.virtual;
+package com.minecrafttas.tasmodog.virtual;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 import org.lwjgl.input.Mouse;
 
-import net.tasmod.TASmod;
+import com.minecrafttas.tasmodog.TASmod;
+import com.minecrafttas.tasmodog.container.Recording;
 
 /**
  * This is an interface of the Mouse Class.
  * This File records or manipulates these Calls
- * @author ScribbleLP, Pancake
+ * @author Scribble, Pancake
  */
 public class VirtualMouse {
 
 	/**
 	 * Internal Mouse Event used to save the Mouse to a File
-	 * @author ScribbleLP
+	 * @author Scribble
 	 */
 	public static final class VirtualMouseEvent {
 
@@ -88,7 +89,8 @@ public class VirtualMouse {
 	public final static boolean next() {
 		if (listen)
 			if (currentlyListening != null) {
-				TASmod.mouseTick(currentlyListening);
+				if (TASmod.instance.getInputContainer() instanceof Recording)
+					((Recording) TASmod.instance.getInputContainer()).mouseTick(currentlyListening);
 				currentlyListening = new VirtualMouseEvent(currentlyListening.posX, currentlyListening.posY, false, 0, -1, false, 0, 0);
 			} else
 				currentlyListening = new VirtualMouseEvent(-1, -1, false, 0, -1, false, 0, 0);

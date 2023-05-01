@@ -1,4 +1,4 @@
-package net.tasmod.main;
+package com.minecrafttas.tasmodog.main;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -9,8 +9,6 @@ import java.awt.Frame;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,18 +21,15 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-import net.tasmod.TASmod;
-import net.tasmod.recorder.Recorder;
-import net.tasmod.replayer.Replayer;
-import net.tasmod.tools.TickrateChanger;
+import com.minecrafttas.tasmodog.TASmod;
+import com.minecrafttas.tasmodog.container.Recording;
+import com.minecrafttas.tasmodog.container.Playback;
 
 /**
  * A new Frame for Minecraft with some more gui stuff do it
  * @author Pancake
  */
 public class EmulatorFrame extends Frame {
-
-	private static final long serialVersionUID = 3759537254483840058L;
 
 	/** The Singleton of this File */
 	public static EmulatorFrame window;
@@ -66,25 +61,7 @@ public class EmulatorFrame extends Frame {
 		
 		origCursor = getCursor();
 		window = this;
-//		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		getInsets().set(0, 0, 0, 0);
-//		addWindowStateListener(l -> {
-//			if (l.getOldState() == JFrame.MAXIMIZED_BOTH)
-//				setState(JFrame.MAXIMIZED_BOTH);
-//		});
-		addWindowListener(new WindowListener() {
-			@Override public void windowOpened(WindowEvent e) {}
-			@Override public void windowIconified(WindowEvent e) {}
-			@Override public void windowDeiconified(WindowEvent e) {}
-			@Override public void windowDeactivated(WindowEvent e) {}
-			@Override public void windowClosed(WindowEvent e) {}
-			@Override public void windowActivated(WindowEvent e) {}
-			@Override 
-			public void windowClosing(WindowEvent e) {
-				if (TASmod.mc == null || !TASmod.mc.running || TickrateChanger.isTickAdvance)
-					System.exit(0);
-			}
-		});
 		bar = new JMenuBar();
 		// create jmenubar
 		final JMenu file = new JMenu("File");
@@ -95,14 +72,14 @@ public class EmulatorFrame extends Frame {
 		final JMenuItem wiki = new JMenuItem("Wiki");	
 		source.addActionListener(e -> {
 			try {
-				if (Desktop.isDesktopSupported()) Desktop.getDesktop().browse(new URI("https://github.com/MCPfannkuchenYT/TASmod-OG"));
+				if (Desktop.isDesktopSupported()) Desktop.getDesktop().browse(new URI("https://github.com/MinecraftTAS/TASmod-OG"));
 			} catch (IOException | URISyntaxException e1) {
 				e1.printStackTrace();
 			}
 		});
 		wiki.addActionListener(e -> {
 			try {
-				if (Desktop.isDesktopSupported()) Desktop.getDesktop().browse(new URI("https://github.com/MCPfannkuchenYT/TASmod-OG/wiki"));
+				if (Desktop.isDesktopSupported()) Desktop.getDesktop().browse(new URI("https://github.com/MinecraftTAS/TASmod-OG/wiki"));
 			} catch (IOException | URISyntaxException e1) {
 				e1.printStackTrace();
 			}
@@ -114,16 +91,16 @@ public class EmulatorFrame extends Frame {
 		final JMenuItem slower = new JMenuItem("Slower");
 		final JMenuItem pause = new JMenuItem("Pause/Resume");
 		faster.addActionListener(e -> {
-			if (TASmod.isRunning && !TickrateChanger.isTickAdvance)
-				TickrateChanger.faster();
+			if (TASmod.instance != null)
+				TASmod.instance.getTickrateChanger().increaseGamespeed();
 		});
 		slower.addActionListener(e -> {
-			if (TASmod.isRunning && !TickrateChanger.isTickAdvance)
-				TickrateChanger.slower();
+			if (TASmod.instance != null)
+				TASmod.instance.getTickrateChanger().decreaseGamespeed();
 		});
 		pause.addActionListener(e -> {
-			if (TASmod.isRunning)
-				TickrateChanger.toggleTickadvance();
+			if (TASmod.instance != null)
+				TASmod.instance.getTickrateChanger().toggleTickadvance();
 		});
 		game.add(faster);
 		game.add(slower);
@@ -134,39 +111,36 @@ public class EmulatorFrame extends Frame {
 		save = new JMenuItem("Save TAS");
 		save.setEnabled(false);
 		final JMenuItem start = new JMenuItem("Launch normally");
-		save.addActionListener(e -> {
-			if (TASmod.recording != null) {
-				if (TASmod.mc.running) {
-					TASmod.wait = true;
-				} else {
-					Recorder.saveTAS();
-				}
-			}
-		});
+		save.addActionListener(e -> ((Recording) TASmod.instance.getInputContainer()).interactiveSave());
 		load.addActionListener(e -> {
 			final String out = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
 			if (out == null) return;
+			
 			final File tasFile = new File(TASmod.TAS_DIR, out + ".tas");
 			String tick = JOptionPane.showInputDialog("Enter tick to rerecord at (leave empty for full playback): ", "");
 			if (tick == null) return;
-			if (!tick.isEmpty()) {
-				TASmod.pauseAt = Integer.parseInt(tick);
-			}
+			
 			try {
-				TASmod.playback = new Replayer(tasFile);
-				Start.startGame(true);
-			} catch (final Exception e1) {
+				Start.setupFilestructure(true);
+
+				if (!tick.isEmpty())
+					TASmod.instance = new TASmod(new Playback(tasFile, Integer.parseInt(tick)));
+				else
+					TASmod.instance = new TASmod(new Playback(tasFile, -1));
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			TASmod.startPlayback = true;
+			
+			
 			create.setEnabled(false);
 			start.setEnabled(false);
 			load.setEnabled(false);
 		});
 		create.addActionListener(e -> {
 			try {
-				Start.startGame(true);
-				TASmod.startRecording = true;
+				Start.setupFilestructure(true);
+				TASmod.instance = new TASmod(new Recording());
+
 				create.setEnabled(false);
 				save.setEnabled(true);
 				start.setEnabled(false);
@@ -177,7 +151,8 @@ public class EmulatorFrame extends Frame {
 		});
 		start.addActionListener(e -> {
 			try {
-				Start.startGame(false);
+				Start.setupFilestructure(false);
+				TASmod.instance = new TASmod(null);
 				start.setEnabled(false);
 				create.setEnabled(false);
 				load.setEnabled(false);
@@ -219,19 +194,17 @@ public class EmulatorFrame extends Frame {
 		super.add(comp, constraints);
 	}
 
+	/**
+	 * Wait until the game is supposed to launch before returning this method and effectively launching the game.
+	 */
 	@Override
 	public void setLocationRelativeTo(Component c) {
 		super.setLocationRelativeTo(c);
-		
 		this.setVisible(true);
-        try {
-        	while (!net.tasmod.TASmod.isRunning) {
-        		Thread.sleep(20);
-        	}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-        this.getComponent(0).setPreferredSize(new Dimension(854, 480));
+		this.getComponent(0).setPreferredSize(new Dimension(854, 480));
+		
+       	while (TASmod.instance == null)
+       		Thread.yield();
 	}
 	
 }

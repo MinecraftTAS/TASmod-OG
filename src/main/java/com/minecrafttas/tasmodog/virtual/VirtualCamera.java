@@ -1,6 +1,6 @@
-package net.tasmod.virtual;
+package com.minecrafttas.tasmodog.virtual;
 
-public final class VirtualCamera {
+public class VirtualCamera {
 
 	// pitch,yaw of fake camera
 	public static float rotationPitch, rotationYaw;

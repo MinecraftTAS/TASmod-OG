@@ -1,27 +1,32 @@
 ==========> Minecraft.java
 --- Minecraft.java
 +++ Minecraft.java
-@@ -129,1 +129,1 @@
+@@ -121,0 +121,2 @@
++import com.minecrafttas.tasmodog.container.Playback;
++
+@@ -129,1 +131,1 @@
 -    private static Minecraft theMinecraft;
 +    public static Minecraft theMinecraft;
-@@ -136,1 +136,1 @@
+@@ -136,1 +138,1 @@
 -    private Timer timer;
 +    public Timer timer;
-@@ -164,1 +164,1 @@
+@@ -164,1 +166,1 @@
 -    protected MinecraftApplet mcApplet;
 +    public MinecraftApplet mcApplet;
-@@ -180,1 +180,1 @@
+@@ -180,1 +182,1 @@
 -    private static File minecraftDir = null;
 +    public static File minecraftDir = null;
-@@ -602,1 +602,1 @@
+@@ -602,1 +604,1 @@
 -                System.exit(0);
 +//                System.exit(0);
-@@ -681,0 +681,1 @@
-+        net.tasmod.TASmod.render(); // Call TASmod Render/Gameloop Tick before runTick() to be able to hijack that
-@@ -712,1 +713,1 @@
+@@ -621,0 +623,1 @@
++        com.minecrafttas.tasmodog.TASmod.instance.init(this); // initialize tasmod
+@@ -681,0 +684,1 @@
++        com.minecrafttas.tasmodog.TASmod.instance.render(); // Call TASmod Render/Gameloop Tick before runTick() to be able to hijack that
+@@ -712,1 +716,1 @@
 -        if(!Keyboard.isKeyDown(65))
-+        if(!net.tasmod.virtual.VirtualKeyboard.isKeyDown(65))
-@@ -734,4 +735,4 @@
++        if(!com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(65))
+@@ -734,4 +738,4 @@
 -        if(!Display.isActive() && fullscreen)
 -        {
 -            toggleFullscreen();
@@ -30,13 +35,13 @@
 +//        {
 +//            toggleFullscreen();
 +//        }
-@@ -755,1 +756,1 @@
+@@ -755,1 +759,1 @@
 -        if(Keyboard.isKeyDown(65))
-+        if(net.tasmod.virtual.VirtualKeyboard.isKeyDown(65))
-@@ -813,1 +814,1 @@
++        if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(65))
+@@ -813,1 +817,1 @@
 -        if(Keyboard.isKeyDown(60))
-+        if(net.tasmod.virtual.VirtualKeyboard.isKey60Down)
-@@ -1023,4 +1024,4 @@
++        if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKey60Down)
+@@ -1023,4 +1027,4 @@
 -        if(!Display.isActive())
 -        {
 -            return;
@@ -45,7 +50,7 @@
 +//        {
 +//            return;
 +//        }
-@@ -1316,0 +1317,24 @@
+@@ -1316,0 +1320,24 @@
 +        // Moved from EntityRenderer.java / basically just hooked up.
 +        if(inGameHasFocus) {
 +            
@@ -57,99 +62,97 @@
 +            thePlayer.setAngles((float) mouseHelper.deltaX * f2, (float) mouseHelper.deltaY * f2);
 +            
 +            // interpolation part 1
-+        	if (net.tasmod.TASmod.playback != null && !net.tasmod.TASmod.playback.isVisible()) {
-+        		net.tasmod.virtual.VirtualCamera.prevRotationPitch = net.tasmod.virtual.VirtualCamera.rotationPitch;
-+        		net.tasmod.virtual.VirtualCamera.prevRotationYaw = net.tasmod.virtual.VirtualCamera.rotationYaw;
++        	if (com.minecrafttas.tasmodog.TASmod.instance.getInputContainer() instanceof Playback && !((Playback) com.minecrafttas.tasmodog.TASmod.instance.getInputContainer()).isVisible()) {
++        		com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationPitch = com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationPitch;
++        		com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationYaw = com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationYaw;
 +        	} else {        		
-+        		net.tasmod.virtual.VirtualCamera.prevRotationPitch = thePlayer.prevRotationPitch;
-+        		net.tasmod.virtual.VirtualCamera.prevRotationYaw = thePlayer.prevRotationYaw;
++        		com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationPitch = thePlayer.prevRotationPitch;
++        		com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationYaw = thePlayer.prevRotationYaw;
 +        	}
-+        	net.tasmod.virtual.VirtualCamera.rotationPitch = thePlayer.rotationPitch;
-+        	net.tasmod.virtual.VirtualCamera.rotationYaw = thePlayer.rotationYaw;
++        	com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationPitch = thePlayer.rotationPitch;
++        	com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationYaw = thePlayer.rotationYaw;
 +        }
-+        net.tasmod.virtual.VirtualCamera.lastX = net.tasmod.virtual.VirtualMouse.getEventX();
-+        net.tasmod.virtual.VirtualCamera.lastY = net.tasmod.virtual.VirtualMouse.getEventY();
++        com.minecrafttas.tasmodog.virtual.VirtualCamera.lastX = com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventX();
++        com.minecrafttas.tasmodog.virtual.VirtualCamera.lastY = com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventY();
 +        // End-Edit
-@@ -1321,1 +1346,1 @@
+@@ -1321,1 +1349,1 @@
 -                if(!Mouse.next())
-+                if(!net.tasmod.virtual.VirtualMouse.next())
-@@ -1325,2 +1350,2 @@
++                if(!com.minecrafttas.tasmodog.virtual.VirtualMouse.next())
+@@ -1325,2 +1353,2 @@
 -                KeyBinding.setKeyBindState(Mouse.getEventButton() - 100, Mouse.getEventButtonState());
 -                if(Mouse.getEventButtonState())
-+                KeyBinding.setKeyBindState(net.tasmod.virtual.VirtualMouse.getEventButton() - 100, net.tasmod.virtual.VirtualMouse.getEventButtonState());
-+                if(net.tasmod.virtual.VirtualMouse.getEventButtonState())
-@@ -1328,1 +1353,1 @@
++                KeyBinding.setKeyBindState(com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButton() - 100, com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButtonState());
++                if(com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButtonState())
+@@ -1328,1 +1356,1 @@
 -                    KeyBinding.onTick(Mouse.getEventButton() - 100);
-+                    KeyBinding.onTick(net.tasmod.virtual.VirtualMouse.getEventButton() - 100);
-@@ -1333,1 +1358,1 @@
++                    KeyBinding.onTick(com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButton() - 100);
+@@ -1333,1 +1361,1 @@
 -                    int i1 = Mouse.getEventDWheel();
-+                    int i1 = net.tasmod.virtual.VirtualMouse.getEventDWheel();
-@@ -1352,1 +1377,1 @@
++                    int i1 = com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventDWheel();
+@@ -1352,1 +1380,1 @@
 -                        if(!inGameHasFocus && Mouse.getEventButtonState())
-+                        if(!inGameHasFocus && net.tasmod.virtual.VirtualMouse.getEventButtonState())
-@@ -1370,1 +1395,1 @@
++                        if(!inGameHasFocus && com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButtonState())
+@@ -1370,1 +1398,1 @@
 -                if(!Keyboard.next())
-+                if(!net.tasmod.virtual.VirtualKeyboard.next())
-@@ -1374,2 +1399,2 @@
++                if(!com.minecrafttas.tasmodog.virtual.VirtualKeyboard.next())
+@@ -1374,2 +1402,2 @@
 -                KeyBinding.setKeyBindState(Keyboard.getEventKey(), Keyboard.getEventKeyState());
 -                if(Keyboard.getEventKeyState())
-+                KeyBinding.setKeyBindState(net.tasmod.virtual.VirtualKeyboard.getEventKey(), net.tasmod.virtual.VirtualKeyboard.getEventKeyState());
-+                if(net.tasmod.virtual.VirtualKeyboard.getEventKeyState())
-@@ -1377,1 +1402,1 @@
++                KeyBinding.setKeyBindState(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey(), com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKeyState());
++                if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKeyState())
+@@ -1377,1 +1405,1 @@
 -                    KeyBinding.onTick(Keyboard.getEventKey());
-+                    KeyBinding.onTick(net.tasmod.virtual.VirtualKeyboard.getEventKey());
-@@ -1379,1 +1404,1 @@
++                    KeyBinding.onTick(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey());
+@@ -1379,1 +1407,1 @@
 -                if(Keyboard.getEventKeyState())
-+                if(net.tasmod.virtual.VirtualKeyboard.getEventKeyState())
-@@ -1381,1 +1406,1 @@
++                if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKeyState())
+@@ -1381,1 +1409,1 @@
 -                    if(Keyboard.getEventKey() == 87)
-+                    if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 87)
-@@ -1391,1 +1416,1 @@
++                    if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 87)
+@@ -1391,1 +1419,1 @@
 -                            if(Keyboard.getEventKey() == 1)
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 1)
-@@ -1395,1 +1420,1 @@
++                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 1)
+@@ -1395,1 +1423,1 @@
 -                            if(Keyboard.getEventKey() == 31 && Keyboard.isKeyDown(61))
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 31 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1399,1 +1424,1 @@
++                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 31 && com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(61))
+@@ -1399,1 +1427,1 @@
 -                            if(Keyboard.getEventKey() == 20 && Keyboard.isKeyDown(61))
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 20 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1403,1 +1428,1 @@
++                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 20 && com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(61))
+@@ -1403,1 +1431,1 @@
 -                            if(Keyboard.getEventKey() == 33 && Keyboard.isKeyDown(61))
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 33 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1405,1 +1430,1 @@
++                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 33 && com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(61))
+@@ -1405,1 +1433,1 @@
 -                                boolean flag = Keyboard.isKeyDown(42) | Keyboard.isKeyDown(54);
-+                                boolean flag = net.tasmod.virtual.VirtualKeyboard.isKeyDown(42) | net.tasmod.virtual.VirtualKeyboard.isKeyDown(54);
-@@ -1408,1 +1433,1 @@
++                                boolean flag = com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(42) | com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(54);
+@@ -1408,1 +1436,1 @@
 -                            if(Keyboard.getEventKey() == 30 && Keyboard.isKeyDown(61))
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 30 && net.tasmod.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1412,1 +1437,1 @@
++                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 30 && com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(61))
+@@ -1412,1 +1440,1 @@
 -                            if(Keyboard.getEventKey() == 59)
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 59)
-@@ -1416,1 +1441,1 @@
++                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 59)
+@@ -1416,1 +1444,1 @@
 -                            if(Keyboard.getEventKey() == 61)
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 61)
-@@ -1420,1 +1445,1 @@
++                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 61)
+@@ -1420,1 +1448,1 @@
 -                            if(Keyboard.getEventKey() == 63)
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 63)
-@@ -1428,1 +1453,1 @@
++                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 63)
+@@ -1428,1 +1456,1 @@
 -                            if(Keyboard.getEventKey() == 66)
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 66)
-@@ -1435,1 +1460,1 @@
++                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 66)
+@@ -1435,1 +1463,1 @@
 -                            if(Keyboard.getEventKey() == 2 + i)
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 2 + i)
-@@ -1443,1 +1468,1 @@
++                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 2 + i)
+@@ -1443,1 +1471,1 @@
 -                            if(Keyboard.getEventKey() == 11)
-+                            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 11)
-@@ -1450,1 +1475,1 @@
++                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 11)
+@@ -1450,1 +1478,1 @@
 -                                if(Keyboard.getEventKey() == 2 + j)
-+                                if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 2 + j)
-@@ -1543,0 +1568,1 @@
-+        net.tasmod.TASmod.tick(); // Tick the TASmod
-@@ -1948,1 +1974,1 @@
++                                if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 2 + j)
+@@ -1543,0 +1571,1 @@
++        com.minecrafttas.tasmodog.TASmod.instance.tick(); // Tick the TASmod
+@@ -1948,1 +1977,1 @@
 -        Frame frame = new Frame("Minecraft");
-+        Frame frame = new net.tasmod.main.EmulatorFrame("Minecraft"); // Replace Minecrafts frame with a new one with some more stuff do it
-@@ -1958,0 +1984,1 @@
-+        net.tasmod.TASmod.mcThread = thread;
++        Frame frame = new com.minecrafttas.tasmodog.main.EmulatorFrame("Minecraft"); // Replace Minecrafts frame with a new one with some more stuff do it
 ==========> ChunkProvider.java
 --- ChunkProvider.java
 +++ ChunkProvider.java
@@ -174,8 +177,8 @@
 +            // This Code rotates the Camera matching the Players Yaw and Pitch
 +            // For the Interpolation, this Camera will be using a custom coordinate that updates more than 20 times a second.
 +        	// ... another word from the future: What's meant by interpolation is a 60 fps camera independent from minecraft. Now there is an additional actual interpolation for rendering
-+        	GL11.glRotatef(net.tasmod.virtual.VirtualCamera.prevRotationPitch + (net.tasmod.virtual.VirtualCamera.rotationPitch - net.tasmod.virtual.VirtualCamera.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
-+        	GL11.glRotatef(net.tasmod.virtual.VirtualCamera.prevRotationYaw + (net.tasmod.virtual.VirtualCamera.rotationYaw - net.tasmod.virtual.VirtualCamera.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++        	GL11.glRotatef(com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationPitch + (com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationPitch - com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
++        	GL11.glRotatef(com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationYaw + (com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationYaw - com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
 +            // End-Edit
 @@ -682,8 +686,8 @@
 -        if(!Display.isActive())
@@ -222,28 +225,28 @@
 -                mc.thePlayer.setAngles(f3, f4 * (float)l);
 -            }
 +
-+            int dx = net.tasmod.virtual.VirtualMouse.getDX();
-+            int dy = net.tasmod.virtual.VirtualMouse.getDY();
++            int dx = com.minecrafttas.tasmodog.virtual.VirtualMouse.getDX();
++            int dy = com.minecrafttas.tasmodog.virtual.VirtualMouse.getDY();
 +            
-+            net.tasmod.virtual.VirtualCamera.setFakeAngles(dx * f2, dy * f2);
++            com.minecrafttas.tasmodog.virtual.VirtualCamera.setFakeAngles(dx * f2, dy * f2);
 +            // End-Edit
 @@ -728,2 +718,2 @@
 -        int k = (Mouse.getX() * i) / mc.displayWidth;
 -        int i1 = j - (Mouse.getY() * j) / mc.displayHeight - 1;
-+        int k = (net.tasmod.virtual.VirtualCamera.lastX * i) / mc.displayWidth;
-+        int i1 = j - (net.tasmod.virtual.VirtualCamera.lastY * j) / mc.displayHeight - 1;
++        int k = (com.minecrafttas.tasmodog.virtual.VirtualCamera.lastX * i) / mc.displayWidth;
++        int i1 = j - (com.minecrafttas.tasmodog.virtual.VirtualCamera.lastY * j) / mc.displayHeight - 1;
 ==========> GuiAchievement.java
 --- GuiAchievement.java
 +++ GuiAchievement.java
 @@ -37,1 +37,1 @@
 -        achievementTime = System.currentTimeMillis();
-+        achievementTime = net.tasmod.tools.TickrateChanger.getMilliseconds();
++        achievementTime = com.minecrafttas.tasmodog.TASmod.instance.getTickrateChanger().currentTimeMillis();
 @@ -46,1 +46,1 @@
 -        achievementTime = System.currentTimeMillis() - 2500L;
-+        achievementTime = net.tasmod.tools.TickrateChanger.getMilliseconds() - 2500L;
++        achievementTime = com.minecrafttas.tasmodog.TASmod.instance.getTickrateChanger().currentTimeMillis() - 2500L;
 @@ -78,1 +78,1 @@
 -        double d = (double)(System.currentTimeMillis() - achievementTime) / 3000D;
-+        double d = (double)(net.tasmod.tools.TickrateChanger.getMilliseconds() - achievementTime) / 3000D;
++        double d = (double)(com.minecrafttas.tasmodog.TASmod.instance.getTickrateChanger().currentTimeMillis() - achievementTime) / 3000D;
 ==========> GuiAchievements.java
 --- GuiAchievements.java
 +++ GuiAchievements.java
@@ -251,34 +254,32 @@
 -import org.lwjgl.input.Mouse;
 @@ -83,1 +82,1 @@
 -        if(Mouse.isButtonDown(0))
-+        if(net.tasmod.virtual.VirtualMouse.isButton0Down)
++        if(com.minecrafttas.tasmodog.virtual.VirtualMouse.isButton0Down)
 ==========> GuiContainer.java
 --- GuiContainer.java
 +++ GuiContainer.java
 @@ -253,1 +253,1 @@
 -                boolean flag1 = j1 != -999 && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(54));
-+                boolean flag1 = j1 != -999 && (net.tasmod.virtual.VirtualKeyboard.isKeyDown(42) || net.tasmod.virtual.VirtualKeyboard.isKeyDown(54));
++                boolean flag1 = j1 != -999 && (com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(42) || com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(54));
 ==========> GuiContainerCreative.java
 --- GuiContainerCreative.java
 +++ GuiContainerCreative.java
 @@ -144,1 +144,1 @@
 -        int i = Mouse.getEventDWheel();
-+        int i = net.tasmod.virtual.VirtualMouse.getEventDWheel();
++        int i = com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventDWheel();
 @@ -171,1 +171,1 @@
 -        boolean flag = Mouse.isButtonDown(0);
-+        boolean flag = net.tasmod.virtual.VirtualMouse.isButton0Down;
++        boolean flag = com.minecrafttas.tasmodog.virtual.VirtualMouse.isButton0Down;
 ==========> GuiIngame.java
 --- GuiIngame.java
 +++ GuiIngame.java
-@@ -79,0 +79,9 @@
+@@ -13,0 +13,2 @@
++import com.minecrafttas.tasmodog.tools.InfoHud;
++
+@@ -79,0 +81,4 @@
 +        // Render TAS Stuff here. Does not have any effect on minecraft.
-+        if (mc.theWorld != null) {
-+            if (mc.currentScreen != null) {
-+                if (mc.currentScreen.getClass().getSimpleName().contains("InfoHud")) net.tasmod.TASmod.infoHud.drawHud();
-+            } else {
-+                net.tasmod.TASmod.infoHud.drawHud();
-+            }
-+        }
++        if (((this.mc.currentScreen instanceof InfoHud) || (this.mc.currentScreen == null)) && this.mc.theWorld != null)
++        	com.minecrafttas.tasmodog.TASmod.instance.getInfoHud().drawHud();
 +        // End-Edit
 ==========> GuiScreen.java
 --- GuiScreen.java
@@ -286,34 +287,34 @@
 @@ -119,2 +119,2 @@
 -        for(; Mouse.next(); handleMouseInput()) { }
 -        for(; Keyboard.next(); handleKeyboardInput()) { }
-+        for(; net.tasmod.virtual.VirtualMouse.next(); handleMouseInput()) { }
-+        for(; net.tasmod.virtual.VirtualKeyboard.next(); handleKeyboardInput()) { }
++        for(; com.minecrafttas.tasmodog.virtual.VirtualMouse.next(); handleMouseInput()) { }
++        for(; com.minecrafttas.tasmodog.virtual.VirtualKeyboard.next(); handleKeyboardInput()) { }
 @@ -125,1 +125,1 @@
 -        if(Mouse.getEventButtonState())
-+        if(net.tasmod.virtual.VirtualMouse.getEventButtonState())
++        if(com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButtonState())
 @@ -127,3 +127,3 @@
 -            int i = (Mouse.getEventX() * width) / mc.displayWidth;
 -            int k = height - (Mouse.getEventY() * height) / mc.displayHeight - 1;
 -            mouseClicked(i, k, Mouse.getEventButton());
-+            int i = (net.tasmod.virtual.VirtualMouse.getEventX() * width) / mc.displayWidth;
-+            int k = height - (net.tasmod.virtual.VirtualMouse.getEventY() * height) / mc.displayHeight - 1;
-+            mouseClicked(i, k, net.tasmod.virtual.VirtualMouse.getEventButton());
++            int i = (com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventX() * width) / mc.displayWidth;
++            int k = height - (com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventY() * height) / mc.displayHeight - 1;
++            mouseClicked(i, k, com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButton());
 @@ -132,3 +132,3 @@
 -            int j = (Mouse.getEventX() * width) / mc.displayWidth;
 -            int l = height - (Mouse.getEventY() * height) / mc.displayHeight - 1;
 -            mouseMovedOrUp(j, l, Mouse.getEventButton());
-+            int j = (net.tasmod.virtual.VirtualMouse.getEventX() * width) / mc.displayWidth;
-+            int l = height - (net.tasmod.virtual.VirtualMouse.getEventY() * height) / mc.displayHeight - 1;
-+            mouseMovedOrUp(j, l, net.tasmod.virtual.VirtualMouse.getEventButton());
++            int j = (com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventX() * width) / mc.displayWidth;
++            int l = height - (com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventY() * height) / mc.displayHeight - 1;
++            mouseMovedOrUp(j, l, com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButton());
 @@ -140,1 +140,1 @@
 -        if(Keyboard.getEventKeyState())
-+        if(net.tasmod.virtual.VirtualKeyboard.getEventKeyState())
++        if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKeyState())
 @@ -142,1 +142,1 @@
 -            if(Keyboard.getEventKey() == 87)
-+            if(net.tasmod.virtual.VirtualKeyboard.getEventKey() == 87)
++            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 87)
 @@ -147,1 +147,1 @@
 -            keyTyped(Keyboard.getEventCharacter(), Keyboard.getEventKey());
-+            keyTyped(net.tasmod.virtual.VirtualKeyboard.getEventCharacter(), net.tasmod.virtual.VirtualKeyboard.getEventKey());
++            keyTyped(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventCharacter(), com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey());
 ==========> GuiSlot.java
 --- GuiSlot.java
 +++ GuiSlot.java
@@ -321,7 +322,7 @@
 +
 @@ -162,1 +163,1 @@
 -        if(Mouse.isButtonDown(0))
-+        if(net.tasmod.virtual.VirtualMouse.isButtonDown(0))
++        if(com.minecrafttas.tasmodog.virtual.VirtualMouse.isButtonDown(0))
 @@ -226,1 +227,3 @@
 -            do
 +            /*
@@ -335,23 +336,23 @@
 +++ GuiSlotStats.java
 @@ -53,1 +53,1 @@
 -        if(!Mouse.isButtonDown(0))
-+        if(!net.tasmod.virtual.VirtualMouse.isButtonDown(0))
++        if(!com.minecrafttas.tasmodog.virtual.VirtualMouse.isButtonDown(0))
 ==========> MouseHelper.java
 --- MouseHelper.java
 +++ MouseHelper.java
 @@ -45,1 +45,1 @@
 -        Mouse.setGrabbed(true);
-+    	net.tasmod.virtual.VirtualMouse.setGrabbed(true);
++    	com.minecrafttas.tasmodog.virtual.VirtualMouse.setGrabbed(true);
 @@ -52,2 +52,2 @@
 -        Mouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
 -        Mouse.setGrabbed(false);
-+    	net.tasmod.virtual.VirtualMouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
-+    	net.tasmod.virtual.VirtualMouse.setGrabbed(false);
++    	com.minecrafttas.tasmodog.virtual.VirtualMouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
++    	com.minecrafttas.tasmodog.virtual.VirtualMouse.setGrabbed(false);
 @@ -58,2 +58,2 @@
 -        deltaX = Mouse.getDX();
 -        deltaY = Mouse.getDY();
-+        deltaX = net.tasmod.virtual.VirtualMouse.getVirtualDX();
-+        deltaY = net.tasmod.virtual.VirtualMouse.getVirtualDY();
++        deltaX = com.minecrafttas.tasmodog.virtual.VirtualMouse.getVirtualDX();
++        deltaY = com.minecrafttas.tasmodog.virtual.VirtualMouse.getVirtualDY();
 ==========> ThreadDownloadResources.java
 --- ThreadDownloadResources.java
 +++ ThreadDownloadResources.java
