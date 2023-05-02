@@ -4,9 +4,11 @@ import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 
+import javax.swing.UIManager;
+
 import net.minecraft.client.Minecraft;
 
-public class Start {
+public class Main {
 	
 	/**
 	 * Launch TASmod
@@ -40,6 +42,9 @@ public class Start {
 		// load natives
 		System.setProperty("org.lwjgl.librarypath", natives.getAbsolutePath());
 		System.setProperty("net.java.games.input.librarypath", natives.getAbsolutePath());
+		
+		// load system look and feel
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		
 		// launch game
 		Minecraft.main(new String[0]);

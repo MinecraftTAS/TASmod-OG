@@ -15,7 +15,6 @@ import org.lwjgl.input.Keyboard;
 
 import com.minecrafttas.tasmodog.KeyboardHelper;
 import com.minecrafttas.tasmodog.TASmod;
-import com.minecrafttas.tasmodog.main.EmulatorFrame;
 import com.minecrafttas.tasmodog.virtual.VirtualKeyboard;
 import com.minecrafttas.tasmodog.virtual.VirtualKeyboard.VirtualKeyEvent;
 import com.minecrafttas.tasmodog.virtual.VirtualMouse;
@@ -27,6 +26,7 @@ import com.minecrafttas.tasmodog.virtual.VirtualMouse.VirtualMouseEvent;
  */
 public class Recording implements Container {
 
+	private TASmod tasmod;
 	private File rerecord;
 
 	private Queue<String> lines = new LinkedList<>();
@@ -57,6 +57,7 @@ public class Recording implements Container {
 	 * @param tasmod TASmod instance
 	 */
 	public void init(TASmod tasmod) {
+		this.tasmod = tasmod;
 		VirtualKeyboard.listen = true;
 		VirtualMouse.listen = true;
 	}
@@ -163,7 +164,7 @@ public class Recording implements Container {
 		// end playback
 		VirtualKeyboard.listen = false;
 		VirtualMouse.listen = false;
-		EmulatorFrame.save.setEnabled(false);
+		this.tasmod.getMinecraftWindow().disableSaveButton();
 		
 		// save file
 		try {

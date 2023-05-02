@@ -152,7 +152,7 @@
 +        com.minecrafttas.tasmodog.TASmod.instance.tick(); // Tick the TASmod
 @@ -1948,1 +1978,1 @@
 -        Frame frame = new Frame("Minecraft");
-+        Frame frame = new com.minecrafttas.tasmodog.main.EmulatorFrame("Minecraft"); // replace minecraft frame with custom one
++        Frame frame = new com.minecrafttas.tasmodog.MinecraftWindow("Minecraft"); // replace minecraft frame with custom one
 ==========> ChunkProvider.java
 --- ChunkProvider.java
 +++ ChunkProvider.java
