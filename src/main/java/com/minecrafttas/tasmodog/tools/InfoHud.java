@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import com.minecrafttas.tasmodog.TASmod;
 import com.minecrafttas.tasmodog.container.Playback;
@@ -55,6 +56,7 @@ public class InfoHud extends GuiScreen {
 	private TASmod tasmod;
 	private List<Widget> widgets;
 	private Widget currentlyDragging;
+	private int offsetX, offsetY; // mouse offset between cursor and corner of item below
 	
 	/**
 	 * Initialize Info Hud
@@ -73,9 +75,6 @@ public class InfoHud extends GuiScreen {
 		this.mc = mc;
 		this.tasmod = tasmod;
 		
-		// initialize widgets
-		this.initWidgets();
-		
 		// try to load configuration
 		try {
 			this.loadConfig();
@@ -84,6 +83,8 @@ public class InfoHud extends GuiScreen {
 			e.printStackTrace();
 		}
 		
+		// initialize widgets
+		this.initWidgets();
 	}
 	
 	/**
@@ -93,10 +94,14 @@ public class InfoHud extends GuiScreen {
 	 * @return Widget below cursor
 	 */
 	public Widget identifyCursor(int mouseX, int mouseY) {
-		for (Widget widget : this.widgets)
-			if (mouseX >= widget.x && mouseX <= (widget.x + this.mc.fontRenderer.getStringWidth(widget.text())) && mouseY >= widget.y && mouseY <= (widget.y + 15))
+		for (Widget widget : this.widgets) {
+			if (mouseX >= widget.x && mouseX <= (widget.x + Math.max(this.mc.fontRenderer.getStringWidth(widget.displayName), this.mc.fontRenderer.getStringWidth(widget.text()))) && mouseY >= widget.y && mouseY <= (widget.y + 15)) {
+				this.offsetX = mouseX - widget.x;
+				this.offsetY = mouseY - widget.y;
 				return widget;
-		
+			}
+		}
+		this.offsetX = this.offsetY = -1;
 		return null;
 	}
 	
@@ -107,6 +112,9 @@ public class InfoHud extends GuiScreen {
 	@Override 
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
+		
+		if (this.currentlyDragging != null)
+			return;
 		
 		Widget widget = this.identifyCursor(mouseX, mouseY);
 		if (widget == null)
@@ -140,8 +148,8 @@ public class InfoHud extends GuiScreen {
 			return;
 		
 		if (k == -1) {
-			this.configuration.setProperty(this.currentlyDragging.shortName + "_x", (this.currentlyDragging.x = mouseX) + "");
-			this.configuration.setProperty(this.currentlyDragging.shortName + "_y", (this.currentlyDragging.y = mouseY) + "");
+			this.configuration.setProperty(this.currentlyDragging.shortName + "_x", (this.currentlyDragging.x = mouseX - this.offsetX) + "");
+			this.configuration.setProperty(this.currentlyDragging.shortName + "_y", (this.currentlyDragging.y = mouseY - this.offsetY) + "");
 		} else if (k == 0) {
 			this.currentlyDragging = null;
 			try {
@@ -169,10 +177,10 @@ public class InfoHud extends GuiScreen {
 		
 		// render widgets
 		for (Widget widget : this.widgets)
-			if (widget.visible)
-				this.drawText(widget.text(), widget.x, widget.y, widget.shouldRenderBackground);
-			else if (this.mc.currentScreen instanceof InfoHud)
-				this.drawText(widget.displayName, widget.x, widget.y, widget.shouldRenderBackground);
+			if (this.mc.currentScreen instanceof InfoHud)
+				this.drawText(widget.displayName, widget.x, widget.y, widget.shouldRenderBackground, widget.visible);
+			else if (widget.visible)
+				this.drawText(widget.text(), widget.x, widget.y, widget.shouldRenderBackground, true);
 	}
 
 	/**
@@ -205,12 +213,16 @@ public class InfoHud extends GuiScreen {
 	 * @param x X-Position
 	 * @param y Y-Position
 	 * @param rect Rect visibility
+	 * @param fullVisibility Full Visibility
 	 */
-	private void drawText(String text, int x, int y, boolean rect) {
-		if (rect)
-			drawRect(x, y, x + this.mc.fontRenderer.getStringWidth(text) + 4, y + 14, 0x80000000);
+	private void drawText(String text, int x, int y, boolean rect, boolean fullVisibility) {
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(770, 771);
 		
-		this.mc.fontRenderer.drawStringWithShadow(text, x + 2, y + 3, 0xFFFFFF);
+		if (rect)
+			this.drawRect(x, y, x + this.mc.fontRenderer.getStringWidth(text) + 4, y + 14, fullVisibility ? 0x80000000 : 0x20000000);
+		
+		this.mc.fontRenderer.drawStringWithShadow(text, x + 2, y + 3, fullVisibility ? 0xFFFFFF : 0x20FFFFFF);
 	}
 
 	/**
@@ -298,7 +310,7 @@ public class InfoHud extends GuiScreen {
 		});
 
 		// Keystrokes widget
-		this.widgets.add(new Widget("Rotation", "keystrokes") {
+		this.widgets.add(new Widget("Keystrokes", "keystrokes") {
 
 			@Override
 			public String text() {
@@ -314,6 +326,7 @@ public class InfoHud extends GuiScreen {
 
 				if (mc.gameSettings.keyBindUseItem.pressed)
 					text += "RC ";
+				
 				return text;
 			}
 
