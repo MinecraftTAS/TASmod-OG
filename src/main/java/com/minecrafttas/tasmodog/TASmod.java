@@ -5,7 +5,6 @@ import java.io.File;
 import org.lwjgl.input.Keyboard;
 
 import com.minecrafttas.tasmodog.container.Container;
-import com.minecrafttas.tasmodog.main.EmulatorFrame;
 import com.minecrafttas.tasmodog.tools.InfoHud;
 import com.minecrafttas.tasmodog.tools.TickrateChanger;
 
@@ -24,16 +23,20 @@ public final class TASmod {
 	private TickrateChanger tickrateChanger;
 	private Container inputContainer;
 	private InfoHud infoHud;
+	private MinecraftWindow minecraftWindow;
 	private Minecraft mc;
 	
 	/**
 	 * Initialize TASmod
+	 * @param inputContainer Input container
+	 * @param minecraftWindow Minecrat window
 	 */
-	public TASmod(Container inputContainer) {
+	public TASmod(Container inputContainer, MinecraftWindow minecraftWindow) {
 		instance = this;
 		this.tickrateChanger = new TickrateChanger();
 		this.inputContainer = inputContainer;
 		this.infoHud = new InfoHud();
+		this.minecraftWindow = minecraftWindow;
 	}
 	
 	/**
@@ -76,8 +79,10 @@ public final class TASmod {
 		this.tickrateChanger.tick();
 		
 		// fix cursor
-		if (this.mc.currentScreen != null) EmulatorFrame.window.setCursor(EmulatorFrame.origCursor);
-		else EmulatorFrame.window.setCursor(EmulatorFrame.blankCursor);
+		if (this.mc.currentScreen != null)
+			this.minecraftWindow.setCursor(MinecraftWindow.DEFAULT_CURSOR);
+		else
+			this.minecraftWindow.setCursor(MinecraftWindow.BLANK_CURSOR);
 	}
 	
 	/**
@@ -85,6 +90,13 @@ public final class TASmod {
 	 */
 	public void render() {
 		this.tickrateChanger.render();
+	}
+	
+	/**
+	 * Update current input container
+	 */
+	public void updateInputContainer(Container inputContainer) {
+		this.inputContainer = inputContainer;
 	}
 	
 	/**
@@ -112,10 +124,11 @@ public final class TASmod {
 	}
 
 	/**
-	 * Update current input container
+	 * Get Minecraft Window instance
+	 * @return Minecraft Window instance
 	 */
-	public void updateInputContainer(Container inputContainer) {
-		this.inputContainer = inputContainer;
+	public MinecraftWindow getMinecraftWindow() {
+		return this.minecraftWindow;
 	}
-
+	
 }

@@ -12,7 +12,6 @@ import org.lwjgl.input.Keyboard;
 
 import com.minecrafttas.tasmodog.KeyboardHelper;
 import com.minecrafttas.tasmodog.TASmod;
-import com.minecrafttas.tasmodog.main.EmulatorFrame;
 import com.minecrafttas.tasmodog.virtual.VirtualKeyboard;
 import com.minecrafttas.tasmodog.virtual.VirtualKeyboard.VirtualKeyEvent;
 import com.minecrafttas.tasmodog.virtual.VirtualMouse;
@@ -28,16 +27,13 @@ public class Playback implements Container {
 	private BufferedReader reader;
 	private File file;
 	private int currentTick;
-	private int recordFrom;
 
 	/**
 	 * Initialize Playback
-	 * @param recordFrom Tick to start recording from 
 	 * @throws IOException Filesystem exception
 	 */
-	public Playback(final File name, int recordFrom) throws Exception {
+	public Playback(final File name) throws Exception {
 		this.file = name;
-		this.recordFrom = recordFrom;
 		this.reader = new BufferedReader(new FileReader(this.file));
 	}
 
@@ -63,11 +59,11 @@ public class Playback implements Container {
 		this.currentTick++;
 		
 		// switch to recording if requested
-		if (this.recordFrom == this.currentTick || KeyboardHelper.isKeyPress(Keyboard.KEY_F12)) {
+		if (KeyboardHelper.isKeyPress(Keyboard.KEY_F12)) {
 			this.tasmod.getTickrateChanger().updateGamespeed(0f);
 			VirtualKeyboard.hack = VirtualMouse.hack = false;
 			this.tasmod.updateInputContainer(new Recording(this.currentTick, this.file));
-			EmulatorFrame.save.setEnabled(true);
+			this.tasmod.getMinecraftWindow().enableSaveButton();
 			this.tasmod.getInputContainer().init(this.tasmod);
 		}
 	}
