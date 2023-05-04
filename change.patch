@@ -13,17 +13,19 @@
 @@ -180,1 +180,1 @@
 -    private static File minecraftDir = null;
 +    public static File minecraftDir = null;
-@@ -602,1 +602,1 @@
+@@ -566,0 +566,1 @@
++    	if (this.fullscreen) this.toggleFullscreen(); // disable fullscreen before exiting
+@@ -602,1 +603,1 @@
 -                System.exit(0);
 +//                System.exit(0); // don't exit game after closing
-@@ -621,0 +621,1 @@
+@@ -621,0 +622,1 @@
 +        com.minecrafttas.tasmodog.TASmod.instance.init(this); // initialize tasmod
-@@ -681,0 +682,1 @@
+@@ -681,0 +683,1 @@
 +        com.minecrafttas.tasmodog.TASmod.instance.render(); // render tasmod
-@@ -712,1 +714,1 @@
+@@ -712,1 +715,1 @@
 -        if(!Keyboard.isKeyDown(65))
 +        if(!com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(65))
-@@ -734,4 +736,6 @@
+@@ -734,4 +737,6 @@
 -        if(!Display.isActive() && fullscreen)
 -        {
 -            toggleFullscreen();
@@ -34,13 +36,13 @@
 +        //    toggleFullscreen();
 +        //}
 +        // End-Edit
-@@ -755,1 +759,1 @@
+@@ -755,1 +760,1 @@
 -        if(Keyboard.isKeyDown(65))
 +        if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(65))
-@@ -813,1 +817,1 @@
+@@ -813,1 +818,1 @@
 -        if(Keyboard.isKeyDown(60))
 +        if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(60))
-@@ -1023,4 +1027,6 @@
+@@ -1023,4 +1028,6 @@
 -        if(!Display.isActive())
 -        {
 -            return;
@@ -51,7 +53,10 @@
 +        //    return;
 +        //}
 +    	// End-Edit
-@@ -1316,0 +1322,23 @@
+@@ -1211,1 +1218,1 @@
+-            Display.setFullscreen(fullscreen);
++            com.minecrafttas.tasmodog.TASmod.instance.getMinecraftWindow().toggleFullscreen(this.fullscreen); // toggle fullscreen on the frame instead of the display
+@@ -1316,0 +1323,23 @@
 +        // Moved from EntityRenderer.java / hooked up to tick loop
 +        if(inGameHasFocus) {
 +            
@@ -75,82 +80,82 @@
 +        com.minecrafttas.tasmodog.virtual.VirtualCamera.lastX = com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventX();
 +        com.minecrafttas.tasmodog.virtual.VirtualCamera.lastY = com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventY();
 +        // End-Edit
-@@ -1321,1 +1350,1 @@
+@@ -1321,1 +1351,1 @@
 -                if(!Mouse.next())
 +                if(!com.minecrafttas.tasmodog.virtual.VirtualMouse.next())
-@@ -1325,2 +1354,2 @@
+@@ -1325,2 +1355,2 @@
 -                KeyBinding.setKeyBindState(Mouse.getEventButton() - 100, Mouse.getEventButtonState());
 -                if(Mouse.getEventButtonState())
 +                KeyBinding.setKeyBindState(com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButton() - 100, com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButtonState());
 +                if(com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButtonState())
-@@ -1328,1 +1357,1 @@
+@@ -1328,1 +1358,1 @@
 -                    KeyBinding.onTick(Mouse.getEventButton() - 100);
 +                    KeyBinding.onTick(com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButton() - 100);
-@@ -1333,1 +1362,1 @@
+@@ -1333,1 +1363,1 @@
 -                    int i1 = Mouse.getEventDWheel();
 +                    int i1 = com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventDWheel();
-@@ -1352,1 +1381,1 @@
+@@ -1352,1 +1382,1 @@
 -                        if(!inGameHasFocus && Mouse.getEventButtonState())
 +                        if(!inGameHasFocus && com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventButtonState())
-@@ -1370,1 +1399,1 @@
+@@ -1370,1 +1400,1 @@
 -                if(!Keyboard.next())
 +                if(!com.minecrafttas.tasmodog.virtual.VirtualKeyboard.next())
-@@ -1374,2 +1403,2 @@
+@@ -1374,2 +1404,2 @@
 -                KeyBinding.setKeyBindState(Keyboard.getEventKey(), Keyboard.getEventKeyState());
 -                if(Keyboard.getEventKeyState())
 +                KeyBinding.setKeyBindState(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey(), com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKeyState());
 +                if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKeyState())
-@@ -1377,1 +1406,1 @@
+@@ -1377,1 +1407,1 @@
 -                    KeyBinding.onTick(Keyboard.getEventKey());
 +                    KeyBinding.onTick(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey());
-@@ -1379,1 +1408,1 @@
+@@ -1379,1 +1409,1 @@
 -                if(Keyboard.getEventKeyState())
 +                if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKeyState())
-@@ -1381,1 +1410,1 @@
+@@ -1381,1 +1411,1 @@
 -                    if(Keyboard.getEventKey() == 87)
 +                    if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 87)
-@@ -1391,1 +1420,1 @@
+@@ -1391,1 +1421,1 @@
 -                            if(Keyboard.getEventKey() == 1)
 +                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 1)
-@@ -1395,1 +1424,1 @@
+@@ -1395,1 +1425,1 @@
 -                            if(Keyboard.getEventKey() == 31 && Keyboard.isKeyDown(61))
 +                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 31 && com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1399,1 +1428,1 @@
+@@ -1399,1 +1429,1 @@
 -                            if(Keyboard.getEventKey() == 20 && Keyboard.isKeyDown(61))
 +                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 20 && com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1403,1 +1432,1 @@
+@@ -1403,1 +1433,1 @@
 -                            if(Keyboard.getEventKey() == 33 && Keyboard.isKeyDown(61))
 +                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 33 && com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1405,1 +1434,1 @@
+@@ -1405,1 +1435,1 @@
 -                                boolean flag = Keyboard.isKeyDown(42) | Keyboard.isKeyDown(54);
 +                                boolean flag = com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(42) | com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(54);
-@@ -1408,1 +1437,1 @@
+@@ -1408,1 +1438,1 @@
 -                            if(Keyboard.getEventKey() == 30 && Keyboard.isKeyDown(61))
 +                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 30 && com.minecrafttas.tasmodog.virtual.VirtualKeyboard.isKeyDown(61))
-@@ -1412,1 +1441,1 @@
+@@ -1412,1 +1442,1 @@
 -                            if(Keyboard.getEventKey() == 59)
 +                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 59)
-@@ -1416,1 +1445,1 @@
+@@ -1416,1 +1446,1 @@
 -                            if(Keyboard.getEventKey() == 61)
 +                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 61)
-@@ -1420,1 +1449,1 @@
+@@ -1420,1 +1450,1 @@
 -                            if(Keyboard.getEventKey() == 63)
 +                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 63)
-@@ -1428,1 +1457,1 @@
+@@ -1428,1 +1458,1 @@
 -                            if(Keyboard.getEventKey() == 66)
 +                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 66)
-@@ -1435,1 +1464,1 @@
+@@ -1435,1 +1465,1 @@
 -                            if(Keyboard.getEventKey() == 2 + i)
 +                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 2 + i)
-@@ -1443,1 +1472,1 @@
+@@ -1443,1 +1473,1 @@
 -                            if(Keyboard.getEventKey() == 11)
 +                            if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 11)
-@@ -1450,1 +1479,1 @@
+@@ -1450,1 +1480,1 @@
 -                                if(Keyboard.getEventKey() == 2 + j)
 +                                if(com.minecrafttas.tasmodog.virtual.VirtualKeyboard.getEventKey() == 2 + j)
-@@ -1543,0 +1572,1 @@
+@@ -1543,0 +1573,1 @@
 +        com.minecrafttas.tasmodog.TASmod.instance.tick(); // Tick the TASmod
-@@ -1948,1 +1978,1 @@
+@@ -1948,1 +1979,1 @@
 -        Frame frame = new Frame("Minecraft");
 +        Frame frame = new com.minecrafttas.tasmodog.MinecraftWindow("Minecraft"); // replace minecraft frame with custom one
 ==========> ChunkProvider.java
