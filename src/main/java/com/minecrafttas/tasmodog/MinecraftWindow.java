@@ -1,6 +1,7 @@
 package com.minecrafttas.tasmodog;
 
 import java.awt.BorderLayout;
+import java.awt.Canvas;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -18,6 +19,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
 
 import com.minecrafttas.tasmodog.container.Playback;
 import com.minecrafttas.tasmodog.container.Recording;
@@ -38,6 +42,10 @@ public class MinecraftWindow extends Frame {
 	private JMenuItem openSourceItem, openWikiItem;
 	private JMenuItem increaseGamespeedItem, decreaseGamespeedItem, toggleTickadvanceItem;
 	private JMenuItem loadItem, createItem, saveItem, launchItem;
+
+	// screen for fullscreen
+	private Frame fullscreenFrame;
+	private Canvas fullscreenCanvas;
 	
 	/**
 	 * Initialize Minecraft Window
@@ -45,8 +53,15 @@ public class MinecraftWindow extends Frame {
 	 */
 	public MinecraftWindow(String title) {
 		super(title);
-		// remove insets
 		this.getInsets().set(0, 0, 0, 0);
+		this.setResizable(false);
+		
+		// create fullscreen frame
+		this.fullscreenFrame = new Frame(title);
+		this.fullscreenFrame.setUndecorated(true);
+		this.fullscreenFrame.setExtendedState(MAXIMIZED_BOTH);
+		this.fullscreenCanvas = new Canvas();
+		this.fullscreenFrame.add(this.fullscreenCanvas);
 		
 		// create menus
 		this.fileMenu = new JMenu("File");
@@ -207,6 +222,22 @@ public class MinecraftWindow extends Frame {
 	 */
 	public void enableSaveButton() {
 		this.saveItem.setEnabled(true);
+	}
+	
+	/**
+	 * Toggle fullscreen
+	 * @param fullscreen Fullscreen state
+	 * @throws LWJGLException LWJGL Exception
+	 */
+	public void toggleFullscreen(boolean fullscreen) throws LWJGLException {
+		this.setVisible(!fullscreen);
+		this.fullscreenFrame.setVisible(fullscreen);
+		
+		if (fullscreen) {
+			Display.setParent(this.fullscreenCanvas);
+		} else {
+			Display.setParent((Canvas) ((Panel) this.getComponent(0)).getComponent(0));
+		}
 	}
 	
 }
