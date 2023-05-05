@@ -240,4 +240,10 @@ public class MinecraftWindow extends Frame {
 		}
 	}
 	
+	@Override
+	public void setCursor(Cursor cursor) {
+		this.fullscreenFrame.setCursor(cursor);
+		super.setCursor(cursor);
+	}
+	
 }
