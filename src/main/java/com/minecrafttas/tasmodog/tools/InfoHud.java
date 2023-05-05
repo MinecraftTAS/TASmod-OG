@@ -20,6 +20,7 @@ import net.minecraft.src.KeyBinding;
 
 /**
  * Customizable info hud/overlay
+ * @author Pancake
  */
 public class InfoHud extends GuiScreen {
 

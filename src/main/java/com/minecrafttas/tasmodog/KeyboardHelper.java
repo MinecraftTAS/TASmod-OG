@@ -6,6 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 /**
  * Keyboard helper for keybinds
+ * @author Pancake
  */
 public class KeyboardHelper {
 
