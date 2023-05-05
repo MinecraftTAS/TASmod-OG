@@ -216,13 +216,11 @@ public class InfoHud extends GuiScreen {
 	 * @param fullVisibility Full Visibility
 	 */
 	private void drawText(String text, int x, int y, boolean rect, boolean fullVisibility) {
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(770, 771);
-		
 		if (rect)
-			this.drawRect(x, y, x + this.mc.fontRenderer.getStringWidth(text) + 4, y + 14, fullVisibility ? 0x80000000 : 0x20000000);
-		
-		this.mc.fontRenderer.drawStringWithShadow(text, x + 2, y + 3, fullVisibility ? 0xFFFFFF : 0x20FFFFFF);
+			this.drawRect(x, y, x + this.mc.fontRenderer.getStringWidth(text) + 4, y + 14, fullVisibility ? 0x80000000 : 0x40000000);
+
+		GL11.glEnable(GL11.GL_BLEND);
+		this.mc.fontRenderer.drawStringWithShadow(text, x + 2, y + 3, fullVisibility ? 0xFFFFFF : 0x40FFFFFF);
 	}
 
 	/**
@@ -234,7 +232,7 @@ public class InfoHud extends GuiScreen {
 
 			@Override
 			public String text() {
-				return String.format("Gamespeed: %f", mc.timer.timerSpeed);
+				return String.format("Gamespeed: %.2f", mc.timer.timerSpeed);
 			}
 
 		});
@@ -318,7 +316,7 @@ public class InfoHud extends GuiScreen {
 				String key;
 
 				for (KeyBinding binds : mc.gameSettings.keyBindings)
-					if (binds.pressed && (key = Keyboard.getKeyName(binds.keyCode)) != null) 
+					if (binds.pressed && (key = ((binds.keyCode >= 0 && binds.keyCode < 256) ? Keyboard.getKeyName(binds.keyCode) : null)) != null) 
 						text += key + " ";
 
 				if (mc.gameSettings.keyBindAttack.pressed)
