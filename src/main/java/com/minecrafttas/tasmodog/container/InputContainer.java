@@ -8,12 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
 import com.minecrafttas.tasmodog.TASmod;
-import com.minecrafttas.tasmodog.virtual.VirtualKeyboard;
-import com.minecrafttas.tasmodog.virtual.VirtualMouse;
 
 /**
  * Input container containing inputs and other tasmod data for all ticks
