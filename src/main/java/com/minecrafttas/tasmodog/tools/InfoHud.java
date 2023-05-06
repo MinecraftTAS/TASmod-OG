@@ -11,7 +11,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.minecrafttas.tasmodog.TASmod;
-import com.minecrafttas.tasmodog.container.Playback;
 import com.minecrafttas.tasmodog.virtual.VirtualCamera;
 
 import net.minecraft.client.Minecraft;
@@ -54,7 +53,7 @@ public class InfoHud extends GuiScreen {
 	}
 	
 	private Properties configuration;
-	private TASmod tasmod;
+//	private TASmod tasmod;
 	private List<Widget> widgets;
 	private Widget currentlyDragging;
 	private int offsetX, offsetY; // mouse offset between cursor and corner of item below
@@ -74,7 +73,7 @@ public class InfoHud extends GuiScreen {
 	 */
 	public void init(Minecraft mc, TASmod tasmod) {
 		this.mc = mc;
-		this.tasmod = tasmod;
+//		this.tasmod = tasmod;
 		
 		// try to load configuration
 		try {
@@ -169,8 +168,9 @@ public class InfoHud extends GuiScreen {
 	 */
 	public void drawHud() {
 		// don't draw if not requested by playback
-		if (this.tasmod.getInputContainer() instanceof Playback && !((Playback) this.tasmod.getInputContainer()).isVisible())
-			return;
+//		TODO: reimplement
+//		if (this.tasmod.getInputContainer() instanceof Playback && !((Playback) this.tasmod.getInputContainer()).isVisible())
+//			return;
 
 		// don't draw over f3 screen
 		if (Minecraft.isDebugInfoEnabled()) 

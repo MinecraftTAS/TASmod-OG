@@ -23,8 +23,6 @@ import javax.swing.JOptionPane;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
-import com.minecrafttas.tasmodog.container.Playback;
-import com.minecrafttas.tasmodog.container.Recording;
 import com.minecrafttas.tasmodog.main.Main;
 
 /**
@@ -111,25 +109,28 @@ public class MinecraftWindow extends Frame {
 		this.increaseGamespeedItem.addActionListener(this.tryRun(() -> TASmod.instance.getTickrateChanger().increaseGamespeed()));
 		this.decreaseGamespeedItem.addActionListener(this.tryRun(() -> TASmod.instance.getTickrateChanger().decreaseGamespeed()));
 		this.toggleTickadvanceItem.addActionListener(this.tryRun(() -> TASmod.instance.getTickrateChanger().toggleTickadvance()));
-		this.saveItem.addActionListener(this.tryRun(() -> ((Recording) TASmod.instance.getInputContainer()).interactiveSave()));
+		this.saveItem.addActionListener(this.tryRun(() -> System.out.println("todo")/* TODO TASmod.instance.getInputContainer().interactiveSave() */));
 		this.loadItem.addActionListener(this.tryRun(() -> {
 			String tasName = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
 			if (tasName == null || tasName.isEmpty())
 				return;
 			
 			Main.setupFilestructure(true);
-			TASmod.instance = new TASmod(new Playback(new File(TASmod.TAS_DIR, tasName + ".tas")), this);
+			TASmod.instance = new TASmod(this);
+			TASmod.instance.getInputContainer().load(new File(TASmod.TAS_DIR, tasName + ".tas"));
 			this.updateButtons();
 		}));
 		this.createItem.addActionListener(this.tryRun(() -> {
 			Main.setupFilestructure(true);
-			TASmod.instance = new TASmod(new Recording(), this);
+			TASmod.instance = new TASmod(this);
+			TASmod.instance.getInputContainer().setRecording(true);
 			this.updateButtons();
 			this.enableSaveButton();
 		}));
 		this.launchItem.addActionListener(this.tryRun(() -> {
 			Main.setupFilestructure(false);
-			TASmod.instance = new TASmod(null, this);
+			TASmod.instance = new TASmod(this);
+			TASmod.instance.getInputContainer().disable();
 			this.updateButtons();
 		}));
 	}

@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.lwjgl.input.Keyboard;
 
-import com.minecrafttas.tasmodog.container.Container;
 import com.minecrafttas.tasmodog.tools.InfoHud;
 import com.minecrafttas.tasmodog.tools.TickrateChanger;
 
@@ -21,7 +20,7 @@ public final class TASmod {
 	public static TASmod instance;
 	
 	private TickrateChanger tickrateChanger;
-	private Container inputContainer;
+	private InputContainer inputContainer;
 	private InfoHud infoHud;
 	private MinecraftWindow minecraftWindow;
 	private Minecraft mc;
@@ -31,10 +30,10 @@ public final class TASmod {
 	 * @param inputContainer Input container
 	 * @param minecraftWindow Minecrat window
 	 */
-	public TASmod(Container inputContainer, MinecraftWindow minecraftWindow) {
+	public TASmod(MinecraftWindow minecraftWindow) {
 		instance = this;
 		this.tickrateChanger = new TickrateChanger();
-		this.inputContainer = inputContainer;
+		this.inputContainer = new InputContainer();
 		this.infoHud = new InfoHud();
 		this.minecraftWindow = minecraftWindow;
 	}
@@ -47,8 +46,7 @@ public final class TASmod {
 		this.mc = mc;
 		
 		// initialize input container
-		if (this.inputContainer != null)
-			this.inputContainer.init(this);
+		this.inputContainer.init(this);
 		
 		// initialize info hud
 		this.infoHud.init(mc, this);
@@ -63,13 +61,7 @@ public final class TASmod {
 	 */
 	public void tick() {	
 		// try to tick input container
-		try {
-			if (this.inputContainer != null)
-				this.inputContainer.tick();
-		} catch (Exception e) {
-			System.err.println("Unable to tick input container");
-			e.printStackTrace();
-		}
+		this.inputContainer.tick();
 		
 		// open info hud on f6 press
 		if (KeyboardHelper.isKeyPress(Keyboard.KEY_F6) && this.mc.currentScreen == null)
@@ -93,13 +85,6 @@ public final class TASmod {
 	}
 	
 	/**
-	 * Update current input container
-	 */
-	public void updateInputContainer(Container inputContainer) {
-		this.inputContainer = inputContainer;
-	}
-	
-	/**
 	 * Get Tickrate Changer instance
 	 * @return Tickrate Changer instance
 	 */
@@ -111,7 +96,7 @@ public final class TASmod {
 	 * Get Input Container instance
 	 * @return Input Container instance
 	 */
-	public Container getInputContainer() {
+	public InputContainer getInputContainer() {
 		return this.inputContainer;
 	}
 	

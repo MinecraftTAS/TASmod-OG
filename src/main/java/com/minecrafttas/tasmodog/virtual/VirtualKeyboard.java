@@ -1,166 +1,65 @@
 package com.minecrafttas.tasmodog.virtual;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
+import com.minecrafttas.tasmodog.InputContainer;
 import com.minecrafttas.tasmodog.TASmod;
-import com.minecrafttas.tasmodog.container.Recording;
+import com.minecrafttas.tasmodog.structs.KeyEvent;
 
 /**
- * This is an interface of the Keyboard Class.
- * This File records or manipulates these Calls
- * @author Scribble, Pancake
+ * Virtual keyboard replacing lwjgl's keyboard class
+ * Emulates a scriptable keyboard in addition to the normal keyboard
  */
 public class VirtualKeyboard {
-
-	/**
-	 * Internal Keyboard Event used to save the Keyboard to a File
-	 * @author Scribble
-	 */
-	public static class VirtualKeyEvent {
-
-		/** The current keyboard character being examined */
-		public int character;
-
-		/** The current keyboard event key being examined */
-		public int key;
-
-		/** The current state of the key being examined in the event queue */
-		public boolean state;
-
-		public VirtualKeyEvent(final int character, final int key, final boolean state) {
-			this.character = character;
-			this.key = key;
-			this.state = state;
-		}
-
-		@Override
-		public String toString() {
-			return character + "!" + key + "!" + state;
-		}
-
-		public static VirtualKeyEvent fromString(final String object) {
-			return new VirtualKeyEvent(Integer.parseInt(object.split("!")[0]), Integer.parseInt(object.split("!")[1]), Boolean.parseBoolean(object.split("!")[2]));
-		}
-
-	}
-
-	/**
-	 * General Idea: LWJGL uses Events, these Events contain a bit of Information {@link VirtualKeyEvent}. You go trough them by running next() and then you access their Information using getEvent****.
-	 * So every time next() is called, a new VirtualKeyEvent is being created, that is slowly being filled with data, by Minecraft Code that is accessing them. So if the MC Code asks for the Event Key, then our Code puts that Information into
-	 * the VirtualKeyEvent. Replaying works the same, but instead of listening, it hacks the LWJGL Keyboard like a Man In The Middle
-	 */
-
-	public static Queue<VirtualKeyEvent> keyEventsForTick = new LinkedList<>();
-	private static VirtualKeyEvent currentKeyEvent;
-	public static boolean hack = false;
-
-	public static boolean listen = false;
-	private static VirtualKeyEvent currentlyListening;
-
-	private static boolean isKey61Down;
-	private static boolean isKey60Down;
-	private static boolean isKey54Down;
-	private static boolean isKey42Down;
-	private static boolean isKey37Down;
-	private static boolean isKey51Down;
-	private static boolean isKey52Down;
-	private static boolean isKey65Down;
-
-	private static void updateKeyboard() {
-		int key = getEventKey();
-		boolean state = getEventKeyState();
-		if (key == 37) isKey37Down = state;
-		if (key == 42) isKey42Down = state;
-		if (key == 54) isKey54Down = state;
-		if (key == 60) isKey60Down = state;
-		if (key == 61) isKey61Down = state;
-		if (key == 51) isKey51Down = state;
-		if (key == 52) isKey52Down = state;
-		if (key == 65) isKey65Down = state;
-	}
+	
+	private static KeyEvent keyEvent;
+	private static List<Integer> keysPressed = new ArrayList<>(256);
 	
 	public static boolean next() {
-		if (listen) {
-			if (currentlyListening != null && currentlyListening.key != 51 && currentlyListening.key != 52 && currentlyListening.key != 66 && currentlyListening.key != 67 && TASmod.instance.getInputContainer() instanceof Recording)
-				((Recording) TASmod.instance.getInputContainer()).keyboardTick(currentlyListening);
-			currentlyListening = new VirtualKeyEvent(-1, -1, false);
-		}
-		if (!hack) {
-			final boolean b = Keyboard.next();
-			if (b) updateKeyboard();
-			return b;
-		}
-		if (keyEventsForTick.isEmpty()) return false;
-		currentKeyEvent = keyEventsForTick.poll();
+		InputContainer inputContainer = TASmod.instance.getInputContainer();
+		KeyEvent nextKeyEvent = inputContainer.getCurrentTickData().pollKeyEvent();
+		boolean next = nextKeyEvent != null;
 		
-		updateKeyboard();
+		// update from real keyboard if recording
+		if (inputContainer.isRecording() || !inputContainer.isActive()) {
+			// fetch event
+			next = Keyboard.next();
+			nextKeyEvent = new KeyEvent(Keyboard.getEventCharacter(), Keyboard.getEventKey(), Keyboard.getEventKeyState());
+			
+			// push event
+			if (next && inputContainer.isActive())
+				inputContainer.getCurrentTickData().addKeyEvent(nextKeyEvent);
+		}
 		
-		return true;
-	}
-
-	public static int getEventKey() {
-		if (!hack) {
-			final int val = Keyboard.getEventKey();
-			if (listen)
-				currentlyListening.key = val;
-			return val;
+		// update keyboard if new event
+		if (next) {
+			keyEvent = nextKeyEvent;
+			if (nextKeyEvent.getState())
+				keysPressed.add(nextKeyEvent.getKey());
+			else
+				keysPressed.remove((Integer) nextKeyEvent.getKey());
 		}
-		return currentKeyEvent.key;
+		
+		return next;
 	}
-
-	public static char getEventCharacter() {
-		if (!hack) {
-			final int val = Keyboard.getEventCharacter();
-			if (listen)
-				currentlyListening.character = val;
-			return (char) val;
-		}
-		return (char) currentKeyEvent.character;
+	
+	public static boolean isKeyDown(int i) {
+		return keysPressed.contains((Integer) i);
 	}
-
+	
 	public static boolean getEventKeyState() {
-		if (!hack) {
-			final boolean val = Keyboard.getEventKeyState();
-			if (listen)
-				currentlyListening.state = val;
-			return val;
-		}
-		return currentKeyEvent.state;
+		return keyEvent.getState();
 	}
-
-	/**
-	 * isKeyDown does not use the Packets, instead it looks through all passed Packets (aka. see if the button is actually down on the Keyboard)
-	 * Update: ._. This is frame based and messes up Mouse Inputs entirely.
-	 * Solution: Yeet this, and do a lazy play in next()
-	 * Problem with that is, that officially left and right clicking in all Slot Menus (Singleplayer, Stats, Texture Pack, etc) is working a bit less.
-	public final static boolean isKeyDown(final int i) {
-		if (!hack) {
-			final boolean val = Keyboard.isKeyDown(i);
-			if (listen) {
-				TASmod.keyboardTick(new VirtualKeyEvent(i, i, val));
-			}
-			return val;
-		}
-		for (final VirtualKeyEvent virtualKeyEvent : keyEventsForTick)
-			if (virtualKeyEvent.key == i && virtualKeyEvent.state == true) return true;
-		return false;
+	
+	public static int getEventKey() {
+		return keyEvent.getKey();
 	}
-	 */
-	public static boolean isKeyDown(final int i) {
-		switch (i) {
-		case 61: return isKey61Down;
-		case 60: return isKey60Down;
-		case 54: return isKey54Down;
-		case 42: return isKey42Down;
-		case 37: return isKey37Down;
-		case 51: return isKey51Down;
-		case 52: return isKey52Down;
-		case 65: return isKey65Down;
-		}
-		throw new RuntimeException("Unhandled Key...");
+	
+	public static char getEventCharacter() {
+		return keyEvent.getCharacter();
 	}
-
+	
 }

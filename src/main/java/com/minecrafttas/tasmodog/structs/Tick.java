@@ -4,18 +4,16 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.minecrafttas.tasmodog.virtual.VirtualKeyboard.VirtualKeyEvent;
-import com.minecrafttas.tasmodog.virtual.VirtualMouse.VirtualMouseEvent;
-
 /**
  * TASmod data for a tick
  * @author Pancake
  */
 public class Tick implements Serializable {
 
-	private Queue<VirtualKeyEvent> keyboardInputs;
-	private Queue<VirtualMouseEvent> mouseInputs;
-
+	private Queue<KeyEvent> keyboardInputs;
+	private Queue<MouseEvent> mouseInputs;
+	public int dx, dy;
+	
 	/**
 	 * Initialize empty tick struct
 	 */
@@ -28,7 +26,7 @@ public class Tick implements Serializable {
 	 * Poll key event from queue
 	 * @return Key event
 	 */
-	public VirtualKeyEvent pollKeyEvent() {
+	public KeyEvent pollKeyEvent() {
 		return this.keyboardInputs.poll();
 	}
 	
@@ -36,7 +34,7 @@ public class Tick implements Serializable {
 	 * Poll mouse event from queue
 	 * @return Mouse event
 	 */
-	public VirtualMouseEvent pollMouseEvent() {
+	public MouseEvent pollMouseEvent() {
 		return this.mouseInputs.poll();
 	}
 	
@@ -68,7 +66,7 @@ public class Tick implements Serializable {
 	 * Add key event to queue
 	 * @param event Key event
 	 */
-	public void addKeyEvent(VirtualKeyEvent event) {
+	public void addKeyEvent(KeyEvent event) {
 		this.keyboardInputs.add(event);
 	}
 	
@@ -76,7 +74,7 @@ public class Tick implements Serializable {
 	 * Adds mouse event to queue
 	 * @param event Mouse event
 	 */
-	public void addMouseEvent(VirtualMouseEvent event) {
+	public void addMouseEvent(MouseEvent event) {
 		this.mouseInputs.add(event);
 	}
 	

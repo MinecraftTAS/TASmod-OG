@@ -8,44 +8,66 @@ import java.io.Serializable;
  */
 public class MouseEvent implements Serializable {
 
-	private char character;
-	private int key;
+	private int button;
 	private boolean state; 
+	private int wheel;
+	private int x, y;
 	
 	/**
-	 * Initialize key event
-	 * @param character Key character if available
-	 * @param key Key code
-	 * @param state Key state
+	 * Initialize mouse event
+	 * @param button Button id
+	 * @param state Button state
+	 * @param wheel Scroll wheel clicks
+	 * @param x Mouse X
+	 * @param y Mouse Y
 	 */
-	public MouseEvent(char character, int key, boolean state) {
-		this.character = character;
-		this.key = key;
+	public MouseEvent(int button, boolean state, int wheel, int x, int y) {
+		this.button = button;
 		this.state = state;
+		this.wheel = wheel;
+		this.x = x;
+		this.y = y;
 	}
 	
+	
 	/**
-	 * Get key event character
-	 * @return Key event character
+	 * Get mouse event button
+	 * @return Mouse event button
 	 */
-	public char getCharacter() {
-		return this.character;
+	public int getButton() {
+		return this.button;
 	}
 	
 	/**
-	 * Get key event key
-	 * @return Key event key
-	 */
-	public int getKey() {
-		return this.key;
-	}
-	
-	/**
-	 * Get key event state
-	 * @return Key event state
+	 * Get button event state
+	 * @return Button event state
 	 */
 	public boolean getState() {
 		return this.state;
+	}
+	
+	/**
+	 * Get scroll wheel clicks
+	 * @return Scroll wheel clicks
+	 */
+	public int getWheel() {
+		return this.wheel;
+	}
+	
+	/**
+	 * Get mouse x position
+	 * @return Mouse X
+	 */
+	public int getX() {
+		return this.x;
+	}
+	
+	/**
+	 * Get mouse y position
+	 * @return Mouse Y
+	 */
+	public int getY() {
+		return this.y;
 	}
 	
 }
