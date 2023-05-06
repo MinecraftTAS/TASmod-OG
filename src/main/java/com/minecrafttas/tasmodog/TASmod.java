@@ -62,7 +62,7 @@ public final class TASmod {
 	 * @throws Exception TASmod Exception
 	 */
 	public void tick() {	
-		// try to tick input container
+		// tick input container
 		this.inputContainer.tick();
 		
 		// open info hud on f6 press

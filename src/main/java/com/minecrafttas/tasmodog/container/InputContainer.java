@@ -2,11 +2,18 @@ package com.minecrafttas.tasmodog.container;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
 import com.minecrafttas.tasmodog.TASmod;
+import com.minecrafttas.tasmodog.virtual.VirtualKeyboard;
+import com.minecrafttas.tasmodog.virtual.VirtualMouse;
 
 /**
  * Input container containing inputs and other tasmod data for all ticks
@@ -52,15 +59,26 @@ public class InputContainer {
 	}
 	
 	/**
+	 * Save tick data to file
+	 * @param file File
+	 * @throws Exception Filesystem exception
+	 */
+	public void save(File file) throws Exception {
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+		oos.writeObject(this.ticks);
+		oos.close();
+	}
+	
+	/**
 	 * Load tick data from file
 	 * @param file File
 	 * @throws Exception Filesystem exception
 	 */
 	@SuppressWarnings("unchecked")
 	public void load(File file) throws Exception {
-		ObjectInputStream oos = new ObjectInputStream(new FileInputStream(file));
-		this.ticks = (List<Tick>) oos.readObject();
-		oos.close();
+		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+		this.ticks = (List<Tick>) ois.readObject();
+		ois.close();
 	}
 	
 	/**
