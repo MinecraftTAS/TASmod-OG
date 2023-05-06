@@ -1,8 +1,11 @@
-package com.minecrafttas.tasmodog.structs;
+package com.minecrafttas.tasmodog.container;
 
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import com.minecrafttas.tasmodog.virtual.structs.KeyEvent;
+import com.minecrafttas.tasmodog.virtual.structs.MouseEvent;
 
 /**
  * TASmod data for a tick

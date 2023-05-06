@@ -1,4 +1,4 @@
-package com.minecrafttas.tasmodog.structs;
+package com.minecrafttas.tasmodog.virtual.structs;
 
 import java.io.Serializable;
 
