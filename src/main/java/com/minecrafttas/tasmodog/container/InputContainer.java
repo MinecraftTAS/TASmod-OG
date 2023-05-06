@@ -1,4 +1,4 @@
-package com.minecrafttas.tasmodog;
+package com.minecrafttas.tasmodog.container;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,7 +6,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.minecrafttas.tasmodog.structs.Tick;
+import com.minecrafttas.tasmodog.TASmod;
 
 /**
  * Input container containing inputs and other tasmod data for all ticks

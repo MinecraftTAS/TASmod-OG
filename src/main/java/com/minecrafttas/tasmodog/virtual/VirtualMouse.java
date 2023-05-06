@@ -5,13 +5,13 @@ import java.util.List;
 
 import org.lwjgl.input.Mouse;
 
-import com.minecrafttas.tasmodog.InputContainer;
 import com.minecrafttas.tasmodog.TASmod;
-import com.minecrafttas.tasmodog.structs.MouseEvent;
+import com.minecrafttas.tasmodog.container.InputContainer;
+import com.minecrafttas.tasmodog.virtual.structs.MouseEvent;
 
 public class VirtualMouse {
 
-	private static MouseEvent mouseEvent;
+	private static MouseEvent mouseEvent = new MouseEvent(-1, false, 0, 0, 0);
 	private static List<Integer> buttonsPressed = new ArrayList<>(16);
 	
 	public static boolean next() {

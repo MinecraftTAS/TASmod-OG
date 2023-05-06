@@ -1,4 +1,4 @@
-package com.minecrafttas.tasmodog;
+package com.minecrafttas.tasmodog.tools;
 
 import java.util.ArrayList;
 

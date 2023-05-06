@@ -4,7 +4,9 @@ import java.io.File;
 
 import org.lwjgl.input.Keyboard;
 
+import com.minecrafttas.tasmodog.container.InputContainer;
 import com.minecrafttas.tasmodog.tools.InfoHud;
+import com.minecrafttas.tasmodog.tools.KeyboardHelper;
 import com.minecrafttas.tasmodog.tools.TickrateChanger;
 
 import net.minecraft.client.Minecraft;

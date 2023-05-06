@@ -11,7 +11,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.minecrafttas.tasmodog.TASmod;
-import com.minecrafttas.tasmodog.virtual.VirtualCamera;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
@@ -303,7 +302,7 @@ public class InfoHud extends GuiScreen {
 
 			@Override
 			public String text() {
-				return String.format("Rotation: %.2f %.2f", VirtualCamera.rotationYaw, VirtualCamera.rotationPitch);
+				return String.format("Rotation: %.2f %.2f", FakeCamera.rotationYaw, FakeCamera.rotationPitch);
 			}
 
 		});

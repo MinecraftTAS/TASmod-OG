@@ -1,13 +1,11 @@
-package com.minecrafttas.tasmodog.virtual;
+package com.minecrafttas.tasmodog.tools;
 
-public class VirtualCamera {
+public class FakeCamera {
 
 	// pitch,yaw of fake camera
 	public static float rotationPitch, rotationYaw;
 	// prev pitch,yaw of fake camera
 	public static float prevRotationPitch, prevRotationYaw;
-	// tick based x,y mouse coordinates
-	public static int lastX, lastY;
 
 	/**
 	 * Update virtual camera rotation

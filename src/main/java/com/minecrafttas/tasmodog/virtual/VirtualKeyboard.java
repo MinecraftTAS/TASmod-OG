@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
-import com.minecrafttas.tasmodog.InputContainer;
 import com.minecrafttas.tasmodog.TASmod;
-import com.minecrafttas.tasmodog.structs.KeyEvent;
+import com.minecrafttas.tasmodog.container.InputContainer;
+import com.minecrafttas.tasmodog.virtual.structs.KeyEvent;
 
 /**
  * Virtual keyboard replacing lwjgl's keyboard class

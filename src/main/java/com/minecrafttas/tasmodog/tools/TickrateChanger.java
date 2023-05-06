@@ -2,8 +2,6 @@ package com.minecrafttas.tasmodog.tools;
 
 import org.lwjgl.input.Keyboard;
 
-import com.minecrafttas.tasmodog.KeyboardHelper;
-
 import net.minecraft.client.Minecraft;
 
 /**
