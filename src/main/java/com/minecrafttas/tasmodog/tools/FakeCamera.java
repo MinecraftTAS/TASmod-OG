@@ -1,27 +1,29 @@
 package com.minecrafttas.tasmodog.tools;
 
+/**
+ * Virtual frame based camera
+ */
 public class FakeCamera {
 
 	// pitch,yaw of fake camera
-	public static float rotationPitch, rotationYaw;
+	public static float yaw, pitch;
 	// prev pitch,yaw of fake camera
-	public static float prevRotationPitch, prevRotationYaw;
+	public static float prevPitch, prevYaw;
 
 	/**
 	 * Update virtual camera rotation
-	 * @author Mojang Studios
+	 * @param dx Mouse delta x with sensitivity applied
+	 * @param dy Mouse delta y with sensitivity applied
 	 */
-	public static void setFakeAngles(final float f, final float f1) {
-		final float f2 = rotationPitch;
-		final float f3 = rotationYaw;
-		rotationYaw += f * 0.14999999999999999D;
-		rotationPitch -= f1 * 0.14999999999999999D;
-		if(rotationPitch < -90F)
-			rotationPitch = -90F;
-		if(rotationPitch > 90F)
-			rotationPitch = 90F;
-		prevRotationPitch += rotationPitch - f2;
-		prevRotationYaw += rotationYaw - f3;
+	public static void setFakeAngles(float dx, float dy) {
+		float newPrevYaw = yaw;
+		float newPrevPitch = pitch;
+		
+		yaw += dx * 0.15;
+		pitch -= Math.max(-90.0f, Math.min(90.0f, dy * 0.15));
+		
+		prevYaw += yaw - newPrevYaw;
+		prevPitch += pitch - newPrevPitch;
 	}
 	
 }
