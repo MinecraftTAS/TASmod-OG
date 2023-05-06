@@ -67,12 +67,12 @@
 +            
 +            thePlayer.setAngles((float) mouseHelper.deltaX * f2, (float) mouseHelper.deltaY * f2);
 +            
-+        	if (com.minecrafttas.tasmodog.TASmod.instance.getInputContainer() instanceof com.minecrafttas.tasmodog.container.Playback && !((com.minecrafttas.tasmodog.container.Playback) com.minecrafttas.tasmodog.TASmod.instance.getInputContainer()).isVisible()) {
-+        		com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationPitch = com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationPitch;
-+        		com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationYaw = com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationYaw;
-+        	} else {        		
++        	if (com.minecrafttas.tasmodog.TASmod.instance.getInputContainer().isRecording()) {
 +        		com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationPitch = thePlayer.prevRotationPitch;
 +        		com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationYaw = thePlayer.prevRotationYaw;
++        	} else {        		
++        		com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationPitch = com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationPitch;
++        		com.minecrafttas.tasmodog.virtual.VirtualCamera.prevRotationYaw = com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationYaw;
 +        	}
 +        	com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationPitch = thePlayer.rotationPitch;
 +        	com.minecrafttas.tasmodog.virtual.VirtualCamera.rotationYaw = thePlayer.rotationYaw;
@@ -261,7 +261,7 @@
 -import org.lwjgl.input.Mouse;
 @@ -83,1 +82,1 @@
 -        if(Mouse.isButtonDown(0))
-+        if(com.minecrafttas.tasmodog.virtual.VirtualMouse.isButton0Down)
++        if(com.minecrafttas.tasmodog.virtual.VirtualMouse.isButtonDown(0))
 ==========> GuiContainer.java
 --- GuiContainer.java
 +++ GuiContainer.java
@@ -276,7 +276,7 @@
 +        int i = com.minecrafttas.tasmodog.virtual.VirtualMouse.getEventDWheel();
 @@ -171,1 +171,1 @@
 -        boolean flag = Mouse.isButtonDown(0);
-+        boolean flag = com.minecrafttas.tasmodog.virtual.VirtualMouse.isButton0Down;
++        boolean flag = com.minecrafttas.tasmodog.virtual.VirtualMouse.isButtonDown(0);
 ==========> GuiIngame.java
 --- GuiIngame.java
 +++ GuiIngame.java
@@ -380,12 +380,12 @@
 +++ MouseHelper.java
 @@ -45,1 +45,1 @@
 -        Mouse.setGrabbed(true);
-+    	com.minecrafttas.tasmodog.virtual.VirtualMouse.setGrabbed(true);
++    	Mouse.setGrabbed(true);
 @@ -52,2 +52,2 @@
 -        Mouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
 -        Mouse.setGrabbed(false);
-+    	com.minecrafttas.tasmodog.virtual.VirtualMouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
-+    	com.minecrafttas.tasmodog.virtual.VirtualMouse.setGrabbed(false);
++    	Mouse.setCursorPosition(windowComponent.getWidth() / 2, windowComponent.getHeight() / 2);
++    	Mouse.setGrabbed(false);
 @@ -58,2 +58,2 @@
 -        deltaX = Mouse.getDX();
 -        deltaY = Mouse.getDY();
