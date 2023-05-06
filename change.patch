@@ -68,14 +68,14 @@
 +            thePlayer.setAngles((float) mouseHelper.deltaX * f2, (float) mouseHelper.deltaY * f2);
 +            
 +        	if (com.minecrafttas.tasmodog.TASmod.instance.getInputContainer().isRecording()) {
-+        		com.minecrafttas.tasmodog.tools.FakeCamera.prevRotationPitch = thePlayer.prevRotationPitch;
-+        		com.minecrafttas.tasmodog.tools.FakeCamera.prevRotationYaw = thePlayer.prevRotationYaw;
++        		com.minecrafttas.tasmodog.tools.FakeCamera.prevPitch = thePlayer.prevRotationPitch;
++        		com.minecrafttas.tasmodog.tools.FakeCamera.prevYaw = thePlayer.prevRotationYaw;
 +        	} else {        		
-+        		com.minecrafttas.tasmodog.tools.FakeCamera.prevRotationPitch = com.minecrafttas.tasmodog.tools.FakeCamera.rotationPitch;
-+        		com.minecrafttas.tasmodog.tools.FakeCamera.prevRotationYaw = com.minecrafttas.tasmodog.tools.FakeCamera.rotationYaw;
++        		com.minecrafttas.tasmodog.tools.FakeCamera.prevPitch = com.minecrafttas.tasmodog.tools.FakeCamera.pitch;
++        		com.minecrafttas.tasmodog.tools.FakeCamera.prevYaw = com.minecrafttas.tasmodog.tools.FakeCamera.yaw;
 +        	}
-+        	com.minecrafttas.tasmodog.tools.FakeCamera.rotationPitch = thePlayer.rotationPitch;
-+        	com.minecrafttas.tasmodog.tools.FakeCamera.rotationYaw = thePlayer.rotationYaw;
++        	com.minecrafttas.tasmodog.tools.FakeCamera.pitch = thePlayer.rotationPitch;
++        	com.minecrafttas.tasmodog.tools.FakeCamera.yaw = thePlayer.rotationYaw;
 +        }
 +        // End-Edit
 @@ -1321,1 +1349,1 @@
@@ -180,8 +180,8 @@
 -            GL11.glRotatef(entityliving.prevRotationPitch + (entityliving.rotationPitch - entityliving.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
 -            GL11.glRotatef(entityliving.prevRotationYaw + (entityliving.rotationYaw - entityliving.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
 +            // rotate camera to virtual camera instead of player camera
-+        	GL11.glRotatef(com.minecrafttas.tasmodog.tools.FakeCamera.prevRotationPitch + (com.minecrafttas.tasmodog.tools.FakeCamera.rotationPitch - com.minecrafttas.tasmodog.tools.FakeCamera.prevRotationPitch) * f, 1.0F, 0.0F, 0.0F);
-+        	GL11.glRotatef(com.minecrafttas.tasmodog.tools.FakeCamera.prevRotationYaw + (com.minecrafttas.tasmodog.tools.FakeCamera.rotationYaw - com.minecrafttas.tasmodog.tools.FakeCamera.prevRotationYaw) * f + 180F, 0.0F, 1.0F, 0.0F);
++        	GL11.glRotatef(com.minecrafttas.tasmodog.tools.FakeCamera.prevPitch + (com.minecrafttas.tasmodog.tools.FakeCamera.pitch - com.minecrafttas.tasmodog.tools.FakeCamera.pitch) * f, 1.0F, 0.0F, 0.0F);
++        	GL11.glRotatef(com.minecrafttas.tasmodog.tools.FakeCamera.prevYaw + (com.minecrafttas.tasmodog.tools.FakeCamera.yaw - com.minecrafttas.tasmodog.tools.FakeCamera.yaw) * f + 180F, 0.0F, 1.0F, 0.0F);
 +            // End-Edit
 @@ -682,8 +684,9 @@
 -        if(!Display.isActive())

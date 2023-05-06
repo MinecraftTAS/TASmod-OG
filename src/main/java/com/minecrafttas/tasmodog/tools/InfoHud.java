@@ -302,7 +302,7 @@ public class InfoHud extends GuiScreen {
 
 			@Override
 			public String text() {
-				return String.format("Rotation: %.2f %.2f", FakeCamera.rotationYaw, FakeCamera.rotationPitch);
+				return String.format("Rotation: %.2f %.2f", FakeCamera.yaw, FakeCamera.pitch);
 			}
 
 		});
