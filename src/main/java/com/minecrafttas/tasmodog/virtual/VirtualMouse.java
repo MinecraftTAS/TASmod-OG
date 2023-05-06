@@ -1,8 +1,5 @@
 package com.minecrafttas.tasmodog.virtual;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.lwjgl.input.Mouse;
 
 import com.minecrafttas.tasmodog.TASmod;
@@ -12,7 +9,7 @@ import com.minecrafttas.tasmodog.virtual.structs.MouseEvent;
 public class VirtualMouse {
 
 	private static MouseEvent mouseEvent = new MouseEvent(-1, false, 0, 0, 0);
-	private static List<Integer> buttonsPressed = new ArrayList<>(16);
+	private static boolean[] buttonsPressed = new boolean[512];
 	
 	public static boolean next() {
 		InputContainer inputContainer = TASmod.instance.getInputContainer();
@@ -33,17 +30,14 @@ public class VirtualMouse {
 		// update mouse if new event
 		if (next) {
 			mouseEvent = nextMouseEvent;
-			if (nextMouseEvent.getState())
-				buttonsPressed.add(nextMouseEvent.getButton());
-			else
-				buttonsPressed.remove((Integer) nextMouseEvent.getButton());
+			buttonsPressed[nextMouseEvent.getButton()+256] = nextMouseEvent.getState();
 		}
 		
 		return next;
 	}
 	
 	public static boolean isButtonDown(int i) {
-		return buttonsPressed.contains((Integer) i);
+		return buttonsPressed[i+256];
 	}
 	
 	public static boolean getEventButtonState() {

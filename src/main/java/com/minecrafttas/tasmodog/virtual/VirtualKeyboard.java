@@ -1,8 +1,5 @@
 package com.minecrafttas.tasmodog.virtual;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.lwjgl.input.Keyboard;
 
 import com.minecrafttas.tasmodog.TASmod;
@@ -16,7 +13,7 @@ import com.minecrafttas.tasmodog.virtual.structs.KeyEvent;
 public class VirtualKeyboard {
 	
 	private static KeyEvent keyEvent;
-	private static List<Integer> keysPressed = new ArrayList<>(256);
+	private static boolean[] keysPressed = new boolean[256+256];
 	
 	public static boolean next() {
 		InputContainer inputContainer = TASmod.instance.getInputContainer();
@@ -37,17 +34,14 @@ public class VirtualKeyboard {
 		// update keyboard if new event
 		if (next) {
 			keyEvent = nextKeyEvent;
-			if (nextKeyEvent.getState())
-				keysPressed.add(nextKeyEvent.getKey());
-			else
-				keysPressed.remove((Integer) nextKeyEvent.getKey());
+			keysPressed[nextKeyEvent.getKey()+256] = nextKeyEvent.getState();
 		}
 		
 		return next;
 	}
 	
 	public static boolean isKeyDown(int i) {
-		return keysPressed.contains((Integer) i);
+		return keysPressed[i+256];
 	}
 	
 	public static boolean getEventKeyState() {
