@@ -6,6 +6,10 @@ import com.minecrafttas.tasmodog.TASmod;
 import com.minecrafttas.tasmodog.container.InputContainer;
 import com.minecrafttas.tasmodog.virtual.structs.MouseEvent;
 
+/**
+ * Virtual mouse replacing lwjgl's mouse class
+ * Emulates a scriptable mouse in addition to the normal mouse
+ */
 public class VirtualMouse {
 
 	private static MouseEvent mouseEvent = new MouseEvent(-1, false, 0, 0, 0);
