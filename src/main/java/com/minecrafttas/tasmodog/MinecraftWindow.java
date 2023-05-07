@@ -109,9 +109,15 @@ public class MinecraftWindow extends Frame {
 		this.increaseGamespeedItem.addActionListener(this.tryRun(() -> TASmod.instance.getTickrateChanger().increaseGamespeed()));
 		this.decreaseGamespeedItem.addActionListener(this.tryRun(() -> TASmod.instance.getTickrateChanger().decreaseGamespeed()));
 		this.toggleTickadvanceItem.addActionListener(this.tryRun(() -> TASmod.instance.getTickrateChanger().toggleTickadvance()));
-		this.saveItem.addActionListener(this.tryRun(() -> System.out.println("todo")/* TODO TASmod.instance.getInputContainer().interactiveSave() */));
+		this.saveItem.addActionListener(this.tryRun(() -> {
+			String tasName = JOptionPane.showInputDialog("Enter name of tas to save", "");
+			if (tasName == null || tasName.isEmpty())
+				return;
+			
+			TASmod.instance.getInputContainer().save(new File(TASmod.TAS_DIR, tasName + ".tas"));
+		}));
 		this.loadItem.addActionListener(this.tryRun(() -> {
-			String tasName = JOptionPane.showInputDialog("Enter the name for the TAS to load", "");
+			String tasName = JOptionPane.showInputDialog("Enter name of tas to load", "");
 			if (tasName == null || tasName.isEmpty())
 				return;
 			

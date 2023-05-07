@@ -2,7 +2,6 @@ package com.minecrafttas.tasmodog.container;
 
 import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.Queue;
 
 import com.minecrafttas.tasmodog.virtual.structs.KeyEvent;
 import com.minecrafttas.tasmodog.virtual.structs.MouseEvent;
@@ -13,8 +12,8 @@ import com.minecrafttas.tasmodog.virtual.structs.MouseEvent;
  */
 public class Tick implements Serializable {
 
-	private Queue<KeyEvent> keyboardInputs;
-	private Queue<MouseEvent> mouseInputs;
+	private LinkedList<KeyEvent> keyboardInputs;
+	private LinkedList<MouseEvent> mouseInputs;
 	public int dx, dy;
 	
 	/**
