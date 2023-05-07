@@ -1,5 +1,5 @@
 plugins {
-    id 'mcp4gradle' version '2.0.0'
+    id 'mcp4gradle' version '2.0.1'
 }
 
 jar.manifest.attributes = ["Main-Class": "com.minecrafttas.tasmodog.main.Main"]
