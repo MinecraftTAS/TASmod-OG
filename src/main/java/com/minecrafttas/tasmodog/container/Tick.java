@@ -1,5 +1,7 @@
 package com.minecrafttas.tasmodog.container;
 
+import java.io.File;
+import java.io.RandomAccessFile;
 import java.io.Serializable;
 import java.util.LinkedList;
 
@@ -14,6 +16,7 @@ public class Tick implements Serializable {
 
 	private LinkedList<KeyEvent> keyboardInputs;
 	private LinkedList<MouseEvent> mouseInputs;
+	private transient RandomAccessFile state;
 	public int dx, dy;
 	
 	/**
@@ -73,11 +76,37 @@ public class Tick implements Serializable {
 	}
 	
 	/**
-	 * Adds mouse event to queue
+	 * Add mouse event to queue
 	 * @param event Mouse event
 	 */
 	public void addMouseEvent(MouseEvent event) {
 		this.mouseInputs.add(event);
+	}
+	
+	/**
+	 * Initialize random access file with state
+	 * @param state State data
+	 * @throws Exception Filesystem exception
+	 */
+	public void initializeState(byte[] state) throws Exception {
+		this.state = new RandomAccessFile(File.createTempFile("savestate", ".dat"), "rw");
+		this.state.writeInt(state.length);
+		this.state.write(state);
+	}
+
+	/**
+	 * Return state data
+	 * @return State data or null
+	 * @throws Exception Filesystem exception
+	 */
+	public byte[] getState() throws Exception {
+		if (this.state == null)
+			return null;
+		
+		this.state.seek(0);
+		byte[] data = new byte[this.state.readInt()];
+		this.state.read(data);
+		return data;
 	}
 	
 	@Override
