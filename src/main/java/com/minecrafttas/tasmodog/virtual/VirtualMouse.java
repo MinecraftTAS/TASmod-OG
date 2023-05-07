@@ -17,7 +17,7 @@ public class VirtualMouse {
 	
 	public static boolean next() {
 		InputContainer inputContainer = TASmod.instance.getInputContainer();
-		MouseEvent nextMouseEvent = inputContainer.getCurrentTickData().pollMouseEvent();
+		MouseEvent nextMouseEvent = inputContainer.isRecording() ? null : inputContainer.getCurrentTickData().pollMouseEvent();
 		boolean next = nextMouseEvent != null;
 		
 		// update from real mouse if recording

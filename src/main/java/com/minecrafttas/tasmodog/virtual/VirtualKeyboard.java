@@ -17,7 +17,7 @@ public class VirtualKeyboard {
 	
 	public static boolean next() {
 		InputContainer inputContainer = TASmod.instance.getInputContainer();
-		KeyEvent nextKeyEvent = inputContainer.getCurrentTickData().pollKeyEvent();
+		KeyEvent nextKeyEvent = inputContainer.isRecording() ? null : inputContainer.getCurrentTickData().pollKeyEvent();
 		boolean next = nextKeyEvent != null;
 		
 		// update from real keyboard if recording

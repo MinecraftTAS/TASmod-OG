@@ -49,7 +49,11 @@ public class InputContainer {
 			return;
 		}
 		
-		this.currentTick = (this.ticks.size() >= this.nextTick || this.isRecording) ? new Tick() : this.ticks.get(this.nextTick);
+		if (this.isRecording) {
+			this.ticks.add(this.nextTick, this.currentTick);
+		}
+		
+		this.currentTick = (this.nextTick >= this.ticks.size() || this.isRecording) ? new Tick() : this.ticks.get(this.nextTick);
 		this.nextTick++;
 	}
 	
@@ -62,6 +66,8 @@ public class InputContainer {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
 		oos.writeObject(this.ticks);
 		oos.close();
+		
+		System.out.println(String.format("Saved %d ticks", this.ticks.size()));
 	}
 	
 	/**
@@ -74,6 +80,8 @@ public class InputContainer {
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
 		this.ticks = (List<Tick>) ois.readObject();
 		ois.close();
+		
+		System.out.println(String.format("Loaded %d ticks", this.ticks.size()));
 	}
 	
 	/**
