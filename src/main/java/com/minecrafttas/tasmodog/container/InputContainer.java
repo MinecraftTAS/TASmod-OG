@@ -123,27 +123,9 @@ public class InputContainer {
 	 */
 	public void save(File file) throws Exception {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-		
-		// write tick data
 		oos.writeObject(this.ticks);
-		
-		// write states
-		int states = 0;
-		for (Tick tick : this.ticks) {
-			byte[] state = tick.getState();
-			if (state == null)
-				continue;
-			
-			oos.write(1);
-			oos.writeInt(this.ticks.indexOf(tick));
-			oos.writeInt(state.length);
-			oos.write(state);
-			
-			states++;
-		}
-		
 		oos.close();
-		System.out.println(String.format("Saved %d ticks and %d states", this.ticks.size(), states));
+		System.out.println(String.format("Saved %d ticks", this.ticks.size()));
 	}
 	
 	/**
@@ -154,25 +136,10 @@ public class InputContainer {
 	@SuppressWarnings("unchecked")
 	public void load(File file) throws Exception {
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-		
-		// load tick data
 		this.ticks = (List<Tick>) ois.readObject();
-		
-		// load states
-		int states = 0;
-		while (ois.read() == 1) {
-			
-			int index = ois.readInt();
-			byte[] data = new byte[ois.readInt()];
-			ois.read(data);
-			this.ticks.get(index).initializeState(data);
-			
-			states++;
-		}
-		
 		ois.close();
 		
-		System.out.println(String.format("Loaded %d ticks and %d states", this.ticks.size(), states));
+		System.out.println(String.format("Loaded %d ticks", this.ticks.size()));
 	}
 	
 	/**

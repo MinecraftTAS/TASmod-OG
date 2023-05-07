@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -66,15 +65,17 @@ public class StateUtils {
 		byte[] data = Files.readAllBytes(currentDir);
 		out.writeInt(data.length);
 		out.write(data);
+		
+		System.out.println("Encoded " + new String(pathBytes) + " (" + data.length + " bytes)");
 	}
 
 	/**
 	 * Load state
-	 * @param mc
-	 * @param state
-	 * @throws IOException
+	 * @param mc Minecraft instance
+	 * @param state State data
+	 * @throws Exception Filesystem exception
 	 */
-	public static void loadstate(Minecraft mc, byte[] state) throws IOException {
+	public static void loadstate(Minecraft mc, byte[] state) throws Exception {
 		// get world info
 		ISaveHandler handler = mc.theWorld.saveHandler;
 		WorldInfo worldInfo = mc.theWorld.getWorldInfo();
@@ -87,7 +88,7 @@ public class StateUtils {
 		// load files
 		Path savesDir = new File(Minecraft.minecraftDir, "saves").toPath().toAbsolutePath();
 		DataInputStream stream = new DataInputStream(new ByteArrayInputStream(state));
-		while (stream.read() == 1) {
+		while (stream.read() != -1) {
 			// read path
 			byte[] pathBytes = new byte[stream.readInt()];
 			stream.read(pathBytes);
@@ -97,9 +98,11 @@ public class StateUtils {
 			stream.read(data);
 
 			// write file
-			Path path = savesDir.resolve(new String(pathBytes));
+			String pathString = new String(pathBytes);
+			Path path = savesDir.resolve(pathString);
 			Files.createDirectories(path.getParent());
 			Files.write(path, data, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+			System.out.println("Decoded " + pathString + " (" + data.length + " bytes)");
 		}
 		
 		// reenter world
