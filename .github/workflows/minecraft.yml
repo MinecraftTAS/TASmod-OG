@@ -8,6 +8,7 @@ jobs:
   tasmodog:
     permissions: write-all
     runs-on: windows-latest
+    if: github.repository == 'MinecraftTAS/TASmod-OG'
     steps:
     - name: Check out repository
       uses: actions/checkout@v3
