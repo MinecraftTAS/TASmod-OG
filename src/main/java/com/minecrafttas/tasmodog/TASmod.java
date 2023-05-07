@@ -48,7 +48,7 @@ public final class TASmod {
 		this.mc = mc;
 		
 		// initialize input container
-		this.inputContainer.init(this);
+		this.inputContainer.init(mc, this);
 		
 		// initialize info hud
 		this.infoHud.init(mc, this);
@@ -86,8 +86,13 @@ public final class TASmod {
 		// render tickrate changer
 		this.tickrateChanger.render();
 		
-		// render input container
-		this.inputContainer.render();
+		// try render input container
+		try {
+			this.inputContainer.render();
+		} catch (Exception e) {
+			System.err.println("Unable to render input container");
+			e.printStackTrace();
+		}
 	}
 	
 	/**

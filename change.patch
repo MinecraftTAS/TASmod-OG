@@ -419,3 +419,9 @@
 @@ -62,1 +62,1 @@
 -                    downloadAndInstallResource(url, s, l, i);
 +                    downloadAndInstallResource(new URL("https://maven.mgnet.work/main/archive/1.0-sounds/"), s, l, i); // download audio from up to date server
+==========> World.java
+--- World.java
++++ World.java
+@@ -61,1 +61,1 @@
+-    protected final ISaveHandler saveHandler;
++    public final ISaveHandler saveHandler;
