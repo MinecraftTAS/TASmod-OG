@@ -2,7 +2,8 @@ plugins {
     id 'mcp4gradle' version '2.0.0'
 }
 
-jar.manifest.attributes = ["Main-Class": "net.tasmod.main.Main"]
+jar.manifest.attributes = ["Main-Class": "com.minecrafttas.tasmodog.main.Main"]
+shadowJar.archiveFileName = "TASmod-OG-Dev-Build.jar"
 
 group = "com.minecrafttas"
 version = "1.0.0-SNAPSHOT"
