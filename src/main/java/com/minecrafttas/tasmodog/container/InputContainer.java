@@ -24,6 +24,7 @@ public class InputContainer {
 	private Tick currentTick;
 	private int nextTick;
 	private boolean isActive, isRecording;
+	private boolean shouldStartRecording;
 	
 	/**
 	 * Initialize Input container
@@ -56,10 +57,15 @@ public class InputContainer {
 		
 		// add tick if recording
 		if (this.isRecording)
-			this.ticks.add(this.nextTick, this.currentTick);
+			if (this.nextTick >= this.ticks.size())
+				this.ticks.add(this.currentTick);
+			else
+				this.ticks.set(this.nextTick, this.currentTick);
 
-		// switch to recording keybind
-		if (KeyboardHelper.isKeyPress(Keyboard.KEY_F12) && !this.isRecording) {
+		// start recording if requested
+		if (this.shouldStartRecording) {
+			this.shouldStartRecording = false;
+			
 			this.tasmod.getTickrateChanger().updateGamespeed(0f);
 			this.tasmod.getMinecraftWindow().enableSaveButton();
 			
@@ -69,8 +75,18 @@ public class InputContainer {
 		}
 		
 		// load next tick
-		this.currentTick = (this.nextTick >= this.ticks.size() || this.isRecording) ? new Tick() : this.ticks.get(this.nextTick);
+		this.currentTick = (this.nextTick >= this.ticks.size() || this.isRecording) ? new Tick() : this.ticks.get(this.nextTick).clone();
 		this.nextTick++;
+	}
+	
+	public void render() {
+		// ignore when not active
+		if (!this.isActive)
+			return;
+		
+		// switch to recording keybind
+		if (KeyboardHelper.isKeyPress(Keyboard.KEY_F12) && !this.isRecording)
+			this.shouldStartRecording = true;
 	}
 	
 	/**

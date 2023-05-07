@@ -85,6 +85,9 @@ public final class TASmod {
 	public void render() {
 		// render tickrate changer
 		this.tickrateChanger.render();
+		
+		// render input container
+		this.inputContainer.render();
 	}
 	
 	/**
