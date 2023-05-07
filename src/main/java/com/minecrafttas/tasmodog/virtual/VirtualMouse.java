@@ -4,6 +4,7 @@ import org.lwjgl.input.Mouse;
 
 import com.minecrafttas.tasmodog.TASmod;
 import com.minecrafttas.tasmodog.container.InputContainer;
+import com.minecrafttas.tasmodog.container.InputContainer.State;
 import com.minecrafttas.tasmodog.virtual.structs.MouseEvent;
 
 /**
@@ -17,17 +18,17 @@ public class VirtualMouse {
 	
 	public static boolean next() {
 		InputContainer inputContainer = TASmod.instance.getInputContainer();
-		MouseEvent nextMouseEvent = inputContainer.isRecording() ? null : inputContainer.getCurrentTickData().pollMouseEvent();
+		MouseEvent nextMouseEvent = inputContainer.getState() == State.RECORDING ? null : inputContainer.getCurrentTickData().pollMouseEvent();
 		boolean next = nextMouseEvent != null;
 		
-		// update from real mouse if recording
-		if (inputContainer.isRecording() || !inputContainer.isActive()) {
+		// update from real mouse if not playing back
+		if (inputContainer.getState() != State.PLAYBACK) {
 			// fetch event
 			next = Mouse.next();
 			nextMouseEvent = new MouseEvent(Mouse.getEventButton(), Mouse.getEventButtonState(), Mouse.getEventDWheel(), Mouse.getEventX(), Mouse.getEventY());
 			
-			// push event
-			if (next && inputContainer.isActive())
+			// push event if recording
+			if (next && inputContainer.getState() == State.RECORDING)
 				inputContainer.getCurrentTickData().addMouseEvent(nextMouseEvent);
 		}
 		

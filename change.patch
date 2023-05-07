@@ -57,104 +57,99 @@
 @@ -1211,1 +1224,1 @@
 -            Display.setFullscreen(fullscreen);
 +            TASmod.instance.getMinecraftWindow().toggleFullscreen(this.fullscreen); // toggle fullscreen on the frame instead of the display
-@@ -1316,0 +1329,21 @@
+@@ -1316,0 +1329,16 @@
 +        // Moved from EntityRenderer.java / hooked up to tick loop
-+        if(inGameHasFocus) {
++        if(this.inGameHasFocus) {
 +            
-+            float f1 = gameSettings.mouseSensitivity * 0.6F + 0.2F;
++            float f1 = this.gameSettings.mouseSensitivity * 0.6F + 0.2F;
 +            float f2 = f1 * f1 * f1 * 8F;
 +            
-+            mouseHelper.mouseXYChange();
++            this.mouseHelper.mouseXYChange();
 +            
-+            thePlayer.setAngles((float) mouseHelper.deltaX * f2, (float) mouseHelper.deltaY * f2);
++            this.thePlayer.setAngles(this.mouseHelper.deltaX * f2, this.mouseHelper.deltaY * f2);
 +            
-+        	if (TASmod.instance.getInputContainer().isRecording()) {
-+        		FakeCamera.prevPitch = thePlayer.prevRotationPitch;
-+        		FakeCamera.prevYaw = thePlayer.prevRotationYaw;
-+        	} else {        		
-+        		FakeCamera.prevPitch = FakeCamera.pitch;
-+        		FakeCamera.prevYaw = FakeCamera.yaw;
-+        	}
-+        	FakeCamera.pitch = thePlayer.rotationPitch;
-+        	FakeCamera.yaw = thePlayer.rotationYaw;
++        	FakeCamera.prevPitch = this.thePlayer.prevRotationPitch;
++        	FakeCamera.prevYaw = this.thePlayer.prevRotationYaw;
++        	FakeCamera.pitch = this.thePlayer.rotationPitch;
++        	FakeCamera.yaw = this.thePlayer.rotationYaw;
 +        }
 +        // end
-@@ -1321,1 +1355,1 @@
+@@ -1321,1 +1350,1 @@
 -                if(!Mouse.next())
 +                if(!VirtualMouse.next())
-@@ -1325,2 +1359,2 @@
+@@ -1325,2 +1354,2 @@
 -                KeyBinding.setKeyBindState(Mouse.getEventButton() - 100, Mouse.getEventButtonState());
 -                if(Mouse.getEventButtonState())
 +                KeyBinding.setKeyBindState(VirtualMouse.getEventButton() - 100, VirtualMouse.getEventButtonState());
 +                if(VirtualMouse.getEventButtonState())
-@@ -1328,1 +1362,1 @@
+@@ -1328,1 +1357,1 @@
 -                    KeyBinding.onTick(Mouse.getEventButton() - 100);
 +                    KeyBinding.onTick(VirtualMouse.getEventButton() - 100);
-@@ -1333,1 +1367,1 @@
+@@ -1333,1 +1362,1 @@
 -                    int i1 = Mouse.getEventDWheel();
 +                    int i1 = VirtualMouse.getEventDWheel();
-@@ -1352,1 +1386,1 @@
+@@ -1352,1 +1381,1 @@
 -                        if(!inGameHasFocus && Mouse.getEventButtonState())
 +                        if(!inGameHasFocus && VirtualMouse.getEventButtonState())
-@@ -1370,1 +1404,1 @@
+@@ -1370,1 +1399,1 @@
 -                if(!Keyboard.next())
 +                if(!VirtualKeyboard.next())
-@@ -1374,2 +1408,2 @@
+@@ -1374,2 +1403,2 @@
 -                KeyBinding.setKeyBindState(Keyboard.getEventKey(), Keyboard.getEventKeyState());
 -                if(Keyboard.getEventKeyState())
 +                KeyBinding.setKeyBindState(VirtualKeyboard.getEventKey(), VirtualKeyboard.getEventKeyState());
 +                if(VirtualKeyboard.getEventKeyState())
-@@ -1377,1 +1411,1 @@
+@@ -1377,1 +1406,1 @@
 -                    KeyBinding.onTick(Keyboard.getEventKey());
 +                    KeyBinding.onTick(VirtualKeyboard.getEventKey());
-@@ -1379,1 +1413,1 @@
+@@ -1379,1 +1408,1 @@
 -                if(Keyboard.getEventKeyState())
 +                if(VirtualKeyboard.getEventKeyState())
-@@ -1381,1 +1415,1 @@
+@@ -1381,1 +1410,1 @@
 -                    if(Keyboard.getEventKey() == 87)
 +                    if(VirtualKeyboard.getEventKey() == 87)
-@@ -1391,1 +1425,1 @@
+@@ -1391,1 +1420,1 @@
 -                            if(Keyboard.getEventKey() == 1)
 +                            if(VirtualKeyboard.getEventKey() == 1)
-@@ -1395,1 +1429,1 @@
+@@ -1395,1 +1424,1 @@
 -                            if(Keyboard.getEventKey() == 31 && Keyboard.isKeyDown(61))
 +                            if(VirtualKeyboard.getEventKey() == 31 && VirtualKeyboard.isKeyDown(61))
-@@ -1399,1 +1433,1 @@
+@@ -1399,1 +1428,1 @@
 -                            if(Keyboard.getEventKey() == 20 && Keyboard.isKeyDown(61))
 +                            if(VirtualKeyboard.getEventKey() == 20 && VirtualKeyboard.isKeyDown(61))
-@@ -1403,1 +1437,1 @@
+@@ -1403,1 +1432,1 @@
 -                            if(Keyboard.getEventKey() == 33 && Keyboard.isKeyDown(61))
 +                            if(VirtualKeyboard.getEventKey() == 33 && VirtualKeyboard.isKeyDown(61))
-@@ -1405,1 +1439,1 @@
+@@ -1405,1 +1434,1 @@
 -                                boolean flag = Keyboard.isKeyDown(42) | Keyboard.isKeyDown(54);
 +                                boolean flag = VirtualKeyboard.isKeyDown(42) | VirtualKeyboard.isKeyDown(54);
-@@ -1408,1 +1442,1 @@
+@@ -1408,1 +1437,1 @@
 -                            if(Keyboard.getEventKey() == 30 && Keyboard.isKeyDown(61))
 +                            if(VirtualKeyboard.getEventKey() == 30 && VirtualKeyboard.isKeyDown(61))
-@@ -1412,1 +1446,1 @@
+@@ -1412,1 +1441,1 @@
 -                            if(Keyboard.getEventKey() == 59)
 +                            if(VirtualKeyboard.getEventKey() == 59)
-@@ -1416,1 +1450,1 @@
+@@ -1416,1 +1445,1 @@
 -                            if(Keyboard.getEventKey() == 61)
 +                            if(VirtualKeyboard.getEventKey() == 61)
-@@ -1420,1 +1454,1 @@
+@@ -1420,1 +1449,1 @@
 -                            if(Keyboard.getEventKey() == 63)
 +                            if(VirtualKeyboard.getEventKey() == 63)
-@@ -1428,1 +1462,1 @@
+@@ -1428,1 +1457,1 @@
 -                            if(Keyboard.getEventKey() == 66)
 +                            if(VirtualKeyboard.getEventKey() == 66)
-@@ -1435,1 +1469,1 @@
+@@ -1435,1 +1464,1 @@
 -                            if(Keyboard.getEventKey() == 2 + i)
 +                            if(VirtualKeyboard.getEventKey() == 2 + i)
-@@ -1443,1 +1477,1 @@
+@@ -1443,1 +1472,1 @@
 -                            if(Keyboard.getEventKey() == 11)
 +                            if(VirtualKeyboard.getEventKey() == 11)
-@@ -1450,1 +1484,1 @@
+@@ -1450,1 +1479,1 @@
 -                                if(Keyboard.getEventKey() == 2 + j)
 +                                if(VirtualKeyboard.getEventKey() == 2 + j)
-@@ -1543,0 +1577,1 @@
+@@ -1543,0 +1572,1 @@
 +        TASmod.instance.tick(); // tick tasmod
-@@ -1948,1 +1983,1 @@
+@@ -1948,1 +1978,1 @@
 -        Frame frame = new Frame("Minecraft");
 +        Frame frame = new MinecraftWindow("Minecraft"); // replace minecraft frame with custom one
 ==========> ChunkProvider.java

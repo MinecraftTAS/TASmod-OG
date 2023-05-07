@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
+import com.minecrafttas.tasmodog.container.InputContainer.State;
 import com.minecrafttas.tasmodog.main.Main;
 
 /**
@@ -124,19 +125,19 @@ public class MinecraftWindow extends Frame {
 			Main.setupFilestructure(true);
 			TASmod.instance = new TASmod(this);
 			TASmod.instance.getInputContainer().load(new File(TASmod.TAS_DIR, tasName + ".tas"));
+			TASmod.instance.getInputContainer().updateState(State.PLAYBACK);
 			this.updateButtons();
 		}));
 		this.createItem.addActionListener(this.tryRun(() -> {
 			Main.setupFilestructure(true);
 			TASmod.instance = new TASmod(this);
-			TASmod.instance.getInputContainer().setRecording(true);
+			TASmod.instance.getInputContainer().updateState(State.RECORDING);
 			this.updateButtons();
 			this.enableSaveButton();
 		}));
 		this.launchItem.addActionListener(this.tryRun(() -> {
 			Main.setupFilestructure(false);
 			TASmod.instance = new TASmod(this);
-			TASmod.instance.getInputContainer().disable();
 			this.updateButtons();
 		}));
 	}
