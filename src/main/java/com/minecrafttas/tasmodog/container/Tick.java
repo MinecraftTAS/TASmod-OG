@@ -80,4 +80,14 @@ public class Tick implements Serializable {
 		this.mouseInputs.add(event);
 	}
 	
+	@Override
+	public Tick clone() {
+		Tick tick = new Tick();
+		tick.keyboardInputs = new LinkedList<>(this.keyboardInputs);
+		tick.mouseInputs = new LinkedList<>(this.mouseInputs);
+		tick.dx = this.dx;
+		tick.dy = this.dy;
+		return tick;
+	}
+	
 }
