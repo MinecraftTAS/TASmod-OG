@@ -8,7 +8,10 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.input.Keyboard;
+
 import com.minecrafttas.tasmodog.TASmod;
+import com.minecrafttas.tasmodog.tools.KeyboardHelper;
 
 /**
  * Input container containing inputs and other tasmod data for all ticks
@@ -16,6 +19,7 @@ import com.minecrafttas.tasmodog.TASmod;
  */
 public class InputContainer {
 
+	private TASmod tasmod;
 	private List<Tick> ticks;
 	private Tick currentTick;
 	private int nextTick;
@@ -37,22 +41,34 @@ public class InputContainer {
 	 * @param tasmod TASmod instance
 	 */
 	public void init(TASmod tasmod) {
-		
+		this.tasmod = tasmod;
 	}
 	
 	/**
 	 * Tick Input container
 	 */
 	public void tick() {
+		// ignore when not active
 		if (!this.isActive) {
 			this.currentTick = new Tick();
 			return;
 		}
 		
-		if (this.isRecording) {
+		// add tick if recording
+		if (this.isRecording)
 			this.ticks.add(this.nextTick, this.currentTick);
+
+		// switch to recording keybind
+		if (KeyboardHelper.isKeyPress(Keyboard.KEY_F12) && !this.isRecording) {
+			this.tasmod.getTickrateChanger().updateGamespeed(0f);
+			this.tasmod.getMinecraftWindow().enableSaveButton();
+			
+			this.isRecording = true;
+			
+			System.out.println("Re-recording from tick " + this.nextTick);
 		}
 		
+		// load next tick
 		this.currentTick = (this.nextTick >= this.ticks.size() || this.isRecording) ? new Tick() : this.ticks.get(this.nextTick);
 		this.nextTick++;
 	}
