@@ -18,12 +18,13 @@ import com.minecrafttas.tasmodog.tools.KeyboardHelper;
  * @author Pancake
  */
 public class InputContainer {
-
+	public enum State { NONE, PLAYBACK, RECORDING }
+	
 	private TASmod tasmod;
 	private List<Tick> ticks;
 	private Tick currentTick;
 	private int nextTick;
-	private boolean isActive, isRecording;
+	private State state;
 	private boolean shouldStartRecording;
 	
 	/**
@@ -33,8 +34,7 @@ public class InputContainer {
 		this.ticks = new ArrayList<>();
 		this.currentTick = new Tick();
 		this.nextTick = 0;
-		this.isActive = true;
-		this.isRecording = false;
+		this.state = State.NONE;
 	}
 	
 	/**
@@ -50,13 +50,13 @@ public class InputContainer {
 	 */
 	public void tick() {
 		// ignore when not active
-		if (!this.isActive) {
+		if (this.state == State.NONE) {
 			this.currentTick = new Tick();
 			return;
 		}
 		
 		// add tick if recording
-		if (this.isRecording)
+		if (this.state == State.RECORDING)
 			if (this.nextTick >= this.ticks.size())
 				this.ticks.add(this.currentTick);
 			else
@@ -69,23 +69,23 @@ public class InputContainer {
 			this.tasmod.getTickrateChanger().updateGamespeed(0f);
 			this.tasmod.getMinecraftWindow().enableSaveButton();
 			
-			this.isRecording = true;
+			this.state = State.RECORDING;
 			
 			System.out.println("Re-recording from tick " + this.nextTick);
 		}
 		
 		// load next tick
-		this.currentTick = (this.nextTick >= this.ticks.size() || this.isRecording) ? new Tick() : this.ticks.get(this.nextTick).clone();
+		this.currentTick = (this.nextTick >= this.ticks.size() || this.state == State.RECORDING) ? new Tick() : this.ticks.get(this.nextTick).clone();
 		this.nextTick++;
 	}
 	
 	public void render() {
 		// ignore when not active
-		if (!this.isActive)
+		if (this.state == State.NONE)
 			return;
 		
 		// switch to recording keybind
-		if (KeyboardHelper.isKeyPress(Keyboard.KEY_F12) && !this.isRecording)
+		if (KeyboardHelper.isKeyPress(Keyboard.KEY_F12) && this.state == State.PLAYBACK)
 			this.shouldStartRecording = true;
 	}
 	
@@ -117,18 +117,19 @@ public class InputContainer {
 	}
 	
 	/**
-	 * Set input container into recording mode
-	 * @param isRecording Recording mode
+	 * Updates container state
+	 * @param newState State
 	 */
-	public void setRecording(boolean isRecording) {
-		this.isRecording = isRecording;
+	public void updateState(State newState) {
+		this.state = newState;
 	}
 	
 	/**
-	 * Disables the input container
+	 * Return current state
+	 * @return Current state
 	 */
-	public void disable() {
-		this.isActive = false;
+	public State getState() {
+		return this.state;
 	}
 
 	/**
@@ -137,22 +138,6 @@ public class InputContainer {
 	 */
 	public Tick getCurrentTickData() {
 		return this.currentTick;
-	}
-
-	/**
-	 * Return recording state
-	 * @return Recording state
-	 */
-	public boolean isRecording() {
-		return this.isRecording;
-	}
-
-	/**
-	 * Return active state
-	 * @return Active state
-	 */
-	public boolean isActive() {
-		return this.isActive;
 	}
 
 }
