@@ -1,6 +1,7 @@
 package com.minecrafttas.tasmodog.main;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +42,16 @@ public class CsvRNG extends ClassVisitor {
 			total += e.getValue();
 		}
 		System.out.println("Total " + total + " occurences of rng found");
+		
+		// create csv
+		PrintWriter writer = new PrintWriter(new File("rng.csv"));
+		for (Entry<RandomOccurance, Integer> e : csv.getRandom().entrySet()) {
+			RandomOccurance o = e.getKey();
+			for (int i = 0; i < e.getValue(); i++) {
+				writer.println(String.format("%s,%s,%s,%s,,FALSE,", o.className, o.methodName, o.randomType, i));
+			}
+		}
+		writer.close();
 	}
 
 	private Map<RandomOccurance, Integer> random = new HashMap<>();
@@ -103,11 +114,6 @@ public class CsvRNG extends ClassVisitor {
 			this.methodName = methodName;
 			this.randomType = randomType;
 		}
-
-		public String getClassName() { return this.className; }
-		public String getMethodName() { return this.methodName; }
-		public String getRandomType() { return this.randomType; }
-		
 		
 		@Override
 		public int hashCode() {
