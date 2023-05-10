@@ -48,7 +48,7 @@ public class CsvRNG extends ClassVisitor {
 		for (Entry<RandomOccurance, Integer> e : csv.getRandom().entrySet()) {
 			RandomOccurance o = e.getKey();
 			for (int i = 0; i < e.getValue(); i++) {
-				writer.println(String.format("%s,%s,%s,%s,,FALSE,", o.className, o.methodName, o.randomType, i));
+				writer.println(String.format("%s,%s,%s,%s,,,FALSE,", o.className, o.methodName, o.randomType, i));
 			}
 		}
 		writer.close();
