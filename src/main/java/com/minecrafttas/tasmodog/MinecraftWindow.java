@@ -6,11 +6,15 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.DisplayMode;
 import java.awt.Frame;
+import java.awt.GraphicsEnvironment;
 import java.awt.Panel;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URI;
@@ -54,13 +58,22 @@ public class MinecraftWindow extends Frame {
 		super(title);
 		this.getInsets().set(0, 0, 0, 0);
 		this.setResizable(false);
+
+		// get screen size
+		DisplayMode mode = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
+		int displayWidth = mode.getWidth();
+		int displayHeight = mode.getHeight();
 		
 		// create fullscreen frame
 		this.fullscreenFrame = new Frame(title);
 		this.fullscreenFrame.setUndecorated(true);
-		this.fullscreenFrame.setExtendedState(MAXIMIZED_BOTH);
+		this.fullscreenFrame.setBounds(0, 0, displayWidth, displayHeight);
 		this.fullscreenCanvas = new Canvas();
 		this.fullscreenFrame.add(this.fullscreenCanvas);
+		this.fullscreenFrame.addWindowFocusListener(new WindowFocusListener() {
+			@Override public void windowLostFocus(WindowEvent e) { fullscreenFrame.setBounds(0, 0, 0, 0); }
+			@Override public void windowGainedFocus(WindowEvent e) { fullscreenFrame.setBounds(0, 0, displayWidth, displayHeight); }
+		});
 		
 		// create menus
 		this.fileMenu = new JMenu("File");
