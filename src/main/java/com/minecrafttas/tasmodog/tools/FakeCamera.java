@@ -20,7 +20,13 @@ public class FakeCamera {
 		float newPrevPitch = pitch;
 		
 		yaw += dx * 0.15;
-		pitch -= Math.max(-90.0f, Math.min(90.0f, dy * 0.15));
+		pitch -= dy * 0.15f;
+		
+		if (pitch < -90.0f)
+			pitch = -90.0f;
+		
+		if (pitch > 90.0f)
+			pitch = 90.0f;
 		
 		prevYaw += yaw - newPrevYaw;
 		prevPitch += pitch - newPrevPitch;
