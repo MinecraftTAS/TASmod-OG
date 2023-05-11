@@ -58,15 +58,20 @@ public class InputContainer {
 		// ignore when not active
 		if (this.state == State.NONE) {
 			this.currentTick = new Tick();
+			this.tasmod.getKillTheRng().regenerateRandom((long) (Math.random() * Long.MAX_VALUE));
 			return;
 		}
 		
 		// add tick if recording
-		if (this.state == State.RECORDING)
+		if (this.state == State.RECORDING) {
 			if (this.nextTick >= this.ticks.size())
 				this.ticks.add(this.currentTick);
 			else
 				this.ticks.set(this.nextTick, this.currentTick);
+			this.tasmod.getKillTheRng().regenerateRandom(this.nextTick);
+		} else {
+			this.tasmod.getKillTheRng().regenerateRandom(this.nextTick - 1);
+		}
 
 		// start recording if requested
 		if (this.shouldStartRecording) {

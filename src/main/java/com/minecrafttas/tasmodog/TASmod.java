@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import com.minecrafttas.tasmodog.container.InputContainer;
 import com.minecrafttas.tasmodog.tools.InfoHud;
 import com.minecrafttas.tasmodog.tools.KeyboardHelper;
+import com.minecrafttas.tasmodog.tools.KillTheRng;
 import com.minecrafttas.tasmodog.tools.TickrateChanger;
 
 import net.minecraft.client.Minecraft;
@@ -25,6 +26,7 @@ public final class TASmod {
 	private InputContainer inputContainer;
 	private InfoHud infoHud;
 	private MinecraftWindow minecraftWindow;
+	private KillTheRng killTheRng;
 	private Minecraft mc;
 	
 	/**
@@ -37,6 +39,7 @@ public final class TASmod {
 		this.tickrateChanger = new TickrateChanger();
 		this.inputContainer = new InputContainer();
 		this.infoHud = new InfoHud();
+		this.killTheRng = new KillTheRng();
 		this.minecraftWindow = minecraftWindow;
 	}
 	
@@ -125,6 +128,14 @@ public final class TASmod {
 	 */
 	public MinecraftWindow getMinecraftWindow() {
 		return this.minecraftWindow;
+	}
+	
+	/**
+	 * Get kill the rng instance
+	 * @return Kill the rng instance
+	 */
+	public KillTheRng getKillTheRng() {
+		return this.killTheRng;
 	}
 	
 }
