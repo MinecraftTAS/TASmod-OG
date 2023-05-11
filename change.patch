@@ -166,24 +166,71 @@
 -            int j = chunk_Z + decoRNG.nextInt(16) + 8;
 +            int i = chunk_X + (KillTheRngOccurences.nextInt[1] % 16) + 8;
 +            int j = chunk_Z + (KillTheRngOccurences.nextInt[2] % 16) + 8;
+@@ -38,1 +40,1 @@
+-            entitydragon.setLocationAndAngles(0.0D, 128D, 0.0D, decoRNG.nextFloat() * 360F, 0.0F);
++            entitydragon.setLocationAndAngles(0.0D, 128D, 0.0D, KillTheRngOccurences.nextFloat[0] * 360F, 0.0F);
+==========> Block.java
+--- Block.java
++++ Block.java
+@@ -10,0 +10,2 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
++
+@@ -476,1 +478,1 @@
+-            if(world.rand.nextFloat() > f)
++            if(KillTheRngOccurences.nextFloat[1] > f)
+@@ -497,3 +499,3 @@
+-            double d = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+-            double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+-            double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
++            double d = (double)(KillTheRngOccurences.nextFloat[2] * f) + (double)(1.0F - f) * 0.5D;
++            double d1 = (double)(KillTheRngOccurences.nextFloat[3] * f) + (double)(1.0F - f) * 0.5D;
++            double d2 = (double)(KillTheRngOccurences.nextFloat[4] * f) + (double)(1.0F - f) * 0.5D;
 ==========> BlockBrewingStand.java
 --- BlockBrewingStand.java
 +++ BlockBrewingStand.java
 @@ -10,0 +10,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -96,3 +98,3 @@
+-                float f = field_40214_a.nextFloat() * 0.8F + 0.1F;
+-                float f1 = field_40214_a.nextFloat() * 0.8F + 0.1F;
+-                float f2 = field_40214_a.nextFloat() * 0.8F + 0.1F;
++                float f = KillTheRngOccurences.nextFloat[5] * 0.8F + 0.1F;
++                float f1 = KillTheRngOccurences.nextFloat[6] * 0.8F + 0.1F;
++                float f2 = KillTheRngOccurences.nextFloat[7] * 0.8F + 0.1F;
 @@ -105,1 +107,1 @@
 -                    int i1 = field_40214_a.nextInt(21) + 10;
 +                    int i1 = (KillTheRngOccurences.nextInt[3] % 21) + 10;
+@@ -113,3 +115,3 @@
+-                    entityitem.motionX = (float)field_40214_a.nextGaussian() * f3;
+-                    entityitem.motionY = (float)field_40214_a.nextGaussian() * f3 + 0.2F;
+-                    entityitem.motionZ = (float)field_40214_a.nextGaussian() * f3;
++                    entityitem.motionX = (float)KillTheRngOccurences.nextGaussian[0] * f3;
++                    entityitem.motionY = (float)KillTheRngOccurences.nextGaussian[1] * f3 + 0.2F;
++                    entityitem.motionZ = (float)KillTheRngOccurences.nextGaussian[2] * f3;
 ==========> BlockChest.java
 --- BlockChest.java
 +++ BlockChest.java
 @@ -9,0 +9,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -397,3 +399,3 @@
+-                float f = random.nextFloat() * 0.8F + 0.1F;
+-                float f1 = random.nextFloat() * 0.8F + 0.1F;
+-                float f2 = random.nextFloat() * 0.8F + 0.1F;
++                float f = KillTheRngOccurences.nextFloat[8] * 0.8F + 0.1F;
++                float f1 = KillTheRngOccurences.nextFloat[9] * 0.8F + 0.1F;
++                float f2 = KillTheRngOccurences.nextFloat[10] * 0.8F + 0.1F;
 @@ -402,1 +404,1 @@
 -                    int i1 = random.nextInt(21) + 10;
 +                    int i1 = (KillTheRngOccurences.nextInt[4] % 21) + 10;
+@@ -410,3 +412,3 @@
+-                    entityitem.motionX = (float)random.nextGaussian() * f3;
+-                    entityitem.motionY = (float)random.nextGaussian() * f3 + 0.2F;
+-                    entityitem.motionZ = (float)random.nextGaussian() * f3;
++                    entityitem.motionX = (float)KillTheRngOccurences.nextGaussian[3] * f3;
++                    entityitem.motionY = (float)KillTheRngOccurences.nextGaussian[4] * f3 + 0.2F;
++                    entityitem.motionZ = (float)KillTheRngOccurences.nextGaussian[5] * f3;
 ==========> BlockCrops.java
 --- BlockCrops.java
 +++ BlockCrops.java
@@ -196,15 +243,46 @@
 @@ -121,1 +123,1 @@
 -            if(world.rand.nextInt(15) <= l)
 +            if((KillTheRngOccurences.nextInt[5] % 15) <= l)
+@@ -124,3 +126,3 @@
+-                float f2 = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5F;
+-                float f3 = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5F;
+-                float f4 = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5F;
++                float f2 = KillTheRngOccurences.nextFloat[11] * f1 + (1.0F - f1) * 0.5F;
++                float f3 = KillTheRngOccurences.nextFloat[12] * f1 + (1.0F - f1) * 0.5F;
++                float f4 = KillTheRngOccurences.nextFloat[13] * f1 + (1.0F - f1) * 0.5F;
 ==========> BlockDispenser.java
 --- BlockDispenser.java
 +++ BlockDispenser.java
 @@ -9,0 +9,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -190,1 +192,1 @@
+-                    double d3 = random.nextDouble() * 0.10000000000000001D + 0.20000000000000001D;
++                    double d3 = KillTheRngOccurences.nextDouble[0] * 0.10000000000000001D + 0.20000000000000001D;
+@@ -194,3 +196,3 @@
+-                    entityitem.motionX += random.nextGaussian() * 0.0074999998323619366D * 6D;
+-                    entityitem.motionY += random.nextGaussian() * 0.0074999998323619366D * 6D;
+-                    entityitem.motionZ += random.nextGaussian() * 0.0074999998323619366D * 6D;
++                    entityitem.motionX += KillTheRngOccurences.nextGaussian[9] * 0.0074999998323619366D * 6D;
++                    entityitem.motionY += KillTheRngOccurences.nextGaussian[10] * 0.0074999998323619366D * 6D;
++                    entityitem.motionZ += KillTheRngOccurences.nextGaussian[11] * 0.0074999998323619366D * 6D;
+@@ -264,3 +266,3 @@
+-                float f = random.nextFloat() * 0.8F + 0.1F;
+-                float f1 = random.nextFloat() * 0.8F + 0.1F;
+-                float f2 = random.nextFloat() * 0.8F + 0.1F;
++                float f = KillTheRngOccurences.nextFloat[14] * 0.8F + 0.1F;
++                float f1 = KillTheRngOccurences.nextFloat[15] * 0.8F + 0.1F;
++                float f2 = KillTheRngOccurences.nextFloat[16] * 0.8F + 0.1F;
 @@ -273,1 +275,1 @@
 -                    int i1 = random.nextInt(21) + 10;
 +                    int i1 = (KillTheRngOccurences.nextInt[7] % 21) + 10;
+@@ -281,3 +283,3 @@
+-                    entityitem.motionX = (float)random.nextGaussian() * f3;
+-                    entityitem.motionY = (float)random.nextGaussian() * f3 + 0.2F;
+-                    entityitem.motionZ = (float)random.nextGaussian() * f3;
++                    entityitem.motionX = (float)KillTheRngOccurences.nextGaussian[6] * f3;
++                    entityitem.motionY = (float)KillTheRngOccurences.nextGaussian[7] * f3 + 0.2F;
++                    entityitem.motionZ = (float)KillTheRngOccurences.nextGaussian[8] * f3;
 ==========> BlockDragonEgg.java
 --- BlockDragonEgg.java
 +++ BlockDragonEgg.java
@@ -269,9 +347,23 @@
 @@ -9,0 +9,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -224,3 +226,3 @@
+-                    float f = furnaceRand.nextFloat() * 0.8F + 0.1F;
+-                    float f1 = furnaceRand.nextFloat() * 0.8F + 0.1F;
+-                    float f2 = furnaceRand.nextFloat() * 0.8F + 0.1F;
++                    float f = KillTheRngOccurences.nextFloat[17] * 0.8F + 0.1F;
++                    float f1 = KillTheRngOccurences.nextFloat[18] * 0.8F + 0.1F;
++                    float f2 = KillTheRngOccurences.nextFloat[19] * 0.8F + 0.1F;
 @@ -233,1 +235,1 @@
 -                        int i1 = furnaceRand.nextInt(21) + 10;
 +                        int i1 = (KillTheRngOccurences.nextInt[23] % 21) + 10;
+@@ -241,3 +243,3 @@
+-                        entityitem.motionX = (float)furnaceRand.nextGaussian() * f3;
+-                        entityitem.motionY = (float)furnaceRand.nextGaussian() * f3 + 0.2F;
+-                        entityitem.motionZ = (float)furnaceRand.nextGaussian() * f3;
++                        entityitem.motionX = (float)KillTheRngOccurences.nextGaussian[12] * f3;
++                        entityitem.motionY = (float)KillTheRngOccurences.nextGaussian[13] * f3 + 0.2F;
++                        entityitem.motionZ = (float)KillTheRngOccurences.nextGaussian[14] * f3;
 ==========> BlockGlowStone.java
 --- BlockGlowStone.java
 +++ BlockGlowStone.java
@@ -306,6 +398,19 @@
 @@ -22,1 +24,1 @@
 -        if(random.nextInt(10 - j * 3) == 0)
 +        if((KillTheRngOccurences.nextInt[29] % (10 - j * 3)) == 0)
+==========> BlockJukeBox.java
+--- BlockJukeBox.java
++++ BlockJukeBox.java
+@@ -9,0 +9,2 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
++
+@@ -81,3 +83,3 @@
+-            double d = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+-            double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.20000000000000001D + 0.59999999999999998D;
+-            double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
++            double d = (double)(KillTheRngOccurences.nextFloat[20] * f) + (double)(1.0F - f) * 0.5D;
++            double d1 = (double)(KillTheRngOccurences.nextFloat[21] * f) + (double)(1.0F - f) * 0.20000000000000001D + 0.59999999999999998D;
++            double d2 = (double)(KillTheRngOccurences.nextFloat[22] * f) + (double)(1.0F - f) * 0.5D;
 ==========> BlockLeaves.java
 --- BlockLeaves.java
 +++ BlockLeaves.java
@@ -432,6 +537,19 @@
 @@ -74,1 +76,1 @@
 -            if(random.nextInt(10) == 0)
 +            if((KillTheRngOccurences.nextInt[55] % 10) == 0)
+==========> BlockSnow.java
+--- BlockSnow.java
++++ BlockSnow.java
+@@ -9,0 +9,2 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
++
+@@ -87,3 +89,3 @@
+-        double d = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+-        double d1 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
+-        double d2 = (double)(world.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
++        double d = (double)(KillTheRngOccurences.nextFloat[23] * f) + (double)(1.0F - f) * 0.5D;
++        double d1 = (double)(KillTheRngOccurences.nextFloat[24] * f) + (double)(1.0F - f) * 0.5D;
++        double d2 = (double)(KillTheRngOccurences.nextFloat[25] * f) + (double)(1.0F - f) * 0.5D;
 ==========> BlockStationary.java
 --- BlockStationary.java
 +++ BlockStationary.java
@@ -462,6 +580,13 @@
 @@ -216,1 +218,1 @@
 -            if(world.rand.nextInt(15) <= l)
 +            if((KillTheRngOccurences.nextInt[59] % 15) <= l)
+@@ -219,3 +221,3 @@
+-                float f2 = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5F;
+-                float f3 = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5F;
+-                float f4 = world.rand.nextFloat() * f1 + (1.0F - f1) * 0.5F;
++                float f2 = KillTheRngOccurences.nextFloat[26] * f1 + (1.0F - f1) * 0.5F;
++                float f3 = KillTheRngOccurences.nextFloat[27] * f1 + (1.0F - f1) * 0.5F;
++                float f4 = KillTheRngOccurences.nextFloat[28] * f1 + (1.0F - f1) * 0.5F;
 ==========> BlockTallGrass.java
 --- BlockTallGrass.java
 +++ BlockTallGrass.java
@@ -535,9 +660,21 @@
 @@ -209,1 +211,1 @@
 -        j = 1 + random.nextInt((j >> 1) + 1) + random.nextInt((j >> 1) + 1);
 +        j = 1 + (KillTheRngOccurences.nextInt[75] % ((j >> 1) + 1)) + (KillTheRngOccurences.nextInt[76] % ((j >> 1) + 1));
+@@ -211,1 +213,1 @@
+-        float f = ((random.nextFloat() + random.nextFloat()) - 1.0F) * 0.25F;
++        float f = ((KillTheRngOccurences.nextFloat[29] + KillTheRngOccurences.nextFloat[30]) - 1.0F) * 0.25F;
 @@ -222,1 +224,1 @@
 -                for(int i1 = l >> 1; random.nextInt(50) <= i1; i1 >>= 1)
 +                for(int i1 = l >> 1; (KillTheRngOccurences.nextInt[77] % 50) <= i1; i1 >>= 1)
+==========> Entity.java
+--- Entity.java
++++ Entity.java
+@@ -10,0 +10,2 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
++
+@@ -1368,1 +1370,1 @@
+-            float f = rand.nextFloat() * 0.2F + 0.1F;
++            float f = KillTheRngOccurences.nextFloat[31] * 0.2F + 0.1F;
 ==========> EntityAnimal.java
 --- EntityAnimal.java
 +++ EntityAnimal.java
@@ -553,6 +690,20 @@
 @@ -10,0 +10,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -105,3 +107,3 @@
+-        d += rand.nextGaussian() * 0.0074999998323619366D * (double)f1;
+-        d1 += rand.nextGaussian() * 0.0074999998323619366D * (double)f1;
+-        d2 += rand.nextGaussian() * 0.0074999998323619366D * (double)f1;
++        d += KillTheRngOccurences.nextGaussian[15] * 0.0074999998323619366D * (double)f1;
++        d1 += KillTheRngOccurences.nextGaussian[16] * 0.0074999998323619366D * (double)f1;
++        d2 += KillTheRngOccurences.nextGaussian[17] * 0.0074999998323619366D * (double)f1;
+@@ -167,3 +169,3 @@
+-                motionX *= rand.nextFloat() * 0.2F;
+-                motionY *= rand.nextFloat() * 0.2F;
+-                motionZ *= rand.nextFloat() * 0.2F;
++                motionX *= KillTheRngOccurences.nextFloat[32] * 0.2F;
++                motionY *= KillTheRngOccurences.nextFloat[33] * 0.2F;
++                motionZ *= KillTheRngOccurences.nextFloat[34] * 0.2F;
 @@ -228,1 +230,1 @@
 -                    j1 += rand.nextInt(j1 / 2 + 2);
 +                    j1 += (KillTheRngOccurences.nextInt[79] % (j1 / 2 + 2));
@@ -562,6 +713,12 @@
 @@ -9,0 +9,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -89,1 +91,1 @@
+-                field_40154_a = 0.5F + (float)rand.nextGaussian() * 3F;
++                field_40154_a = 0.5F + (float)KillTheRngOccurences.nextGaussian[18] * 3F;
+@@ -147,1 +149,1 @@
+-                        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(worldObj, this, d + rand.nextGaussian() * (double)f1, d1, d2 + rand.nextGaussian() * (double)f1);
++                        EntitySmallFireball entitysmallfireball = new EntitySmallFireball(worldObj, this, d + KillTheRngOccurences.nextGaussian[19] * (double)f1, d1, d2 + KillTheRngOccurences.nextGaussian[20] * (double)f1);
 @@ -187,1 +189,1 @@
 -            int j = rand.nextInt(2 + i);
 +            int j = (KillTheRngOccurences.nextInt[80] % (2 + i));
@@ -607,6 +764,9 @@
 @@ -77,1 +79,1 @@
 -        if(pathToEntity == null || rand.nextInt(100) == 0)
 +        if(pathToEntity == null || (KillTheRngOccurences.nextInt[92] % 100) == 0)
+@@ -141,1 +143,1 @@
+-        if(rand.nextFloat() < 0.8F && (flag || flag1))
++        if(KillTheRngOccurences.nextFloat[35] < 0.8F && (flag || flag1))
 @@ -158,3 +160,3 @@
 -            int i1 = MathHelper.floor_double((posX + (double)rand.nextInt(13)) - 6D);
 -            int j1 = MathHelper.floor_double((posY + (double)rand.nextInt(7)) - 3D);
@@ -629,6 +789,11 @@
 @@ -9,0 +9,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -170,2 +172,2 @@
+-                field_40167_a += rand.nextGaussian() * 2D;
+-                field_40166_c += rand.nextGaussian() * 2D;
++                field_40167_a += KillTheRngOccurences.nextGaussian[21] * 2D;
++                field_40166_c += KillTheRngOccurences.nextGaussian[22] * 2D;
 @@ -322,1 +324,1 @@
 -        if(rand.nextInt(10) == 0)
 +        if((KillTheRngOccurences.nextInt[97] % 10) == 0)
@@ -638,6 +803,21 @@
 @@ -398,1 +400,1 @@
 -            field_40179_aC = (Entity)worldObj.playerEntities.get(rand.nextInt(worldObj.playerEntities.size()));
 +            field_40179_aC = (Entity)worldObj.playerEntities.get((KillTheRngOccurences.nextInt[99] % (worldObj.playerEntities.size())));
+@@ -405,1 +407,1 @@
+-                field_40165_b = 70F + rand.nextFloat() * 50F;
++                field_40165_b = 70F + KillTheRngOccurences.nextFloat[39] * 50F;
+@@ -407,2 +409,2 @@
+-                field_40167_a += rand.nextFloat() * 120F - 60F;
+-                field_40166_c += rand.nextFloat() * 120F - 60F;
++                field_40167_a += KillTheRngOccurences.nextFloat[40] * 120F - 60F;
++                field_40166_c += KillTheRngOccurences.nextFloat[41] * 120F - 60F;
+@@ -479,3 +481,3 @@
+-        field_40167_a = posX + (double)(f1 * 5F) + (double)((rand.nextFloat() - 0.5F) * 2.0F);
+-        field_40165_b = posY + (double)(rand.nextFloat() * 3F) + 1.0D;
+-        field_40166_c = (posZ - (double)(f2 * 5F)) + (double)((rand.nextFloat() - 0.5F) * 2.0F);
++        field_40167_a = posX + (double)(f1 * 5F) + (double)((KillTheRngOccurences.nextFloat[36] - 0.5F) * 2.0F);
++        field_40165_b = posY + (double)(KillTheRngOccurences.nextFloat[37] * 3F) + 1.0D;
++        field_40166_c = (posZ - (double)(f2 * 5F)) + (double)((KillTheRngOccurences.nextFloat[38] - 0.5F) * 2.0F);
 ==========> EntityEgg.java
 --- EntityEgg.java
 +++ EntityEgg.java
@@ -668,36 +848,105 @@
 @@ -127,1 +129,1 @@
 -                if(rand.nextInt(20) == 0)
 +                if((KillTheRngOccurences.nextInt[106] % 20) == 0)
+@@ -129,3 +131,3 @@
+-                    int i = MathHelper.floor_double((posX - 2D) + rand.nextDouble() * 4D);
+-                    int l = MathHelper.floor_double(posY + rand.nextDouble() * 3D);
+-                    int j1 = MathHelper.floor_double((posZ - 2D) + rand.nextDouble() * 4D);
++                    int i = MathHelper.floor_double((posX - 2D) + KillTheRngOccurences.nextDouble[3] * 4D);
++                    int l = MathHelper.floor_double(posY + KillTheRngOccurences.nextDouble[4] * 3D);
++                    int j1 = MathHelper.floor_double((posZ - 2D) + KillTheRngOccurences.nextDouble[5] * 4D);
 @@ -141,1 +143,1 @@
 -            if(rand.nextInt(2000) == 0)
 +            if((KillTheRngOccurences.nextInt[107] % 2000) == 0)
-@@ -208,1 +210,1 @@
+@@ -143,3 +145,3 @@
+-                int j = MathHelper.floor_double((posX - 1.0D) + rand.nextDouble() * 2D);
+-                int i1 = MathHelper.floor_double(posY + rand.nextDouble() * 2D);
+-                int k1 = MathHelper.floor_double((posZ - 1.0D) + rand.nextDouble() * 2D);
++                int j = MathHelper.floor_double((posX - 1.0D) + KillTheRngOccurences.nextDouble[6] * 2D);
++                int i1 = MathHelper.floor_double(posY + KillTheRngOccurences.nextDouble[7] * 2D);
++                int k1 = MathHelper.floor_double((posZ - 1.0D) + KillTheRngOccurences.nextDouble[8] * 2D);
+@@ -163,1 +165,1 @@
+-            if(f > 0.5F && worldObj.canBlockSeeTheSky(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)) && rand.nextFloat() * 30F < (f - 0.4F) * 2.0F)
++            if(f > 0.5F && worldObj.canBlockSeeTheSky(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)) && KillTheRngOccurences.nextFloat[42] * 30F < (f - 0.4F) * 2.0F)
+@@ -207,3 +209,3 @@
+-        double d = posX + (rand.nextDouble() - 0.5D) * 64D;
 -        double d1 = posY + (double)(rand.nextInt(64) - 32);
+-        double d2 = posZ + (rand.nextDouble() - 0.5D) * 64D;
++        double d = posX + (KillTheRngOccurences.nextDouble[9] - 0.5D) * 64D;
 +        double d1 = posY + (double)((KillTheRngOccurences.nextInt[105] % 64) - 32);
-@@ -219,1 +221,1 @@
++        double d2 = posZ + (KillTheRngOccurences.nextDouble[10] - 0.5D) * 64D;
+@@ -218,3 +220,3 @@
+-        double d1 = (posX + (rand.nextDouble() - 0.5D) * 8D) - vec3d.xCoord * d;
 -        double d2 = (posY + (double)(rand.nextInt(16) - 8)) - vec3d.yCoord * d;
+-        double d3 = (posZ + (rand.nextDouble() - 0.5D) * 8D) - vec3d.zCoord * d;
++        double d1 = (posX + (KillTheRngOccurences.nextDouble[1] - 0.5D) * 8D) - vec3d.xCoord * d;
 +        double d2 = (posY + (double)((KillTheRngOccurences.nextInt[103] % 16) - 8)) - vec3d.yCoord * d;
++        double d3 = (posZ + (KillTheRngOccurences.nextDouble[2] - 0.5D) * 8D) - vec3d.zCoord * d;
 @@ -309,1 +311,1 @@
 -            int k = rand.nextInt(2 + i);
 +            int k = (KillTheRngOccurences.nextInt[104] % (2 + i));
+==========> EntityFireball.java
+--- EntityFireball.java
++++ EntityFireball.java
+@@ -10,0 +10,2 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
++
+@@ -87,3 +89,3 @@
+-        d += rand.nextGaussian() * 0.40000000000000002D;
+-        d1 += rand.nextGaussian() * 0.40000000000000002D;
+-        d2 += rand.nextGaussian() * 0.40000000000000002D;
++        d += KillTheRngOccurences.nextGaussian[23] * 0.40000000000000002D;
++        d1 += KillTheRngOccurences.nextGaussian[24] * 0.40000000000000002D;
++        d2 += KillTheRngOccurences.nextGaussian[25] * 0.40000000000000002D;
+@@ -110,3 +112,3 @@
+-                motionX *= rand.nextFloat() * 0.2F;
+-                motionY *= rand.nextFloat() * 0.2F;
+-                motionZ *= rand.nextFloat() * 0.2F;
++                motionX *= KillTheRngOccurences.nextFloat[43] * 0.2F;
++                motionY *= KillTheRngOccurences.nextFloat[44] * 0.2F;
++                motionZ *= KillTheRngOccurences.nextFloat[45] * 0.2F;
 ==========> EntityFishHook.java
 --- EntityFishHook.java
 +++ EntityFishHook.java
 @@ -10,0 +10,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -110,3 +112,3 @@
+-        d += rand.nextGaussian() * 0.0074999998323619366D * (double)f1;
+-        d1 += rand.nextGaussian() * 0.0074999998323619366D * (double)f1;
+-        d2 += rand.nextGaussian() * 0.0074999998323619366D * (double)f1;
++        d += KillTheRngOccurences.nextGaussian[26] * 0.0074999998323619366D * (double)f1;
++        d1 += KillTheRngOccurences.nextGaussian[27] * 0.0074999998323619366D * (double)f1;
++        d2 += KillTheRngOccurences.nextGaussian[28] * 0.0074999998323619366D * (double)f1;
+@@ -197,3 +199,3 @@
+-                motionX *= rand.nextFloat() * 0.2F;
+-                motionY *= rand.nextFloat() * 0.2F;
+-                motionZ *= rand.nextFloat() * 0.2F;
++                motionX *= KillTheRngOccurences.nextFloat[46] * 0.2F;
++                motionY *= KillTheRngOccurences.nextFloat[47] * 0.2F;
++                motionZ *= KillTheRngOccurences.nextFloat[48] * 0.2F;
 @@ -309,1 +311,1 @@
 -                if(rand.nextInt(c) == 0)
 +                if((KillTheRngOccurences.nextInt[108] % c) == 0)
 @@ -311,1 +313,1 @@
 -                    ticksCatchable = rand.nextInt(30) + 10;
 +                    ticksCatchable = (KillTheRngOccurences.nextInt[109] % 30) + 10;
+@@ -334,1 +336,1 @@
+-            motionY -= (double)(rand.nextFloat() * rand.nextFloat() * rand.nextFloat()) * 0.20000000000000001D;
++            motionY -= (double)(KillTheRngOccurences.nextFloat[49] * KillTheRngOccurences.nextFloat[50] * KillTheRngOccurences.nextFloat[51]) * 0.20000000000000001D;
 ==========> EntityGhast.java
 --- EntityGhast.java
 +++ EntityGhast.java
 @@ -10,0 +10,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -88,3 +90,3 @@
+-            waypointX = posX + (double)((rand.nextFloat() * 2.0F - 1.0F) * 16F);
+-            waypointY = posY + (double)((rand.nextFloat() * 2.0F - 1.0F) * 16F);
+-            waypointZ = posZ + (double)((rand.nextFloat() * 2.0F - 1.0F) * 16F);
++            waypointX = posX + (double)((KillTheRngOccurences.nextFloat[52] * 2.0F - 1.0F) * 16F);
++            waypointY = posY + (double)((KillTheRngOccurences.nextFloat[53] * 2.0F - 1.0F) * 16F);
++            waypointZ = posZ + (double)((KillTheRngOccurences.nextFloat[54] * 2.0F - 1.0F) * 16F);
 @@ -94,1 +96,1 @@
 -            courseChangeCooldown += rand.nextInt(5) + 2;
 +            courseChangeCooldown += (KillTheRngOccurences.nextInt[111] % 5) + 2;
@@ -710,6 +959,20 @@
 @@ -230,1 +232,1 @@
 -        return rand.nextInt(20) == 0 && super.getCanSpawnHere() && worldObj.difficultySetting > 0;
 +        return (KillTheRngOccurences.nextInt[110] % 20) == 0 && super.getCanSpawnHere() && worldObj.difficultySetting > 0;
+==========> EntityItem.java
+--- EntityItem.java
++++ EntityItem.java
+@@ -9,0 +9,2 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
++
+@@ -36,2 +38,2 @@
+-        rotationYaw = (float)(Math.random() * 360D);
+-        motionX = (float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D);
++        rotationYaw = (float)(KillTheRngOccurences.random[0] * 360D);
++        motionX = (float)(KillTheRngOccurences.random[1] * 0.20000000298023224D - 0.10000000149011612D);
+@@ -39,1 +41,1 @@
+-        motionZ = (float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D);
++        motionZ = (float)(KillTheRngOccurences.random[2] * 0.20000000298023224D - 0.10000000149011612D);
 ==========> EntityLightningBolt.java
 --- EntityLightningBolt.java
 +++ EntityLightningBolt.java
@@ -735,6 +998,18 @@
 @@ -9,0 +9,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -128,1 +130,1 @@
+-        rotationYaw = (float)(Math.random() * 3.1415927410125732D * 2D);
++        rotationYaw = (float)(KillTheRngOccurences.random[8] * 3.1415927410125732D * 2D);
+@@ -491,1 +493,1 @@
+-                for(d1 = entity.posZ - posZ; d * d + d1 * d1 < 0.0001D; d1 = (Math.random() - Math.random()) * 0.01D)
++                for(d1 = entity.posZ - posZ; d * d + d1 * d1 < 0.0001D; d1 = (KillTheRngOccurences.random[3] - KillTheRngOccurences.random[4]) * 0.01D)
+@@ -493,1 +495,1 @@
+-                    d = (Math.random() - Math.random()) * 0.01D;
++                    d = (KillTheRngOccurences.random[5] - KillTheRngOccurences.random[6]) * 0.01D;
+@@ -500,1 +502,1 @@
+-                attackedAtYaw = (int)(Math.random() * 2D) * 180;
++                attackedAtYaw = (int)(KillTheRngOccurences.random[7] * 2D) * 180;
 @@ -646,1 +648,1 @@
 -            int k = rand.nextInt(3);
 +            int k = (KillTheRngOccurences.nextInt[121] % 3);
@@ -744,21 +1019,64 @@
 @@ -996,1 +998,1 @@
 -            if(entityAge > 600 && rand.nextInt(800) == 0 && d3 > 1024D && canDespawn())
 +            if(entityAge > 600 && (KillTheRngOccurences.nextInt[124] % 800) == 0 && d3 > 1024D && canDespawn())
+@@ -1015,1 +1017,1 @@
+-        if(rand.nextFloat() < 0.02F)
++        if(KillTheRngOccurences.nextFloat[55] < 0.02F)
 @@ -1021,1 +1023,1 @@
 -                numTicksToChaseTarget = 10 + rand.nextInt(20);
 +                numTicksToChaseTarget = 10 + (KillTheRngOccurences.nextInt[123] % 20);
+@@ -1024,1 +1026,1 @@
+-                randomYawVelocity = (rand.nextFloat() - 0.5F) * 20F;
++                randomYawVelocity = (KillTheRngOccurences.nextFloat[56] - 0.5F) * 20F;
+@@ -1036,1 +1038,1 @@
+-            if(rand.nextFloat() < 0.05F)
++            if(KillTheRngOccurences.nextFloat[57] < 0.05F)
+@@ -1038,1 +1040,1 @@
+-                randomYawVelocity = (rand.nextFloat() - 0.5F) * 20F;
++                randomYawVelocity = (KillTheRngOccurences.nextFloat[58] - 0.5F) * 20F;
+@@ -1047,1 +1049,1 @@
+-            isJumping = rand.nextFloat() < 0.8F;
++            isJumping = KillTheRngOccurences.nextFloat[59] < 0.8F;
 ==========> EntityMinecart.java
 --- EntityMinecart.java
 +++ EntityMinecart.java
 @@ -10,0 +10,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -187,3 +189,3 @@
+-                    float f = rand.nextFloat() * 0.8F + 0.1F;
+-                    float f1 = rand.nextFloat() * 0.8F + 0.1F;
+-                    float f2 = rand.nextFloat() * 0.8F + 0.1F;
++                    float f = KillTheRngOccurences.nextFloat[63] * 0.8F + 0.1F;
++                    float f1 = KillTheRngOccurences.nextFloat[64] * 0.8F + 0.1F;
++                    float f2 = KillTheRngOccurences.nextFloat[65] * 0.8F + 0.1F;
 @@ -196,1 +198,1 @@
 -                        int k = rand.nextInt(21) + 10;
 +                        int k = (KillTheRngOccurences.nextInt[126] % 21) + 10;
+@@ -204,3 +206,3 @@
+-                        entityitem.motionX = (float)rand.nextGaussian() * f3;
+-                        entityitem.motionY = (float)rand.nextGaussian() * f3 + 0.2F;
+-                        entityitem.motionZ = (float)rand.nextGaussian() * f3;
++                        entityitem.motionX = (float)KillTheRngOccurences.nextGaussian[32] * f3;
++                        entityitem.motionY = (float)KillTheRngOccurences.nextGaussian[33] * f3 + 0.2F;
++                        entityitem.motionZ = (float)KillTheRngOccurences.nextGaussian[34] * f3;
+@@ -243,3 +245,3 @@
+-            float f = rand.nextFloat() * 0.8F + 0.1F;
+-            float f1 = rand.nextFloat() * 0.8F + 0.1F;
+-            float f2 = rand.nextFloat() * 0.8F + 0.1F;
++            float f = KillTheRngOccurences.nextFloat[60] * 0.8F + 0.1F;
++            float f1 = KillTheRngOccurences.nextFloat[61] * 0.8F + 0.1F;
++            float f2 = KillTheRngOccurences.nextFloat[62] * 0.8F + 0.1F;
 @@ -252,1 +254,1 @@
 -                int j = rand.nextInt(21) + 10;
 +                int j = (KillTheRngOccurences.nextInt[125] % 21) + 10;
+@@ -260,3 +262,3 @@
+-                entityitem.motionX = (float)rand.nextGaussian() * f3;
+-                entityitem.motionY = (float)rand.nextGaussian() * f3 + 0.2F;
+-                entityitem.motionZ = (float)rand.nextGaussian() * f3;
++                entityitem.motionX = (float)KillTheRngOccurences.nextGaussian[29] * f3;
++                entityitem.motionY = (float)KillTheRngOccurences.nextGaussian[30] * f3 + 0.2F;
++                entityitem.motionZ = (float)KillTheRngOccurences.nextGaussian[31] * f3;
 ==========> EntityMob.java
 --- EntityMob.java
 +++ EntityMob.java
@@ -804,6 +1122,19 @@
 @@ -494,1 +496,1 @@
 -        if(j > 0 && rand.nextInt(j + 1) > 0)
 +        if(j > 0 && (KillTheRngOccurences.nextInt[134] % (j + 1)) > 0)
+@@ -524,2 +526,2 @@
+-            float f2 = rand.nextFloat() * 0.5F;
+-            float f4 = rand.nextFloat() * 3.141593F * 2.0F;
++            float f2 = KillTheRngOccurences.nextFloat[66] * 0.5F;
++            float f4 = KillTheRngOccurences.nextFloat[67] * 3.141593F * 2.0F;
+@@ -536,2 +538,2 @@
+-            float f3 = rand.nextFloat() * 3.141593F * 2.0F;
+-            f1 *= rand.nextFloat();
++            float f3 = KillTheRngOccurences.nextFloat[68] * 3.141593F * 2.0F;
++            f1 *= KillTheRngOccurences.nextFloat[69];
+@@ -539,1 +541,1 @@
+-            entityitem.motionY += (rand.nextFloat() - rand.nextFloat()) * 0.1F;
++            entityitem.motionY += (KillTheRngOccurences.nextFloat[70] - KillTheRngOccurences.nextFloat[71]) * 0.1F;
 @@ -872,1 +874,1 @@
 -                i += rand.nextInt(i / 2 + 2);
 +                i += (KillTheRngOccurences.nextInt[133] % (i / 2 + 2));
@@ -893,18 +1224,31 @@
 @@ -92,1 +94,1 @@
 -                int i = 2 + rand.nextInt(3);
 +                int i = 2 + (KillTheRngOccurences.nextInt[137] % 3);
+@@ -96,3 +98,3 @@
+-                    entityitem.motionY += rand.nextFloat() * 0.05F;
+-                    entityitem.motionX += (rand.nextFloat() - rand.nextFloat()) * 0.1F;
+-                    entityitem.motionZ += (rand.nextFloat() - rand.nextFloat()) * 0.1F;
++                    entityitem.motionY += KillTheRngOccurences.nextFloat[72] * 0.05F;
++                    entityitem.motionX += (KillTheRngOccurences.nextFloat[73] - KillTheRngOccurences.nextFloat[74]) * 0.1F;
++                    entityitem.motionZ += (KillTheRngOccurences.nextFloat[75] - KillTheRngOccurences.nextFloat[76]) * 0.1F;
 @@ -166,1 +168,1 @@
 -        int i = random.nextInt(100);
 +        int i = (KillTheRngOccurences.nextInt[135] % 100);
 @@ -183,1 +185,1 @@
 -        return random.nextInt(500) != 0 ? 0 : 6;
 +        return (KillTheRngOccurences.nextInt[136] % 500) != 0 ? 0 : 6;
+@@ -190,1 +192,1 @@
+-        if(rand.nextBoolean())
++        if(KillTheRngOccurences.nextBoolean[0])
 ==========> EntitySilverfish.java
 --- EntitySilverfish.java
 +++ EntitySilverfish.java
 @@ -9,0 +9,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -133,1 +135,1 @@
+-                            if(!rand.nextBoolean())
++                            if(!KillTheRngOccurences.nextBoolean[1])
 @@ -152,1 +154,1 @@
 -            int k1 = rand.nextInt(6);
 +            int k1 = (KillTheRngOccurences.nextInt[138] % 6);
@@ -914,6 +1258,9 @@
 @@ -9,0 +9,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -70,1 +72,1 @@
+-            if(f > 0.5F && worldObj.canBlockSeeTheSky(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)) && rand.nextFloat() * 30F < (f - 0.4F) * 2.0F)
++            if(f > 0.5F && worldObj.canBlockSeeTheSky(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)) && KillTheRngOccurences.nextFloat[77] * 30F < (f - 0.4F) * 2.0F)
 @@ -116,1 +118,1 @@
 -        int j = rand.nextInt(3 + i);
 +        int j = (KillTheRngOccurences.nextInt[139] % (3 + i));
@@ -932,12 +1279,21 @@
 @@ -30,1 +32,1 @@
 -        slimeJumpDelay = rand.nextInt(20) + 10;
 +        slimeJumpDelay = (KillTheRngOccurences.nextInt[145] % 20) + 10;
+@@ -131,1 +133,1 @@
+-                worldObj.playSoundAtEntity(this, func_40138_aj(), getSoundVolume(), ((rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F) * 0.8F);
++                worldObj.playSoundAtEntity(this, func_40138_aj(), getSoundVolume(), ((KillTheRngOccurences.nextFloat[79] - KillTheRngOccurences.nextFloat[80]) * 0.2F + 1.0F) * 0.8F);
+@@ -134,1 +136,1 @@
+-            moveStrafing = 1.0F - rand.nextFloat() * 2.0F;
++            moveStrafing = 1.0F - KillTheRngOccurences.nextFloat[81] * 2.0F;
 @@ -153,1 +155,1 @@
 -        return rand.nextInt(20) + 10;
 +        return (KillTheRngOccurences.nextInt[142] % 20) + 10;
 @@ -166,1 +168,1 @@
 -            int j = 2 + rand.nextInt(3);
 +            int j = 2 + (KillTheRngOccurences.nextInt[141] % 3);
+@@ -173,1 +175,1 @@
+-                entityslime.setLocationAndAngles(posX + (double)f, posY + 0.5D, posZ + (double)f1, rand.nextFloat() * 360F, 0.0F);
++                entityslime.setLocationAndAngles(posX + (double)f, posY + 0.5D, posZ + (double)f1, KillTheRngOccurences.nextFloat[78] * 360F, 0.0F);
 @@ -227,1 +229,1 @@
 -        if((getSlimeSize() == 1 || worldObj.difficultySetting > 0) && rand.nextInt(10) == 0 && chunk.getRandomWithSeed(0x3ad8025fL).nextInt(10) == 0 && posY < 40D)
 +        if((getSlimeSize() == 1 || worldObj.difficultySetting > 0) && (KillTheRngOccurences.nextInt[143] % 10) == 0 && chunk.getRandomWithSeed(0x3ad8025fL).nextInt(10) == 0 && posY < 40D)
@@ -983,6 +1339,27 @@
 @@ -187,1 +189,1 @@
 -        if(rand.nextInt(50) == 0 || !inWater || randomMotionVecX == 0.0F && randomMotionVecY == 0.0F && randomMotionVecZ == 0.0F)
 +        if((KillTheRngOccurences.nextInt[154] % 50) == 0 || !inWater || randomMotionVecX == 0.0F && randomMotionVecY == 0.0F && randomMotionVecZ == 0.0F)
+==========> EntityThrowable.java
+--- EntityThrowable.java
++++ EntityThrowable.java
+@@ -10,0 +10,2 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
++
+@@ -110,3 +112,3 @@
+-        d += rand.nextGaussian() * 0.0074999998323619366D * (double)f1;
+-        d1 += rand.nextGaussian() * 0.0074999998323619366D * (double)f1;
+-        d2 += rand.nextGaussian() * 0.0074999998323619366D * (double)f1;
++        d += KillTheRngOccurences.nextGaussian[35] * 0.0074999998323619366D * (double)f1;
++        d1 += KillTheRngOccurences.nextGaussian[36] * 0.0074999998323619366D * (double)f1;
++        d2 += KillTheRngOccurences.nextGaussian[37] * 0.0074999998323619366D * (double)f1;
+==========> EntityTNTPrimed.java
+--- EntityTNTPrimed.java
++++ EntityTNTPrimed.java
+@@ -7,0 +7,1 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
+@@ -29,1 +30,1 @@
+-        float f = (float)(Math.random() * 3.1415927410125732D * 2D);
++        float f = (float)(KillTheRngOccurences.random[9] * 3.1415927410125732D * 2D);
 ==========> EntityWaterMob.java
 --- EntityWaterMob.java
 +++ EntityWaterMob.java
@@ -1010,12 +1387,44 @@
 @@ -450,1 +452,1 @@
 -                    if(rand.nextInt(3) == 0)
 +                    if((KillTheRngOccurences.nextInt[156] % 3) == 0)
+==========> EntityXPOrb.java
+--- EntityXPOrb.java
++++ EntityXPOrb.java
+@@ -9,0 +9,2 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
++
+@@ -32,4 +34,4 @@
+-        rotationYaw = (float)(Math.random() * 360D);
+-        motionX = (float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F;
+-        motionY = (float)(Math.random() * 0.20000000000000001D) * 2.0F;
+-        motionZ = (float)(Math.random() * 0.20000000298023224D - 0.10000000149011612D) * 2.0F;
++        rotationYaw = (float)(KillTheRngOccurences.random[10] * 360D);
++        motionX = (float)(KillTheRngOccurences.random[11] * 0.20000000298023224D - 0.10000000149011612D) * 2.0F;
++        motionY = (float)(KillTheRngOccurences.random[12] * 0.20000000000000001D) * 2.0F;
++        motionZ = (float)(KillTheRngOccurences.random[13] * 0.20000000298023224D - 0.10000000149011612D) * 2.0F;
+@@ -93,2 +95,2 @@
+-            motionX = (rand.nextFloat() - rand.nextFloat()) * 0.2F;
+-            motionZ = (rand.nextFloat() - rand.nextFloat()) * 0.2F;
++            motionX = (KillTheRngOccurences.nextFloat[82] - KillTheRngOccurences.nextFloat[83]) * 0.2F;
++            motionZ = (KillTheRngOccurences.nextFloat[84] - KillTheRngOccurences.nextFloat[85]) * 0.2F;
+==========> EntityZombie.java
+--- EntityZombie.java
++++ EntityZombie.java
+@@ -9,0 +9,2 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
++
+@@ -39,1 +41,1 @@
+-            if(f > 0.5F && worldObj.canBlockSeeTheSky(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)) && rand.nextFloat() * 30F < (f - 0.4F) * 2.0F)
++            if(f > 0.5F && worldObj.canBlockSeeTheSky(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ)) && KillTheRngOccurences.nextFloat[86] * 30F < (f - 0.4F) * 2.0F)
 ==========> Explosion.java
 --- Explosion.java
 +++ Explosion.java
 @@ -9,0 +9,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
+@@ -62,1 +64,1 @@
+-                    float f1 = explosionSize * (0.7F + worldObj.rand.nextFloat() * 0.6F);
++                    float f1 = explosionSize * (0.7F + KillTheRngOccurences.nextFloat[87] * 0.6F);
 @@ -184,1 +186,1 @@
 -                if(j2 == 0 && Block.opaqueCubeLookup[k2] && ExplosionRNG.nextInt(3) == 0)
 +                if(j2 == 0 && Block.opaqueCubeLookup[k2] && (KillTheRngOccurences.nextInt[160] % 3) == 0)
@@ -1066,6 +1475,15 @@
 @@ -171,1 +173,1 @@
 -        boolean flag = Mouse.isButtonDown(0);
 +        boolean flag = VirtualMouse.isButtonDown(0);
+==========> GuiCreateWorld.java
+--- GuiCreateWorld.java
++++ GuiCreateWorld.java
+@@ -12,0 +12,2 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
++
+@@ -143,1 +145,1 @@
+-            long l = (new Random()).nextLong();
++            long l = KillTheRngOccurences.nextLong[0];
 ==========> GuiIngame.java
 --- GuiIngame.java
 +++ GuiIngame.java
@@ -1197,6 +1615,15 @@
 @@ -121,1 +123,1 @@
 -                        if(itemRand.nextInt(3) != 0)
 +                        if((KillTheRngOccurences.nextInt[166] % 3) != 0)
+==========> ItemFood.java
+--- ItemFood.java
++++ ItemFood.java
+@@ -9,0 +9,2 @@
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
++
+@@ -44,1 +46,1 @@
+-        if(!world.multiplayerWorld && potionId > 0 && world.rand.nextFloat() < potionEffectProbability)
++        if(!world.multiplayerWorld && potionId > 0 && KillTheRngOccurences.nextFloat[88] < potionEffectProbability)
 ==========> ItemStack.java
 --- ItemStack.java
 +++ ItemStack.java
@@ -1236,6 +1663,9 @@
 @@ -115,1 +117,1 @@
 -                                                    var19 += var0.rand.nextInt(var20) - var0.rand.nextInt(var20);
 +                                                    var19 += (KillTheRngOccurences.nextInt[170] % var20) - (KillTheRngOccurences.nextInt[171] % var20);
+@@ -149,1 +151,1 @@
+-                                                                var38.setLocationAndAngles((double)var23, (double)var24, (double)var25, var0.rand.nextFloat() * 360.0F, 0.0F);
++                                                                var38.setLocationAndAngles((double)var23, (double)var24, (double)var25, KillTheRngOccurences.nextFloat[89] * 360.0F, 0.0F);
 @@ -198,1 +200,1 @@
 -        if((entityliving instanceof EntitySpider) && world.rand.nextInt(100) == 0)
 +        if((entityliving instanceof EntitySpider) && (KillTheRngOccurences.nextInt[175] % 100) == 0)
@@ -1272,9 +1702,15 @@
 @@ -10,0 +10,2 @@
 +import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +
-@@ -93,1 +95,1 @@
+@@ -92,4 +94,4 @@
+-                double d3 = (double)xCoord + (worldObj.rand.nextDouble() - worldObj.rand.nextDouble()) * 4D;
 -                double d4 = (yCoord + worldObj.rand.nextInt(3)) - 1;
+-                double d5 = (double)zCoord + (worldObj.rand.nextDouble() - worldObj.rand.nextDouble()) * 4D;
+-                entityliving.setLocationAndAngles(d3, d4, d5, worldObj.rand.nextFloat() * 360F, 0.0F);
++                double d3 = (double)xCoord + (KillTheRngOccurences.nextDouble[11] - KillTheRngOccurences.nextDouble[12]) * 4D;
 +                double d4 = (yCoord + (KillTheRngOccurences.nextInt[178] % 3)) - 1;
++                double d5 = (double)zCoord + (KillTheRngOccurences.nextDouble[13] - KillTheRngOccurences.nextDouble[14]) * 4D;
++                entityliving.setLocationAndAngles(d3, d4, d5, KillTheRngOccurences.nextFloat[90] * 360F, 0.0F);
 @@ -111,1 +113,1 @@
 -        delay = 200 + worldObj.rand.nextInt(600);
 +        delay = 200 + (KillTheRngOccurences.nextInt[179] % 600);
