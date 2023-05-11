@@ -24,6 +24,7 @@ public class VirtualMouse {
 		// update from real mouse if not playing back
 		if (inputContainer.getState() != State.PLAYBACK) {
 			// fetch event
+			Mouse.poll();
 			next = Mouse.next();
 			nextMouseEvent = new MouseEvent(Mouse.getEventButton(), Mouse.getEventButtonState(), Mouse.getEventDWheel(), Mouse.getEventX(), Mouse.getEventY());
 			
