@@ -9,23 +9,9 @@ bin
 .classpath
 .project
 .settings
-.metadata 
-minecraft
+.metadata
+.factorypath
 
-*.jar
-
-TASmod OG Installer/tasmodog/
-tas.minecraft/
-*.settings
-*.tas
-*.backup
-*.mp4
-*.snd
-*.mkv
-
-TASmod OG Full/options.txt
-TASmod OG Full/render.cfg
-TASmod OG Full/infogui.cfg
-TASmod OG Full/resources/
-
-TASmod OG Light/options.txt
+# Ignore minecraft files
+run
+**/net/minecraft

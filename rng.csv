@@ -1,0 +1,1369 @@
+Class,Method,Type,Index,Custom Name,Usecase,Disable,Disable Reason
+BiomeEndDecorator,decorate_do,nextInt,0,endPillarShouldGenerate,Should an end pillar generate,FALSE,
+BiomeEndDecorator,decorate_do,nextInt,1,endPillarChunkOffsetX,X position of the end pillar,FALSE,
+BiomeEndDecorator,decorate_do,nextInt,2,endPillarChunkOffsetZ,Z position of the end pillar,FALSE,
+BiomeEndDecorator,decorate_do,nextFloat,0,endDragonRotation,Defines the rotation of the ender dragon on spawn,FALSE,
+Block,dropBlockAsItemWithChance,nextFloat,0,blockDropChance,Chance of item dropping from block,FALSE,
+Block,dropBlockAsItem_do,nextFloat,0,blockDropPositionX,X position of the dropped item,FALSE,
+Block,dropBlockAsItem_do,nextFloat,1,blockDropPositionY,Y position of the dropped item,FALSE,
+Block,dropBlockAsItem_do,nextFloat,2,blockDropPositionZ,Z position of the dropped item,FALSE,
+BlockBrewingStand,onBlockRemoval,nextGaussian,0,brewingStandInventoryDropMotionX,X motion of the dropped inventory from a destroyed brewing stand,FALSE,
+BlockBrewingStand,onBlockRemoval,nextGaussian,1,brewingStandInventoryDropMotionY,Y motion of the dropped inventory from a destroyed brewing stand,FALSE,
+BlockBrewingStand,onBlockRemoval,nextGaussian,2,brewingStandInventoryDropMotionZ,Z motion of the dropped inventory from a destroyed brewing stand,FALSE,
+BlockBrewingStand,onBlockRemoval,nextInt,0,brewingStandInventorySplit,Amount of items that get split in 2 different stacks when a brewing stand is destroyed,FALSE,
+BlockBrewingStand,onBlockRemoval,nextFloat,0,brewingStandInventoryDropPositionX,X position of the dropped inventory from a destroyed brewing stand,FALSE,
+BlockBrewingStand,onBlockRemoval,nextFloat,1,brewingStandInventoryDropPositionY,Y position of the dropped inventory from a destroyed brewing stand,FALSE,
+BlockBrewingStand,onBlockRemoval,nextFloat,2,brewingStandInventoryDropPositionZ,Z position of the dropped inventory from a destroyed brewing stand,FALSE,
+BlockChest,onBlockRemoval,nextGaussian,0,chestInventoryDropMotionX,X motion of the dropped inventory from a destroyed chest,FALSE,
+BlockChest,onBlockRemoval,nextGaussian,1,chestInventoryDropMotionY,Y motion of the dropped inventory from a destroyed chest,FALSE,
+BlockChest,onBlockRemoval,nextGaussian,2,chestStandInventoryDropMotionZ,Z motion of the dropped inventory from a destroyed chest,FALSE,
+BlockChest,onBlockRemoval,nextFloat,0,chestInventoryDropPositionX,X position of the dropped inventory from a destroyed chest,FALSE,
+BlockChest,onBlockRemoval,nextFloat,1,chestInventoryDropPositionY,Y position of the dropped inventory from a destroyed chest,FALSE,
+BlockChest,onBlockRemoval,nextFloat,2,chestInventoryDropPositionZ,Z position of the dropped inventory from a destroyed chest,FALSE,
+BlockChest,onBlockRemoval,nextInt,0,chestInventorySplit,Amount of items that get split in 2 different stacks when a chest is destroyed,FALSE,
+BlockCrops,dropBlockAsItemWithChance,nextInt,0,cropSeedDrop,Chance of a seed dropping from a crop,FALSE,
+BlockCrops,dropBlockAsItemWithChance,nextFloat,0,cropDropPositionX,X position of seed dropped from crop,FALSE,
+BlockCrops,dropBlockAsItemWithChance,nextFloat,1,cropDropPositionY,Y position of seed dropped from crop,FALSE,
+BlockCrops,dropBlockAsItemWithChance,nextFloat,2,cropDropPositionZ,Z position of seed dropped from crop,FALSE,
+BlockCrops,updateTick,nextInt,0,cropGrowthChance,Chance of seed growing on a block tick,FALSE,
+BlockDispenser,onBlockRemoval,nextInt,0,dispenserInventorySplit,Amount of items that get split in 2 different stacks when a dispenser is destroyed,FALSE,
+BlockDispenser,dispenseItem,nextDouble,0,dispenserDispensingForce,Initial force of a dispensed item,FALSE,
+BlockDispenser,onBlockRemoval,nextGaussian,0,dispenserInventoryDropMotionX,X motion of the dropped inventory from a destroyed dispenser,FALSE,
+BlockDispenser,onBlockRemoval,nextGaussian,1,dispenserInventoryDropMotionY1,Y motion of the dropped inventory from a destroyed dispenser,FALSE,
+BlockDispenser,onBlockRemoval,nextGaussian,2,dispenserInventoryDropMotionY2,Z motion of the dropped inventory from a destroyed dispenser,FALSE,
+BlockDispenser,onBlockRemoval,nextFloat,0,dispenserInventoryDropPositionX,X position of the dropped inventory from a destroyed dispenser,FALSE,
+BlockDispenser,onBlockRemoval,nextFloat,1,dispenserInventoryDropPositionY,Y position of the dropped inventory from a destroyed dispenser,FALSE,
+BlockDispenser,onBlockRemoval,nextFloat,2,dispenserInventoryDropPositionZ,Z position of the dropped inventory from a destroyed dispenser,FALSE,
+BlockDispenser,dispenseItem,nextGaussian,0,dispenserDispensingMotionX,X motion of the dispensed item,FALSE,
+BlockDispenser,dispenseItem,nextGaussian,1,dispenserDispensingMotionY,Y motion of the dispensed item,FALSE,
+BlockDispenser,dispenseItem,nextGaussian,2,dispenserDispensingMotionZ,Z motion of the dispensed item,FALSE,
+BlockDragonEgg,func_41054_h,nextInt,0,dragonEggTpPositionX0,X position of a dragon egg when teleporting around,FALSE,
+BlockDragonEgg,func_41054_h,nextInt,1,dragonEggTpPositionX1,X position of a dragon egg when teleporting around,FALSE,
+BlockDragonEgg,func_41054_h,nextInt,2,dragonEggTpPositionY0,Y position of a dragon egg when teleporting around,FALSE,
+BlockDragonEgg,func_41054_h,nextInt,3,dragonEggTpPositionY1,Y position of a dragon egg when teleporting around,FALSE,
+BlockDragonEgg,func_41054_h,nextInt,4,dragonEggTpPositionZ0,Z position of a dragon egg when teleporting around,FALSE,
+BlockDragonEgg,func_41054_h,nextInt,5,dragonEggTpPositionZ1,Z position of a dragon egg when teleporting around,FALSE,
+BlockFarmland,onEntityWalking,nextInt,0,farmlandDestroy,Chance of farmland being destroyed when walking on it,FALSE,
+BlockFire,updateTick,nextInt,0,fireFuelBurn,Amount of fire loosing fuel,FALSE,
+BlockFire,updateTick,nextInt,1,fireFuelExtinguish,Chance of fire extinguishing without fuel,FALSE,
+BlockFire,updateTick,nextInt,2,fireSpreadChance,Chance of fire spreading,FALSE,
+BlockFire,updateTick,nextInt,3,fireSpreadChanceStrength,Chance of fire spreading with strength,FALSE,
+BlockFire,tryToCatchBlockOnFire,nextInt,0,fireCatchChance,Chance of block catching fire,FALSE,
+BlockFire,tryToCatchBlockOnFire,nextInt,1,fireCatchLevelChance,Chance of block catching fire with a non-zero value of fuel,FALSE,
+BlockFire,tryToCatchBlockOnFire,nextInt,2,fireStayaliveChance,Chance of fire staying alive,FALSE,
+BlockFlowing,updateTick,nextInt,0,lavaShouldDecay,Whether lava should decay or not,FALSE,
+BlockFurnace,onBlockRemoval,nextInt,0,furnaceInventorySplit,Amount of items that get split in 2 different stacks when a furnace is destroyed,FALSE,
+BlockFurnace,onBlockRemoval,nextGaussian,0,furnaceInventoryDropMotionX,X motion of the dropped inventory from a destroyed furnace,FALSE,
+BlockFurnace,onBlockRemoval,nextGaussian,1,furnaceInventoryDropMotionY1,Y motion of the dropped inventory from a destroyed furnace,FALSE,
+BlockFurnace,onBlockRemoval,nextGaussian,2,furnaceInventoryDropMotionY2,Z motion of the dropped inventory from a destroyed furnace,FALSE,
+BlockFurnace,onBlockRemoval,nextFloat,0,furnaceInventoryDropPositionX,X position of the dropped inventory from a destroyed furnace,FALSE,
+BlockFurnace,onBlockRemoval,nextFloat,1,furnaceInventoryDropPositionY,Y position of the dropped inventory from a destroyed furnace,FALSE,
+BlockFurnace,onBlockRemoval,nextFloat,2,furnaceInventoryDropPositionZ,Z position of the dropped inventory from a destroyed furnace,FALSE,
+BlockGlowStone,func_40198_a,nextInt,0,glowstoneFortuneBonus,Amount of additional glowstone when destroyed with fortune,FALSE,
+BlockGlowStone,quantityDropped,nextInt,0,glowstoneDropAmount,Amount of glowstone dropped,FALSE,
+BlockGrass,updateTick,nextInt,0,grassSpreadPositionX,X position of grass spreading,FALSE,
+BlockGrass,updateTick,nextInt,1,grassSpreadPositionY,Y position of grass spreading,FALSE,
+BlockGrass,updateTick,nextInt,2,grassSpreadPositionZ,Z position of grass spreading,FALSE,
+BlockGravel,idDropped,nextInt,0,gravelFlintDrop,Chance of flint dropping,FALSE,
+BlockJukeBox,func_28038_b_,nextFloat,0,jukeBoxRecordDropMotionX,X motion of record when flying out of a jukebox,FALSE,
+BlockJukeBox,func_28038_b_,nextFloat,1,jukeBoxRecordDropMotionY,Y motion of record when flying out of a jukebox,FALSE,
+BlockJukeBox,func_28038_b_,nextFloat,2,jukeBoxRecordDropMotionZ,Z motion of record when flying out of a jukebox,FALSE,
+BlockLeaves,quantityDropped,nextInt,0,leavesSaplingDrop,Whether a sapling should drop from a decaying leaf,FALSE,
+BlockLever,onBlockPlaced,nextInt,0,leverPlaceOrientation,Orientation of the lever when placed on top of a block,FALSE,
+BlockMelon,quantityDropped,nextInt,0,melonDropAmount,Amount of melons dropped,FALSE,
+BlockMelon,func_40198_a,nextInt,0,melonDropFortuneBonus,Amount of additional melons dropped with fortune,FALSE,
+BlockMushroom,updateTick,nextInt,0,mushroomSpreadChance,Should a mushroom spread,FALSE,
+BlockMushroom,updateTick,nextInt,1,mushroomSpreadPositionX,X position of mushroom spreading,FALSE,
+BlockMushroom,updateTick,nextInt,2,mushroomSpreadPositionY1,Y position of mushroom spreading,FALSE,
+BlockMushroom,updateTick,nextInt,3,mushroomSpreadPositionY2,Y position of mushroom spreading,FALSE,
+BlockMushroom,updateTick,nextInt,4,mushroomSpreadPositionZ,Z position of mushroom spreading,FALSE,
+BlockMushroom,updateTick,nextInt,5,mushroomSpreadPositionOnFailX,X of the new position if the old position is invalid for a mushroom to spawn,FALSE,
+BlockMushroom,updateTick,nextInt,6,mushroomSpreadPositionOnFailY1,Y of the new position if the old position is invalid for a mushroom to spawn,FALSE,
+BlockMushroom,updateTick,nextInt,7,mushroomSpreadPositionOnFailY2,Y of the new position if the old position is invalid for a mushroom to spawn,FALSE,
+BlockMushroom,updateTick,nextInt,8,mushroomSpreadPositionOnFailZ,Z of the new position if the old position is invalid for a mushroom to spawn,FALSE,
+BlockMushroomCap,quantityDropped,nextInt,0,mushroomDrop,Amount of mushroom drops,FALSE,
+BlockMycelium,updateTick,nextInt,0,myceliumSpreadX,Mycelium spread position x,FALSE,
+BlockMycelium,updateTick,nextInt,1,myceliumSpreadY,Mycelium spread position y,FALSE,
+BlockMycelium,updateTick,nextInt,2,myceliumSpreadZ,Mycelium spread position z,FALSE,
+BlockNetherStalk,updateTick,nextInt,0,netherWartShouldGrow,Should nether wart grow,FALSE,
+BlockNetherStalk,dropBlockAsItemWithChance,nextInt,0,netherWartDropQuantity1,Amount of nether wart drops,FALSE,
+BlockNetherStalk,dropBlockAsItemWithChance,nextInt,1,netherWartDropQuantity2,Amount of nether wart drops,FALSE,
+BlockOre,func_40198_a,nextInt,0,lapisOreDropQuantity2,Amount of lapis dropped from lapis ore,FALSE,
+BlockOre,quantityDropped,nextInt,0,lapisOreDropQuantity1,Amount of lapis dropped from lapis ore,FALSE,
+BlockRedstoneOre,quantityDropped,nextInt,0,redstoneOreDropQuantity2,Amount of redstone dropped from redstone ore,FALSE,
+BlockRedstoneOre,func_40198_a,nextInt,0,redstoneOreDropQuantity1,Amount of redstone dropped from redstone ore,FALSE,
+BlockSapling,updateTick,nextInt,0,saplingAdvanceStage,Should sapling advance growth stage,FALSE,
+BlockSapling,growTree,nextInt,0,saplingBigTree,Should generate big tree from sapling,FALSE,
+BlockSnow,harvestBlock,nextFloat,0,snowDropPositionX,Position x of snowball dropped by snow,FALSE,
+BlockSnow,harvestBlock,nextFloat,1,snowDropPositionY,Position y of snowball dropped by snow,FALSE,
+BlockSnow,harvestBlock,nextFloat,2,snowDropPositionZ,Position z of snowball dropped by snow,FALSE,
+BlockStationary,updateTick,nextInt,0,lavaSpreadFire,Amount of fire blocks to spread,FALSE,
+BlockStationary,updateTick,nextInt,1,lavaSpreadFirePositionX,Position x of fire to spread,FALSE,
+BlockStationary,updateTick,nextInt,2,lavaSpreadFirePositionZ,Position z of fire to spread,FALSE,
+BlockStem,dropBlockAsItemWithChance,nextInt,0,stemDropFortune,Additional seeds dropped by stem with fortune,FALSE,
+BlockStem,updateTick,nextInt,0,stemShouldGrow,Should stem advance growth,FALSE,
+BlockStem,updateTick,nextInt,1,stemGrowDirection,Direction stem should grow,FALSE,
+BlockStem,dropBlockAsItemWithChance,nextFloat,0,stemDropPositionX,Position x of seeds dropped by stem,FALSE,
+BlockStem,dropBlockAsItemWithChance,nextFloat,1,stemDropPositionY,Position y of seeds dropped by stem,FALSE,
+BlockStem,dropBlockAsItemWithChance,nextFloat,2,stemDropPositionZ,Position z of seeds dropped by stem,FALSE,
+BlockTallGrass,func_40198_a,nextInt,0,tallGrassDropRolls,Amount of roles for tall grass drop,FALSE,
+BlockTallGrass,idDropped,nextInt,0,tallGrassDrop,Should drop seed,FALSE,
+BlockTNT,onBlockDestroyedByExplosion,nextInt,0,tntFuseNeighboringTnt,TNT Fuse of blocks nearby an explosion,FALSE,
+BlockVine,updateTick,nextInt,0,vineGrow1,Should vine grow/spread,FALSE,
+BlockVine,updateTick,nextInt,1,vineGrow2,Should vine grow/spread,FALSE,
+BlockVine,updateTick,nextInt,2,vineGrow3,Should vine grow/spread,FALSE,
+BlockVine,updateTick,nextInt,3,vineGrow4,Should vine grow/spread,FALSE,
+BlockVine,updateTick,nextInt,4,vineGrow5,Should vine grow/spread,FALSE,
+EnchantmentHelper,getEnchantmentModifierLiving,nextInt,0,enchantmentModifierLiving,Enchantment modifier of living entities,FALSE,
+EnchantmentHelper,calcItemStackEnchantability,nextInt,0,enchantmentItemLevel1,Enchantment item level,FALSE,
+EnchantmentHelper,calcItemStackEnchantability,nextInt,1,enchantmentItemLevel2,Enchantment item level,FALSE,
+EnchantmentHelper,calcItemStackEnchantability,nextInt,2,enchantmentItemLevel3,Enchantment item level,FALSE,
+EnchantmentHelper,buildEnchantmentList,nextFloat,0,enchantmentLevel3,Enchantment level of item,FALSE,
+EnchantmentHelper,buildEnchantmentList,nextFloat,1,enchantmentLevel4,Enchantment level of item,FALSE,
+EnchantmentHelper,getEnchantmentModifierDamage,nextInt,0,enchantmentModifierDamage,Enchantment modifier of damage,FALSE,
+EnchantmentHelper,buildEnchantmentList,nextInt,0,enchantmentLevel1,Enchantment level of item,FALSE,
+EnchantmentHelper,buildEnchantmentList,nextInt,1,enchantmentLevel2,Enchantment level of item,FALSE,
+EnchantmentHelper,buildEnchantmentList,nextInt,2,enchantmentLevel5,Enchantment level of item,FALSE,
+Entity,pushOutOfBlocks,nextFloat,0,entityPushVelocity,Velocity applied to entities to push out of blocks,FALSE,
+EntityAnimal,func_36001_a,nextInt,0,animalExperience,Amount of experience to drop on animal death,FALSE,
+EntityArrow,setArrowHeading,nextGaussian,0,arrowHeadingX,Entity arrow heading X,FALSE,
+EntityArrow,setArrowHeading,nextGaussian,1,arrowHeadingY,Entity arrow heading Y,FALSE,
+EntityArrow,setArrowHeading,nextGaussian,2,arrowHeadingZ,Entity arrow heading Z,FALSE,
+EntityArrow,onUpdate,nextInt,0,arrowCritDamageModifier,Critical hit additional damage on arrow,FALSE,
+EntityArrow,onUpdate,nextFloat,0,arrowInGroundX,Arrow motion if inside ground x,FALSE,
+EntityArrow,onUpdate,nextFloat,1,arrowlnGroundY,Arrow motion if inside ground y,FALSE,
+EntityArrow,onUpdate,nextFloat,2,arrowInGroundZ,Arrow motion if inside ground z,FALSE,
+EntityBlaze,onLivingUpdate,nextGaussian,0,blazePathHeightOffsetY,Some offset in height that causes the blaze to go higher,FALSE,
+EntityBlaze,dropFewItems,nextInt,0,blazeRodDropQuantity,Quantity of blaze rods dropped on blaze death,FALSE,
+EntityBlaze,attackEntity,nextGaussian,0,blazeFireballOffsetX,Blaze fireball offset x,FALSE,
+EntityBlaze,attackEntity,nextGaussian,1,blazeFireballOffsetZ,Blaze fireball offset z,FALSE,
+EntityChicken,<init>,nextInt,0,chickenLayEgg1,Lay egg delay,FALSE,
+EntityChicken,onLivingUpdate,nextInt,0,chickenLayEgg2,Lay egg delay,FALSE,
+EntityChicken,dropFewItems,nextInt,0,chickenFeatherDropQuantity1,Quantity of feather to drop on chicken death,FALSE,
+EntityChicken,dropFewItems,nextInt,1,chickenFeatherDropQuantity2,Quantity of feather to drop on chicken death,FALSE,
+EntityCow,dropFewItems,nextInt,0,cowLeatherDropQuantity1,Quantity of leather to drop on cow death,FALSE,
+EntityCow,dropFewItems,nextInt,1,cowLeatherDropQuantity2,Quantity of leather to drop on cow death,FALSE,
+EntityCow,dropFewItems,nextInt,2,cowBeefDropQuantity1,Quantity of beef to drop on cow death,FALSE,
+EntityCow,dropFewItems,nextInt,3,cowBeefDropQuantity2,Quantity of beef to drop on cow death,FALSE,
+EntityCreature,updateEntityActionState,nextInt,0,entityCreatureNewPath1,Should entity get new path,FALSE,
+EntityCreature,updateEntityActionState,nextInt,1,entityCreatureNewPath2,Should entity get new path,FALSE,
+EntityCreature,updateEntityActionState,nextInt,2,entityCreatureNewPath3,Should entity get new path,FALSE,
+EntityCreature,updateEntityActionState,nextInt,3,entityCreatureUpdateState,Should entity update entity action state,FALSE,
+EntityCreature,updateWanderPath,nextInt,0,entityCreaturePathOffsetX,Entity path generation offset x,FALSE,
+EntityCreature,updateWanderPath,nextInt,1,entityCreaturePathOffsetY,Entity path generation offset y,FALSE,
+EntityCreature,updateWanderPath,nextInt,2,entityCreaturePathOffsetZ,Entity path generation offset z,FALSE,
+EntityCreature,updateEntityActionState,nextFloat,0,entityCreatureShouldJump,Should entity creature jump in water,FALSE,
+EntityCreeper,onDeath,nextInt,0,creeperRecordDropId,Which record should creeper drop on death by skeleton,FALSE,
+EntityDragon,func_41011_ay,nextInt,0,enderdragonUpdateHealCrystal,Should enderdragon chance end crystal heal point,FALSE,
+EntityDragon,func_40156_a,nextFloat,0,enderdragonFlyDeviationX1,Enderdragon fly position deviation x,FALSE,
+EntityDragon,func_40156_a,nextFloat,1,enderdragonFlyDeviationY1,Enderdragon fly position deviation x,FALSE,
+EntityDragon,func_40156_a,nextFloat,2,enderdragonFlyDeviationZ1,Enderdragon fly position deviation z,FALSE,
+EntityDragon,func_41006_aA,nextInt,0,enderdragonPerchPlayer,Should enderdragon perch player,FALSE,
+EntityDragon,func_41006_aA,nextInt,1,enderdragonPerchPlayerIndex,Index of player to perch,FALSE,
+EntityDragon,onLivingUpdate,nextGaussian,0,enderdragonFlyDeviationX,Enderdragon fly position deviation x,FALSE,
+EntityDragon,onLivingUpdate,nextGaussian,1,enderdragonFlyDeviationZ,Enderdragon fly position deviation z,FALSE,
+EntityDragon,func_41006_aA,nextFloat,0,enderdragonFlyGoalY,Enderdragon fly position y,FALSE,
+EntityDragon,func_41006_aA,nextFloat,1,enderdragonFlyGoalX,Enderdragon fly position x,FALSE,
+EntityDragon,func_41006_aA,nextFloat,2,enderdragonFlyGoalZ,Enderdragon fly position z,FALSE,
+EntityEgg,func_40078_a,nextInt,0,eggSpawnChance,Chance of spawning chickens on egg throw,FALSE,
+EntityEgg,func_40078_a,nextInt,1,eggSpawn4Chance,Chance of spawning 4 chickens on egg throw,FALSE,
+EntityEnderEye,func_40090_a,nextInt,0,endereyeBreak,Should endereye break,FALSE,
+EntityEnderman,teleportToEntity,nextDouble,0,endermanTeleportOffsetX0,Enderman teleport offset x,FALSE,
+EntityEnderman,teleportToEntity,nextDouble,1,endermanTeleportOffsetZ0,Enderman teleport offset z,FALSE,
+EntityEnderman,onLivingUpdate,nextDouble,0,endermanPickBlockX0,Enderman pick block offset x,FALSE,
+EntityEnderman,onLivingUpdate,nextDouble,1,endermanPickBlockY0,Enderman pick block offset y,FALSE,
+EntityEnderman,onLivingUpdate,nextDouble,2,endermanPickBlockZ0,Enderman pick block offset z,FALSE,
+EntityEnderman,onLivingUpdate,nextDouble,3,endermanPickBlockX1,Enderman pick block offset x,FALSE,
+EntityEnderman,onLivingUpdate,nextDouble,4,endermanPickBlockY1,Enderman pick block offset y,FALSE,
+EntityEnderman,onLivingUpdate,nextDouble,5,endermanPickBlockZ1,Enderman pick block offset z,FALSE,
+EntityEnderman,teleportToEntity,nextInt,0,endermanTeleportOffsetY0,Enderman teleport offset y,FALSE,
+EntityEnderman,dropFewItems,nextInt,0,endermanPearlDropQuantity,Quantity of enderpearls to drop on enderman,FALSE,
+EntityEnderman,teleportRandomly,nextDouble,0,endermanTeleportOffsetX1,Enderman teleport offset x,FALSE,
+EntityEnderman,teleportRandomly,nextDouble,1,endermanTeleportOffsetZ1,Enderman teleport offset z,FALSE,
+EntityEnderman,teleportRandomly,nextInt,0,endermanTeleportOffsetY1,Enderman teleport offset y,FALSE,
+EntityEnderman,onLivingUpdate,nextFloat,0,endermanShouldTeleport,Enderman teleport chance,FALSE,
+EntityEnderman,onLivingUpdate,nextInt,0,endermanPickupItem,Should enderman pickup new item,FALSE,
+EntityEnderman,onLivingUpdate,nextInt,1,endermanPickupItem2,Should enderman pickup new item even if already carrying one,FALSE,
+EntityFireball,onUpdate,nextFloat,0,fireballInGroundX,Fireball motion if inside ground x,FALSE,
+EntityFireball,onUpdate,nextFloat,1,fireballInGroundY,Fireball motion if inside ground y,FALSE,
+EntityFireball,onUpdate,nextFloat,2,fireballInGroundZ,Fireball motion if inside ground z,FALSE,
+EntityFireball,<init>,nextGaussian,0,fireballMotionOffsetX,Fireball motion inaccuracy x,FALSE,
+EntityFireball,<init>,nextGaussian,1,fireballMotionOffsetY,Fireball motion inaccuracy y,FALSE,
+EntityFireball,<init>,nextGaussian,2,fireballMotionOffsetZ,Fireball rod motion inaccuracy z,FALSE,
+EntityFishHook,onUpdate,nextInt,0,rodUpdateCatchableTicks,Fishing rod should update catchable ticks,FALSE,
+EntityFishHook,onUpdate,nextInt,1,rodCatchableTicks,Fishing rod catchable ticks,FALSE,
+EntityFishHook,onUpdate,nextFloat,0,rodMotionInGroundX,Fishing rod motion if inside ground x,FALSE,
+EntityFishHook,onUpdate,nextFloat,1,rodMotionInGroundY,Fishing rod motion if inside ground y,FALSE,
+EntityFishHook,onUpdate,nextFloat,2,rodMotionInGroundZ,Fishing rod motion if inside ground z,FALSE,
+EntityFishHook,onUpdate,nextFloat,10,rodBobMotion1,Fishing rod bobbing motion,FALSE,
+EntityFishHook,onUpdate,nextFloat,11,rodBobMotion2,Fishing rod bobbing motion,FALSE,
+EntityFishHook,onUpdate,nextFloat,12,rodBobMotion3,Fishing rod bobbing motion,FALSE,
+EntityFishHook,calculateVelocity,nextGaussian,0,rodMotionOffsetX,Fishing rod motion inaccuracy x,FALSE,
+EntityFishHook,calculateVelocity,nextGaussian,1,rodMotionOffsetY,Fishing rod motion inaccuracy y,FALSE,
+EntityFishHook,calculateVelocity,nextGaussian,2,rodMotionOffsetZ,Fishing rod motion inaccuracy z,FALSE,
+EntityGhast,updateEntityActionState,nextFloat,0,ghastWaypointX,Ghast waypoint x,FALSE,
+EntityGhast,updateEntityActionState,nextFloat,1,ghastWaypointY,Ghast waypoint y,FALSE,
+EntityGhast,updateEntityActionState,nextFloat,2,ghastWaypointZ,Ghast waypoint z,FALSE,
+EntityGhast,getCanSpawnHere,nextInt,0,ghastSpawnChance,Ghast spawning chance,FALSE,
+EntityGhast,updateEntityActionState,nextInt,0,ghastCourseChange,Cooldown for ghast changing course,FALSE,
+EntityGhast,dropFewItems,nextInt,0,ghastTearDropQuantity1,Quantity of ghast tears to drop on ghast death,FALSE,
+EntityGhast,dropFewItems,nextInt,1,ghastTearDropQuantity2,Quantity of ghast tears to drop on ghast death,FALSE,
+EntityGhast,dropFewItems,nextInt,2,ghastGunpowderDropQuantity1,Quantity of gunpowder to drop on ghast death,FALSE,
+EntityGhast,dropFewItems,nextInt,3,ghastGunpowderDropQuantity2,Quantity of gunpowder to drop on ghast death,FALSE,
+EntityItem,<init>,random,1,entityItemInitialRotationYaw,Initial rotation yaw of dropped item entity,FALSE,
+EntityItem,<init>,random,2,entityItemInitialMotionX,Initial motion x of dropped item entity,FALSE,
+EntityItem,<init>,random,3,entityItemInitialMotionZ,Initial motion z of dropped item entity,FALSE,
+EntityLightningBolt,<init>,nextInt,0,lightningBoltLivingTime,Living time of a lightning bolt,FALSE,
+EntityLightningBolt,<init>,nextInt,1,lightningBoltTargetX,Lightning bolt target block,FALSE,
+EntityLightningBolt,<init>,nextInt,2,lightningBoltTargetY,Lightning bolt target block,FALSE,
+EntityLightningBolt,<init>,nextInt,3,lightningBoltTargetZ,Lightning bolt target block,FALSE,
+EntityLightningBolt,onUpdate,nextInt,0,lightningBoltFireState,Should lightning block set fire to block,FALSE,
+EntityLiving,attackEntityFrom,random,0,entityLivingKnockback1,Determines the random knockback direction if two entities are inside of each other,FALSE,
+EntityLiving,attackEntityFrom,random,1,entityLivingKnockback2,Determines the random knockback direction if two entities are inside of each other,FALSE,
+EntityLiving,attackEntityFrom,random,2,entityLivingKnockback3,Determines the random knockback direction if two entities are inside of each other,FALSE,
+EntityLiving,attackEntityFrom,random,3,entityLivingKnockback4,Determines the random knockback direction if two entities are inside of each other,FALSE,
+EntityLiving,attackEntityFrom,random,4,entityLivingAttackYaw,Entity attack yaw if no entity attacked,FALSE,
+EntityLiving,updateEntityActionState,nextFloat,0,entityLivingChasePlayer0,Should a new player be chased,FALSE,
+EntityLiving,updateEntityActionState,nextFloat,1,entityLivingChasePlayerYawVelocity0,Random yaw velocity if no player was found to chase,FALSE,
+EntityLiving,updateEntityActionState,nextFloat,2,entityLivingChasePlayer1,Should yaw velocity be updated,FALSE,
+EntityLiving,updateEntityActionState,nextFloat,3,entityLivingChasePlayerYawVelocity1,Random yaw velocity if no player was found to chase,FALSE,
+EntityLiving,updateEntityActionState,nextFloat,4,entityLivingShouldJump,Should entity jump,FALSE,
+EntityLiving,dropFewItems,nextInt,0,entityLivingDropCount1,Amount of items to drop on death,FALSE,
+EntityLiving,dropFewItems,nextInt,1,entityLivingDropCount2,Amount of items to drop on death,FALSE,
+EntityLiving,updateEntityActionState,nextInt,0,entityLivingChasePlayerTime,Amount of ticks to chase player for,FALSE,
+EntityLiving,despawnEntity,nextInt,0,entityLivingDespawnChance,Chance of entity despawning,FALSE,
+EntityLiving,<init>,random,3,entityLivingInitialRotation,Initial rotation of spawning entity living,FALSE,
+EntityMinecart,setEntityDead,nextFloat,0,minecartInventoryDropPositionX0,X position of the dropped item from a destroyed minecart,FALSE,
+EntityMinecart,setEntityDead,nextFloat,1,minecartInventoryDropPositionY0,Y position of the dropped item from a destroyed minecart,FALSE,
+EntityMinecart,setEntityDead,nextFloat,2,minecartInventoryDropPositionZ0,Z position of the dropped item from a destroyed minecart,FALSE,
+EntityMinecart,attackEntityFrom,nextFloat,0,minecartInventoryDropPositionX1,X position of the dropped item from a destroyed minecart,FALSE,
+EntityMinecart,attackEntityFrom,nextFloat,1,minecartInventoryDropPositionY1,Y position of the dropped item from a destroyed minecart,FALSE,
+EntityMinecart,attackEntityFrom,nextFloat,2,minecartInventoryDropPositionZ1,Z position of the dropped item from a destroyed minecart,FALSE,
+EntityMinecart,setEntityDead,nextGaussian,0,minecartInventoryDropMotionX0,X motion of the dropped item from a destroyed minecart,FALSE,
+EntityMinecart,setEntityDead,nextGaussian,1,minecartInventoryDropMotionY0,Y motion of the dropped item from a destroyed minecart,FALSE,
+EntityMinecart,setEntityDead,nextGaussian,2,minecartInventoryDropMotionZ0,Z motion of the dropped item from a destroyed minecart,FALSE,
+EntityMinecart,setEntityDead,nextInt,0,minecartContentSplit1,Amount of items that get split in 2 different stacks when a minecart is destroyed,FALSE,
+EntityMinecart,attackEntityFrom,nextInt,0,minecartContentSplit2,Amount of items that get split in 2 different stacks when a minecart is destroyed,FALSE,
+EntityMinecart,attackEntityFrom,nextGaussian,0,minecartInventoryDropMotionX1,X motion of the dropped item from a destroyed minecart,FALSE,
+EntityMinecart,attackEntityFrom,nextGaussian,1,minecartInventoryDropMotionY1,Y motion of the dropped item from a destroyed minecart,FALSE,
+EntityMinecart,attackEntityFrom,nextGaussian,2,minecartInventoryDropMotionZ1,Z motion of the dropped item from a destroyed minecart,FALSE,
+EntityMob,func_40147_Y,nextInt,0,mobSpawnSkyLightLevel,Sky light level for mob to spawn,FALSE,
+EntityMob,func_40147_Y,nextInt,1,mobSpawnLightLevel,Light level for mob to spawn,FALSE,
+EntityPainting,<init>,nextInt,0,paintingRng,Which painting to display,FALSE,
+EntityPigZombie,dropFewItems,nextInt,0,pigZombieRottenFleshDropQuantity,Quantity of rotten flesh to drop on pigman death,FALSE,
+EntityPigZombie,dropFewItems,nextInt,1,pigZombieGoldNuggetDropQuantity,Quantity of gold nuggets to drop on pigman death,FALSE,
+EntityPigZombie,becomeAngryAt,nextInt,0,pigZombieAngerLevel,Pigman Anger time,FALSE,
+EntityPlayer,attackTargetEntityWithCurrentItem,nextInt,0,playerCritDamageModifier,Critical hit additional damage for player,FALSE,
+EntityPlayer,func_40116_f,nextInt,0,playerRespirationModifier,Respiration player rng,FALSE,
+EntityPlayer,dropPlayerItemWithRandomChoice,nextFloat,0,playerDropMotionXZ1,Player item drop motion x z,FALSE,
+EntityPlayer,dropPlayerItemWithRandomChoice,nextFloat,1,playerDropMotionXZ2,Player item drop motion x z,FALSE,
+EntityPlayer,dropPlayerItemWithRandomChoice,nextFloat,2,playerDropMotionXZ3,Player item drop motion x z,FALSE,
+EntityPlayer,dropPlayerItemWithRandomChoice,nextFloat,3,playerDropMotionXZ4,Player item drop motion x z,FALSE,
+EntityPlayer,dropPlayerItemWithRandomChoice,nextFloat,4,playerDropMotionY1,Player item drop motion y,FALSE,
+EntityPlayer,dropPlayerItemWithRandomChoice,nextFloat,5,playerDropMotionY2,Player item drop motion y,FALSE,
+EntitySheep,func_40145_a,nextBoolean,0,sheepBabyColor,Inherit parent sheep color,FALSE,
+EntitySheep,getRandomFleeceColor,nextInt,0,sheepColor,Color of sheep,FALSE,
+EntitySheep,getRandomFleeceColor,nextInt,1,sheepPinkColor,Chance of pink sheep,FALSE,
+EntitySheep,interact,nextFloat,0,sheepWoolMotionY,Motion Y of dropped wool from sheep,FALSE,
+EntitySheep,interact,nextFloat,1,sheepWoolMotionX1,Motion X of dropped wool from sheep,FALSE,
+EntitySheep,interact,nextFloat,2,sheepWoolMotionX2,Motion X of dropped wool from sheep,FALSE,
+EntitySheep,interact,nextFloat,3,sheepWoolMotionZ1,Motion Z of dropped wool from sheep,FALSE,
+EntitySheep,interact,nextFloat,4,sheepWoolMotionZ2,Motion Z of dropped wool from sheep,FALSE,
+EntitySheep,interact,nextInt,0,sheepWoolCount,Amount of wool to drop from a sheep,FALSE,
+EntitySilverfish,updateEntityActionState,nextBoolean,0,silverfishBlockInfested,Should silverfish stop looking for nearby infested blocks,FALSE,
+EntitySilverfish,updateEntityActionState,nextInt,0,silverfishHideInBlock,Silverfish hide in block,FALSE,
+EntitySkeleton,dropFewItems,nextInt,0,skeletonArrowDropQuantity,Quantity of arrows to drop on skeleton death,FALSE,
+EntitySkeleton,dropFewItems,nextInt,1,skeletonBoneDropQuantity,Quantity of bone to drop on skeleton death,FALSE,
+EntitySkeleton,onLivingUpdate,nextFloat,0,skeletonFireChance,Skeleton get set on fire chance,FALSE,
+EntitySlime,setEntityDead,nextInt,0,slimeRespawnCount,Slime respawn count,FALSE,
+EntitySlime,func_40131_af,nextInt,0,slimeJumpDelay0,Slime jump delay,FALSE,
+EntitySlime,setEntityDead,nextFloat,0,slimeRespawnRotation,Rotation of smaller slime variants on spawn,FALSE,
+EntitySlime,getCanSpawnHere,nextInt,0,slimeCanSpawnChance,Can slime spawn here,FALSE,
+EntitySlime,<init>,nextInt,0,slimeSize,Initial slime size,FALSE,
+EntitySlime,<init>,nextInt,1,slimeJumpDelay1,Initial slime jump delay,FALSE,
+EntitySlime,updateEntityActionState,nextFloat,2,slimeJumpStrafe,Slime strafing after jumping,FALSE,
+EntitySnowman,dropFewItems,nextInt,0,snowmanDropQuantity,Quantity of snowballs to drop on snowman death,FALSE,
+EntitySnowman,onLivingUpdate,nextInt,0,snowmanAttackChance,Chance of snowman chosing a target,FALSE,
+EntitySnowman,onLivingUpdate,nextInt,1,snowmanAttackEntity,Snowman attack entity,FALSE,
+EntitySpider,attackEntity,nextInt,0,spiderLoseFocus,Chance of spider losing focus,FALSE,
+EntitySpider,attackEntity,nextInt,1,spiderJumpAttackChance,Chance of spider attacking with a jump,FALSE,
+EntitySpider,dropFewItems,nextInt,0,spiderEyeChance1,Chance of spider dropping a spider eye,FALSE,
+EntitySpider,dropFewItems,nextInt,1,spiderEyeChance2,Chance of spider dropping a spider eye,FALSE,
+EntitySquid,updateEntityActionState,nextFloat,0,squidMotionVecXZ,Squid motion X,FALSE,
+EntitySquid,updateEntityActionState,nextFloat,1,squidMotionVecY,Squid motion Y,FALSE,
+EntitySquid,dropFewItems,nextInt,0,squidDropItemChance,Squid Ink sack drop rate,FALSE,
+EntitySquid,updateEntityActionState,nextInt,0,squidMotionSwitch,Chance of the squid changing its motion,FALSE,
+EntityThrowable,setThrowableHeading,nextGaussian,0,entityThrowableHeadingX,Entity throwable heading X,FALSE,
+EntityThrowable,setThrowableHeading,nextGaussian,1,entityThrowableHeadingY,Entity throwable heading Y,FALSE,
+EntityThrowable,setThrowableHeading,nextGaussian,2,entityThrowableHeadingZ,Entity throwable heading Z,FALSE,
+EntityTNTPrimed,<init>,random,0,primedTntMotion,Motion x z of primed tnt,FALSE,
+EntityWaterMob,func_36001_a,nextInt,0,entityDeathXP,XP orbs dropped on entity death,FALSE,
+EntityWolf,interact,nextInt,0,wolfTameChance,Chance of taming a dog,FALSE,
+EntityWolf,updateEntityActionState,nextInt,0,wolfAttackChance,Chance of a wolf chosing a target,FALSE,
+EntityWolf,updateEntityActionState,nextInt,1,wolfAttackEntity,Wolf attack entity,FALSE,
+EntityWolf,attackEntity,nextInt,0,wolfJumpAttackChance,Chance of wolf attacking with a jump,FALSE,
+EntityXPOrb,onUpdate,nextFloat,0,xpOrbLavaOffsetX1,XP orb motion in lava x,FALSE,
+EntityXPOrb,onUpdate,nextFloat,1,xpOrbLavaOffsetX2,XP orb motion in lava x ,FALSE,
+EntityXPOrb,onUpdate,nextFloat,2,xpOrbLavaOffsetZ1,XP orb motion in lava z,FALSE,
+EntityXPOrb,onUpdate,nextFloat,3,xpOrbLavaOffsetZ2,XP orb motion in lava z,FALSE,
+EntityXPOrb,<init>,random,0,xpOrbRotation,Rotation of XP orb on spawn,FALSE,
+EntityXPOrb,<init>,random,1,xpOrbInitialMotionX,Motion x of XP orb on spawn,FALSE,
+EntityXPOrb,<init>,random,2,xpOrbInitialMotionY,Motion y of XP orb on spawn,FALSE,
+EntityXPOrb,<init>,random,3,xpOrbInitialMotionZ,Motion z of XP orb on spawn,FALSE,
+EntityZombie,onLivingUpdate,nextFloat,0,zombieFireChance,Zombie get set on fire chance,FALSE,
+Explosion,doExplosionA,nextFloat,0,explosionDropChance,Explosion drop chance,FALSE,
+Explosion,doExplosionB,nextInt,0,explosionFireChance,Explosion fire chance,FALSE,
+GuiCreateWorld,actionPerformed,nextLong,0,worldSeed,World seed,FALSE,
+ItemDye,onItemUse,nextInt,0,bonemealSpreadX,Bonemeal spread position x,FALSE,
+ItemDye,onItemUse,nextInt,1,bonemealSpreadY1,Bonemeal spread position y,FALSE,
+ItemDye,onItemUse,nextInt,2,bonemealSpreadY2,Bonemeal spread position y,FALSE,
+ItemDye,onItemUse,nextInt,3,bonemealSpreadZ,Bonemeal spread position z,FALSE,
+ItemDye,onItemUse,nextInt,4,bonemealTallGrassChance,Bonemeal tall grass chance,FALSE,
+ItemDye,onItemUse,nextInt,5,bonemealPlantChance,Bonemeal plant chance,FALSE,
+ItemFood,onFoodEaten,nextFloat,1,itemPotionEffectProbability,Probatility of gettting the effect after eating a food,FALSE,
+ItemStack,damageItem,nextInt,0,itemUnbreaking,Unbreaking durability loss,FALSE,
+SpawnerAnimals,performSpawning,nextInt,0,spawnerOffsetX1,Entity spawner spawn offset x,FALSE,
+SpawnerAnimals,performSpawning,nextInt,1,spawnerOffsetX2,Entity spawner spawn offset x,FALSE,
+SpawnerAnimals,performSpawning,nextInt,4,spawnerOffsetZ1,Entity spawner spawn offset z,FALSE,
+SpawnerAnimals,performSpawning,nextInt,5,spawnerOffsetZ2,Entity spawner spawn offset z,FALSE,
+SpawnerAnimals,getRandomSpawningPointInChunk,nextInt,0,spawnerPointX,Entity spawning spot x,FALSE,
+SpawnerAnimals,getRandomSpawningPointInChunk,nextInt,1,spawnerPointY,Entity spawning spot y,FALSE,
+SpawnerAnimals,getRandomSpawningPointInChunk,nextInt,2,spawnerPointZ,Entity spawning spot z,FALSE,
+SpawnerAnimals,creatureSpecificInit,nextInt,0,spawnerSpiderJockey,Spider jokey chance,FALSE,
+SpawnerAnimals,performSpawning,nextFloat,0,spawnerSpawnRotation,Entity spawning rotation,FALSE,
+Teleporter,createPortal,nextInt,0,netherPortalOrientation,Orientation of the nether portal,FALSE,
+TileEntityDispenser,getRandomStackFromInventory,nextInt,0,dispenserSlot,Defines slot to dispense,FALSE,
+TileEntityMobSpawner,updateEntity,nextInt,0,mobSpawnerSpawnOffsetY,Mob spawner spawn offset y,FALSE,
+TileEntityMobSpawner,updateDelay,nextInt,0,mobSpawnerSpawnDelay,Delay of mob spawner,FALSE,
+TileEntityMobSpawner,updateEntity,nextDouble,0,mobSpawnerSpawnOffsetX0,Mob spawner spawn offset x,FALSE,
+TileEntityMobSpawner,updateEntity,nextDouble,1,mobSpawnerSpawnOffsetX1,Mob spawner spawn offset x,FALSE,
+TileEntityMobSpawner,updateEntity,nextDouble,2,mobSpawnerSpawnOffsetZ0,Mob spawner spawn offset z,FALSE,
+TileEntityMobSpawner,updateEntity,nextDouble,3,mobSpawnerSpawnOffsetZ1,Mob spawner spawn offset z,FALSE,
+TileEntityMobSpawner,updateEntity,nextFloat,3,mobSpawnerSpawnRotation,Rotation of the mob spawned by a mob spawner,FALSE,
+WeightedRandom,func_35734_a,nextInt,0,weightedRandom,Weighted Random RNG with various usecases such as enchantments,FALSE,
+World,<init>,nextInt,0,worldInitialLCG0,Initial world load LCG,FALSE,
+World,<init>,nextInt,2,worldInitialLCG1,Initial world load LCG,FALSE,
+World,<init>,nextInt,4,worldInitialLCG2,Initial world load LCG,FALSE,
+World,updateWeather,nextInt,0,worldThunderTime1,New thunder time if it's thundering,FALSE,
+World,updateWeather,nextInt,1,worldThunderTime2,New thunder time,FALSE,
+World,updateWeather,nextInt,2,worldRainTime1,New rain time if it's raining,FALSE,
+World,updateWeather,nextInt,3,worldRainTime2,New rain time,FALSE,
+World,getInitialSpawnLocation,nextInt,0,worldInitialSpawnOffsetX0,Initial spawn location offset x,FALSE,
+World,getInitialSpawnLocation,nextInt,1,worldInitialSpawnOffsetX1,Initial spawn location offset x,FALSE,
+World,getInitialSpawnLocation,nextInt,2,worldInitialSpawnOffsetZ0,Initial spawn location offset z,FALSE,
+World,getInitialSpawnLocation,nextInt,3,worldInitialSpawnOffsetZ1,Initial spawn location offset z,FALSE,
+World,updateBlocksAndPlayCaveSounds,nextInt,2,worldLightingBolt,Whether a lighting bold should strike,FALSE,
+World,updateBlocksAndPlayCaveSounds,nextInt,3,worldLightTypeUpdateX,Light type update offset x,FALSE,
+World,updateBlocksAndPlayCaveSounds,nextInt,4,worldLightTypeUpdateY,Light type update offset y,FALSE,
+World,updateBlocksAndPlayCaveSounds,nextInt,5,worldLightTypeUpdateZ,Light type update offset z,FALSE,
+World,setSpawnLocation,nextInt,0,worldSpawnOffsetX0,Spawn location offset x,FALSE,
+World,setSpawnLocation,nextInt,1,worldSpawnOffsetX1,Spawn location offset x,FALSE,
+World,setSpawnLocation,nextInt,2,worldSpawnOffsetZ0,Spawn location offset z,FALSE,
+World,setSpawnLocation,nextInt,3,worldSpawnOffsetZ1,Spawn location offset z,FALSE,
+BlockDragonEgg,func_41054_h,nextDouble,0,,,TRUE,Rendering
+BlockDragonEgg,func_41054_h,nextDouble,1,,,TRUE,Rendering
+BlockDragonEgg,func_41054_h,nextDouble,2,,,TRUE,Rendering
+BlockDragonEgg,func_41054_h,nextDouble,3,,,TRUE,Rendering
+BlockDragonEgg,func_41054_h,nextFloat,0,,,TRUE,Rendering
+BlockDragonEgg,func_41054_h,nextFloat,1,,,TRUE,Rendering
+BlockDragonEgg,func_41054_h,nextFloat,2,,,TRUE,Rendering
+BlockPistonBase,powerBlock,nextFloat,0,,,TRUE,Sound effects
+BlockPistonBase,powerBlock,nextFloat,1,,,TRUE,Sound effects
+BlockPumpkin,onBlockAdded,nextDouble,0,,,TRUE,Rendering
+BlockPumpkin,onBlockAdded,nextDouble,1,,,TRUE,Rendering
+BlockPumpkin,onBlockAdded,nextDouble,2,,,TRUE,Rendering
+BlockRedstoneOre,func_319_i,nextFloat,0,,,TRUE,Rendering
+BlockRedstoneOre,func_319_i,nextFloat,1,,,TRUE,Rendering
+BlockRedstoneOre,func_319_i,nextFloat,2,,,TRUE,Rendering
+BlockRedstoneTorch,updateTick,nextFloat,0,,,TRUE,Sound effects
+BlockRedstoneTorch,updateTick,nextFloat,1,,,TRUE,Sound effects
+BlockRedstoneTorch,updateTick,nextDouble,0,,,TRUE,Rendering
+BlockRedstoneTorch,updateTick,nextDouble,1,,,TRUE,Rendering
+BlockRedstoneTorch,updateTick,nextDouble,2,,,TRUE,Rendering
+ContainerEnchantment,onCraftMatrixChanged,nextLong,0,,,TRUE,Rendering
+Entity,moveEntity,nextFloat,0,,,TRUE,Rendering
+Entity,moveEntity,nextFloat,1,,,TRUE,Rendering
+Entity,onEntityUpdate,nextFloat,0,,,TRUE,Rendering
+Entity,onEntityUpdate,nextFloat,1,,,TRUE,Rendering
+Entity,onEntityUpdate,nextFloat,2,,,TRUE,Rendering
+Entity,onEntityUpdate,nextFloat,3,,,TRUE,Rendering
+Entity,onEntityUpdate,nextFloat,4,,,TRUE,Rendering
+Entity,onEntityUpdate,nextFloat,5,,,TRUE,Rendering
+Entity,onEntityUpdate,nextFloat,6,,,TRUE,Rendering
+Entity,onEntityUpdate,nextFloat,7,,,TRUE,Rendering
+Entity,onEntityUpdate,nextFloat,8,,,TRUE,Rendering
+EntityAnimal,onLivingUpdate,nextGaussian,0,,,TRUE,Rendering
+EntityAnimal,onLivingUpdate,nextGaussian,1,,,TRUE,Rendering
+EntityAnimal,onLivingUpdate,nextGaussian,2,,,TRUE,Rendering
+EntityAnimal,func_40144_b,nextFloat,0,,,TRUE,Rendering
+EntityAnimal,func_40144_b,nextFloat,1,,,TRUE,Rendering
+EntityAnimal,func_40144_b,nextFloat,2,,,TRUE,Rendering
+EntityAnimal,interact,nextGaussian,0,,,TRUE,Rendering
+EntityAnimal,interact,nextGaussian,1,,,TRUE,Rendering
+EntityAnimal,interact,nextGaussian,2,,,TRUE,Rendering
+EntityAnimal,onLivingUpdate,nextFloat,0,,,TRUE,Rendering
+EntityAnimal,onLivingUpdate,nextFloat,1,,,TRUE,Rendering
+EntityAnimal,onLivingUpdate,nextFloat,2,,,TRUE,Rendering
+EntityAnimal,attackEntity,nextFloat,0,,,TRUE,Rendering
+EntityAnimal,attackEntity,nextFloat,1,,,TRUE,Rendering
+EntityAnimal,attackEntity,nextFloat,2,,,TRUE,Rendering
+EntityAnimal,interact,nextFloat,0,,,TRUE,Rendering
+EntityAnimal,interact,nextFloat,1,,,TRUE,Rendering
+EntityAnimal,interact,nextFloat,2,,,TRUE,Rendering
+EntityAnimal,func_40144_b,nextGaussian,0,,,TRUE,Rendering
+EntityAnimal,func_40144_b,nextGaussian,1,,,TRUE,Rendering
+EntityAnimal,func_40144_b,nextGaussian,2,,,TRUE,Rendering
+EntityArrow,onUpdate,nextFloat,3,,,TRUE,Sound effects
+EntityArrow,onUpdate,nextFloat,4,,,TRUE,Sound effects
+EntityArrow,onCollideWithPlayer,nextFloat,0,,,TRUE,Sound effects
+EntityArrow,onCollideWithPlayer,nextFloat,1,,,TRUE,Sound effects
+EntityBlaze,onLivingUpdate,nextFloat,0,,,TRUE,Sound effects
+EntityBlaze,onLivingUpdate,nextFloat,1,,,TRUE,Sound effects
+EntityBlaze,onLivingUpdate,nextDouble,0,,,TRUE,Rendering
+EntityBlaze,onLivingUpdate,nextDouble,1,,,TRUE,Rendering
+EntityBlaze,onLivingUpdate,nextDouble,2,,,TRUE,Rendering
+EntityBlaze,onLivingUpdate,nextInt,0,,,TRUE,Sound effects
+EntityBoat,onUpdate,nextBoolean,0,,,TRUE,Rendering
+EntityBoat,onUpdate,nextInt,0,,,TRUE,Rendering
+EntityBoat,onUpdate,nextFloat,0,,,TRUE,Rendering
+EntityChicken,onLivingUpdate,nextFloat,0,,,TRUE,Sound effects
+EntityChicken,onLivingUpdate,nextFloat,1,,,TRUE,Sound effects
+EntityDragon,func_40120_m_,nextInt,0,,,TRUE,Unused
+EntityDragon,func_40120_m_,nextInt,1,,,TRUE,Unused
+EntityDragon,func_40120_m_,nextInt,2,,,TRUE,Unused
+EntityDragon,onLivingUpdate,nextFloat,0,,,TRUE,Rendering
+EntityDragon,onLivingUpdate,nextFloat,1,,,TRUE,Rendering
+EntityDragon,onLivingUpdate,nextFloat,2,,,TRUE,Rendering
+EntityDragon,func_40158_a,nextFloat,0,,,TRUE,Rendering
+EntityDragon,func_40158_a,nextFloat,1,,,TRUE,Rendering
+EntityDragon,func_40158_a,nextFloat,2,,,TRUE,Rendering
+EntityDragon,func_40120_m_,nextFloat,0,,,TRUE,Rendering
+EntityDragon,func_40120_m_,nextFloat,1,,,TRUE,Rendering
+EntityDragon,func_40120_m_,nextFloat,2,,,TRUE,Rendering
+EntityEnderCrystal,<init>,nextInt,0,,,TRUE,Rendering
+EntityEnderEye,onUpdate,nextDouble,0,,,TRUE,Rendering
+EntityEnderEye,onUpdate,nextDouble,1,,,TRUE,Rendering
+EntityEnderman,onLivingUpdate,nextDouble,6,,,TRUE,Rendering
+EntityEnderman,onLivingUpdate,nextDouble,7,,,TRUE,Rendering
+EntityEnderman,onLivingUpdate,nextDouble,8,,,TRUE,Rendering
+EntityEnderman,onLivingUpdate,nextDouble,9,,,TRUE,Rendering
+EntityEnderman,onLivingUpdate,nextDouble,10,,,TRUE,Rendering
+EntityEnderman,onLivingUpdate,nextDouble,11,,,TRUE,Rendering
+EntityEnderman,teleportTo,nextFloat,0,,,TRUE,Rendering
+EntityEnderman,teleportTo,nextFloat,1,,,TRUE,Rendering
+EntityEnderman,teleportTo,nextFloat,2,,,TRUE,Rendering
+EntityEnderman,teleportTo,nextDouble,0,,,TRUE,Rendering
+EntityEnderman,teleportTo,nextDouble,1,,,TRUE,Rendering
+EntityEnderman,teleportTo,nextDouble,2,,,TRUE,Rendering
+EntityEnderPearl,func_40078_a,nextDouble,0,,,TRUE,Rendering
+EntityEnderPearl,func_40078_a,nextGaussian,0,,,TRUE,Rendering
+EntityEnderPearl,func_40078_a,nextGaussian,1,,,TRUE,Rendering
+EntityFishHook,onUpdate,nextFloat,3,,,TRUE,
+EntityFishHook,onUpdate,nextFloat,4,,,TRUE,
+EntityFishHook,onUpdate,nextFloat,5,,,TRUE,
+EntityFishHook,onUpdate,nextFloat,6,,,TRUE,
+EntityFishHook,onUpdate,nextFloat,7,,,TRUE,
+EntityFishHook,onUpdate,nextFloat,8,,,TRUE,
+EntityFishHook,onUpdate,nextFloat,9,,,TRUE,
+EntityItem,onUpdate,nextFloat,0,,,TRUE,Sound effects
+EntityItem,onUpdate,nextFloat,1,,,TRUE,Sound effects
+EntityItem,onUpdate,nextFloat,2,,,TRUE,Sound effects
+EntityItem,onUpdate,nextFloat,3,,,TRUE,Sound effects
+EntityItem,onUpdate,nextFloat,4,,,TRUE,Sound effects
+EntityItem,onCollideWithPlayer,nextFloat,0,,,TRUE,Sound effects
+EntityItem,onCollideWithPlayer,nextFloat,1,,,TRUE,Sound effects
+EntityItem,<init>,random,0,,,TRUE,Rendering [DESYNC] [WRONG ONE?]
+EntityItem,<init>,random,4,,,TRUE,Rendering [DESYNC] [WRONG ONE?]
+EntityLightningBolt,onUpdate,nextFloat,0,,,TRUE,Sound effects
+EntityLightningBolt,onUpdate,nextFloat,1,,,TRUE,Sound effects
+EntityLightningBolt,<init>,nextLong,0,,,TRUE,Rendering
+EntityLightningBolt,onUpdate,nextLong,0,,,TRUE,Rendering
+EntityLiving,func_41005_b,random,0,,,TRUE,Sound effects
+EntityLiving,func_40123_ac,nextFloat,0,,,TRUE,Sound effects
+EntityLiving,func_40123_ac,nextFloat,1,,,TRUE,Sound effects
+EntityLiving,func_40123_ac,nextFloat,2,,,TRUE,Sound effects
+EntityLiving,func_40123_ac,nextFloat,3,,,TRUE,Sound effects
+EntityLiving,updatePotionEffects,nextDouble,0,,,TRUE,Rendering
+EntityLiving,updatePotionEffects,nextDouble,1,,,TRUE,Rendering
+EntityLiving,updatePotionEffects,nextDouble,2,,,TRUE,Rendering
+EntityLiving,func_41005_b,nextFloat,0,,,TRUE,Rendering
+EntityLiving,func_41005_b,nextFloat,1,,,TRUE,Rendering
+EntityLiving,func_41005_b,nextFloat,2,,,TRUE,Rendering
+EntityLiving,func_41005_b,nextFloat,3,,,TRUE,Rendering
+EntityLiving,handleHealthUpdate,nextFloat,0,,,TRUE,Sound effects
+EntityLiving,handleHealthUpdate,nextFloat,1,,,TRUE,Sound effects
+EntityLiving,handleHealthUpdate,nextFloat,2,,,TRUE,Sound effects
+EntityLiving,handleHealthUpdate,nextFloat,3,,,TRUE,Sound effects
+EntityLiving,updatePotionEffects,nextBoolean,0,,,TRUE,Rendering
+EntityLiving,func_40120_m_,nextFloat,0,,,TRUE,Rendering
+EntityLiving,func_40120_m_,nextFloat,1,,,TRUE,Rendering
+EntityLiving,func_40120_m_,nextFloat,2,,,TRUE,Rendering
+EntityLiving,onEntityUpdate,nextInt,0,,,TRUE,Sound effects
+EntityLiving,onEntityUpdate,nextFloat,0,,,TRUE,Rendering
+EntityLiving,onEntityUpdate,nextFloat,1,,,TRUE,Rendering
+EntityLiving,onEntityUpdate,nextFloat,2,,,TRUE,Rendering
+EntityLiving,onEntityUpdate,nextFloat,3,,,TRUE,Rendering
+EntityLiving,onEntityUpdate,nextFloat,4,,,TRUE,Rendering
+EntityLiving,onEntityUpdate,nextFloat,5,,,TRUE,Rendering
+EntityLiving,<init>,random,0,,,TRUE,Unused
+EntityLiving,<init>,random,1,,,TRUE,Unused
+EntityLiving,<init>,random,2,,,TRUE,Unused
+EntityLiving,func_40120_m_,nextGaussian,0,,,TRUE,Rendering
+EntityLiving,func_40120_m_,nextGaussian,1,,,TRUE,Rendering
+EntityLiving,func_40120_m_,nextGaussian,2,,,TRUE,Rendering
+EntityMinecart,onUpdate,nextInt,0,,,TRUE,Rendering
+EntityPigZombie,becomeAngryAt,nextInt,1,,,TRUE,Sound effects
+EntityPigZombie,onUpdate,nextFloat,0,,,TRUE,Sound effects
+EntityPigZombie,onUpdate,nextFloat,1,,,TRUE,Sound effects
+EntityPlayer,func_35201_a,random,0,,,TRUE,Rendering
+EntityPlayer,func_35201_a,nextInt,0,,,TRUE,Sound effects
+EntityPlayer,func_35201_a,nextFloat,0,,,TRUE,Sound effects
+EntityPlayer,func_35201_a,nextFloat,1,,,TRUE,Rendering
+EntityPlayer,func_35201_a,nextFloat,2,,,TRUE,Rendering
+EntityPlayer,func_35201_a,nextFloat,3,,,TRUE,Rendering
+EntityPlayer,func_35201_a,nextFloat,4,,,TRUE,Sound effects
+EntityPlayer,func_35201_a,nextFloat,5,,,TRUE,Sound effects
+EntityPlayerSP,onLivingUpdate,nextFloat,0,,,TRUE,Sound effects
+EntityPlayerSP,onLivingUpdate,nextFloat,1,,,TRUE,Sound effects
+EntityPlayerSP,func_40182_b,nextFloat,0,,,TRUE,Sound effects
+EntitySkeleton,attackEntity,nextFloat,0,,,TRUE,Sound effects
+EntitySlime,onCollideWithPlayer,nextFloat,0,,,TRUE,Sound effects
+EntitySlime,onCollideWithPlayer,nextFloat,1,,,TRUE,Sound effects
+EntitySlime,getCanSpawnHere,nextInt,1,,,TRUE,Seeded
+EntitySlime,updateEntityActionState,nextFloat,0,,,TRUE,Sound effects
+EntitySlime,updateEntityActionState,nextFloat,1,,,TRUE,Sound effects
+EntitySlime,onUpdate,nextFloat,0,,,TRUE,Rendering
+EntitySlime,onUpdate,nextFloat,1,,,TRUE,Rendering
+EntitySlime,onUpdate,nextFloat,2,,,TRUE,Sound effects
+EntitySlime,onUpdate,nextFloat,3,,,TRUE,Sound effects
+BlockBrewingStand,randomDisplayTick,nextFloat,0,,,TRUE,Rendering
+BlockBrewingStand,randomDisplayTick,nextFloat,1,,,TRUE,Rendering
+BlockBrewingStand,randomDisplayTick,nextFloat,2,,,TRUE,Rendering
+BlockEnchantmentTable,randomDisplayTick,nextFloat,0,,,TRUE,Rendering
+BlockEnchantmentTable,randomDisplayTick,nextFloat,1,,,TRUE,Rendering
+BlockEnchantmentTable,randomDisplayTick,nextFloat,2,,,TRUE,Rendering
+BlockEnchantmentTable,randomDisplayTick,nextInt,0,,,TRUE,Rendering
+BlockEndPortal,randomDisplayTick,nextFloat,0,,,TRUE,Rendering
+BlockEndPortal,randomDisplayTick,nextFloat,1,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextInt,0,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,0,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,1,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,2,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,3,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,4,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,5,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,6,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,7,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,8,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,9,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,10,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,11,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,12,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,13,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,14,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,15,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,16,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,17,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,18,,,TRUE,Rendering
+BlockFire,randomDisplayTick,nextFloat,19,,,TRUE,Sound effects
+BlockFluid,triggerLavaMixEffects,random,0,,,TRUE,Sound effects
+BlockFluid,triggerLavaMixEffects,random,1,,,TRUE,Sound effects
+BlockFluid,randomDisplayTick,nextFloat,0,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextFloat,1,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextFloat,2,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextFloat,3,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextFloat,4,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextFloat,5,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextFloat,6,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextFloat,7,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextFloat,8,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextFloat,9,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextFloat,10,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextFloat,11,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextInt,0,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextInt,1,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextInt,2,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextInt,3,,,TRUE,Rendering
+BlockFluid,randomDisplayTick,nextInt,4,,,TRUE,Rendering
+BlockFluid,triggerLavaMixEffects,nextFloat,0,,,TRUE,Rendering
+BlockFluid,triggerLavaMixEffects,nextFloat,1,,,TRUE,Rendering
+BlockFurnace,randomDisplayTick,nextFloat,0,,,TRUE,Rendering
+BlockFurnace,randomDisplayTick,nextFloat,1,,,TRUE,Rendering
+BlockMycelium,randomDisplayTick,nextFloat,0,,,TRUE,Rendering
+BlockMycelium,randomDisplayTick,nextFloat,1,,,TRUE,Rendering
+BlockMycelium,randomDisplayTick,nextInt,0,,,TRUE,Rendering
+BlockPortal,randomDisplayTick,nextInt,0,,,TRUE,Rendering
+BlockPortal,randomDisplayTick,nextInt,1,,,TRUE,Rendering
+BlockPortal,randomDisplayTick,nextFloat,0,,,TRUE,Rendering
+BlockPortal,randomDisplayTick,nextFloat,1,,,TRUE,Rendering
+BlockPortal,randomDisplayTick,nextFloat,2,,,TRUE,Rendering
+BlockPortal,randomDisplayTick,nextFloat,3,,,TRUE,Rendering
+BlockPortal,randomDisplayTick,nextFloat,4,,,TRUE,Rendering
+BlockPortal,randomDisplayTick,nextFloat,5,,,TRUE,Rendering
+BlockPortal,randomDisplayTick,nextFloat,6,,,TRUE,Rendering
+BlockPortal,randomDisplayTick,nextFloat,7,,,TRUE,Rendering
+BlockPortal,randomDisplayTick,nextFloat,8,,,TRUE,Rendering
+BlockRedstoneRepeater,randomDisplayTick,nextInt,0,,,TRUE,Rendering
+BlockRedstoneRepeater,randomDisplayTick,nextFloat,0,,,TRUE,Rendering
+BlockRedstoneRepeater,randomDisplayTick,nextFloat,1,,,TRUE,Rendering
+BlockRedstoneRepeater,randomDisplayTick,nextFloat,2,,,TRUE,Rendering
+BlockRedstoneTorch,randomDisplayTick,nextFloat,0,,,TRUE,Rendering
+BlockRedstoneTorch,randomDisplayTick,nextFloat,1,,,TRUE,Rendering
+BlockRedstoneTorch,randomDisplayTick,nextFloat,2,,,TRUE,Rendering
+BlockRedstoneWire,randomDisplayTick,nextFloat,0,,,TRUE,Rendering
+BlockRedstoneWire,randomDisplayTick,nextFloat,1,,,TRUE,Rendering
+EnchantmentNameParts,func_40250_a,setSeed,0,,,TRUE,setSeed
+EnchantmentNameParts,func_40249_a,nextInt,0,,,TRUE,Seeded
+EnchantmentNameParts,func_40249_a,nextInt,1,,,TRUE,Seeded
+EntityLiving,spawnExplosionParticle,nextFloat,0,,,TRUE,Rendering
+EntityLiving,spawnExplosionParticle,nextFloat,1,,,TRUE,Rendering
+EntityLiving,spawnExplosionParticle,nextFloat,2,,,TRUE,Rendering
+EntityLiving,spawnExplosionParticle,nextGaussian,0,,,TRUE,Rendering
+EntityLiving,spawnExplosionParticle,nextGaussian,1,,,TRUE,Rendering
+EntityLiving,spawnExplosionParticle,nextGaussian,2,,,TRUE,Rendering
+EntitySnowman,attackEntity,nextFloat,0,,,TRUE,Sound effects
+EntitySquid,<init>,nextFloat,0,,,TRUE,Rendering
+EntitySquid,onLivingUpdate,nextInt,0,,,TRUE,Rendering
+EntitySquid,onLivingUpdate,nextFloat,0,,,TRUE,Rendering
+EntityThrowable,onUpdate,nextFloat,0,,,TRUE,Unused
+EntityThrowable,onUpdate,nextFloat,1,,,TRUE,Unused
+EntityThrowable,onUpdate,nextFloat,2,,,TRUE,Unused
+EntityWolf,onUpdate,nextFloat,0,,,TRUE,Sound effects
+EntityWolf,onUpdate,nextFloat,1,,,TRUE,Sound effects
+EntityWolf,onUpdate,nextFloat,2,,,TRUE,Rendering
+EntityWolf,onUpdate,nextFloat,3,,,TRUE,Rendering
+EntityWolf,showHeartsOrSmokeFX,nextFloat,0,,,TRUE,Rendering
+EntityWolf,showHeartsOrSmokeFX,nextFloat,1,,,TRUE,Rendering
+EntityWolf,showHeartsOrSmokeFX,nextFloat,2,,,TRUE,Rendering
+EntityWolf,getLivingSound,nextInt,0,,,TRUE,Sound effects
+EntityWolf,showHeartsOrSmokeFX,nextGaussian,0,,,TRUE,Rendering
+EntityWolf,showHeartsOrSmokeFX,nextGaussian,1,,,TRUE,Rendering
+EntityWolf,showHeartsOrSmokeFX,nextGaussian,2,,,TRUE,Rendering
+EntityXPOrb,onUpdate,nextFloat,4,,,TRUE,Sound effects
+EntityXPOrb,onCollideWithPlayer,nextFloat,0,,,TRUE,Sound effects
+EntityXPOrb,onCollideWithPlayer,nextFloat,1,,,TRUE,Sound effects
+Explosion,doExplosionB,nextFloat,0,,,TRUE,Sound effects
+Explosion,doExplosionB,nextFloat,1,,,TRUE,Sound effects
+Explosion,doExplosionB,nextFloat,2,,,TRUE,Rendering
+Explosion,doExplosionB,nextFloat,3,,,TRUE,Rendering
+Explosion,doExplosionB,nextFloat,4,,,TRUE,Rendering
+Explosion,doExplosionB,nextFloat,5,,,TRUE,Rendering
+Explosion,doExplosionB,nextFloat,6,,,TRUE,Rendering
+GuiEnchantment,func_40219_x_,nextInt,0,,,TRUE,Rendering
+GuiEnchantment,func_40219_x_,nextInt,1,,,TRUE,Rendering
+ItemBow,onPlayerStoppedUsing,nextFloat,0,,,TRUE,Sound effects
+ItemBucket,onItemRightClick,random,0,,,TRUE,Rendering
+ItemBucket,onItemRightClick,random,1,,,TRUE,Rendering
+ItemBucket,onItemRightClick,random,2,,,TRUE,Rendering
+ItemBucket,onItemRightClick,nextFloat,0,,,TRUE,Sound effects
+ItemBucket,onItemRightClick,nextFloat,1,,,TRUE,Sound effects
+ItemEgg,onItemRightClick,nextFloat,0,,,TRUE,Sound effects
+ItemEnderEye,onItemUse,nextFloat,0,,,TRUE,Rendering
+ItemEnderEye,onItemUse,nextFloat,1,,,TRUE,Rendering
+ItemEnderEye,onItemRightClick,nextFloat,0,,,TRUE,Sound effects
+ItemEnderPearl,onItemRightClick,nextFloat,0,,,TRUE,Sound effects
+ItemFishingRod,onItemRightClick,nextFloat,0,,,TRUE,Sound effects
+ItemFlintAndSteel,onItemUse,nextFloat,0,,,TRUE,Sound effects
+ItemFood,onFoodEaten,nextFloat,0,,,TRUE,Sound effects
+ItemPotion,onItemRightClick,nextFloat,0,,,TRUE,Sound effects
+ItemSnowball,onItemRightClick,nextFloat,0,,,TRUE,Sound effects
+MathHelper,getRandomIntegerInRange,nextInt,0,,,TRUE,Seeded
+NetClientHandler,handleCollect,nextFloat,0,,,TRUE,Sound effects
+NetClientHandler,handleCollect,nextFloat,1,,,TRUE,Sound effects
+SoundManager,<init>,nextInt,0,,,TRUE,Sound effects
+SoundManager,playRandomMusicIfReady,nextInt,0,,,TRUE,Sound effects
+SoundPool,getRandomSoundFromSoundPool,nextInt,0,,,TRUE,Sound effects
+SoundPool,getRandomSound,nextInt,0,,,TRUE,Sound effects
+SpawnerAnimals,performSpawning,nextInt,2,,,TRUE,0 - 0 lol
+SpawnerAnimals,performSpawning,nextInt,3,,,TRUE,0 - 0 lol
+TileEntityChest,updateEntity,nextFloat,0,,,TRUE,Sound effects
+TileEntityChest,updateEntity,nextFloat,1,,,TRUE,Sound effects
+TileEntityEnchantmentTable,updateEntity,nextInt,0,,,TRUE,Rendering
+TileEntityEnchantmentTable,updateEntity,nextInt,1,,,TRUE,Rendering
+TileEntityEnchantmentTable,updateEntity,nextInt,2,,,TRUE,Rendering
+TileEntityMobSpawner,updateEntity,nextFloat,0,,,TRUE,Rendering
+TileEntityMobSpawner,updateEntity,nextFloat,1,,,TRUE,Rendering
+TileEntityMobSpawner,updateEntity,nextFloat,2,,,TRUE,Rendering
+WeightedRandom,func_35732_a,nextInt,0,,,TRUE,Seeded
+World,randomDisplayUpdates,nextFloat,0,,,TRUE,Rendering
+World,randomDisplayUpdates,nextFloat,1,,,TRUE,Rendering
+World,randomDisplayUpdates,nextFloat,2,,,TRUE,Rendering
+World,<init>,nextInt,1,,,TRUE,Sound effects
+World,<init>,nextInt,3,,,TRUE,Sound effects
+World,<init>,nextInt,5,,,TRUE,Sound effects
+World,updateBlocksAndPlayCaveSounds,nextFloat,0,,,TRUE,Sound effects
+World,setRandomSeed,setSeed,0,,,TRUE,setSeed
+World,updateBlocksAndPlayCaveSounds,nextInt,0,,,TRUE,Sound effects
+World,updateBlocksAndPlayCaveSounds,nextInt,1,,,TRUE,Sound effects
+World,randomDisplayUpdates,nextInt,0,,,TRUE,Rendering
+World,randomDisplayUpdates,nextInt,1,,,TRUE,Rendering
+World,randomDisplayUpdates,nextInt,2,,,TRUE,Rendering
+World,randomDisplayUpdates,nextInt,3,,,TRUE,Rendering
+World,randomDisplayUpdates,nextInt,4,,,TRUE,Rendering
+World,randomDisplayUpdates,nextInt,5,,,TRUE,Rendering
+World,randomDisplayUpdates,nextInt,6,,,TRUE,Rendering
+BiomeDecorator,genStandardOre2,nextInt,0,,,TRUE,Seeded
+BiomeDecorator,genStandardOre2,nextInt,1,,,TRUE,Seeded
+BiomeDecorator,genStandardOre2,nextInt,2,,,TRUE,Seeded
+BiomeDecorator,genStandardOre2,nextInt,3,,,TRUE,Seeded
+BiomeDecorator,genStandardOre1,nextInt,0,,,TRUE,Seeded
+BiomeDecorator,genStandardOre1,nextInt,1,,,TRUE,Seeded
+BiomeDecorator,genStandardOre1,nextInt,2,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,0,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,1,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,2,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,3,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,4,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,5,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,6,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,7,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,8,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,9,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,10,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,11,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,12,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,13,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,14,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,15,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,16,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,17,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,18,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,19,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,20,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,21,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,22,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,23,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,24,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,25,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,26,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,27,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,28,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,29,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,30,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,31,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,32,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,33,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,34,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,35,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,36,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,37,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,38,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,39,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,40,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,41,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,42,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,43,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,44,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,45,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,46,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,47,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,48,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,49,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,50,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,51,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,52,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,53,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,54,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,55,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,56,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,57,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,58,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,59,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,60,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,61,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,62,,,TRUE,Seeded
+BiomeDecorator,decorate_do,nextInt,63,,,TRUE,Seeded
+BiomeGenBase,getRandomWorldGenForTrees,nextInt,0,,,TRUE,Seeded
+BiomeGenForest,getRandomWorldGenForTrees,nextInt,0,,,TRUE,Seeded
+BiomeGenForest,getRandomWorldGenForTrees,nextInt,1,,,TRUE,Seeded
+BiomeGenTaiga,getRandomWorldGenForTrees,nextInt,0,,,TRUE,Seeded
+ChunkProviderEnd,provideChunk,setSeed,0,,,TRUE,setSeed
+ChunkProviderGenerate,populate,nextLong,0,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextLong,1,,,TRUE,Seeded
+ChunkProviderGenerate,populate,setSeed,0,,,TRUE,Seeded
+ChunkProviderGenerate,populate,setSeed,1,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,0,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,1,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,2,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,3,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,4,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,5,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,6,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,7,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,8,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,9,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,10,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,11,,,TRUE,Seeded
+ChunkProviderGenerate,populate,nextInt,12,,,TRUE,Seeded
+ChunkProviderGenerate,replaceBlocksForBiome,nextInt,0,,,TRUE,Seeded
+ChunkProviderGenerate,replaceBlocksForBiome,nextInt,1,,,TRUE,Seeded
+ChunkProviderGenerate,replaceBlocksForBiome,nextDouble,0,,,TRUE,Seeded
+ChunkProviderGenerate,provideChunk,setSeed,0,,,TRUE,setSeed
+ChunkProviderHell,func_4058_b,nextInt,0,,,TRUE,Seeded
+ChunkProviderHell,func_4058_b,nextInt,1,,,TRUE,Seeded
+ChunkProviderHell,func_4058_b,nextDouble,0,,,TRUE,Seeded
+ChunkProviderHell,func_4058_b,nextDouble,1,,,TRUE,Seeded
+ChunkProviderHell,func_4058_b,nextDouble,2,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,0,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,1,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,2,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,3,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,4,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,5,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,6,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,7,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,8,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,9,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,10,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,11,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,12,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,13,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,14,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,15,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,16,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,17,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,18,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,19,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,20,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,21,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,22,,,TRUE,Seeded
+ChunkProviderHell,populate,nextInt,23,,,TRUE,Seeded
+ChunkProviderHell,provideChunk,setSeed,0,,,TRUE,setSeed
+ComponentMineshaftCorridor,addComponentParts,nextInt,0,,,TRUE,Seeded
+ComponentMineshaftCorridor,addComponentParts,nextInt,1,,,TRUE,Seeded
+ComponentMineshaftCorridor,addComponentParts,nextInt,2,,,TRUE,Seeded
+ComponentMineshaftCorridor,addComponentParts,nextInt,3,,,TRUE,Seeded
+ComponentMineshaftCorridor,addComponentParts,nextInt,4,,,TRUE,Seeded
+ComponentMineshaftCorridor,addComponentParts,nextInt,5,,,TRUE,Seeded
+ComponentMineshaftCorridor,func_35066_a,nextInt,0,,,TRUE,Seeded
+ComponentMineshaftCorridor,<init>,nextInt,0,,,TRUE,Seeded
+ComponentMineshaftCorridor,<init>,nextInt,1,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,0,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,1,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,2,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,3,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,4,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,5,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,6,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,7,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,8,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,9,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,10,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,11,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,12,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,13,,,TRUE,Seeded
+ComponentMineshaftCorridor,buildComponent,nextInt,14,,,TRUE,Seeded
+ComponentMineshaftCross,func_35071_a,nextInt,0,,,TRUE,Seeded
+ComponentMineshaftCross,buildComponent,nextBoolean,0,,,TRUE,Seeded
+ComponentMineshaftCross,buildComponent,nextBoolean,1,,,TRUE,Seeded
+ComponentMineshaftCross,buildComponent,nextBoolean,2,,,TRUE,Seeded
+ComponentMineshaftCross,buildComponent,nextBoolean,3,,,TRUE,Seeded
+ComponentMineshaftRoom,buildComponent,nextInt,0,,,TRUE,Seeded
+ComponentMineshaftRoom,buildComponent,nextInt,1,,,TRUE,Seeded
+ComponentMineshaftRoom,buildComponent,nextInt,2,,,TRUE,Seeded
+ComponentMineshaftRoom,buildComponent,nextInt,3,,,TRUE,Seeded
+ComponentMineshaftRoom,buildComponent,nextInt,4,,,TRUE,Seeded
+ComponentMineshaftRoom,buildComponent,nextInt,5,,,TRUE,Seeded
+ComponentMineshaftRoom,buildComponent,nextInt,6,,,TRUE,Seeded
+ComponentMineshaftRoom,buildComponent,nextInt,7,,,TRUE,Seeded
+ComponentMineshaftRoom,<init>,nextInt,0,,,TRUE,Seeded
+ComponentMineshaftRoom,<init>,nextInt,1,,,TRUE,Seeded
+ComponentMineshaftRoom,<init>,nextInt,2,,,TRUE,Seeded
+ComponentNetherBridgeCorridor4,buildComponent,nextInt,0,,,TRUE,Seeded
+ComponentNetherBridgeCorridor4,buildComponent,nextInt,1,,,TRUE,Seeded
+ComponentNetherBridgeCrossing3,<init>,nextInt,0,,,TRUE,Seeded
+ComponentNetherBridgePiece,func_40020_a,nextInt,0,,,TRUE,Seeded
+ComponentStronghold,getRandomDoor,nextInt,0,,,TRUE,Seeded
+ComponentStrongholdChestCorridor,addComponentParts,nextInt,0,,,TRUE,Seeded
+ComponentStrongholdCrossing,<init>,nextInt,0,,,TRUE,Seeded
+ComponentStrongholdCrossing,<init>,nextBoolean,0,,,TRUE,Seeded
+ComponentStrongholdCrossing,<init>,nextBoolean,1,,,TRUE,Seeded
+ComponentStrongholdCrossing,<init>,nextBoolean,2,,,TRUE,Seeded
+ComponentStrongholdLibrary,addComponentParts,nextInt,0,,,TRUE,Seeded
+ComponentStrongholdLibrary,addComponentParts,nextInt,1,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,0,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,1,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,2,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,3,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,4,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,5,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,6,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,7,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,8,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,9,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,10,,,TRUE,Seeded
+ComponentStrongholdPortalRoom,addComponentParts,nextFloat,11,,,TRUE,Seeded
+ComponentStrongholdRoomCrossing,<init>,nextInt,0,,,TRUE,Seeded
+ComponentStrongholdRoomCrossing,addComponentParts,nextInt,0,,,TRUE,Seeded
+ComponentStrongholdStairs,<init>,nextInt,0,,,TRUE,Seeded
+ComponentStrongholdStraight,<init>,nextInt,0,,,TRUE,Seeded
+ComponentStrongholdStraight,<init>,nextInt,1,,,TRUE,Seeded
+ComponentVillageHouse4_Garden,<init>,nextBoolean,0,,,TRUE,Seeded
+ComponentVillagePathGen,buildComponent,nextInt,0,,,TRUE,Seeded
+ComponentVillagePathGen,buildComponent,nextInt,1,,,TRUE,Seeded
+ComponentVillagePathGen,buildComponent,nextInt,2,,,TRUE,Seeded
+ComponentVillagePathGen,buildComponent,nextInt,3,,,TRUE,Seeded
+ComponentVillagePathGen,buildComponent,nextInt,4,,,TRUE,Seeded
+ComponentVillagePathGen,buildComponent,nextInt,5,,,TRUE,Seeded
+ComponentVillageWell,<init>,nextInt,0,,,TRUE,Seeded
+ComponentVillageWoodHut,<init>,nextInt,0,,,TRUE,Seeded
+ComponentVillageWoodHut,<init>,nextBoolean,0,,,TRUE,Seeded
+EffectRenderer,addBlockHitEffects,nextDouble,0,,,TRUE,Rendering
+EffectRenderer,addBlockHitEffects,nextDouble,1,,,TRUE,Rendering
+EffectRenderer,addBlockHitEffects,nextDouble,2,,,TRUE,Rendering
+EffectRenderer,addBlockDestroyEffects,nextInt,0,,,TRUE,Rendering
+EntityAuraFX,<init>,nextFloat,0,,,TRUE,Rendering
+EntityAuraFX,<init>,nextFloat,1,,,TRUE,Rendering
+EntityAuraFX,<init>,random,0,,,TRUE,Rendering
+EntityBubbleFX,<init>,random,0,,,TRUE,Rendering
+EntityBubbleFX,<init>,random,1,,,TRUE,Rendering
+EntityBubbleFX,<init>,random,2,,,TRUE,Rendering
+EntityBubbleFX,<init>,random,3,,,TRUE,Rendering
+EntityBubbleFX,<init>,nextFloat,0,,,TRUE,Rendering
+EntityCloudFX,<init>,random,0,,,TRUE,Rendering
+EntityCloudFX,<init>,random,1,,,TRUE,Rendering
+EntityCrit2FX,onUpdate,nextFloat,0,,,TRUE,Rendering
+EntityCrit2FX,onUpdate,nextFloat,1,,,TRUE,Rendering
+EntityCrit2FX,onUpdate,nextFloat,2,,,TRUE,Rendering
+EntityCritFX,<init>,random,0,,,TRUE,Rendering
+EntityCritFX,<init>,random,1,,,TRUE,Rendering
+EntityDropParticleFX,<init>,random,0,,,TRUE,Rendering
+EntityEnchantmentTableParticleFX,<init>,nextFloat,0,,,TRUE,Rendering
+EntityEnchantmentTableParticleFX,<init>,nextFloat,1,,,TRUE,Rendering
+EntityEnchantmentTableParticleFX,<init>,random,0,,,TRUE,Rendering
+EntityEnchantmentTableParticleFX,<init>,random,1,,,TRUE,Rendering
+EntityExplodeFX,<init>,random,0,,,TRUE,Rendering
+EntityExplodeFX,<init>,random,1,,,TRUE,Rendering
+EntityExplodeFX,<init>,random,2,,,TRUE,Rendering
+EntityExplodeFX,<init>,nextFloat,0,,,TRUE,Rendering
+EntityExplodeFX,<init>,nextFloat,1,,,TRUE,Rendering
+EntityExplodeFX,<init>,nextFloat,2,,,TRUE,Rendering
+EntityExplodeFX,<init>,nextFloat,3,,,TRUE,Rendering
+EntityFlameFX,<init>,random,0,,,TRUE,Rendering
+EntityFlameFX,<init>,nextFloat,0,,,TRUE,Rendering
+EntityFlameFX,<init>,nextFloat,1,,,TRUE,Rendering
+EntityFlameFX,<init>,nextFloat,2,,,TRUE,Rendering
+EntityFlameFX,<init>,nextFloat,3,,,TRUE,Rendering
+EntityFlameFX,<init>,nextFloat,4,,,TRUE,Rendering
+EntityFlameFX,<init>,nextFloat,5,,,TRUE,Rendering
+EntityFX,<init>,random,0,,,TRUE,Rendering
+EntityFX,<init>,random,1,,,TRUE,Rendering
+EntityFX,<init>,random,2,,,TRUE,Rendering
+EntityFX,<init>,random,3,,,TRUE,Rendering
+EntityFX,<init>,random,4,,,TRUE,Rendering
+EntityFX,<init>,nextFloat,0,,,TRUE,Rendering
+EntityFX,<init>,nextFloat,1,,,TRUE,Rendering
+EntityFX,<init>,nextFloat,2,,,TRUE,Rendering
+EntityFX,<init>,nextFloat,3,,,TRUE,Rendering
+EntityHugeExplodeFX,onUpdate,nextDouble,0,,,TRUE,Rendering
+EntityHugeExplodeFX,onUpdate,nextDouble,1,,,TRUE,Rendering
+EntityHugeExplodeFX,onUpdate,nextDouble,2,,,TRUE,Rendering
+EntityHugeExplodeFX,onUpdate,nextDouble,3,,,TRUE,Rendering
+EntityHugeExplodeFX,onUpdate,nextDouble,4,,,TRUE,Rendering
+EntityHugeExplodeFX,onUpdate,nextDouble,5,,,TRUE,Rendering
+EntityLargeExplodeFX,<init>,nextInt,0,,,TRUE,Rendering
+EntityLargeExplodeFX,<init>,nextFloat,0,,,TRUE,Rendering
+EntityLavaFX,<init>,random,0,,,TRUE,Rendering
+EntityLavaFX,onUpdate,nextFloat,0,,,TRUE,Rendering
+EntityLavaFX,<init>,nextFloat,0,,,TRUE,Rendering
+EntityLavaFX,<init>,nextFloat,1,,,TRUE,Rendering
+EntityPortalFX,<init>,nextFloat,0,,,TRUE,Rendering
+EntityPortalFX,<init>,nextFloat,1,,,TRUE,Rendering
+EntityPortalFX,<init>,random,0,,,TRUE,Rendering
+EntityPortalFX,<init>,random,1,,,TRUE,Rendering
+EntityRainFX,<init>,random,0,,,TRUE,Rendering
+EntityRainFX,<init>,random,1,,,TRUE,Rendering
+EntityRainFX,onUpdate,random,0,,,TRUE,Rendering
+EntityRainFX,<init>,nextInt,0,,,TRUE,Rendering
+EntityReddustFX,<init>,random,0,,,TRUE,Rendering
+EntityReddustFX,<init>,random,1,,,TRUE,Rendering
+EntityReddustFX,<init>,random,2,,,TRUE,Rendering
+EntityReddustFX,<init>,random,3,,,TRUE,Rendering
+EntityReddustFX,<init>,random,4,,,TRUE,Rendering
+EntityRenderer,updateTorchFlicker,random,0,,,TRUE,Rendering
+EntityRenderer,updateTorchFlicker,random,1,,,TRUE,Rendering
+EntityRenderer,updateTorchFlicker,random,2,,,TRUE,Rendering
+EntityRenderer,updateTorchFlicker,random,3,,,TRUE,Rendering
+EntityRenderer,updateTorchFlicker,random,4,,,TRUE,Rendering
+EntityRenderer,updateTorchFlicker,random,5,,,TRUE,Rendering
+EntityRenderer,updateTorchFlicker,random,6,,,TRUE,Rendering
+EntityRenderer,updateTorchFlicker,random,7,,,TRUE,Rendering
+EntityRenderer,addRainParticles,nextFloat,0,,,TRUE,Seeded + rendering
+EntityRenderer,addRainParticles,nextFloat,1,,,TRUE,Seeded + rendering
+EntityRenderer,renderRainSnow,nextGaussian,0,,,TRUE,Seeded + rendering
+EntityRenderer,renderRainSnow,nextGaussian,1,,,TRUE,Seeded + rendering
+EntityRenderer,renderRainSnow,nextFloat,0,,,TRUE,Seeded + rendering
+EntityRenderer,renderRainSnow,nextFloat,1,,,TRUE,Seeded + rendering
+EntityRenderer,renderRainSnow,nextFloat,2,,,TRUE,Seeded + rendering
+EntityRenderer,addRainParticles,nextInt,0,,,TRUE,Seeded + rendering
+EntityRenderer,addRainParticles,nextInt,1,,,TRUE,Seeded + rendering
+EntityRenderer,addRainParticles,nextInt,2,,,TRUE,Seeded + rendering
+EntityRenderer,addRainParticles,nextInt,3,,,TRUE,Seeded + rendering
+EntityRenderer,addRainParticles,nextInt,4,,,TRUE,Seeded + rendering
+EntityRenderer,addRainParticles,nextInt,5,,,TRUE,Seeded + rendering
+EntityRenderer,addRainParticles,setSeed,0,,,TRUE,setSeed
+EntityRenderer,renderRainSnow,setSeed,0,,,TRUE,setSeed
+EntitySmokeFX,<init>,random,0,,,TRUE,Rendering
+EntitySmokeFX,<init>,random,1,,,TRUE,Rendering
+EntitySnowShovelFX,<init>,random,0,,,TRUE,Rendering
+EntitySnowShovelFX,<init>,random,1,,,TRUE,Rendering
+EntitySpellParticleFX,<init>,random,0,,,TRUE,Rendering
+EntitySuspendFX,<init>,nextFloat,0,,,TRUE,Rendering
+EntitySuspendFX,<init>,random,0,,,TRUE,Rendering
+FontRenderer,renderString,nextInt,0,,,TRUE,Rendering
+FontRenderer,renderString,nextInt,1,,,TRUE,Rendering
+GuiAchievements,genAchievementBackground,nextInt,0,,,TRUE,Seeded + rendering
+GuiAchievements,genAchievementBackground,nextInt,1,,,TRUE,Seeded + rendering
+GuiAchievements,genAchievementBackground,nextInt,2,,,TRUE,Seeded + rendering
+GuiAchievements,genAchievementBackground,setSeed,0,,,TRUE,setSeed
+GuiIngame,renderGameOverlay,nextInt,0,,,TRUE,Seeded + rendering
+GuiIngame,renderGameOverlay,nextInt,1,,,TRUE,Seeded + rendering
+GuiIngame,renderGameOverlay,setSeed,0,,,TRUE,setSeed
+GuiMainMenu,<init>,nextInt,0,,,TRUE,Rendering
+GuiMainMenu,<init>,nextFloat,0,,,TRUE,Rendering
+GuiWinGame,initGui,nextInt,0,,,TRUE,Seeded + rendering
+GuiWinGame,drawScreen,setSeed,0,,,TRUE,setSeed
+GuiWinGame,drawScreen,setSeed,1,,,TRUE,setSeed
+MapGenBase,generate,nextLong,0,,,TRUE,Seeded
+MapGenBase,generate,nextLong,1,,,TRUE,Seeded
+MapGenBase,generate,setSeed,0,,,TRUE,setSeed
+MapGenBase,generate,setSeed,1,,,TRUE,setSeed
+MapGenCaves,recursiveGenerate,nextFloat,0,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextFloat,1,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextFloat,2,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextFloat,3,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextFloat,4,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextFloat,5,,,TRUE,Seeded
+MapGenCaves,generateLargeCaveNode,nextFloat,0,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextInt,0,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextInt,1,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextInt,2,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextInt,3,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextFloat,0,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextFloat,1,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextFloat,2,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextFloat,3,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextFloat,4,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextFloat,5,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextFloat,6,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextFloat,7,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextLong,0,,,TRUE,Seeded
+MapGenCaves,generateCaveNode,nextLong,1,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextInt,0,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextInt,1,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextInt,2,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextInt,3,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextInt,4,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextInt,5,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextInt,6,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextInt,7,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextInt,8,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextInt,9,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextInt,10,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextLong,0,,,TRUE,Seeded
+MapGenCaves,recursiveGenerate,nextLong,1,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextLong,0,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextInt,0,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextInt,1,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextInt,2,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextInt,3,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextInt,4,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextInt,5,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextInt,6,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextInt,7,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextInt,8,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextInt,0,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextInt,1,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextInt,2,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextInt,3,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextFloat,0,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextFloat,1,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextFloat,2,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextFloat,3,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextFloat,4,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextFloat,5,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextFloat,6,,,TRUE,Seeded
+MapGenCavesHell,generateCaveNode,nextFloat,7,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextFloat,0,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextFloat,1,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextFloat,2,,,TRUE,Seeded
+MapGenCavesHell,recursiveGenerate,nextFloat,3,,,TRUE,Seeded
+MapGenCavesHell,generateLargeCaveNode,nextFloat,0,,,TRUE,Seeded
+MapGenMineshaft,canSpawnStructureAtCoords,nextInt,0,,,TRUE,Seeded
+MapGenMineshaft,canSpawnStructureAtCoords,nextInt,1,,,TRUE,Seeded
+MapGenNetherBridge,canSpawnStructureAtCoords,nextInt,0,,,TRUE,Seeded
+MapGenNetherBridge,canSpawnStructureAtCoords,nextInt,1,,,TRUE,Seeded
+MapGenNetherBridge,canSpawnStructureAtCoords,nextInt,2,,,TRUE,Seeded
+MapGenNetherBridge,canSpawnStructureAtCoords,nextInt,3,,,TRUE,Seeded
+MapGenNetherBridge,canSpawnStructureAtCoords,setSeed,0,,,TRUE,setSeed
+MapGenRavine,func_35626_a,nextInt,0,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextInt,1,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextInt,2,,,TRUE,Seeded
+MapGenRavine,recursiveGenerate,nextInt,0,,,TRUE,Seeded
+MapGenRavine,recursiveGenerate,nextInt,1,,,TRUE,Seeded
+MapGenRavine,recursiveGenerate,nextInt,2,,,TRUE,Seeded
+MapGenRavine,recursiveGenerate,nextInt,3,,,TRUE,Seeded
+MapGenRavine,recursiveGenerate,nextInt,4,,,TRUE,Seeded
+MapGenRavine,recursiveGenerate,nextFloat,0,,,TRUE,Seeded
+MapGenRavine,recursiveGenerate,nextFloat,1,,,TRUE,Seeded
+MapGenRavine,recursiveGenerate,nextFloat,2,,,TRUE,Seeded
+MapGenRavine,recursiveGenerate,nextFloat,3,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextFloat,0,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextFloat,1,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextFloat,2,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextFloat,3,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextFloat,4,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextFloat,5,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextFloat,6,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextFloat,7,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextFloat,8,,,TRUE,Seeded
+MapGenRavine,func_35626_a,nextFloat,9,,,TRUE,Seeded
+MapGenRavine,recursiveGenerate,nextLong,0,,,TRUE,Seeded
+MapGenStronghold,canSpawnStructureAtCoords,nextDouble,0,,,TRUE,Seeded
+MapGenStronghold,canSpawnStructureAtCoords,nextDouble,1,,,TRUE,Seeded
+MapGenStronghold,canSpawnStructureAtCoords,setSeed,0,,,TRUE,setSeed
+MapGenStructure,recursiveGenerate,nextInt,0,,,TRUE,Seeded
+MapGenStructure,func_40484_a,setSeed,0,,,TRUE,Seeded
+MapGenStructure,func_40484_a,setSeed,1,,,TRUE,Seeded
+MapGenStructure,func_40484_a,nextLong,0,,,TRUE,Seeded
+MapGenStructure,func_40484_a,nextLong,1,,,TRUE,Seeded
+MapGenVillage,canSpawnStructureAtCoords,nextInt,0,,,TRUE,Seeded
+MapGenVillage,canSpawnStructureAtCoords,nextInt,1,,,TRUE,Seeded
+MapGenWaterlily,generate,nextInt,0,,,TRUE,Seeded
+MapGenWaterlily,generate,nextInt,1,,,TRUE,Seeded
+MapGenWaterlily,generate,nextInt,2,,,TRUE,Seeded
+MapGenWaterlily,generate,nextInt,3,,,TRUE,Seeded
+MapGenWaterlily,generate,nextInt,4,,,TRUE,Seeded
+MapGenWaterlily,generate,nextInt,5,,,TRUE,Seeded
+ModelGhast,<init>,nextInt,0,,,TRUE,Seeded
+NoiseGeneratorPerlin,<init>,nextInt,0,,,TRUE,Seeded
+NoiseGeneratorPerlin,<init>,nextDouble,0,,,TRUE,Seeded
+NoiseGeneratorPerlin,<init>,nextDouble,1,,,TRUE,Seeded
+NoiseGeneratorPerlin,<init>,nextDouble,2,,,TRUE,Seeded
+RenderDragon,func_40279_a,nextFloat,0,,,TRUE,Seeded + rendering
+RenderDragon,func_40279_a,nextFloat,1,,,TRUE,Seeded + rendering
+RenderDragon,func_40279_a,nextFloat,2,,,TRUE,Seeded + rendering
+RenderDragon,func_40279_a,nextFloat,3,,,TRUE,Seeded + rendering
+RenderDragon,func_40279_a,nextFloat,4,,,TRUE,Seeded + rendering
+RenderDragon,func_40279_a,nextFloat,5,,,TRUE,Seeded + rendering
+RenderDragon,func_40279_a,nextFloat,6,,,TRUE,Seeded + rendering
+RenderDragon,func_40279_a,nextFloat,7,,,TRUE,Seeded + rendering
+RenderEnderman,renderEnderman,nextGaussian,0,,,TRUE,Rendering
+RenderEnderman,renderEnderman,nextGaussian,1,,,TRUE,Rendering
+RenderEndPortal,func_40446_a,nextFloat,0,,,TRUE,Seeded + rendering
+RenderEndPortal,func_40446_a,nextFloat,1,,,TRUE,Seeded + rendering
+RenderEndPortal,func_40446_a,nextFloat,2,,,TRUE,Seeded + rendering
+RenderGlobal,renderStars,nextDouble,0,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextDouble,0,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextDouble,1,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextDouble,2,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextDouble,3,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextDouble,4,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextDouble,5,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextDouble,6,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextDouble,7,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextDouble,8,,,TRUE,Rendering
+RenderGlobal,func_40193_b,nextInt,0,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,0,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,1,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,2,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,3,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,4,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,5,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,6,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,7,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,8,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,9,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,10,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,11,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,12,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,13,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextFloat,14,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,random,0,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextGaussian,0,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextGaussian,1,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextGaussian,2,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextGaussian,3,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextGaussian,4,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextGaussian,5,,,TRUE,Rendering
+RenderGlobal,playAuxSFX,nextGaussian,6,,,TRUE,Rendering
+RenderGlobal,renderStars,nextFloat,0,,,TRUE,Rendering
+RenderGlobal,renderStars,nextFloat,1,,,TRUE,Rendering
+RenderGlobal,renderStars,nextFloat,2,,,TRUE,Rendering
+RenderGlobal,renderStars,nextFloat,3,,,TRUE,Rendering
+RenderItem,func_40267_a,nextFloat,0,,,TRUE,Rendering
+RenderItem,func_40267_a,nextFloat,1,,,TRUE,Rendering
+RenderItem,func_40267_a,nextFloat,2,,,TRUE,Rendering
+RenderItem,doRenderItem,nextFloat,0,,,TRUE,Seeded + rendering
+RenderItem,doRenderItem,nextFloat,1,,,TRUE,Seeded + rendering
+RenderItem,doRenderItem,nextFloat,2,,,TRUE,Seeded + rendering
+RenderItem,doRenderItem,setSeed,0,,,TRUE,setSeed
+RenderLightningBolt,doRenderLightningBolt,nextInt,0,,,TRUE,Seeded + rendering
+RenderLightningBolt,doRenderLightningBolt,nextInt,1,,,TRUE,Seeded + rendering
+RenderLightningBolt,doRenderLightningBolt,nextInt,2,,,TRUE,Seeded + rendering
+RenderLightningBolt,doRenderLightningBolt,nextInt,3,,,TRUE,Seeded + rendering
+RenderLightningBolt,doRenderLightningBolt,nextInt,4,,,TRUE,Seeded + rendering
+RenderLightningBolt,doRenderLightningBolt,nextInt,5,,,TRUE,Seeded + rendering
+RenderPainting,func_158_a,setSeed,0,,,TRUE,setSeed
+SpawnerAnimals,func_35957_a,nextFloat,0,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextFloat,1,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextInt,0,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextInt,1,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextInt,2,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextInt,3,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextInt,4,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextInt,5,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextInt,6,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextInt,7,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextInt,8,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextInt,9,,,TRUE,Seeded
+SpawnerAnimals,func_35957_a,nextInt,10,,,TRUE,Seeded
+StructureComponent,randomlyPlaceBlock,nextFloat,0,,,TRUE,Seeded
+StructureComponent,randomlyFillWithBlocks,nextFloat,0,,,TRUE,Seeded
+StructureComponent,fillTreasureChestWithLoot,nextInt,0,,,TRUE,Seeded
+StructureComponent,fillTreasureChestWithLoot,nextInt,1,,,TRUE,Seeded
+StructureComponent,fillTreasureChestWithLoot,nextInt,2,,,TRUE,Seeded
+StructureMineshaftPieces,getRandomComponent,nextInt,0,,,TRUE,Seeded
+StructureNetherBridgeEnd,<init>,nextInt,0,,,TRUE,Seeded
+StructureNetherBridgeEnd,addComponentParts,nextInt,0,,,TRUE,Seeded
+StructureNetherBridgeEnd,addComponentParts,nextInt,1,,,TRUE,Seeded
+StructureNetherBridgeEnd,addComponentParts,nextInt,2,,,TRUE,Seeded
+StructureNetherBridgeEnd,addComponentParts,nextInt,3,,,TRUE,Seeded
+StructureNetherBridgeEnd,addComponentParts,nextInt,4,,,TRUE,Seeded
+StructureNetherBridgeStart,<init>,nextInt,0,,,TRUE,Seeded
+StructureStart,func_40559_a,nextInt,0,,,TRUE,Seeded
+StructureStart,markAvailableHeight,nextInt,0,,,TRUE,Seeded
+StructureStrongholdPieces,func_35847_b,nextInt,0,,,TRUE,Seeded
+StructureStrongholdStart,<init>,nextInt,0,,,TRUE,Seeded
+StructureStrongholdStones,selectBlocks,nextFloat,0,,,TRUE,Seeded
+StructureVillagePieces,getNextVillageComponent,nextInt,0,,,TRUE,Seeded
+StructureVillageStart,<init>,nextInt,0,,,TRUE,Seeded
+StructureVillageStart,<init>,nextInt,1,,,TRUE,Seeded
+TextureCompassFX,onTick,random,0,,,TRUE,Rendering
+TextureFlamesFX,onTick,random,0,,,TRUE,Rendering
+TextureFlamesFX,onTick,random,1,,,TRUE,Rendering
+TextureFlamesFX,onTick,random,2,,,TRUE,Rendering
+TextureFlamesFX,onTick,random,3,,,TRUE,Rendering
+TextureLavaFlowFX,onTick,random,0,,,TRUE,Rendering
+TextureLavaFX,onTick,random,0,,,TRUE,Rendering
+TexturePortalFX,<init>,nextFloat,0,,,TRUE,Rendering
+TextureWatchFX,onTick,random,0,,,TRUE,Rendering
+TextureWaterFlowFX,onTick,random,0,,,TRUE,Rendering
+TextureWaterFX,onTick,random,0,,,TRUE,Rendering
+WorldChunkManager,func_35556_a,nextInt,0,,,TRUE,Seeded
+WorldChunkManagerHell,func_35556_a,nextInt,0,,,TRUE,Seeded (unused)
+WorldChunkManagerHell,func_35556_a,nextInt,1,,,TRUE,Seeded (unused)
+WorldGenBigMushroom,generate,nextInt,0,,,TRUE,Seeded [DESYNC]
+WorldGenBigMushroom,generate,nextInt,1,,,TRUE,Seeded [DESYNC]
+WorldGenBigTree,generate,nextLong,0,,,TRUE,Seeded [DESYNC]
+WorldGenBigTree,generateLeafNodeList,nextFloat,0,,,TRUE,Seeded [DESYNC]
+WorldGenBigTree,generateLeafNodeList,nextFloat,1,,,TRUE,Seeded [DESYNC]
+WorldGenBigTree,generate,nextInt,0,,,TRUE,Seeded [DESYNC]
+WorldGenBigTree,generate,setSeed,0,,,TRUE,setSeed
+WorldGenCactus,generate,nextInt,0,,,TRUE,Seeded
+WorldGenCactus,generate,nextInt,1,,,TRUE,Seeded
+WorldGenCactus,generate,nextInt,2,,,TRUE,Seeded
+WorldGenCactus,generate,nextInt,3,,,TRUE,Seeded
+WorldGenCactus,generate,nextInt,4,,,TRUE,Seeded
+WorldGenCactus,generate,nextInt,5,,,TRUE,Seeded
+WorldGenCactus,generate,nextInt,6,,,TRUE,Seeded
+WorldGenCactus,generate,nextInt,7,,,TRUE,Seeded
+WorldGenClay,generate,nextInt,0,,,TRUE,Seeded
+WorldGenDeadBush,generate,nextInt,0,,,TRUE,Seeded
+WorldGenDeadBush,generate,nextInt,1,,,TRUE,Seeded
+WorldGenDeadBush,generate,nextInt,2,,,TRUE,Seeded
+WorldGenDeadBush,generate,nextInt,3,,,TRUE,Seeded
+WorldGenDeadBush,generate,nextInt,4,,,TRUE,Seeded
+WorldGenDeadBush,generate,nextInt,5,,,TRUE,Seeded
+WorldGenDungeons,pickCheckLootItem,nextInt,0,,,TRUE,Seeded
+WorldGenDungeons,pickCheckLootItem,nextInt,1,,,TRUE,Seeded
+WorldGenDungeons,pickCheckLootItem,nextInt,2,,,TRUE,Seeded
+WorldGenDungeons,pickCheckLootItem,nextInt,3,,,TRUE,Seeded
+WorldGenDungeons,pickCheckLootItem,nextInt,4,,,TRUE,Seeded
+WorldGenDungeons,pickCheckLootItem,nextInt,5,,,TRUE,Seeded
+WorldGenDungeons,pickCheckLootItem,nextInt,6,,,TRUE,Seeded
+WorldGenDungeons,pickCheckLootItem,nextInt,7,,,TRUE,Seeded
+WorldGenDungeons,pickCheckLootItem,nextInt,8,,,TRUE,Seeded
+WorldGenDungeons,pickCheckLootItem,nextInt,9,,,TRUE,Seeded
+WorldGenDungeons,generate,nextInt,0,,,TRUE,Seeded
+WorldGenDungeons,generate,nextInt,1,,,TRUE,Seeded
+WorldGenDungeons,generate,nextInt,2,,,TRUE,Seeded
+WorldGenDungeons,generate,nextInt,3,,,TRUE,Seeded
+WorldGenDungeons,generate,nextInt,4,,,TRUE,Seeded
+WorldGenDungeons,generate,nextInt,5,,,TRUE,Seeded
+WorldGenDungeons,pickMobSpawner,nextInt,0,,,TRUE,Seeded
+WorldGenFire,generate,nextInt,0,,,TRUE,Seeded
+WorldGenFire,generate,nextInt,1,,,TRUE,Seeded
+WorldGenFire,generate,nextInt,2,,,TRUE,Seeded
+WorldGenFire,generate,nextInt,3,,,TRUE,Seeded
+WorldGenFire,generate,nextInt,4,,,TRUE,Seeded
+WorldGenFire,generate,nextInt,5,,,TRUE,Seeded
+WorldGenFlowers,generate,nextInt,0,,,TRUE,Seeded
+WorldGenFlowers,generate,nextInt,1,,,TRUE,Seeded
+WorldGenFlowers,generate,nextInt,2,,,TRUE,Seeded
+WorldGenFlowers,generate,nextInt,3,,,TRUE,Seeded
+WorldGenFlowers,generate,nextInt,4,,,TRUE,Seeded
+WorldGenFlowers,generate,nextInt,5,,,TRUE,Seeded
+WorldGenForest,generate,nextInt,0,,,TRUE,Seeded [DESYNC]
+WorldGenForest,generate,nextInt,1,,,TRUE,Seeded [DESYNC]
+WorldGenGlowStone1,generate,nextInt,0,,,TRUE,Seeded
+WorldGenGlowStone1,generate,nextInt,1,,,TRUE,Seeded
+WorldGenGlowStone1,generate,nextInt,2,,,TRUE,Seeded
+WorldGenGlowStone1,generate,nextInt,3,,,TRUE,Seeded
+WorldGenGlowStone1,generate,nextInt,4,,,TRUE,Seeded
+WorldGenGlowStone2,generate,nextInt,0,,,TRUE,Seeded
+WorldGenGlowStone2,generate,nextInt,1,,,TRUE,Seeded
+WorldGenGlowStone2,generate,nextInt,2,,,TRUE,Seeded
+WorldGenGlowStone2,generate,nextInt,3,,,TRUE,Seeded
+WorldGenGlowStone2,generate,nextInt,4,,,TRUE,Seeded
+WorldGenLakes,generate,nextInt,0,,,TRUE,Seeded
+WorldGenLakes,generate,nextInt,1,,,TRUE,Seeded
+WorldGenLakes,generate,nextDouble,0,,,TRUE,Seeded
+WorldGenLakes,generate,nextDouble,1,,,TRUE,Seeded
+WorldGenLakes,generate,nextDouble,2,,,TRUE,Seeded
+WorldGenLakes,generate,nextDouble,3,,,TRUE,Seeded
+WorldGenLakes,generate,nextDouble,4,,,TRUE,Seeded
+WorldGenLakes,generate,nextDouble,5,,,TRUE,Seeded
+WorldGenMinable,generate,nextFloat,0,,,TRUE,Seeded
+WorldGenMinable,generate,nextInt,0,,,TRUE,Seeded
+WorldGenMinable,generate,nextInt,1,,,TRUE,Seeded
+WorldGenMinable,generate,nextDouble,0,,,TRUE,Seeded
+WorldGenPumpkin,generate,nextInt,0,,,TRUE,Seeded
+WorldGenPumpkin,generate,nextInt,1,,,TRUE,Seeded
+WorldGenPumpkin,generate,nextInt,2,,,TRUE,Seeded
+WorldGenPumpkin,generate,nextInt,3,,,TRUE,Seeded
+WorldGenPumpkin,generate,nextInt,4,,,TRUE,Seeded
+WorldGenPumpkin,generate,nextInt,5,,,TRUE,Seeded
+WorldGenPumpkin,generate,nextInt,6,,,TRUE,Seeded
+WorldGenReed,generate,nextInt,0,,,TRUE,Seeded
+WorldGenReed,generate,nextInt,1,,,TRUE,Seeded
+WorldGenReed,generate,nextInt,2,,,TRUE,Seeded
+WorldGenReed,generate,nextInt,3,,,TRUE,Seeded
+WorldGenReed,generate,nextInt,4,,,TRUE,Seeded
+WorldGenReed,generate,nextInt,5,,,TRUE,Seeded
+WorldGenSand,generate,nextInt,0,,,TRUE,Seeded
+WorldGenSpikes,generate,nextFloat,0,,,TRUE,Seeded [DESYNC]
+WorldGenSpikes,generate,nextInt,0,,,TRUE,Seeded [DESYNC]
+WorldGenSpikes,generate,nextInt,1,,,TRUE,Seeded [DESYNC]
+WorldGenSwamp,generate,nextInt,0,,,TRUE,Seeded
+WorldGenSwamp,generate,nextInt,1,,,TRUE,Seeded
+WorldGenSwamp,generate,nextInt,2,,,TRUE,Seeded
+WorldGenSwamp,generate,nextInt,3,,,TRUE,Seeded
+WorldGenSwamp,generate,nextInt,4,,,TRUE,Seeded
+WorldGenSwamp,generate,nextInt,5,,,TRUE,Seeded
+WorldGenTaiga1,generate,nextInt,0,,,TRUE,Seeded
+WorldGenTaiga1,generate,nextInt,1,,,TRUE,Seeded
+WorldGenTaiga1,generate,nextInt,2,,,TRUE,Seeded
+WorldGenTaiga2,generate,nextInt,0,,,TRUE,Seeded [DESYNC]
+WorldGenTaiga2,generate,nextInt,1,,,TRUE,Seeded [DESYNC]
+WorldGenTaiga2,generate,nextInt,2,,,TRUE,Seeded [DESYNC]
+WorldGenTaiga2,generate,nextInt,3,,,TRUE,Seeded [DESYNC]
+WorldGenTaiga2,generate,nextInt,4,,,TRUE,Seeded [DESYNC]
+WorldGenTallGrass,generate,nextInt,0,,,TRUE,Seeded
+WorldGenTallGrass,generate,nextInt,1,,,TRUE,Seeded
+WorldGenTallGrass,generate,nextInt,2,,,TRUE,Seeded
+WorldGenTallGrass,generate,nextInt,3,,,TRUE,Seeded
+WorldGenTallGrass,generate,nextInt,4,,,TRUE,Seeded
+WorldGenTallGrass,generate,nextInt,5,,,TRUE,Seeded
+WorldGenTrees,generate,nextInt,0,,,TRUE,Seeded [DESYNC]
+WorldGenTrees,generate,nextInt,1,,,TRUE,Seeded [DESYNC]

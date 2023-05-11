@@ -1,0 +1,38 @@
+name: Compile TASmod-OG
+
+on:
+  push:
+    branches: [ "develop" ]
+
+jobs:
+  tasmodog:
+    permissions: write-all
+    runs-on: windows-latest
+    if: github.repository == 'MinecraftTAS/TASmod-OG'
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+    - name: Set up JDK 8
+      uses: actions/setup-java@v3
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+        cache: gradle
+    - name: Prepare build with Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: shadowJar --no-daemon
+        gradle-version: 8.0.2
+        cache-disabled: true
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: TASmod-OG
+        path: build/libs/*.jar
+    - name: Upload to discord
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      working-directory:
+        build/libs/
+      run: |
+        curl -H "Content-Type: multipart/form-data" -X POST -F "file=@TASmod-OG-Dev-Build.jar" "${{ env.DISCORD_WEBHOOK }}"
