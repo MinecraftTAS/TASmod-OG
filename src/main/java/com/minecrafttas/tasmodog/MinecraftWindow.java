@@ -58,7 +58,7 @@ public class MinecraftWindow extends Frame {
 		super(title);
 		this.getInsets().set(0, 0, 0, 0);
 		this.setResizable(false);
-
+		
 		// get screen size
 		DisplayMode mode = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
 		int displayWidth = mode.getWidth();
@@ -153,6 +153,13 @@ public class MinecraftWindow extends Frame {
 			TASmod.instance = new TASmod(this);
 			this.updateButtons();
 		}));
+	}
+	
+	@Override
+	protected void processWindowEvent(WindowEvent e) {
+		if (e.getID() == WindowEvent.WINDOW_CLOSING && TASmod.instance == null)
+			System.exit(0);
+		super.processWindowEvent(e);
 	}
 	
 	/**
