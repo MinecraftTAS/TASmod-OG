@@ -818,12 +818,28 @@
 @@ -405,1 +407,1 @@
 -                field_40165_b = 70F + rand.nextFloat() * 50F;
 +                field_40165_b = 70F + KillTheRngOccurences.nextFloat[39] * 50F;
-@@ -407,2 +409,2 @@
+@@ -407,6 +409,14 @@
 -                field_40167_a += rand.nextFloat() * 120F - 60F;
 -                field_40166_c += rand.nextFloat() * 120F - 60F;
+-                double d = posX - field_40167_a;
+-                double d1 = posY - field_40165_b;
+-                double d2 = posZ - field_40166_c;
+-                flag = d * d + d1 * d1 + d2 * d2 > 100D;
 +                field_40167_a += KillTheRngOccurences.nextFloat[40] * 120F - 60F;
 +                field_40166_c += KillTheRngOccurences.nextFloat[41] * 120F - 60F;
-@@ -479,3 +481,3 @@
++
++                // fix this code freezing the game with unlucky rng values
++                while (!flag) {
++                	field_40167_a *= 1.1;
++                	field_40165_b *= 1.1;
++                	field_40166_c *= 1.1;
++                    double d = posX - field_40167_a;
++                    double d1 = posY - field_40165_b;
++                    double d2 = posZ - field_40166_c;
++                    flag = d * d + d1 * d1 + d2 * d2 > 100D;
++                }
++                // end
+@@ -479,3 +489,3 @@
 -        field_40167_a = posX + (double)(f1 * 5F) + (double)((rand.nextFloat() - 0.5F) * 2.0F);
 -        field_40165_b = posY + (double)(rand.nextFloat() * 3F) + 1.0D;
 -        field_40166_c = (posZ - (double)(f2 * 5F)) + (double)((rand.nextFloat() - 0.5F) * 2.0F);
