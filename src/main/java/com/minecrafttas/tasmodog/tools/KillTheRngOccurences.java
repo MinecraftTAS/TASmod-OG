@@ -1,5 +1,7 @@
 package com.minecrafttas.tasmodog.tools;
 
+import java.util.Random;
+
 public class KillTheRngOccurences {
 
 	public static final int[] nextInt = new int[200];
@@ -391,5 +393,19 @@ public class KillTheRngOccurences {
 		{ "xpOrbInitialMotionY", "Motion y of XP orb on spawn" },
 		{ "xpOrbInitialMotionZ", "Motion z of XP orb on spawn" },
 	};
+	
+	/**
+	 * Workaround for sometimes seeded sometimes not spawning.
+	 * Use world random if preload
+	 */
+	public static boolean spawnerAnimals;
+
+	public static int nextIntSpawnerAnimals(Random og, int i) {
+		return spawnerAnimals ? og.nextInt() : nextInt[i];
+	}
+
+	public static float nextFloatSpawnerAnimals(Random og, int i) {
+		return spawnerAnimals ? og.nextFloat() : nextFloat[i];
+	}
 
 }
