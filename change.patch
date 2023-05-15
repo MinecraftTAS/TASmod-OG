@@ -1,32 +1,34 @@
 ==========> Minecraft.java
 --- Minecraft.java
 +++ Minecraft.java
-@@ -121,0 +121,6 @@
+@@ -121,0 +121,8 @@
 +import com.minecrafttas.tasmodog.TASmod;
 +import com.minecrafttas.tasmodog.MinecraftWindow;
 +import com.minecrafttas.tasmodog.tools.FakeCamera;
++import com.minecrafttas.tasmodog.tools.KillTheRng;
++import com.minecrafttas.tasmodog.tools.KillTheRngOccurences;
 +import com.minecrafttas.tasmodog.virtual.VirtualKeyboard;
 +import com.minecrafttas.tasmodog.virtual.VirtualMouse;
 +
-@@ -136,1 +142,1 @@
+@@ -136,1 +144,1 @@
 -    private Timer timer;
 +    public Timer timer;
-@@ -180,1 +186,1 @@
+@@ -180,1 +188,1 @@
 -    private static File minecraftDir = null;
 +    public static File minecraftDir = null;
-@@ -566,0 +572,1 @@
+@@ -566,0 +574,1 @@
 +    	if (this.fullscreen) this.toggleFullscreen(); // disable fullscreen before exiting
-@@ -602,1 +609,1 @@
+@@ -602,1 +611,1 @@
 -                System.exit(0);
 +//                System.exit(0); // don't exit game after closing
-@@ -621,0 +628,1 @@
+@@ -621,0 +630,1 @@
 +        TASmod.instance.init(this); // initialize tasmod
-@@ -681,0 +689,1 @@
+@@ -681,0 +691,1 @@
 +        TASmod.instance.render(); // render tasmod
-@@ -712,1 +721,1 @@
+@@ -712,1 +723,1 @@
 -        if(!Keyboard.isKeyDown(65))
 +        if(!VirtualKeyboard.isKeyDown(65))
-@@ -734,4 +743,6 @@
+@@ -734,4 +745,6 @@
 -        if(!Display.isActive() && fullscreen)
 -        {
 -            toggleFullscreen();
@@ -37,13 +39,13 @@
 +        //    toggleFullscreen();
 +        //}
 +        // end
-@@ -755,1 +766,1 @@
+@@ -755,1 +768,1 @@
 -        if(Keyboard.isKeyDown(65))
 +        if(VirtualKeyboard.isKeyDown(65))
-@@ -813,1 +824,1 @@
+@@ -813,1 +826,1 @@
 -        if(Keyboard.isKeyDown(60))
 +        if(VirtualKeyboard.isKeyDown(60))
-@@ -1023,4 +1034,6 @@
+@@ -1023,4 +1036,6 @@
 -        if(!Display.isActive())
 -        {
 -            return;
@@ -54,10 +56,10 @@
 +        //    return;
 +        //}
 +    	// end
-@@ -1211,1 +1224,1 @@
+@@ -1211,1 +1226,1 @@
 -            Display.setFullscreen(fullscreen);
 +            TASmod.instance.getMinecraftWindow().toggleFullscreen(this.fullscreen); // toggle fullscreen on the frame instead of the display
-@@ -1316,0 +1329,16 @@
+@@ -1316,0 +1331,16 @@
 +        // Moved from EntityRenderer.java / hooked up to tick loop
 +        if(this.inGameHasFocus) {
 +            
@@ -74,82 +76,85 @@
 +        	FakeCamera.yaw = this.thePlayer.rotationYaw;
 +        }
 +        // end
-@@ -1321,1 +1350,1 @@
+@@ -1321,1 +1352,1 @@
 -                if(!Mouse.next())
 +                if(!VirtualMouse.next())
-@@ -1325,2 +1354,2 @@
+@@ -1325,2 +1356,2 @@
 -                KeyBinding.setKeyBindState(Mouse.getEventButton() - 100, Mouse.getEventButtonState());
 -                if(Mouse.getEventButtonState())
 +                KeyBinding.setKeyBindState(VirtualMouse.getEventButton() - 100, VirtualMouse.getEventButtonState());
 +                if(VirtualMouse.getEventButtonState())
-@@ -1328,1 +1357,1 @@
+@@ -1328,1 +1359,1 @@
 -                    KeyBinding.onTick(Mouse.getEventButton() - 100);
 +                    KeyBinding.onTick(VirtualMouse.getEventButton() - 100);
-@@ -1333,1 +1362,1 @@
+@@ -1333,1 +1364,1 @@
 -                    int i1 = Mouse.getEventDWheel();
 +                    int i1 = VirtualMouse.getEventDWheel();
-@@ -1352,1 +1381,1 @@
+@@ -1352,1 +1383,1 @@
 -                        if(!inGameHasFocus && Mouse.getEventButtonState())
 +                        if(!inGameHasFocus && VirtualMouse.getEventButtonState())
-@@ -1370,1 +1399,1 @@
+@@ -1370,1 +1401,1 @@
 -                if(!Keyboard.next())
 +                if(!VirtualKeyboard.next())
-@@ -1374,2 +1403,2 @@
+@@ -1374,2 +1405,2 @@
 -                KeyBinding.setKeyBindState(Keyboard.getEventKey(), Keyboard.getEventKeyState());
 -                if(Keyboard.getEventKeyState())
 +                KeyBinding.setKeyBindState(VirtualKeyboard.getEventKey(), VirtualKeyboard.getEventKeyState());
 +                if(VirtualKeyboard.getEventKeyState())
-@@ -1377,1 +1406,1 @@
+@@ -1377,1 +1408,1 @@
 -                    KeyBinding.onTick(Keyboard.getEventKey());
 +                    KeyBinding.onTick(VirtualKeyboard.getEventKey());
-@@ -1379,1 +1408,1 @@
+@@ -1379,1 +1410,1 @@
 -                if(Keyboard.getEventKeyState())
 +                if(VirtualKeyboard.getEventKeyState())
-@@ -1381,1 +1410,1 @@
+@@ -1381,1 +1412,1 @@
 -                    if(Keyboard.getEventKey() == 87)
 +                    if(VirtualKeyboard.getEventKey() == 87)
-@@ -1391,1 +1420,1 @@
+@@ -1391,1 +1422,1 @@
 -                            if(Keyboard.getEventKey() == 1)
 +                            if(VirtualKeyboard.getEventKey() == 1)
-@@ -1395,1 +1424,1 @@
+@@ -1395,1 +1426,1 @@
 -                            if(Keyboard.getEventKey() == 31 && Keyboard.isKeyDown(61))
 +                            if(VirtualKeyboard.getEventKey() == 31 && VirtualKeyboard.isKeyDown(61))
-@@ -1399,1 +1428,1 @@
+@@ -1399,1 +1430,1 @@
 -                            if(Keyboard.getEventKey() == 20 && Keyboard.isKeyDown(61))
 +                            if(VirtualKeyboard.getEventKey() == 20 && VirtualKeyboard.isKeyDown(61))
-@@ -1403,1 +1432,1 @@
+@@ -1403,1 +1434,1 @@
 -                            if(Keyboard.getEventKey() == 33 && Keyboard.isKeyDown(61))
 +                            if(VirtualKeyboard.getEventKey() == 33 && VirtualKeyboard.isKeyDown(61))
-@@ -1405,1 +1434,1 @@
+@@ -1405,1 +1436,1 @@
 -                                boolean flag = Keyboard.isKeyDown(42) | Keyboard.isKeyDown(54);
 +                                boolean flag = VirtualKeyboard.isKeyDown(42) | VirtualKeyboard.isKeyDown(54);
-@@ -1408,1 +1437,1 @@
+@@ -1408,1 +1439,1 @@
 -                            if(Keyboard.getEventKey() == 30 && Keyboard.isKeyDown(61))
 +                            if(VirtualKeyboard.getEventKey() == 30 && VirtualKeyboard.isKeyDown(61))
-@@ -1412,1 +1441,1 @@
+@@ -1412,1 +1443,1 @@
 -                            if(Keyboard.getEventKey() == 59)
 +                            if(VirtualKeyboard.getEventKey() == 59)
-@@ -1416,1 +1445,1 @@
+@@ -1416,1 +1447,1 @@
 -                            if(Keyboard.getEventKey() == 61)
 +                            if(VirtualKeyboard.getEventKey() == 61)
-@@ -1420,1 +1449,1 @@
+@@ -1420,1 +1451,1 @@
 -                            if(Keyboard.getEventKey() == 63)
 +                            if(VirtualKeyboard.getEventKey() == 63)
-@@ -1428,1 +1457,1 @@
+@@ -1428,1 +1459,1 @@
 -                            if(Keyboard.getEventKey() == 66)
 +                            if(VirtualKeyboard.getEventKey() == 66)
-@@ -1435,1 +1464,1 @@
+@@ -1435,1 +1466,1 @@
 -                            if(Keyboard.getEventKey() == 2 + i)
 +                            if(VirtualKeyboard.getEventKey() == 2 + i)
-@@ -1443,1 +1472,1 @@
+@@ -1443,1 +1474,1 @@
 -                            if(Keyboard.getEventKey() == 11)
 +                            if(VirtualKeyboard.getEventKey() == 11)
-@@ -1450,1 +1479,1 @@
+@@ -1450,1 +1481,1 @@
 -                                if(Keyboard.getEventKey() == 2 + j)
 +                                if(VirtualKeyboard.getEventKey() == 2 + j)
-@@ -1543,0 +1572,1 @@
+@@ -1543,0 +1574,1 @@
 +        TASmod.instance.tick(); // tick tasmod
-@@ -1948,1 +1978,1 @@
+@@ -1822,0 +1854,2 @@
++        
++        KillTheRngOccurences.spawnerAnimals = true;
+@@ -1948,1 +1982,1 @@
 -        Frame frame = new Frame("Minecraft");
 +        Frame frame = new MinecraftWindow("Minecraft"); // replace minecraft frame with custom one
 ==========> BiomeEndDecorator.java
@@ -640,6 +645,13 @@
 +            		check = true;
 +            if (!check) return emptyChunk;
 +            // end
+==========> ChunkProviderGenerate.java
+--- ChunkProviderGenerate.java
++++ ChunkProviderGenerate.java
+@@ -7,0 +7,1 @@
++import java.lang.reflect.Field;
+@@ -9,0 +10,1 @@
++import java.util.concurrent.atomic.AtomicLong;
 ==========> EnchantmentHelper.java
 --- EnchantmentHelper.java
 +++ EnchantmentHelper.java
@@ -1654,21 +1666,18 @@
 -        int k = i + world.rand.nextInt(16);
 -        int l = world.rand.nextInt(world.field_35472_c);
 -        int i1 = j + world.rand.nextInt(16);
-+        int k = i + (KillTheRngOccurences.nextInt[172] % 16);
-+        int l = (KillTheRngOccurences.nextInt[173] % world.field_35472_c);
-+        int i1 = j + (KillTheRngOccurences.nextInt[174] % 16);
++        int k = i + (KillTheRngOccurences.nextIntSpawnerAnimals(world.rand, 172) % 16);
++        int l = (KillTheRngOccurences.nextIntSpawnerAnimals(world.rand, 173) % world.field_35472_c);
++        int i1 = j + (KillTheRngOccurences.nextIntSpawnerAnimals(world.rand, 174) % 16);
 @@ -113,1 +115,1 @@
 -                                                    var17 += var0.rand.nextInt(var20) - var0.rand.nextInt(var20);
-+                                                    var17 += (KillTheRngOccurences.nextInt[168] % var20) - (KillTheRngOccurences.nextInt[169] % var20);
++                                                    var17 += (KillTheRngOccurences.nextIntSpawnerAnimals(var0.rand, 168) % var20) - (KillTheRngOccurences.nextIntSpawnerAnimals(var0.rand, 169) % var20);
 @@ -115,1 +117,1 @@
 -                                                    var19 += var0.rand.nextInt(var20) - var0.rand.nextInt(var20);
-+                                                    var19 += (KillTheRngOccurences.nextInt[170] % var20) - (KillTheRngOccurences.nextInt[171] % var20);
++                                                    var19 += (KillTheRngOccurences.nextIntSpawnerAnimals(var0.rand, 170) % var20) - (KillTheRngOccurences.nextIntSpawnerAnimals(var0.rand, 171) % var20);
 @@ -149,1 +151,1 @@
 -                                                                var38.setLocationAndAngles((double)var23, (double)var24, (double)var25, var0.rand.nextFloat() * 360.0F, 0.0F);
-+                                                                var38.setLocationAndAngles((double)var23, (double)var24, (double)var25, KillTheRngOccurences.nextFloat[89] * 360.0F, 0.0F);
-@@ -198,1 +200,1 @@
--        if((entityliving instanceof EntitySpider) && world.rand.nextInt(100) == 0)
-+        if((entityliving instanceof EntitySpider) && (KillTheRngOccurences.nextInt[175] % 100) == 0)
++                                                                var38.setLocationAndAngles((double)var23, (double)var24, (double)var25, KillTheRngOccurences.nextFloatSpawnerAnimals(var0.rand, 89) * 360.0F, 0.0F);
 ==========> Teleporter.java
 --- Teleporter.java
 +++ Teleporter.java
@@ -1751,22 +1760,24 @@
 -            j += rand.nextInt(8) - rand.nextInt(8);
 +            i += (KillTheRngOccurences.nextInt[196] % 8) - (KillTheRngOccurences.nextInt[197] % 8);
 +            j += (KillTheRngOccurences.nextInt[198] % 8) - (KillTheRngOccurences.nextInt[199] % 8);
-@@ -2239,1 +2241,1 @@
+@@ -2191,0 +2193,1 @@
++        KillTheRngOccurences.spawnerAnimals = false;
+@@ -2239,1 +2242,1 @@
 -                worldInfo.setThunderTime(rand.nextInt(12000) + 3600);
 +                worldInfo.setThunderTime((KillTheRngOccurences.nextInt[184] % 12000) + 3600);
-@@ -2242,1 +2244,1 @@
+@@ -2242,1 +2245,1 @@
 -                worldInfo.setThunderTime(rand.nextInt(0x29040) + 12000);
 +                worldInfo.setThunderTime((KillTheRngOccurences.nextInt[185] % 0x29040) + 12000);
-@@ -2258,1 +2260,1 @@
+@@ -2258,1 +2261,1 @@
 -                worldInfo.setRainTime(rand.nextInt(12000) + 12000);
 +                worldInfo.setRainTime((KillTheRngOccurences.nextInt[186] % 12000) + 12000);
-@@ -2261,1 +2263,1 @@
+@@ -2261,1 +2264,1 @@
 -                worldInfo.setRainTime(rand.nextInt(0x29040) + 12000);
 +                worldInfo.setRainTime((KillTheRngOccurences.nextInt[187] % 0x29040) + 12000);
-@@ -2373,1 +2375,1 @@
+@@ -2373,1 +2376,1 @@
 -            if(rand.nextInt(0x186a0) == 0 && isRaining() && getIsThundering())
 +            if((KillTheRngOccurences.nextInt[192] % 0x186a0) == 0 && isRaining() && getIsThundering())
-@@ -2401,1 +2403,1 @@
+@@ -2401,1 +2404,1 @@
 -            updateAllLightTypes(j1 + rand.nextInt(16), rand.nextInt(field_35472_c), l1 + rand.nextInt(16));
 +            updateAllLightTypes(j1 + (KillTheRngOccurences.nextInt[193] % 16), (KillTheRngOccurences.nextInt[194] % field_35472_c), l1 + (KillTheRngOccurences.nextInt[195] % 16));
 ==========> null
